@@ -415,22 +415,22 @@ def render_forecast_h12_tab(df, last_date, horizon=12):
 
                 elif model_name == 'SubcompMulti':
                     from sirena.models.subcomponent_multi import SubcomponentMultiForecaster
-                    # Load SA data for subcomponent model
-                    sa_df = pd.read_csv('data/sa_fl.csv', sep=';', decimal=',')
-                    sa_df['Дата'] = pd.to_datetime(sa_df['Дата'])
-                    sa_df = sa_df.pivot(index='Дата', columns='Код', values='Значение')
-                    sa_df.columns = [str(c) for c in sa_df.columns]
-                    for col in sa_df.columns:
-                        if sa_df[col].dtype == object:
-                            sa_df[col] = sa_df[col].astype(str).str.replace(',', '.').astype(float)
+                    # Load macro data for subcomponent model (needs Ki, Ruonia for rate features)
+                    macro_df = pd.read_csv('data/inflation_data.csv', sep=';', decimal=',')
+                    for col in macro_df.columns:
+                        if col != 'Date' and macro_df[col].dtype == object:
+                            macro_df[col] = macro_df[col].astype(str).str.replace(',', '.').astype(float)
+                    macro_df['Date'] = pd.to_datetime(macro_df['Date'], format='%d.%m.%Y')
+                    macro_df = macro_df.set_index('Date').sort_index()
+
                     model = SubcomponentMultiForecaster()
-                    model.fit(sa_df, 'Все товары и услуги')
+                    model.fit(macro_df, 'mom')
                     fc_vals = []
                     for h in range(horizon):
                         target = dates[h]
-                        sa_ext = sa_df.copy()
-                        sa_ext.loc[target] = np.nan
-                        pred = model.predict(sa_ext, target)['prediction']
+                        macro_ext = macro_df.copy()
+                        macro_ext.loc[target] = np.nan
+                        pred = model.predict(macro_ext, target)['prediction'] - 100  # Convert from index to p.p.
                         fc_vals.append(pred)
                     forecasts['SubcompMulti'] = fc_vals
 
