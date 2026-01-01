@@ -44,14 +44,40 @@ class ForecastResult:
     ci_lower: Optional[np.ndarray] = None
     ci_upper: Optional[np.ndarray] = None
     regime: Optional[str] = None
+    historical_mom: Optional[np.ndarray] = None  # Исторические MoM для YoY
+
+    def yoy(self) -> np.ndarray:
+        """
+        Рассчитать YoY инфляцию (скользящая сумма 12 MoM).
+
+        Returns:
+            np.ndarray: YoY инфляция для каждого месяца прогноза
+        """
+        if self.historical_mom is None or len(self.historical_mom) < 11:
+            # Нет истории — возвращаем кумулятивную сумму
+            return np.cumsum(self.total)
+
+        # Берём последние 11 месяцев истории + прогноз
+        hist = self.historical_mom[-11:]  # 11 последних MoM
+        full_series = np.concatenate([hist, self.total])
+
+        # Скользящая сумма 12 месяцев
+        yoy_values = []
+        for i in range(len(self.total)):
+            window = full_series[i:i+12]
+            yoy_values.append(np.sum(window))
+
+        return np.array(yoy_values)
 
     def summary(self) -> str:
         """Краткая сводка прогноза."""
+        yoy = self.yoy()
         lines = [
             f"Прогноз на {len(self.total)} мес.",
             f"  Baseline: {self.baseline[0]:.2f}% → {self.baseline[-1]:.2f}%",
             f"  Effect:   {self.effect.sum():+.3f}% (cumulative)",
             f"  Total:    {self.total[0]:.2f}% → {self.total[-1]:.2f}%",
+            f"  YoY:      {yoy[0]:.2f}% → {yoy[-1]:.2f}%",
         ]
         if self.ki_trajectory is not None:
             lines.append(f"  Ki:       {self.ki_trajectory[0]:.1f}% → {self.ki_trajectory[-1]:.1f}%")
@@ -66,6 +92,7 @@ class ForecastResult:
             'Baseline': self.baseline,
             'Effect': self.effect,
             'Total': self.total,
+            'YoY': self.yoy(),
         })
         if self.ki_trajectory is not None:
             df['Ki'] = self.ki_trajectory
@@ -330,13 +357,24 @@ class SIRENA:
 
         total = baseline + effect
 
+        # Исторические MoM для расчёта YoY (конвертируем из индекса в п.п.)
+        historical_mom = None
+        if 'mom' in self._df.columns:
+            mom_values = self._df['mom'].dropna().values[-12:]
+            # Если данные в индексной форме (100 = 0%), конвертируем в п.п.
+            if mom_values.mean() > 50:  # Индексная форма
+                historical_mom = mom_values - 100
+            else:
+                historical_mom = mom_values
+
         return ForecastResult(
             dates=dates,
             baseline=baseline,
             effect=effect,
             total=total,
             ki_trajectory=ki_trajectory,
-            regime=self._regime_info.regime if self._regime_info else None
+            regime=self._regime_info.regime if self._regime_info else None,
+            historical_mom=historical_mom
         )
 
     def compare_scenarios(
@@ -371,7 +409,7 @@ class SIRENA:
             horizon: Горизонт прогноза
 
         Returns:
-            DataFrame с колонками: Base, Hike, Cut, Auto
+            DataFrame с колонками: Base, Hike, Cut, Auto, YoY
         """
         scenarios = self.compare_scenarios(horizon)
 
@@ -381,8 +419,68 @@ class SIRENA:
         df['Cut (-2 п.п.)'] = scenarios['cut'].total
         df['Auto (Taylor)'] = scenarios['auto'].total
         df['Ki (Auto)'] = scenarios['auto'].ki_trajectory
+        df['YoY (Base)'] = scenarios['base'].yoy()
+        df['YoY (Auto)'] = scenarios['auto'].yoy()
 
         return df
+
+    def plot_yoy(self, horizon: int = 12, show_history: int = 24) -> None:
+        """
+        Построить график YoY инфляции.
+
+        Args:
+            horizon: Горизонт прогноза
+            show_history: Месяцев истории для отображения
+        """
+        try:
+            import matplotlib.pyplot as plt
+        except ImportError:
+            print("matplotlib не установлен. Установите: pip install matplotlib")
+            return
+
+        scenarios = self.compare_scenarios(horizon)
+
+        # Исторические YoY
+        if 'mom' in self._df.columns:
+            mom = self._df['mom'].dropna()
+            # Конвертируем из индекса в п.п. если нужно
+            if mom.mean() > 50:
+                mom = mom - 100
+            hist_yoy = mom.rolling(12).sum().dropna()
+            hist_yoy = hist_yoy.tail(show_history)
+        else:
+            hist_yoy = pd.Series()
+
+        # Создание графика
+        fig, ax = plt.subplots(figsize=(12, 6))
+
+        # История
+        if len(hist_yoy) > 0:
+            ax.plot(hist_yoy.index, hist_yoy.values, 'b-', linewidth=2, label='Факт')
+
+        # Прогнозы
+        colors = {'base': '#3b82f6', 'hike': '#ef4444', 'cut': '#22c55e', 'auto': '#f59e0b'}
+        labels = {'base': 'Базовый', 'hike': 'Повышение Ki', 'cut': 'Снижение Ki', 'auto': 'Авто (Тейлор)'}
+
+        for sc, fc in scenarios.items():
+            yoy = fc.yoy()
+            ax.plot(fc.dates, yoy, '--', color=colors[sc], linewidth=2, label=labels[sc])
+
+        # Таргет ЦБ
+        ax.axhline(y=4.0, color='red', linestyle=':', alpha=0.7, label='Таргет ЦБ (4%)')
+
+        # Оформление
+        ax.set_xlabel('Дата')
+        ax.set_ylabel('YoY инфляция, %')
+        ax.set_title('Прогноз YoY инфляции по сценариям')
+        ax.legend(loc='upper right')
+        ax.grid(True, alpha=0.3)
+
+        # Вертикальная линия — граница прогноза
+        ax.axvline(x=self.last_date, color='gray', linestyle='--', alpha=0.5)
+
+        plt.tight_layout()
+        plt.show()
 
     def regime_history(self, months: int = 24) -> pd.DataFrame:
         """
