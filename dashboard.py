@@ -488,7 +488,7 @@ def render_forecast_h12_tab(df, last_date, horizon=12):
 
     # Summary table
     st.markdown("#### 📋 Прогнозные значения")
-    fc_df = pd.DataFrame({'Дата': dates})
+    fc_df = pd.DataFrame({'Дата': [d.strftime('%Y-%m') for d in dates]})
     for model_name, fc_vals in forecasts.items():
         fc_df[model_name] = fc_vals
     if len(forecasts) > 1:
@@ -1039,7 +1039,7 @@ def render_scenarios_tab(df, last_date):
 
     # Detailed table
     with st.expander("📋 Подробная таблица прогнозов"):
-        detail_df = pd.DataFrame({'Дата': dates})
+        detail_df = pd.DataFrame({'Дата': [d.strftime('%Y-%m') for d in dates]})
         for sc, fc in results.items():
             detail_df[f'{scenario_names[sc]}'] = fc['total']
             if sc != 'base':

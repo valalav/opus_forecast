@@ -87,19 +87,20 @@ class ForecastResult:
 
     def to_dataframe(self) -> pd.DataFrame:
         """Конвертация в DataFrame."""
+        # Format dates as YYYY-MM (without time)
+        date_index = pd.Index([d.strftime('%Y-%m') for d in self.dates], name='Date')
         df = pd.DataFrame({
-            'Date': self.dates,
             'Baseline': self.baseline,
             'Effect': self.effect,
             'Total': self.total,
             'YoY': self.yoy(),
-        })
+        }, index=date_index)
         if self.ki_trajectory is not None:
             df['Ki'] = self.ki_trajectory
         if self.ci_lower is not None:
             df['CI_Lower'] = self.ci_lower
             df['CI_Upper'] = self.ci_upper
-        return df.set_index('Date')
+        return df
 
 
 @dataclass
