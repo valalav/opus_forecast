@@ -67,11 +67,13 @@ GEMINI.md содержит только:
 
 ## Project Overview
 
-**СИРЕНА-КБР v5.4** — система прогнозирования инфляции (ИПЦ) в Кабардино-Балкарской Республике.
+**СИРЕНА-КБР v5.3** — система прогнозирования инфляции (ИПЦ) в Кабардино-Балкарской Республике.
 
-**Ансамбль:** 9 моделей (Huber, ElasticNet, NGBoost, Prophet и др.)
+**Production Ensemble:** 9 моделей (Huber, RidgeShockDummies, ElasticNet, NGBoostShock, NGBoost, Ridge, RidgeExtended, Prophet, EBM)
 
-**Dashboard:** `http://localhost:8503`
+**Dashboard:** `http://localhost:8503` (порт 8503!)
+
+**Лучшая модель (SIRENA Score):** SubcomponentMulti (Score 0.515, MAE h=1: 0.265)
 
 ---
 
@@ -85,6 +87,7 @@ GEMINI.md содержит только:
 | **[docs/MODEL_CATALOG.md](docs/MODEL_CATALOG.md)** | Каталог моделей с примерами |
 | **[docs/EDGE_LAB_REFERENCE.md](docs/EDGE_LAB_REFERENCE.md)** | Ralph / Edge Lab |
 | **[docs/NOWCASTING.md](docs/NOWCASTING.md)** | Недельный nowcast |
+| **[README.md](README.md)** | Полная документация проекта |
 
 ---
 
@@ -100,8 +103,12 @@ python3 scripts/precompute_forecasts.py
 # Генерация графиков
 python3 scripts/generate_charts.py
 
-# Бэктест
-python3 scripts/run_backtest_h1.py
+# Бэктест (5 горизонтов)
+python3 scripts/run_backtest_h1.py  # h=1 (самый важный)
+python3 scripts/run_backtest_h2.py  # h=2
+python3 scripts/run_backtest_h3.py  # h=3
+python3 scripts/run_backtest_h6.py  # h=6
+python3 scripts/run_backtest_h12.py # h=12 (годовая траектория)
 
 # Тесты
 pytest tests/ -v
@@ -125,9 +132,11 @@ python3 scripts/verify_all_tabs.py
 ## File Organization
 
 - **Root**: Только `README.md`, `GEMINI.md`, `dashboard.py`, `requirements.txt`
-- **Scripts**: `scripts/` — все скрипты
-- **Data**: `data/` — все CSV/Excel
+- **sirena/models/**: 40+ моделей прогнозирования
+- **Scripts**: `scripts/` — 120+ скриптов
+- **Data**: `data/` — все CSV/Excel/JSON
 - **Docs**: `docs/` — вся документация
+- **Pages**: `pages/` — страницы дашборда Streamlit
 - **Archive**: `archive/` — устаревшее
 
 ---
@@ -197,3 +206,25 @@ For financial or legal analysis, use the `/critical-review` skill.
 2. **`data/access_weights.csv`** — Вторичный (агрегаты). Использовать с осторожностью (коды могут не совпадать).
 
 **Правило:** При анализе драйверов инфляции **ВСЕГДА** учитывать вес. Товар с ростом +100% и весом 0.0001% (Спички) менее важен, чем товар с ростом +10% и весом 1.5% (Мясо).
+
+---
+
+## Production Models (Актуальный ансамбль v4.8)
+
+| Модель | Вес | MAE h=1 | Файл |
+|--------|-----|---------|------|
+| Huber | 18% | 0.289 | `sirena/models/huber.py` |
+| RidgeShockDummies | 17% | 0.299 | `sirena/models/ridge_shock_dummies.py` |
+| ElasticNet | 17% | 0.301 | `sirena/models/elasticnet.py` |
+| NGBoostShock | 16% | 0.291 | `sirena/models/ngboost_shock.py` |
+| NGBoost | 12% | 0.312 | `sirena/models/ngboost_model.py` |
+| Ridge | 8% | 0.310 | `sirena/models/ridge.py` |
+| RidgeExtended | 5% | 0.318 | `sirena/models/ridge_extended.py` |
+| Prophet | 4% | 0.277 | `sirena/models/prophet.py` |
+| EBM | 3% | 0.340 | `sirena/models/ebm.py` |
+
+**Лучшая модель (SIRENA Score):** SubcomponentMulti (0.515) — `sirena/models/subcomponent_multi.py`
+
+---
+
+*Последнее обновление: 2 февраля 2026*
