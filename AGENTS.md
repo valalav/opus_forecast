@@ -34,7 +34,8 @@ sync/                                  # Add this to Syncthing
 ├── experiments/                       # Experiment results
 └── reports/                           # Markdown reports
 
-# Update command: python3 scripts/sync_to_share.py
+# ✅ Updates AUTOMATICALLY after each backtest
+# Manual update: python3 scripts/sync_to_share.py
 ```
 
 **Production results (source):**

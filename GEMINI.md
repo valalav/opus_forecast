@@ -131,7 +131,8 @@ sync/                                    # ← Добавьте в Syncthing
 ├── experiments/                         # 🧪 Результаты экспериментов
 └── reports/                             # 📑 Markdown отчёты
 
-# Обновление: python3 scripts/sync_to_share.py
+# ✅ Обновление АВТОМАТИЧЕСКОЕ после каждого бэктеста
+# Ручное обновление: python3 scripts/sync_to_share.py
 ```
 
 ### Бэктесты и прогнозы (Production)
