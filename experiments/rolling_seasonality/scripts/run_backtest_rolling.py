@@ -256,6 +256,23 @@ def main():
     
     print(f"💾 Предсказания сохранены для {len(all_predictions)} моделей")
     
+    # Автоматическая синхронизация в sync/
+    print("\n🔄 Синхронизация результатов в sync/...")
+    try:
+        import subprocess
+        result = subprocess.run(
+            ['python3', 'scripts/sync_to_share.py'],
+            capture_output=True,
+            text=True,
+            timeout=60
+        )
+        if result.returncode == 0:
+            print("✅ Результаты синхронизированы в sync/")
+        else:
+            print(f"⚠️ Ошибка синхронизации")
+    except Exception as e:
+        print(f"⚠️ Не удалось синхронизировать: {e}")
+    
     return summary_df, all_predictions
 
 
