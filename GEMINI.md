@@ -119,6 +119,63 @@ python3 scripts/verify_all_tabs.py
 
 ---
 
+## 📁 Структура результатов и артефактов
+
+### Бэктесты и прогнозы (Production)
+
+```
+archive/results/
+├── backtest_h1_predictions.csv          # Прогнозы h=1
+├── backtest_h1_metrics.csv              # Метрики h=1
+├── backtest_h1_summary.md               # Сводка h=1
+├── backtest_h2_predictions.csv          # Прогнозы h=2
+├── backtest_h2_metrics.csv              # Метрики h=2
+├── backtest_h12_predictions.csv         # Прогнозы h=12
+├── backtest_h12_metrics.csv             # Метрики h=12
+├── forecasts_current.csv                # Текущие прогнозы
+└── model_comparison.csv                 # Сравнение моделей
+```
+
+### Графики и визуализации (Production)
+
+```
+assets/charts/
+├── backtest_h1_predictions.html         # Интерактивные графики h=1
+├── backtest_h1_errors.html              # Графики ошибок h=1
+├── backtest_h12_predictions.html        # Интерактивные графики h=12
+├── forecasts.html                       # Графики прогнозов
+├── model_comparison.html                # Сравнение моделей
+├── nowcast.html                         # Nowcast визуализация
+└── sirena_score_dynamics.html           # Динамика SIRENA Score
+```
+
+### Данные
+
+```
+data/
+├── inflation_data.csv                   # Основные данные (источник)
+├── infl_kbr.csv                         # Альтернативный формат
+├── precomputed_forecasts.json           # Предвычисленные прогнозы
+├── kbr_weekly_prices_2008_2026.csv     # Недельные данные
+└── raw/                                 # Сырые данные
+```
+
+### Эксперименты
+
+```
+experiments/
+└── {experiment_name}/
+    ├── results/                         # Результаты эксперимента
+    │   ├── backtest_summary_*.csv
+    │   ├── predictions_*.csv
+    │   └── *.png                        # Графики
+    └── docs/
+        ├── RESEARCH_PROPOSAL.md
+        └── RESULTS.md
+```
+
+---
+
 ## Workflows (Slash Commands)
 
 | Команда | Описание |
@@ -137,7 +194,9 @@ python3 scripts/verify_all_tabs.py
 - **Data**: `data/` — все CSV/Excel/JSON
 - **Docs**: `docs/` — вся документация
 - **Pages**: `pages/` — страницы дашборда Streamlit
-- **Archive**: `archive/` — устаревшее
+- **Archive**: `archive/` — устаревшее и результаты бэктестов
+- **Assets**: `assets/charts/` — графики и визуализации
+- **Experiments**: `experiments/` — изолированные эксперименты
 
 ---
 

@@ -137,4 +137,48 @@ python3 scripts/precompute_forecasts.py
 python3 scripts/generate_charts.py
 ```
 
+### Результаты бэктестов (где сохраняются)
+
+После запуска бэктестов результаты сохраняются в:
+
+```
+archive/results/
+├── backtest_h1_predictions.csv          # Прогнозы h=1 всех моделей
+├── backtest_h1_metrics.csv              # Метрики h=1 (MAE, RMSE, KPI)
+├── backtest_h1_summary.md               # Сводка h=1 в Markdown
+├── backtest_h2_predictions.csv          # Прогнозы h=2
+├── backtest_h2_metrics.csv              # Метрики h=2
+├── backtest_h2_summary.md               # Сводка h=2
+├── backtest_h12_predictions.csv         # Прогнозы h=12
+├── backtest_h12_metrics.csv             # Метрики h=12
+└── backtest_h12_summary.md              # Сводка h=12
+```
+
+### Графики и визуализации (где сохраняются)
+
+Интерактивные графики сохраняются в:
+
+```
+assets/charts/
+├── backtest_h1_predictions.html         # Графики прогнозов h=1
+├── backtest_h1_errors.html              # Графики ошибок h=1
+├── backtest_h2_predictions.html         # Графики прогнозов h=2
+├── backtest_h12_predictions.html        # Графики прогнозов h=12
+├── forecasts.html                       # Общие прогнозы
+└── model_comparison.html                # Сравнение моделей
+```
+
+### Проверка результатов
+
+```bash
+# Проверить CSV-результаты
+ls -la archive/results/backtest_h*.csv
+
+# Проверить графики
+ls -la assets/charts/*.html
+
+# Просмотреть метрики
+cat archive/results/backtest_h1_metrics.csv
+```
+
 Результат должен быть: **ВСЕ ПРОВЕРКИ ПРОЙДЕНЫ: 11/11**
