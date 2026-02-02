@@ -184,6 +184,18 @@ experiments/rolling_seasonality/results/
 └── summary_table.png
 ```
 
+### Синхронизация (Syncthing)
+
+Для синхронизации результатов добавьте в Syncthing:
+```
+sync/experiments/rolling_seasonality/
+```
+
+Скрипт автоматически копирует результаты:
+```bash
+python3 scripts/sync_to_share.py
+```
+
 ---
 
 ## 📝 Лог изменений

@@ -121,10 +121,23 @@ python3 scripts/verify_all_tabs.py
 
 ## 📁 Структура результатов и артефактов
 
+### 🔄 Синхронизация (Syncthing) — ГЛАВНАЯ ПАПКА
+
+```
+sync/                                    # ← Добавьте в Syncthing
+├── charts/                              # 📊 PNG графики
+├── csv/                                 # 📄 CSV-результаты
+├── html/                                # 🌐 HTML-визуализации
+├── experiments/                         # 🧪 Результаты экспериментов
+└── reports/                             # 📑 Markdown отчёты
+
+# Обновление: python3 scripts/sync_to_share.py
+```
+
 ### Бэктесты и прогнозы (Production)
 
 ```
-archive/results/
+archive/results/                         # Исходные результаты
 ├── backtest_h1_predictions.csv          # Прогнозы h=1
 ├── backtest_h1_metrics.csv              # Метрики h=1
 ├── backtest_h1_summary.md               # Сводка h=1
@@ -139,7 +152,7 @@ archive/results/
 ### Графики и визуализации (Production)
 
 ```
-assets/charts/
+assets/charts/                           # Исходные графики
 ├── backtest_h1_predictions.html         # Интерактивные графики h=1
 ├── backtest_h1_errors.html              # Графики ошибок h=1
 ├── backtest_h12_predictions.html        # Интерактивные графики h=12

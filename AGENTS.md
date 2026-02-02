@@ -25,7 +25,19 @@ This file provides guidance to AI agents (Claude, Gemini, etc.) when working wit
 
 ### Results & Backtests
 
-**Production results:**
+**🔄 Syncthing sync folder (for external sync):**
+```
+sync/                                  # Add this to Syncthing
+├── charts/                            # PNG charts
+├── csv/                               # CSV results
+├── html/                              # HTML visualizations
+├── experiments/                       # Experiment results
+└── reports/                           # Markdown reports
+
+# Update command: python3 scripts/sync_to_share.py
+```
+
+**Production results (source):**
 ```
 archive/results/
 ├── backtest_h1_predictions.csv       # h=1 forecasts (most important KPI)
@@ -35,7 +47,7 @@ archive/results/
 └── model_comparison.csv              # Model comparison table
 ```
 
-**Charts & Visualizations:**
+**Charts & Visualizations (source):**
 ```
 assets/charts/
 ├── backtest_h1_predictions.html      # Interactive h=1 charts

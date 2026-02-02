@@ -113,3 +113,7 @@ Thumbs.db
 
 # Claude Code
 .claude/
+
+# Syncthing sync folder
+sync/
+
