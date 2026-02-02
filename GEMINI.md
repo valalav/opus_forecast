@@ -254,6 +254,20 @@ python3 system/orchestrator.py
 
 ---
 
+## 🔄 СинХронизация результатов
+
+Когда пользователь говорит **"синхронизируй"** или **"обнови sync"**:
+
+```bash
+python3 scripts/sync_to_share.py
+```
+
+Этот скрипт копирует актуальные результаты, графики и отчёты в папку `sync/` для Syncthing.
+
+**Папка для Syncthing:** `sync/` (добавьте её в Syncthing)
+
+---
+
 ## 🛡️ Critical Review Protocol
 For financial or legal analysis, use the `/critical-review` skill.
 - **Trigger**: "Check this critically", "Verify sources".

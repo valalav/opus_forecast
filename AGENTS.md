@@ -83,6 +83,18 @@ experiments/
 
 ---
 
+## 🔄 Synchronization Trigger
+
+When the user says **"синхронизируй"** (synchronize) or **"обнови sync"** (update sync):
+
+```bash
+python3 scripts/sync_to_share.py
+```
+
+This command syncs results, charts, and reports to the `sync/` folder for Syncthing.
+
+---
+
 ## 🧠 Key Concepts
 
 ### Forecasting Horizons
