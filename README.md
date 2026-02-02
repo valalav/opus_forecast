@@ -20,6 +20,9 @@
 - **Актуализированный ансамбль** — 9 моделей с оптимизированными весами
 - **SubcomponentMulti** — лучшая модель по SIRENA Score (0.515)
 - **Улучшенная визуализация** — 13 вкладок: 5 прогнозов + Сценарии + Weekly + 5 бэктестов
+- **🧪 Эксперименты:**
+  - **Rolling Seasonality Ridge** — скользящая сезонность (24 мес.) показывает MAE 0.314, лучше Ridge на 6.4%
+  - Подробнее: `experiments/rolling_seasonality/`
 
 ### Что нового в v5.0
 
@@ -451,6 +454,38 @@ pytorch-forecasting>=1.0.0
 
 # External Data
 yfinance>=0.2.0
+```
+
+---
+
+## 🧪 Эксперименты
+
+Активные исследования и прототипы в `experiments/`:
+
+### Rolling Seasonality Ridge (2026-02-02)
+- **Проблема:** Глобальная сезонность на всей истории вредит после структурных сдвигов 2022-2024
+- **Решение:** Скользящая сезонность на последних 24 месяцах
+- **Результат:** MAE 0.314 (6.4% лучше Ridge baseline, 1.2% лучше Huber)
+- **Статус:** 🟢 Рекомендуется к внедрению
+- **Подробнее:** [experiments/rolling_seasonality/](experiments/rolling_seasonality/)
+
+Структура эксперимента:
+```
+experiments/rolling_seasonality/
+├── README.md                    # Быстрый старт
+├── docs/
+│   ├── RESEARCH_PROPOSAL.md    # Предпосылки и гипотезы
+│   └── RESULTS.md               # Результаты и анализ
+├── models/
+│   └── rolling_seasonality_ridge.py  # Модель
+└── scripts/
+    └── run_backtest_rolling.py  # Бэктест
+```
+
+Запуск:
+```bash
+cd experiments/rolling_seasonality
+python3 scripts/run_backtest_rolling.py
 ```
 
 ---
