@@ -47,7 +47,7 @@ class EnsembleForecaster:
             DataFrame с колонками Date, BVAR
         """
         try:
-            from sirena_bvar import BayesianVAR
+            from sirena.models.bvar import BVARForecaster
 
             # Загрузка данных
             df = pd.read_csv('data/inflation_data.csv', sep=';', decimal=',')
@@ -80,11 +80,17 @@ class EnsembleForecaster:
                 data = data[data.index <= cutoff_date]
 
             # Обучение
-            model = BayesianVAR(data, ['CPI', 'Food', 'USD', 'RUONIA'], lags=4)
-            model.fit(lambda1=1.0, lambda2=0.5, lambda3=1.0)
+            model: BVARForecaster = BVARForecaster(
+                lags=4,
+                lambda1=1.0,
+                lambda2=0.5,
+                lambda3=1.0,
+                var_names=['CPI', 'Food', 'USD', 'RUONIA']
+            )
+            model.fit(data, target_col='CPI')
 
             # Прогноз
-            fc = model.forecast(h=horizon, n_draws=2000)
+            fc = model.forecast_full(horizon=horizon)
             median_path = fc['median'][:, 0]
 
             last_date = data.index.max()

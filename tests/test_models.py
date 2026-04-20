@@ -126,34 +126,34 @@ class TestBayesianVAR:
 
     def test_bvar_import(self):
         """Проверка импорта BVAR."""
-        from sirena_bvar import BayesianVAR
+        from sirena.models.bvar import BVARForecaster
 
-        assert BayesianVAR is not None
+        assert BVARForecaster is not None
 
     def test_bvar_fit(self, sample_bvar_data):
         """Тест обучения BVAR."""
-        from sirena_bvar import BayesianVAR
+        from sirena.models.bvar import BVARForecaster
 
-        model = BayesianVAR(
-            sample_bvar_data,
-            ['CPI', 'Food', 'USD', 'RUONIA'],
-            lags=4
+        model: BVARForecaster = BVARForecaster(
+            lags=4,
+            lambda1=1.0,
+            var_names=['CPI', 'Food', 'USD', 'RUONIA']
         )
-        model.fit(lambda1=1.0)
+        model.fit(sample_bvar_data, target_col='CPI')
 
         assert model.B_post is not None
 
     def test_bvar_forecast(self, sample_bvar_data):
         """Тест прогнозирования BVAR."""
-        from sirena_bvar import BayesianVAR
+        from sirena.models.bvar import BVARForecaster
 
-        model = BayesianVAR(
-            sample_bvar_data,
-            ['CPI', 'Food', 'USD', 'RUONIA'],
-            lags=4
+        model: BVARForecaster = BVARForecaster(
+            lags=4,
+            lambda1=1.0,
+            var_names=['CPI', 'Food', 'USD', 'RUONIA']
         )
-        model.fit(lambda1=1.0)
-        fc = model.forecast(h=12, n_draws=500)
+        model.fit(sample_bvar_data, target_col='CPI')
+        fc = model.forecast_full(horizon=12)
 
         assert 'median' in fc
         assert fc['median'].shape[0] == 12
