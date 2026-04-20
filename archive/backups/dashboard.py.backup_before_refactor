@@ -1,0 +1,3489 @@
+"""
+СИРЕНА-КБР v5.3: Dashboard
+13 вкладок: 5 прогнозов + Сценарии Ki + Экзогенные + Weekly + 5 бэктестов
+Новое в v5.3: Weekly Prices tab - nowcasting, volatility alerts, price trends
+"""
+
+import streamlit as st
+import pandas as pd
+import numpy as np
+import plotly.graph_objects as go
+from datetime import datetime
+from sklearn.linear_model import Ridge
+from sklearn.preprocessing import RobustScaler
+import warnings
+import os
+
+# Import forecast tab functions from pages module
+from pages import (
+    get_best_model_for_horizon,
+    forecast_with_model,
+    calculate_kpi_corrections,
+)
+from pages import render_forecast_tab, render_forecast_h12_tab
+
+# =============================================================================
+# ЕДИНЫЙ СПИСОК МОДЕЛЕЙ — ИЗМЕНЯТЬ ТОЛЬКО ЗДЕСЬ!
+# =============================================================================
+ALL_MODELS = [
+    "Ridge",
+    "Ridge_Ext",
+    "Bayes_Ridge",
+    "ElasticNet",
+    "Huber",
+    "Ridge_Shock",
+    "Ridge_Macro",
+    "NGBoost",
+    "NGBoost_Shock",
+    "BVAR",
+    "SARIMA",
+    "LightGBM",
+    "Prophet",
+    "ETS",
+    "EBM",
+    "CatBoost",
+    "Subcomp",
+    "Subcomp_Multi",
+    "Micro",
+    "Ensemble",
+]
+
+MODEL_COLORS = {
+    "Ridge": "#1f77b4",
+    "Ridge_Ext": "#aec7e8",
+    "Bayes_Ridge": "#ff7f0e",
+    "ElasticNet": "#ffbb78",
+    "Huber": "#2ca02c",
+    "Ridge_Shock": "#98df8a",
+    "Ridge_Macro": "#2ecc71",  # Green - macro features model
+    "NGBoost": "#d62728",
+    "NGBoost_Shock": "#ff9896",
+    "BVAR": "#9467bd",
+    "SARIMA": "#c5b0d5",
+    "LightGBM": "#8c564b",
+    "Prophet": "#c49c94",
+    "ETS": "#e377c2",
+    "EBM": "#f7b6d2",
+    "CatBoost": "#7f7f7f",
+    "Subcomp": "#c7c7c7",
+    "Subcomp_Multi": "#bcbd22",
+    "Micro": "#17becf",
+    "Ensemble": "#000000",
+    "Actual": "#000000",
+    "Факт": "#000000",
+}
+
+MONTH_NAMES_RU = [
+    "Январь",
+    "Февраль",
+    "Март",
+    "Апрель",
+    "Май",
+    "Июнь",
+    "Июль",
+    "Август",
+    "Сентябрь",
+    "Октябрь",
+    "Ноябрь",
+    "Декабрь",
+]
+
+# --- SETUP ---
+st.set_page_config(
+    page_title="СИРЕНА-КБР v5.3", layout="wide", initial_sidebar_state="collapsed"
+)
+warnings.filterwarnings("ignore")
+
+
+# =============================================================================
+# DATA LOADING
+# =============================================================================
+@st.cache_data
+def load_data():
+    """Load main inflation data."""
+    try:
+        df_raw = pd.read_csv("data/infl_kbr.csv", sep=";", decimal=",")
+
+        if "MoM" in df_raw.columns and df_raw["MoM"].dtype == object:
+            df_raw["MoM"] = df_raw["MoM"].astype(str).str.replace(",", ".")
+            df_raw["MoM"] = pd.to_numeric(df_raw["MoM"], errors="coerce")
+
+        if "Day" in df_raw.columns:
+            df_raw["Date"] = pd.to_datetime(
+                df_raw["Day"], format="%d.%m.%Y", errors="coerce"
+            )
+            if df_raw["Date"].isna().any():
+                df_raw["Date"] = pd.to_datetime(df_raw["Day"])
+
+        if "Товар" in df_raw.columns and "MoM" in df_raw.columns:
+            df = df_raw.pivot_table(
+                index="Date", columns="Товар", values="MoM", aggfunc="first"
+            )
+        else:
+            df = df_raw.set_index("Date")
+
+        df = df[
+            [
+                "Все товары и услуги",
+                "Продовольственные товары",
+                "Непродовольственные товары",
+                "Услуги",
+            ]
+        ].copy()
+        return df.sort_index()
+    except Exception as e:
+        st.error(f"Ошибка загрузки данных: {e}")
+        return None
+
+
+@st.cache_data
+def load_backtest_data(horizon):
+    """Load backtest predictions for given horizon."""
+    filepath = f"archive/results/backtest_h{horizon}_predictions.csv"
+    try:
+        df = pd.read_csv(filepath)
+        df["Date"] = pd.to_datetime(df["Date"])
+        return df
+    except Exception as e:
+        return None
+
+
+# =============================================================================
+# FORECAST FUNCTIONS
+# =============================================================================
+def get_best_model_for_horizon(horizon):
+    """Return best model name for each horizon based on backtests."""
+    best_models = {
+        1: "Huber",
+        2: "NGBoost_Shock",
+        3: "Micro",  # Based on h=3 backtest
+        6: "Micro",  # Based on h=6 backtest
+        12: "Prophet",
+    }
+    return best_models.get(horizon, "Ridge")
+
+
+def forecast_with_model(df, target_date, model_name):
+    """Get forecast from specific model."""
+    try:
+        if model_name == "Huber":
+            from sirena.models.huber import HuberForecaster
+
+            model = HuberForecaster()
+            model.fit(df)
+            df_ext = df.copy()
+            df_ext.loc[target_date] = np.nan
+            return model.predict(df_ext, target_date)["prediction"] - 100
+
+        elif model_name == "NGBoost_Shock":
+            from sirena.models.ngboost_shock import NGBoostShockForecaster
+
+            model = NGBoostShockForecaster()
+            model.fit(df, "Все товары и услуги")
+            df_ext = df.copy()
+            df_ext.loc[target_date] = np.nan
+            return model.predict(df_ext, target_date)["prediction"] - 100
+
+        elif model_name == "Micro":
+            from sirena.models.microcomponent import MicrocomponentForecaster
+
+            model = MicrocomponentForecaster(horizon=1, use_seasonal_adj=True)
+            model.fit(df, "Все товары и услуги")
+            result = model.predict(df, target_date)
+            if result and "prediction" in result:
+                month = target_date.month
+                seasonal_adj = model.SEASONAL_ADJ.get(month, 0)
+                return result["prediction"] - 100 + seasonal_adj
+            return np.nan
+
+        elif model_name == "Prophet":
+            from sirena.models.prophet import ProphetForecaster
+
+            model = ProphetForecaster()
+            model.fit(df, "Все товары и услуги")
+            fc = model.forecast(horizon=1)
+            return fc[0] if len(fc) > 0 else np.nan
+
+        elif model_name == "Ridge":
+            from sirena.models.ridge_extended import RidgeExtendedForecaster
+
+            model = RidgeExtendedForecaster()
+            model.fit(df)
+            df_ext = df.copy()
+            df_ext.loc[target_date] = np.nan
+            return model.predict(df_ext, target_date)["prediction"] - 100
+
+        return np.nan
+    except Exception as e:
+        st.warning(f"Ошибка модели {model_name}: {e}")
+        return np.nan
+
+
+def calculate_kpi_corrections(bt_data, model_name):
+    """Calculate seasonal shift and bias corrections."""
+    bt_data = bt_data.copy()
+    bt_data["Month"] = bt_data["Date"].dt.month
+
+    # Seasonal Shift (optimize for KPI)
+    monthly_shifts = {}
+    for month in range(1, 13):
+        month_data = bt_data[bt_data["Month"] == month]
+        if len(month_data) == 0:
+            monthly_shifts[month] = 0
+            continue
+        best_shift, best_hits = 0, 0
+        for shift in np.arange(-0.5, 0.51, 0.01):
+            shifted = month_data[model_name] + shift
+            hits = ((month_data["Actual"] - shifted).abs() <= 0.5).sum()
+            if hits > best_hits:
+                best_hits = hits
+                best_shift = shift
+        monthly_shifts[month] = best_shift
+
+    # Bias Correction
+    bias = (
+        bt_data.groupby("Month")
+        .apply(lambda x: (x[model_name] - x["Actual"]).mean())
+        .to_dict()
+    )
+
+    return monthly_shifts, bias
+
+
+# =============================================================================
+# TAB RENDERERS
+# =============================================================================
+def render_forecast_tab(df, last_date, horizon, bt_data):
+    """Render forecast tab for given horizon."""
+    target_date = last_date + pd.DateOffset(months=horizon)
+    target_month = target_date.month
+
+    st.subheader(f"🎯 Прогноз на {horizon} мес. вперёд")
+    st.markdown(
+        f"**Прогнозный месяц:** {MONTH_NAMES_RU[target_month - 1]} {target_date.year}"
+    )
+
+    if bt_data is None:
+        st.error(
+            f"Данные бэктеста не найдены. Запустите: python3 scripts/run_backtest_h{horizon}.py"
+        )
+        return
+
+    best_model = get_best_model_for_horizon(horizon)
+
+    if best_model not in bt_data.columns:
+        st.error(f"Модель {best_model} отсутствует в данных бэктеста")
+        return
+
+    # Get corrections
+    monthly_shifts, bias = calculate_kpi_corrections(bt_data, best_model)
+
+    # Get base forecast
+    base_pred = forecast_with_model(df, target_date, best_model)
+
+    if np.isnan(base_pred):
+        st.error(f"Не удалось получить прогноз от модели {best_model}")
+        return
+
+    # Apply corrections
+    seasonal_shift = monthly_shifts.get(target_month, 0)
+    bias_correction = bias.get(target_month, 0)
+
+    seasonal_pred = base_pred + seasonal_shift
+    bias_pred = base_pred - bias_correction
+
+    # Display forecasts
+    col1, col2, col3 = st.columns(3)
+    col1.metric(f"{best_model.replace('_', ' ')}", f"{base_pred:.2f}%")
+    col2.metric("🎯 Seasonal", f"{seasonal_pred:.2f}%", f"{seasonal_shift:+.2f}")
+    col3.metric("📊 Bias", f"{bias_pred:.2f}%", f"{-bias_correction:+.2f}")
+
+    # Calculate top-5 models by MAE
+    models_available = [m for m in ALL_MODELS if m in bt_data.columns]
+    model_mae = {}
+    for m in models_available:
+        errors = (bt_data["Actual"] - bt_data[m]).abs()
+        model_mae[m] = errors.mean()
+    top5_models = sorted(model_mae.keys(), key=lambda x: model_mae[x])[:5]
+
+    # Chart: Top-5 models backtest + forecast points
+    fig = go.Figure()
+    bt_data_sorted = bt_data.sort_values("Date")
+
+    # KPI Zone (background)
+    fig.add_trace(
+        go.Scatter(
+            x=bt_data_sorted["Date"],
+            y=bt_data_sorted["Actual"] + 0.5,
+            mode="lines",
+            line=dict(width=0),
+            showlegend=False,
+            hoverinfo="skip",
+        )
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=bt_data_sorted["Date"],
+            y=bt_data_sorted["Actual"] - 0.5,
+            mode="lines",
+            line=dict(width=0),
+            fill="tonexty",
+            fillcolor="rgba(200, 200, 200, 0.3)",
+            name="KPI (±0.5)",
+            hoverinfo="skip",
+        )
+    )
+
+    # Actual values
+    fig.add_trace(
+        go.Scatter(
+            x=bt_data_sorted["Date"],
+            y=bt_data_sorted["Actual"],
+            name="Факт",
+            mode="lines+markers",
+            line=dict(color="black", width=2),
+            marker=dict(color="black", size=8),
+        )
+    )
+
+    # Top-5 models backtest lines
+    colors = ["#10b981", "#2563eb", "#f97316", "#8b5cf6", "#ef4444"]
+    for i, m in enumerate(top5_models):
+        fig.add_trace(
+            go.Scatter(
+                x=bt_data_sorted["Date"],
+                y=bt_data_sorted[m],
+                name=m.replace("_", " "),
+                mode="lines+markers",
+                line=dict(color=colors[i], width=2),
+                marker=dict(size=5),
+            )
+        )
+
+    # Forecast points for top-5 models
+    for i, m in enumerate(top5_models):
+        try:
+            pred = forecast_with_model(df, target_date, m)
+            if not np.isnan(pred):
+                fig.add_trace(
+                    go.Scatter(
+                        x=[target_date],
+                        y=[pred],
+                        name=f"{m} прогноз",
+                        mode="markers",
+                        marker=dict(color=colors[i], size=14, symbol="star"),
+                        showlegend=False,
+                    )
+                )
+        except:
+            pass
+
+    fig.update_layout(
+        title=f"Прогноз на {horizon} мес. вперёд",
+        xaxis_title="Дата",
+        yaxis_title="MoM инфляция (%)",
+        height=400,
+        hovermode="x unified",
+        plot_bgcolor="white",
+        paper_bgcolor="white",
+        xaxis=dict(gridcolor="#e5e5e5"),
+        yaxis=dict(gridcolor="#e5e5e5"),
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+    st.markdown("---")
+
+    # Historical context
+    st.markdown(f"#### Исторический контекст для {MONTH_NAMES_RU[target_month - 1]}")
+    bt_data["Month"] = bt_data["Date"].dt.month
+    month_history = bt_data[bt_data["Month"] == target_month]
+
+    if len(month_history) > 0:
+        col1, col2, col3 = st.columns(3)
+        col1.metric("Средний факт", f"{month_history['Actual'].mean():.2f}%")
+        col2.metric("Seasonal Shift", f"{seasonal_shift:+.2f}")
+        col3.metric("Bias", f"{bias_correction:+.2f}")
+
+    # Corrections table
+    with st.expander("📊 Таблица коррекций по месяцам"):
+        shifts_df = pd.DataFrame(
+            {
+                "Месяц": MONTH_NAMES_RU,
+                "Seasonal Shift": [monthly_shifts.get(m, 0) for m in range(1, 13)],
+                "Bias": [bias.get(m, 0) for m in range(1, 13)],
+            }
+        )
+        st.dataframe(
+            shifts_df.style.format({"Seasonal Shift": "{:+.2f}", "Bias": "{:+.2f}"}),
+            hide_index=True,
+        )
+
+
+def render_forecast_h12_tab(df, last_date, horizon=12):
+    """Render 12-month trajectory forecast tab."""
+    st.subheader("📈 Прогноз траектории на 12 месяцев")
+
+    # Load precomputed forecasts or calculate
+    bt_h12 = load_backtest_data(12)
+
+    if bt_h12 is None:
+        st.error(
+            "Данные бэктеста h=12 не найдены. Запустите: python3 scripts/run_backtest_h12.py"
+        )
+        return
+
+    # Get ensemble forecast
+    with st.spinner("Расчёт ансамбля моделей..."):
+        forecasts = {}
+        dates = pd.date_range(
+            start=last_date + pd.DateOffset(months=1), periods=horizon, freq="MS"
+        )
+
+        # Try to get forecasts from multiple models (top performers)
+        models_to_try = [
+            "Ridge",
+            "Prophet",
+            "BVAR",
+            "ETS",
+            "Huber",
+            "LightGBM",
+            "SubcompMulti",
+        ]
+
+        for model_name in models_to_try:
+            try:
+                if model_name == "Ridge":
+                    from sirena.models.ridge_extended import RidgeExtendedForecaster
+
+                    model = RidgeExtendedForecaster()
+                    model.fit(df)
+                    fc_vals = []
+                    for h in range(horizon):
+                        target = dates[h]
+                        df_ext = df.copy()
+                        df_ext.loc[target] = np.nan
+                        pred = model.predict(df_ext, target)["prediction"] - 100
+                        fc_vals.append(pred)
+                    forecasts["Ridge"] = fc_vals
+
+                elif model_name == "Prophet":
+                    from sirena.models.prophet import ProphetForecaster
+
+                    model = ProphetForecaster()
+                    model.fit(df, "Все товары и услуги")
+                    fc = model.forecast(horizon=horizon)
+                    forecasts["Prophet"] = list(fc)
+
+                elif model_name == "BVAR":
+                    from sirena.models.bvar import BayesianVAR
+
+                    # Load BVAR data
+                    bvar_df = pd.read_csv(
+                        "data/inflation_data.csv", sep=";", decimal=","
+                    )
+                    for col in [
+                        "mom",
+                        "Prod",
+                        "Nonprod",
+                        "Serv",
+                        "usd_nom_i",
+                        "Ruonia",
+                    ]:
+                        if col in bvar_df.columns:
+                            if bvar_df[col].dtype == object:
+                                bvar_df[col] = (
+                                    bvar_df[col].astype(str).str.replace(",", ".")
+                                )
+                            bvar_df[col] = pd.to_numeric(bvar_df[col], errors="coerce")
+                    bvar_df["Date"] = pd.to_datetime(
+                        bvar_df["Date"], format="%d.%m.%Y", errors="coerce"
+                    )
+                    bvar_df["Date"] = (
+                        bvar_df["Date"].dt.to_period("M").dt.to_timestamp()
+                    )
+                    bvar_df = bvar_df.set_index("Date").sort_index()
+
+                    data = pd.DataFrame()
+                    data["CPI"] = bvar_df["mom"] - 100
+                    data["Food"] = bvar_df["Prod"] - 100
+                    data["NonFood"] = bvar_df["Nonprod"] - 100
+                    data["Services"] = bvar_df["Serv"] - 100
+                    data["USD"] = bvar_df["usd_nom_i"] - 100
+                    data["RUONIA"] = bvar_df["Ruonia"]
+                    data = data.dropna()
+                    data = data[data.index <= last_date]
+
+                    bvar = BayesianVAR(lags=4)
+                    bvar.fit(data, target_col="CPI")
+                    fc = bvar.forecast_full(horizon=horizon)
+                    forecasts["BVAR"] = list(fc["median"][:, 0])
+
+                elif model_name == "ETS":
+                    from sirena.models.ets import ETSForecaster
+
+                    model = ETSForecaster()
+                    model.fit(df, "Все товары и услуги")
+                    fc = model.forecast(horizon=horizon)
+                    forecasts["ETS"] = list(fc)
+
+                elif model_name == "Huber":
+                    from sirena.models.huber import HuberForecaster
+
+                    model = HuberForecaster()
+                    model.fit(df)
+                    fc_vals = []
+                    for h in range(horizon):
+                        target = dates[h]
+                        df_ext = df.copy()
+                        df_ext.loc[target] = np.nan
+                        pred = model.predict(df_ext, target)["prediction"] - 100
+                        fc_vals.append(pred)
+                    forecasts["Huber"] = fc_vals
+
+                elif model_name == "LightGBM":
+                    from sirena.models.lightgbm import LightGBMForecaster
+
+                    model = LightGBMForecaster()
+                    model.fit(df, "Все товары и услуги")
+                    fc = model.forecast(horizon=horizon)
+                    forecasts["LightGBM"] = list(fc)
+
+                elif model_name == "SubcompMulti":
+                    from sirena.models.subcomponent_multi import (
+                        SubcomponentMultiForecaster,
+                    )
+
+                    # Load macro data for subcomponent model (needs Ki, Ruonia for rate features)
+                    macro_df = pd.read_csv(
+                        "data/inflation_data.csv", sep=";", decimal=","
+                    )
+                    for col in macro_df.columns:
+                        if col != "Date" and macro_df[col].dtype == object:
+                            macro_df[col] = (
+                                macro_df[col]
+                                .astype(str)
+                                .str.replace(",", ".")
+                                .astype(float)
+                            )
+                    macro_df["Date"] = pd.to_datetime(
+                        macro_df["Date"], format="%d.%m.%Y"
+                    )
+                    macro_df = macro_df.set_index("Date").sort_index()
+
+                    model = SubcomponentMultiForecaster()
+                    model.fit(macro_df, "mom")
+                    fc_vals = []
+                    for h in range(horizon):
+                        target = dates[h]
+                        macro_ext = macro_df.copy()
+                        macro_ext.loc[target] = np.nan
+                        pred = (
+                            model.predict(macro_ext, target)["prediction"] - 100
+                        )  # Convert from index to p.p.
+                        fc_vals.append(pred)
+                    forecasts["SubcompMulti"] = fc_vals
+
+            except Exception as e:
+                pass  # Model unavailable
+
+    if not forecasts:
+        st.error("Не удалось рассчитать ни одной модели")
+        return
+
+    # Create chart - ONLY forecast, no historical data
+    fig = go.Figure()
+
+    # Starting point (last actual value)
+    last_actual = df["Все товары и услуги"].iloc[-1] - 100
+    start_point = pd.DataFrame({"Date": [last_date], "Value": [last_actual]})
+
+    # Forecasts - each model as separate line
+    colors_list = [
+        "#2563eb",
+        "#dc2626",
+        "#16a34a",
+        "#9333ea",
+        "#ea580c",
+        "#0891b2",
+        "#db2777",
+    ]
+    for i, (model_name, fc_vals) in enumerate(forecasts.items()):
+        # Add starting point + forecast
+        full_dates = [last_date] + list(dates)
+        full_vals = [last_actual] + list(fc_vals)
+
+        fig.add_trace(
+            go.Scatter(
+                x=full_dates,
+                y=full_vals,
+                name=model_name,
+                mode="lines+markers",
+                line=dict(color=colors_list[i % len(colors_list)], width=2),
+                marker=dict(size=6),
+            )
+        )
+
+    # Ensemble (simple average)
+    if len(forecasts) > 1:
+        ensemble = np.mean([forecasts[m] for m in forecasts], axis=0)
+        full_dates = [last_date] + list(dates)
+        full_vals = [last_actual] + list(ensemble)
+        fig.add_trace(
+            go.Scatter(
+                x=full_dates,
+                y=full_vals,
+                name="Ансамбль",
+                mode="lines+markers",
+                line=dict(color="#000000", width=3),
+                marker=dict(size=8),
+            )
+        )
+
+    fig.update_layout(
+        title="Прогноз MoM инфляции на 12 месяцев",
+        xaxis_title="Дата",
+        yaxis_title="MoM инфляция (%)",
+        height=500,
+        hovermode="x unified",
+        plot_bgcolor="white",
+        paper_bgcolor="white",
+        xaxis=dict(gridcolor="#e5e5e5"),
+        yaxis=dict(gridcolor="#e5e5e5"),
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+    # Summary table
+    st.markdown("#### 📋 Прогнозные значения")
+    fc_df = pd.DataFrame({"Дата": [d.strftime("%m.%y") for d in dates]})
+    for model_name, fc_vals in forecasts.items():
+        fc_df[model_name] = fc_vals
+    if len(forecasts) > 1:
+        fc_df["Ансамбль"] = ensemble
+
+    st.dataframe(
+        fc_df.style.format({col: "{:.2f}" for col in fc_df.columns if col != "Дата"}),
+        use_container_width=True,
+        hide_index=True,
+    )
+
+    # === YoY CALCULATION ===
+    st.markdown("---")
+    st.markdown("#### 📊 Годовая инфляция (YoY)")
+
+    try:
+        from sirena.utils.yoy import forecast_yoy, yoy_at_horizon
+
+        # Get historical MoM data
+        mom_history = (df["Все товары и услуги"] - 100).dropna()
+
+        # Model selection for YoY
+        available_models = list(forecasts.keys()) + ["Ансамбль"]
+        yoy_model = st.selectbox(
+            "Модель для YoY",
+            options=available_models,
+            index=len(available_models) - 1,  # Default to Ансамбль
+            key="yoy_model_select",
+        )
+
+        # Get forecast for selected model
+        if yoy_model == "Ансамбль":
+            if len(forecasts) > 1:
+                selected_fc = np.mean([forecasts[m] for m in forecasts], axis=0)
+            else:
+                selected_fc = list(forecasts.values())[0]
+        else:
+            selected_fc = forecasts[yoy_model]
+
+        # YoY at different horizons
+        yoy_results = []
+        for h in [1, 3, 6, 12]:
+            if h <= len(selected_fc):
+                yoy_h = yoy_at_horizon(mom_history, selected_fc, h)
+                target_date = last_date + pd.DateOffset(months=h)
+                yoy_results.append(
+                    {
+                        "Горизонт": f"h={h}",
+                        "Дата": target_date.strftime("%m.%y"),
+                        "MoM %": selected_fc[h - 1],
+                        "YoY %": yoy_h,
+                    }
+                )
+
+        yoy_df = pd.DataFrame(yoy_results)
+        st.dataframe(
+            yoy_df.style.format({"MoM %": "{:.2f}", "YoY %": "{:.2f}"}),
+            use_container_width=True,
+            hide_index=True,
+        )
+
+        # YoY trajectory chart
+        yoy_series = forecast_yoy(mom_history, selected_fc, return_full=True)
+
+        fig_yoy = go.Figure()
+        fig_yoy.add_trace(
+            go.Scatter(
+                x=yoy_series.index,
+                y=yoy_series.values,
+                name=f"YoY ({yoy_model})",
+                mode="lines+markers",
+                line=dict(color="#dc2626", width=2),
+                marker=dict(size=6),
+            )
+        )
+
+        # Current YoY (from historical data)
+        current_yoy = (np.prod(1 + mom_history.tail(12).values / 100) - 1) * 100
+        fig_yoy.add_hline(
+            y=current_yoy,
+            line_dash="dash",
+            line_color="gray",
+            annotation_text=f"Текущий YoY: {current_yoy:.2f}%",
+        )
+
+        fig_yoy.update_layout(
+            title=f"Прогноз YoY инфляции ({yoy_model})",
+            xaxis_title="Дата",
+            yaxis_title="YoY инфляция (%)",
+            height=400,
+            plot_bgcolor="white",
+            paper_bgcolor="white",
+            xaxis=dict(gridcolor="#e5e5e5"),
+            yaxis=dict(gridcolor="#e5e5e5"),
+        )
+
+        st.plotly_chart(fig_yoy, use_container_width=True)
+
+    except Exception as e:
+        st.warning(f"YoY расчёт недоступен: {e}")
+
+
+def _render_exog_generation_form():
+    """Helper to render exog forecast generation form."""
+    st.markdown("### Генерация прогноза")
+    st.markdown("Введите текущие значения для генерации автопрогноза:")
+
+    col_ki, col_usd, col_brent = st.columns(3)
+    with col_ki:
+        gen_ki = st.number_input(
+            "Ключевая ставка (%)",
+            min_value=4.0,
+            max_value=25.0,
+            value=16.0,
+            step=0.25,
+            key="gen_ki",
+        )
+    with col_usd:
+        gen_usd = st.number_input(
+            "Курс USD (руб.)",
+            min_value=50.0,
+            max_value=150.0,
+            value=78.0,
+            step=1.0,
+            key="gen_usd",
+        )
+    with col_brent:
+        gen_brent = st.number_input(
+            "Brent ($)",
+            min_value=30.0,
+            max_value=150.0,
+            value=60.0,
+            step=1.0,
+            key="gen_brent",
+        )
+
+    if st.button("🔄 Сгенерировать прогноз", type="primary", key="gen_exog_btn"):
+        with st.spinner("Генерация..."):
+            try:
+                infl_df = pd.read_csv("data/inflation_data.csv", sep=";", decimal=",")
+                for col in infl_df.columns:
+                    if col != "Date" and infl_df[col].dtype == object:
+                        infl_df[col] = infl_df[col].astype(str).str.replace(",", ".")
+                        infl_df[col] = pd.to_numeric(infl_df[col], errors="coerce")
+                infl_df["Date"] = pd.to_datetime(infl_df["Date"], format="%d.%m.%Y")
+                infl_df = infl_df.set_index("Date").sort_index()
+
+                from sirena.models.exog_forecaster import ExogForecaster
+
+                ef = ExogForecaster(
+                    ki_method="adaptive",
+                    usd_method="adaptive",
+                    brent_method="ar1",
+                    current_ki=gen_ki,
+                    current_usd_abs=gen_usd,
+                    current_ruonia=gen_ki - 0.25,
+                    current_brent=gen_brent,
+                )
+                ef.fit(infl_df)
+                ef.save_forecast(
+                    "data/exog_forecast.csv", horizon=12, include_history=6
+                )
+                ef.save_forecast_json("data/exog_forecast.json", horizon=12)
+
+                st.success("Прогноз сгенерирован!")
+                st.rerun()
+            except Exception as e:
+                st.error(f"Ошибка: {e}")
+
+
+def render_exog_forecast_tab():
+    """Render exogenous variables forecast tab."""
+    st.subheader("📊 Прогноз экзогенных переменных")
+
+    # Import loader
+    from sirena.models.exog_loader import (
+        load_exog_data,
+        get_exog_source,
+        copy_forecast_to_manual,
+        clear_manual_file,
+        save_manual_data,
+        manual_file_exists,
+    )
+
+    exog_csv_path = "data/exog_forecast.csv"
+    exog_json_path = "data/exog_forecast.json"
+    manual_path = "data/exog_manual.csv"
+
+    try:
+        import json
+        import traceback
+
+        # Check source
+        source = get_exog_source()
+
+        # === SOURCE SELECTOR ===
+        st.markdown("### Источник данных")
+
+        col_src1, col_src2, col_src3 = st.columns([2, 1, 1])
+        with col_src1:
+            if source == "manual":
+                st.info("📝 **Используются ручные данные** (exog_manual.csv)")
+            elif source == "forecast":
+                st.success("🤖 **Используется автопрогноз** (exog_forecast.csv)")
+            else:
+                st.warning("⚠️ Нет данных. Сгенерируйте прогноз.")
+
+        with col_src2:
+            if source == "forecast":
+                if st.button(
+                    "📋 Скопировать в ручной",
+                    help="Скопировать автопрогноз для редактирования",
+                ):
+                    if copy_forecast_to_manual(overwrite=False):
+                        st.success("Скопировано!")
+                        st.rerun()
+                    else:
+                        st.warning("Ручной файл уже существует")
+
+        with col_src3:
+            if source == "manual":
+                if st.button("🗑️ Удалить ручной", help="Вернуться к автопрогнозу"):
+                    if clear_manual_file():
+                        st.success("Удалено!")
+                        st.rerun()
+
+        # Load data based on source
+        if source == "manual":
+            exog_df = pd.read_csv(manual_path)
+            exog_df["Date"] = pd.to_datetime(exog_df["Date"])
+        elif os.path.exists(exog_csv_path):
+            exog_df = pd.read_csv(exog_csv_path)
+            exog_df["Date"] = pd.to_datetime(exog_df["Date"])
+        else:
+            exog_df = None
+
+        # Load metadata from forecast
+        exog_meta = None
+        if os.path.exists(exog_json_path):
+            with open(exog_json_path, "r", encoding="utf-8") as f:
+                exog_meta = json.load(f)
+
+        if exog_df is None:
+            st.warning("Нет данных. Сгенерируйте прогноз ниже.")
+            # Show generation form
+            _render_exog_generation_form()
+            return
+
+        # Display metadata
+        if exog_meta:
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.metric("Последние данные", exog_meta["last_data_date"])
+            with col2:
+                st.metric("Горизонт прогноза", f"{exog_meta['horizon']} мес.")
+            with col3:
+                methods_str = ", ".join(
+                    [f"{k}: {v}" for k, v in exog_meta["methods"].items()]
+                )
+                st.metric("Методы", methods_str)
+
+        # Split into history and forecast
+        hist_df = exog_df[exog_df["Type"] == "History"].copy()
+        fc_df = exog_df[exog_df["Type"] != "History"].copy()
+
+        # --- Table ---
+        st.markdown("### Таблица данных")
+
+        # If manual mode, show editable table
+        if source == "manual":
+            st.markdown(
+                "📝 **Режим редактирования** — измените значения и нажмите 'Сохранить'"
+            )
+
+            # Prepare editable dataframe
+            edit_df = exog_df.copy()
+            edit_df["Date"] = edit_df["Date"].dt.strftime("%Y-%m-%d")
+
+            # Only keep editable columns
+            edit_cols = ["Date", "Ki", "Ruonia", "USD_ABS", "Brent", "Type"]
+            edit_df = edit_df[[c for c in edit_cols if c in edit_df.columns]]
+
+            # Use data_editor for editing
+            edited_df = st.data_editor(
+                edit_df,
+                use_container_width=True,
+                height=400,
+                num_rows="fixed",
+                column_config={
+                    "Date": st.column_config.TextColumn("Дата", disabled=True),
+                    "Ki": st.column_config.NumberColumn(
+                        "Ki (%)", min_value=4.0, max_value=25.0, step=0.25
+                    ),
+                    "Ruonia": st.column_config.NumberColumn(
+                        "Ruonia (%)", min_value=4.0, max_value=25.0, step=0.25
+                    ),
+                    "USD_ABS": st.column_config.NumberColumn(
+                        "USD (руб.)", min_value=50.0, max_value=150.0, step=0.5
+                    ),
+                    "Brent": st.column_config.NumberColumn(
+                        "Brent ($)", min_value=30.0, max_value=150.0, step=0.5
+                    ),
+                    "Type": st.column_config.TextColumn("Тип", disabled=True),
+                },
+                key="exog_editor",
+            )
+
+            # Save button
+            if st.button("💾 Сохранить изменения", type="primary"):
+                edited_df["Date"] = pd.to_datetime(edited_df["Date"])
+                if save_manual_data(edited_df):
+                    st.success("Сохранено!")
+                    st.rerun()
+                else:
+                    st.error("Ошибка сохранения")
+        else:
+            # Read-only display
+            display_df = exog_df.copy()
+            display_df["Date"] = display_df["Date"].dt.strftime("%Y-%m")
+
+            # Rename columns for Russian
+            col_rename = {
+                "Date": "Дата",
+                "Ki": "Ключевая ставка (%)",
+                "Ruonia": "RUONIA (%)",
+                "USD_ABS": "Курс USD (руб.)",
+                "usd_nom_i": "Индекс USD",
+                "Brent": "Brent ($)",
+                "Type": "Тип",
+            }
+            display_df = display_df.rename(columns=col_rename)
+
+            # Style the dataframe
+            def highlight_forecast(row):
+                if "Тип" in row.index and row["Тип"] == "Forecast":
+                    return ["background-color: #e6f3ff"] * len(row)
+                return [""] * len(row)
+
+            # Format numeric columns
+            format_dict = {}
+            if "Ключевая ставка (%)" in display_df.columns:
+                format_dict["Ключевая ставка (%)"] = "{:.2f}"
+            if "RUONIA (%)" in display_df.columns:
+                format_dict["RUONIA (%)"] = "{:.2f}"
+            if "Курс USD (руб.)" in display_df.columns:
+                format_dict["Курс USD (руб.)"] = "{:.2f}"
+            if "Индекс USD" in display_df.columns:
+                format_dict["Индекс USD"] = "{:.2f}"
+            if "Brent ($)" in display_df.columns:
+                format_dict["Brent ($)"] = "{:.2f}"
+
+            styled_df = display_df.style.apply(highlight_forecast, axis=1)
+            if format_dict:
+                styled_df = styled_df.format(format_dict, na_rep="-")
+
+            st.dataframe(styled_df, use_container_width=True, height=400)
+
+        # --- Chart ---
+        st.markdown("### Траектории экзогенных")
+
+        # Create figure with secondary y-axis
+        fig = go.Figure()
+
+        # Ki trajectory
+        fig.add_trace(
+            go.Scatter(
+                x=hist_df["Date"],
+                y=hist_df["Ki"],
+                name="Ki (история)",
+                mode="lines+markers",
+                line=dict(color="#1f77b4", width=2),
+                marker=dict(size=6),
+            )
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=fc_df["Date"],
+                y=fc_df["Ki"],
+                name="Ki (прогноз)",
+                mode="lines+markers",
+                line=dict(color="#1f77b4", width=2, dash="dash"),
+                marker=dict(size=6, symbol="circle-open"),
+            )
+        )
+
+        # Ruonia trajectory
+        fig.add_trace(
+            go.Scatter(
+                x=hist_df["Date"],
+                y=hist_df["Ruonia"],
+                name="Ruonia (история)",
+                mode="lines+markers",
+                line=dict(color="#ff7f0e", width=2),
+                marker=dict(size=6),
+            )
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=fc_df["Date"],
+                y=fc_df["Ruonia"],
+                name="Ruonia (прогноз)",
+                mode="lines+markers",
+                line=dict(color="#ff7f0e", width=2, dash="dash"),
+                marker=dict(size=6, symbol="circle-open"),
+            )
+        )
+
+        # Add vertical line at forecast start
+        if len(fc_df) > 0:
+            fc_start = fc_df["Date"].iloc[0]
+            fig.add_vline(x=fc_start, line_dash="dot", line_color="gray")
+
+        fig.update_layout(
+            title="Прогноз ключевой ставки и RUONIA",
+            xaxis_title="Дата",
+            yaxis_title="Ставка (%)",
+            height=400,
+            plot_bgcolor="white",
+            paper_bgcolor="white",
+            xaxis=dict(gridcolor="#e5e5e5"),
+            yaxis=dict(gridcolor="#e5e5e5"),
+            legend=dict(
+                orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1
+            ),
+        )
+
+        st.plotly_chart(fig, use_container_width=True)
+
+        # USD and Brent charts side by side
+        col_usd, col_brent = st.columns(2)
+
+        with col_usd:
+            if "USD_ABS" in exog_df.columns and not exog_df["USD_ABS"].isna().all():
+                fig_usd = go.Figure()
+
+                fig_usd.add_trace(
+                    go.Scatter(
+                        x=hist_df["Date"],
+                        y=hist_df["USD_ABS"],
+                        name="USD (история)",
+                        mode="lines+markers",
+                        line=dict(color="#9467bd", width=2),
+                        marker=dict(size=6),
+                    )
+                )
+                fig_usd.add_trace(
+                    go.Scatter(
+                        x=fc_df["Date"],
+                        y=fc_df["USD_ABS"],
+                        name="USD (прогноз)",
+                        mode="lines+markers",
+                        line=dict(color="#9467bd", width=2, dash="dash"),
+                        marker=dict(size=6, symbol="circle-open"),
+                    )
+                )
+
+                if len(fc_df) > 0:
+                    fig_usd.add_vline(
+                        x=fc_df["Date"].iloc[0], line_dash="dot", line_color="gray"
+                    )
+
+                fig_usd.update_layout(
+                    title="Прогноз курса USD/RUB",
+                    xaxis_title="Дата",
+                    yaxis_title="Курс (руб.)",
+                    height=350,
+                    plot_bgcolor="white",
+                    paper_bgcolor="white",
+                    xaxis=dict(gridcolor="#e5e5e5"),
+                    yaxis=dict(gridcolor="#e5e5e5"),
+                )
+
+                st.plotly_chart(fig_usd, use_container_width=True)
+
+        with col_brent:
+            if "Brent" in exog_df.columns and not exog_df["Brent"].isna().all():
+                fig_brent = go.Figure()
+
+                fig_brent.add_trace(
+                    go.Scatter(
+                        x=hist_df["Date"],
+                        y=hist_df["Brent"],
+                        name="Brent (история)",
+                        mode="lines+markers",
+                        line=dict(color="#2ca02c", width=2),
+                        marker=dict(size=6),
+                    )
+                )
+                fig_brent.add_trace(
+                    go.Scatter(
+                        x=fc_df["Date"],
+                        y=fc_df["Brent"],
+                        name="Brent (прогноз)",
+                        mode="lines+markers",
+                        line=dict(color="#2ca02c", width=2, dash="dash"),
+                        marker=dict(size=6, symbol="circle-open"),
+                    )
+                )
+
+                if len(fc_df) > 0:
+                    fig_brent.add_vline(
+                        x=fc_df["Date"].iloc[0], line_dash="dot", line_color="gray"
+                    )
+
+                fig_brent.update_layout(
+                    title="Прогноз цены нефти Brent",
+                    xaxis_title="Дата",
+                    yaxis_title="Цена ($)",
+                    height=350,
+                    plot_bgcolor="white",
+                    paper_bgcolor="white",
+                    xaxis=dict(gridcolor="#e5e5e5"),
+                    yaxis=dict(gridcolor="#e5e5e5"),
+                )
+
+                st.plotly_chart(fig_brent, use_container_width=True)
+
+        # --- Methodology ---
+        with st.expander("📖 Методология прогноза"):
+            st.markdown("""
+            **Методы прогноза экзогенных переменных:**
+
+            | Переменная | Метод | Описание |
+            |------------|-------|----------|
+            | **Ki (Ключевая ставка)** | Adaptive | Продолжение тренда с затуханием (0.7^t). Если Ki менялся в последние 6 мес — тренд продолжается |
+            | **Ruonia** | Ki - спред | Ruonia = Ki - 0.25 п.п. (исторический спред) |
+            | **USD** | Adaptive | Продолжение тренда с затуханием (0.8^t). Анализ изменений за 6 мес. |
+            | **Brent** | AR(1) | Возврат к долгосрочному среднему $70 со скоростью 3%/мес |
+
+            **Валидация методов (бэктест 2023-2025):**
+            - Adaptive для Ki: **MAE -24%** vs naive на h=1
+            - Adaptive для USD: учитывает тренды укрепления/ослабления рубля
+            - AR(1) для Brent: адекватно отражает mean reversion
+
+            **Интеграция:**
+            Прогнозные траектории используются в SubcompMulti v2.7 для rate-sensitive features.
+            """)
+
+        # --- Update section ---
+        st.markdown("### Обновить прогноз")
+        st.markdown("Введите актуальные значения для пересчёта прогноза:")
+
+        col_ki, col_usd, col_brent = st.columns(3)
+        with col_ki:
+            new_ki = st.number_input(
+                "Ключевая ставка (%)",
+                min_value=4.0,
+                max_value=25.0,
+                value=float(exog_meta["last_values"].get("Ki", 16.0)),
+                step=0.25,
+                key="exog_ki",
+            )
+        with col_usd:
+            new_usd = st.number_input(
+                "Курс USD (руб.)",
+                min_value=50.0,
+                max_value=150.0,
+                value=float(exog_meta["last_values"].get("USD_ABS", 78.0)),
+                step=1.0,
+                key="exog_usd",
+            )
+        with col_brent:
+            new_brent = st.number_input(
+                "Brent ($)",
+                min_value=30.0,
+                max_value=150.0,
+                value=float(exog_meta["last_values"].get("Brent", 60.0)),
+                step=1.0,
+                key="exog_brent",
+            )
+
+        if st.button("🔄 Пересчитать прогноз", type="primary"):
+            with st.spinner("Генерация нового прогноза..."):
+                try:
+                    # Load macro data
+                    infl_df = pd.read_csv(
+                        "data/inflation_data.csv", sep=";", decimal=","
+                    )
+                    for col in infl_df.columns:
+                        if col != "Date" and infl_df[col].dtype == object:
+                            infl_df[col] = (
+                                infl_df[col].astype(str).str.replace(",", ".")
+                            )
+                            infl_df[col] = pd.to_numeric(infl_df[col], errors="coerce")
+                    infl_df["Date"] = pd.to_datetime(infl_df["Date"], format="%d.%m.%Y")
+                    infl_df = infl_df.set_index("Date").sort_index()
+
+                    from sirena.models.exog_forecaster import ExogForecaster
+
+                    ef = ExogForecaster(
+                        ki_method="adaptive",
+                        usd_method="adaptive",
+                        brent_method="ar1",
+                        current_ki=new_ki,
+                        current_usd_abs=new_usd,
+                        current_ruonia=new_ki - 0.25,
+                        current_brent=new_brent,
+                    )
+                    ef.fit(infl_df)
+                    ef.save_forecast(
+                        "data/exog_forecast.csv", horizon=12, include_history=6
+                    )
+                    ef.save_forecast_json("data/exog_forecast.json", horizon=12)
+
+                    st.success("Прогноз обновлён!")
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"Ошибка обновления: {e}")
+
+    except FileNotFoundError:
+        st.warning(
+            "Файл прогноза не найден. Введите текущие значения и нажмите кнопку для генерации."
+        )
+
+        col_ki, col_usd, col_brent = st.columns(3)
+        with col_ki:
+            init_ki = st.number_input(
+                "Ключевая ставка (%)",
+                min_value=4.0,
+                max_value=25.0,
+                value=16.0,
+                step=0.25,
+                key="init_ki",
+            )
+        with col_usd:
+            init_usd = st.number_input(
+                "Курс USD (руб.)",
+                min_value=50.0,
+                max_value=150.0,
+                value=78.0,
+                step=1.0,
+                key="init_usd",
+            )
+        with col_brent:
+            init_brent = st.number_input(
+                "Brent ($)",
+                min_value=30.0,
+                max_value=150.0,
+                value=60.0,
+                step=1.0,
+                key="init_brent",
+            )
+
+        if st.button("🔄 Сгенерировать прогноз", type="primary"):
+            with st.spinner("Генерация прогноза экзогенных..."):
+                try:
+                    infl_df = pd.read_csv(
+                        "data/inflation_data.csv", sep=";", decimal=","
+                    )
+                    for col in infl_df.columns:
+                        if col != "Date" and infl_df[col].dtype == object:
+                            infl_df[col] = (
+                                infl_df[col].astype(str).str.replace(",", ".")
+                            )
+                            infl_df[col] = pd.to_numeric(infl_df[col], errors="coerce")
+                    infl_df["Date"] = pd.to_datetime(infl_df["Date"], format="%d.%m.%Y")
+                    infl_df = infl_df.set_index("Date").sort_index()
+
+                    from sirena.models.exog_forecaster import ExogForecaster
+
+                    ef = ExogForecaster(
+                        ki_method="adaptive",
+                        usd_method="adaptive",
+                        brent_method="ar1",
+                        current_ki=init_ki,
+                        current_usd_abs=init_usd,
+                        current_ruonia=init_ki - 0.25,
+                        current_brent=init_brent,
+                    )
+                    ef.fit(infl_df)
+                    ef.save_forecast(
+                        "data/exog_forecast.csv", horizon=12, include_history=6
+                    )
+                    ef.save_forecast_json("data/exog_forecast.json", horizon=12)
+
+                    st.success("Прогноз сгенерирован!")
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"Ошибка генерации: {e}")
+
+    except Exception as e:
+        import traceback
+
+        st.error(f"Ошибка загрузки прогноза: {e}")
+        st.code(traceback.format_exc())
+
+
+def render_scenarios_tab(df, last_date):
+    """Render rate scenarios tab with calibrated transmission model v2.0."""
+    st.subheader("🎚️ Сценарии ключевой ставки")
+
+    # Model selection
+    model_type = st.radio(
+        "Модель трансмиссии",
+        options=["simple", "subcomponent", "asymmetric"],
+        format_func=lambda x: {
+            "simple": "📊 Базовая (симметричный IRF)",
+            "subcomponent": "🧩 Субкомпонентная (с декомпозицией)",
+            "asymmetric": "📈📉 Асимметричная (hike ≠ cut)",
+        }[x],
+        horizontal=True,
+    )
+
+    # Model description
+    if model_type == "simple":
+        st.markdown("""
+        **Базовая модель трансмиссии** — калиброванные параметры из литературы.
+        - Пиковый эффект: **-0.08%** на 1 п.п. ставки
+        - Лаг пикового эффекта: **6 месяцев**
+        """)
+    elif model_type == "subcomponent":
+        st.markdown("""
+        **Субкомпонентная модель** — разная чувствительность для разных товаров.
+        - 🏠 Кредитозависимые (авто, мебель): **-0.15** peak effect, **4 мес** лаг
+        - 🛒 Импортозависимые (одежда, обувь): **-0.10** peak effect, **3 мес** лаг
+        - 🥬 Базовые продукты (мясо, молоко): **-0.02** peak effect, **6 мес** лаг
+        - 🏛️ Регулируемые (ЖКХ): **-0.01** peak effect, **12 мес** лаг
+        """)
+    else:  # asymmetric
+        st.markdown("""
+        **Асимметричная модель** — повышение ставки сильнее влияет, чем снижение.
+        - 📈 Повышение (hike): **-0.10** peak effect, **5 мес** лаг
+        - 📉 Снижение (cut): **-0.05** peak effect, **8 мес** лаг
+        - Ratio: повышение в **~2x** сильнее
+        """)
+
+    # Scenario selector
+    col1, col2 = st.columns([1, 2])
+    with col1:
+        scenario = st.selectbox(
+            "Сценарий Ki",
+            options=["auto", "base", "hike", "cut", "custom"],
+            format_func=lambda x: {
+                "auto": "🤖 Авто (по правилу Тейлора)",
+                "base": "📊 Базовый (без изменений)",
+                "hike": "📈 Повышение (+2 п.п. за 6 мес)",
+                "cut": "📉 Снижение (-2 п.п. за 6 мес)",
+                "custom": "⚙️ Пользовательский",
+            }[x],
+        )
+
+    with col2:
+        horizon = st.slider(
+            "Горизонт прогноза", min_value=6, max_value=24, value=12, step=3
+        )
+
+    # Custom scenario input
+    custom_ki = None
+    if scenario == "custom":
+        st.markdown("**Введите траекторию изменения Ki (п.п. от текущего уровня):**")
+        cols = st.columns(min(6, horizon))
+        custom_vals = []
+        for i, col in enumerate(cols):
+            if i < horizon:
+                val = col.number_input(
+                    f"Месяц {i + 1}", value=0.0, step=0.5, key=f"ki_{i}"
+                )
+                custom_vals.append(val)
+        # Fill remaining months with last value
+        while len(custom_vals) < horizon:
+            custom_vals.append(custom_vals[-1] if custom_vals else 0.0)
+        custom_ki = np.array(custom_vals)
+
+    # Run model
+    with st.spinner("Расчёт модели трансмиссии..."):
+        try:
+            # Load inflation_data.csv
+            infl_df = pd.read_csv(
+                "data/inflation_data.csv", sep=";", decimal=",", encoding="utf-8-sig"
+            )
+            for col in infl_df.columns:
+                if col != "Date" and infl_df[col].dtype == object:
+                    infl_df[col] = infl_df[col].astype(str).str.replace(",", ".")
+                    infl_df[col] = pd.to_numeric(infl_df[col], errors="coerce")
+            infl_df["Date"] = pd.to_datetime(
+                infl_df["Date"], format="%d.%m.%Y", errors="coerce"
+            )
+            infl_df = infl_df.set_index("Date").sort_index()
+
+            # Display current regime
+            try:
+                from sirena.models.regime_detector import detect_regime, MacroRegime
+
+                regime, regime_diag = detect_regime(infl_df)
+                regime_emoji = {"normal": "🟢", "shock": "🔴", "high_inflation": "🟠"}[
+                    regime.value
+                ]
+                regime_label = {
+                    "normal": "Нормальный",
+                    "shock": "Шок",
+                    "high_inflation": "Высокая инфляция",
+                }[regime.value]
+                st.info(
+                    f"**Текущий режим:** {regime_emoji} {regime_label} | ΔKi(3м): {regime_diag['ki_change']:+.1f} п.п. | ΔRuonia(3м): {regime_diag['ruonia_change']:+.1f} п.п."
+                )
+            except Exception:
+                pass
+
+            # Auto scenario using Taylor rule
+            auto_ki_trajectory = None
+            if scenario == "auto":
+                try:
+                    from sirena.models.ki_trajectory import KiTrajectoryForecaster
+                    from sirena.models.subcomponent_multi import (
+                        SubcomponentMultiForecaster,
+                    )
+
+                    # Get baseline inflation forecast
+                    base_model = SubcomponentMultiForecaster(horizon=1)
+                    base_model.fit(infl_df, "mom")
+                    baseline_fc = base_model.forecast(horizon)
+
+                    # Get Ki trajectory from Taylor rule
+                    ki_model = KiTrajectoryForecaster()
+                    ki_model.fit(infl_df)
+                    auto_ki_trajectory = ki_model.forecast_trajectory(
+                        horizon, baseline_fc
+                    )
+
+                    current_ki = (
+                        infl_df["Ki"].iloc[-1] if "Ki" in infl_df.columns else 21.0
+                    )
+                    ki_change_auto = auto_ki_trajectory[-1] - current_ki
+
+                    st.success(
+                        f"**Авто-траектория Ki:** {current_ki:.1f}% → {auto_ki_trajectory[-1]:.1f}% (Δ = {ki_change_auto:+.1f} п.п.)"
+                    )
+                except Exception as e:
+                    st.warning(f"Авто-сценарий недоступен: {e}")
+                    scenario = "base"  # Fallback
+
+            # Initialize model based on type
+            group_decomposition = None
+
+            if model_type == "subcomponent":
+                from sirena.models.subcomponent_scenario import (
+                    SubcomponentScenarioForecaster,
+                )
+
+                model = SubcomponentScenarioForecaster()
+                model.fit(infl_df)
+                model_desc = "Субкомпонентная модель с декомпозицией по группам товаров"
+            elif model_type == "asymmetric":
+                from sirena.models.scenario_rate import ScenarioRateModel
+
+                model = ScenarioRateModel(use_asymmetric=True)
+                model.fit(infl_df)
+                model_desc = "Асимметричная модель (повышение ~2x сильнее снижения)"
+            else:  # simple
+                from sirena.models.scenario_rate import ScenarioRateModel
+
+                model = ScenarioRateModel()
+                model.fit(infl_df)
+                model_desc = "Базовая модель с симметричным IRF"
+
+            # Define Ki changes for each scenario
+            ki_changes = {
+                "base": 0.0,
+                "hike": 2.0,  # +2 п.п.
+                "cut": -2.0,  # -2 п.п.
+            }
+
+            # Add auto scenario if trajectory is available
+            if auto_ki_trajectory is not None:
+                current_ki = infl_df["Ki"].iloc[-1] if "Ki" in infl_df.columns else 21.0
+                ki_changes["auto"] = auto_ki_trajectory[-1] - current_ki
+
+            # Get forecasts for all scenarios
+            results = {}
+            for sc, ki_change in ki_changes.items():
+                # Use forecast_scenario_with_ci for subcomponent model
+                if model_type == "subcomponent" and hasattr(
+                    model, "forecast_scenario_with_ci"
+                ):
+                    fc = model.forecast_scenario_with_ci(
+                        horizon, ki_change=ki_change, alpha=0.1
+                    )
+                    results[sc] = {
+                        "total": fc["mean"],
+                        "ki_path": np.full(horizon, ki_change),
+                        "effect": fc["effect"],
+                        "baseline": fc["baseline"],
+                        "total_q05": fc["ci_lower"],  # Real 90% CI
+                        "total_q95": fc["ci_upper"],
+                    }
+                else:
+                    fc = model.forecast_scenario(horizon, ki_change=ki_change)
+                    results[sc] = {
+                        "total": fc["total"],
+                        "ki_path": np.full(horizon, ki_change),
+                        "effect": fc["effect"],
+                        "baseline": fc["baseline"],
+                        "total_q05": fc["total"] - 0.3,  # Approximate CI
+                        "total_q95": fc["total"] + 0.3,
+                    }
+
+                # Get group decomposition for subcomponent model
+                if model_type == "subcomponent" and sc == "hike":
+                    fc_full = model.forecast_scenario(horizon, ki_change=ki_change)
+                    group_decomposition = fc_full.get("group_decomposition")
+
+            # Custom scenario
+            if custom_ki is not None:
+                if model_type == "subcomponent" and hasattr(
+                    model, "forecast_scenario_with_ci"
+                ):
+                    fc_custom = model.forecast_scenario_with_ci(
+                        horizon, ki_change=custom_ki[0], alpha=0.1
+                    )
+                    results["custom"] = {
+                        "total": fc_custom["mean"],
+                        "ki_path": custom_ki,
+                        "effect": fc_custom["effect"],
+                        "baseline": fc_custom["baseline"],
+                        "total_q05": fc_custom["ci_lower"],
+                        "total_q95": fc_custom["ci_upper"],
+                    }
+                else:
+                    fc_custom = model.forecast_scenario(horizon, ki_change=custom_ki[0])
+                    results["custom"] = {
+                        "total": fc_custom["total"],
+                        "ki_path": custom_ki,
+                        "effect": fc_custom["effect"],
+                        "baseline": fc_custom["baseline"],
+                        "total_q05": fc_custom["total"] - 0.3,
+                        "total_q95": fc_custom["total"] + 0.3,
+                    }
+
+            st.success(f"✅ {model_desc}")
+
+        except Exception as e:
+            st.error(f"Ошибка расчёта: {e}")
+            import traceback
+
+            st.text(traceback.format_exc())
+            return
+
+    # Results visualization
+    st.markdown("---")
+    st.markdown("### 📊 Результаты сценарного анализа")
+
+    # Comparison chart
+    fig = go.Figure()
+    dates = pd.date_range(
+        start=last_date + pd.DateOffset(months=1), periods=horizon, freq="MS"
+    )
+
+    scenario_colors = {
+        "auto": "#f59e0b",  # Amber
+        "base": "#3b82f6",  # Blue
+        "hike": "#ef4444",  # Red
+        "cut": "#22c55e",  # Green
+        "custom": "#8b5cf6",  # Purple
+    }
+    scenario_names = {
+        "auto": "Авто (Тейлор)",
+        "base": "Базовый",
+        "hike": "Повышение Ki",
+        "cut": "Снижение Ki",
+        "custom": "Пользовательский",
+    }
+
+    for sc, fc in results.items():
+        color = scenario_colors[sc]
+        is_selected = sc == scenario
+
+        # Add CI fan chart for selected scenario
+        if is_selected and "total_q05" in fc and "total_q95" in fc:
+            # Convert hex color to rgba for fill
+            hex_color = color.lstrip("#")
+            r, g, b = tuple(int(hex_color[i : i + 2], 16) for i in (0, 2, 4))
+            fill_color = f"rgba({r}, {g}, {b}, 0.2)"
+
+            # Upper bound (no line)
+            fig.add_trace(
+                go.Scatter(
+                    x=dates,
+                    y=fc["total_q95"],
+                    mode="lines",
+                    line=dict(width=0),
+                    showlegend=False,
+                    hoverinfo="skip",
+                )
+            )
+            # Lower bound with fill to upper
+            fig.add_trace(
+                go.Scatter(
+                    x=dates,
+                    y=fc["total_q05"],
+                    mode="lines",
+                    line=dict(width=0),
+                    fill="tonexty",
+                    fillcolor=fill_color,
+                    showlegend=True,
+                    name=f"{scenario_names[sc]} 90% CI",
+                )
+            )
+
+        # Main forecast line
+        fig.add_trace(
+            go.Scatter(
+                x=dates,
+                y=fc["total"],
+                name=scenario_names[sc],
+                mode="lines+markers",
+                line=dict(
+                    color=color,
+                    width=2 if is_selected else 1,
+                    dash="solid" if is_selected else "dot",
+                ),
+                marker=dict(size=6 if is_selected else 4),
+            )
+        )
+
+    fig.update_layout(
+        title="Прогноз MoM инфляции при разных сценариях ставки"
+        + (" (с 90% CI)" if model_type == "subcomponent" else ""),
+        xaxis_title="Дата",
+        yaxis_title="MoM инфляция (%)",
+        height=450,
+        hovermode="x unified",
+        plot_bgcolor="white",
+        paper_bgcolor="white",
+        xaxis=dict(gridcolor="#e5e5e5"),
+        yaxis=dict(gridcolor="#e5e5e5"),
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+    # Ki trajectory chart
+    fig_ki = go.Figure()
+    for sc, fc in results.items():
+        fig_ki.add_trace(
+            go.Scatter(
+                x=dates,
+                y=fc["ki_path"],
+                name=scenario_names[sc],
+                mode="lines+markers",
+                line=dict(color=scenario_colors[sc], width=2 if sc == scenario else 1),
+            )
+        )
+
+    fig_ki.update_layout(
+        title="Траектория изменения ключевой ставки (п.п.)",
+        xaxis_title="Дата",
+        yaxis_title="Изменение Ki (п.п.)",
+        height=300,
+        plot_bgcolor="white",
+        paper_bgcolor="white",
+        xaxis=dict(gridcolor="#e5e5e5"),
+        yaxis=dict(gridcolor="#e5e5e5"),
+    )
+
+    st.plotly_chart(fig_ki, use_container_width=True)
+
+    # Summary metrics
+    st.markdown("### 📋 Сравнение сценариев")
+
+    # Calculate baseline cumulative for delta
+    base_cum = np.sum(results["base"]["total"])
+
+    cols = st.columns(len(results))
+    for i, (sc, fc) in enumerate(results.items()):
+        with cols[i]:
+            cum_cpi = np.sum(fc["total"])
+            effect = np.sum(fc["effect"])
+            delta_vs_base = cum_cpi - base_cum
+
+            st.metric(
+                label=scenario_names[sc],
+                value=f"{cum_cpi:.2f}%",
+                delta=f"Эффект: {effect:+.2f}%" if sc != "base" else "базовый",
+            )
+
+    # Group decomposition for subcomponent model
+    if model_type == "subcomponent" and group_decomposition:
+        st.markdown("---")
+        st.markdown("### 🧩 Декомпозиция эффекта по группам товаров")
+        st.markdown("*При повышении ставки на +2 п.п.*")
+
+        group_names = {
+            "credit": "🏠 Кредитозависимые (авто, мебель)",
+            "import": "🛒 Импортозависимые (одежда, обувь)",
+            "basic": "🥬 Базовые продукты (мясо, молоко)",
+            "regulated": "🏛️ Регулируемые (ЖКХ)",
+            "services": "🎓 Услуги (образование, туризм)",
+            "other": "📦 Прочие",
+        }
+
+        # Sort by absolute effect
+        sorted_groups = sorted(
+            group_decomposition.items(), key=lambda x: abs(x[1]), reverse=True
+        )
+
+        # Create bar chart
+        fig_decomp = go.Figure()
+        for group, effect in sorted_groups:
+            if effect != 0:
+                fig_decomp.add_trace(
+                    go.Bar(
+                        x=[group_names.get(group, group)],
+                        y=[effect],
+                        name=group,
+                        marker_color="#ef4444" if effect < 0 else "#22c55e",
+                        text=[f"{effect:+.3f}%"],
+                        textposition="outside",
+                    )
+                )
+
+        fig_decomp.update_layout(
+            title="Вклад каждой группы товаров в общий эффект",
+            yaxis_title="Эффект (%)",
+            height=350,
+            showlegend=False,
+            plot_bgcolor="white",
+            paper_bgcolor="white",
+            yaxis=dict(gridcolor="#e5e5e5"),
+        )
+        st.plotly_chart(fig_decomp, use_container_width=True)
+
+        # Summary table
+        decomp_data = []
+        total_effect = sum(group_decomposition.values())
+        for group, effect in sorted_groups:
+            if effect != 0:
+                pct = (effect / total_effect * 100) if total_effect != 0 else 0
+                decomp_data.append(
+                    {
+                        "Группа": group_names.get(group, group),
+                        "Эффект (%)": f"{effect:+.4f}",
+                        "Доля (%)": f"{pct:.1f}%",
+                    }
+                )
+        decomp_df = pd.DataFrame(decomp_data)
+        st.dataframe(decomp_df, use_container_width=True, hide_index=True)
+
+    # Asymmetric model comparison
+    if model_type == "asymmetric":
+        st.markdown("---")
+        st.markdown("### 📈📉 Асимметрия эффекта")
+
+        hike_effect = np.sum(results["hike"]["effect"])
+        cut_effect = np.sum(results["cut"]["effect"])
+        ratio = abs(hike_effect / cut_effect) if cut_effect != 0 else float("inf")
+
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("Повышение +2 п.п.", f"{hike_effect:+.2f}%")
+        with col2:
+            st.metric("Снижение -2 п.п.", f"{cut_effect:+.2f}%")
+        with col3:
+            st.metric("Ratio (hike/cut)", f"{ratio:.2f}x")
+
+        st.info(
+            "📊 Повышение ставки влияет сильнее, чем снижение. "
+            "Причина: банки быстрее повышают ставки по кредитам, чем снижают."
+        )
+
+    # YoY calculation
+    st.markdown("---")
+    st.markdown("### 📊 Годовая инфляция (YoY) по сценариям")
+
+    try:
+        from sirena.utils.yoy import yoy_at_horizon
+
+        mom_history = (df["Все товары и услуги"] - 100).dropna()
+
+        yoy_comparison = []
+        for sc, fc in results.items():
+            if horizon >= 12:
+                yoy_h12 = yoy_at_horizon(mom_history, fc["total"], 12)
+            else:
+                yoy_h12 = yoy_at_horizon(mom_history, fc["total"], horizon)
+
+            yoy_comparison.append(
+                {
+                    "Сценарий": scenario_names[sc],
+                    "Ki (п.п.)": fc["ki_path"][-1],
+                    "Cum MoM (%)": np.sum(fc["total"]),
+                    "YoY h=12 (%)": yoy_h12 if horizon >= 12 else np.nan,
+                }
+            )
+
+        yoy_df = pd.DataFrame(yoy_comparison)
+        st.dataframe(
+            yoy_df.style.format(
+                {
+                    "Ki (п.п.)": "{:+.1f}",
+                    "Cum MoM (%)": "{:.2f}",
+                    "YoY h=12 (%)": "{:.2f}",
+                }
+            ),
+            use_container_width=True,
+            hide_index=True,
+        )
+
+    except Exception as e:
+        st.warning(f"YoY расчёт недоступен: {e}")
+
+    # Effect breakdown chart
+    st.markdown("---")
+    st.markdown("### 📉 Разбивка эффекта от ставки")
+
+    if scenario != "base":
+        selected_result = results[scenario]
+        fig_effect = go.Figure()
+
+        fig_effect.add_trace(
+            go.Bar(
+                x=dates,
+                y=selected_result["baseline"],
+                name="Базовый прогноз",
+                marker_color="#3b82f6",
+            )
+        )
+
+        fig_effect.add_trace(
+            go.Bar(
+                x=dates,
+                y=selected_result["effect"],
+                name="Эффект Ki",
+                marker_color="#ef4444" if scenario == "hike" else "#22c55e",
+            )
+        )
+
+        fig_effect.update_layout(
+            title=f"Разбивка: {scenario_names[scenario]}",
+            xaxis_title="Дата",
+            yaxis_title="MoM инфляция (%)",
+            barmode="relative",
+            height=400,
+            plot_bgcolor="white",
+            paper_bgcolor="white",
+        )
+
+        st.plotly_chart(fig_effect, use_container_width=True)
+
+        st.info(f"""
+        **Интерпретация для сценария "{scenario_names[scenario]}":**
+        - Базовый прогноз (без изменения ставки): **{np.sum(selected_result["baseline"]):.2f}%** за {horizon} мес
+        - Эффект от изменения ставки: **{np.sum(selected_result["effect"]):+.2f}%**
+        - Итоговый прогноз: **{np.sum(selected_result["total"]):.2f}%**
+        """)
+
+    # Detailed table
+    with st.expander("📋 Подробная таблица прогнозов"):
+        detail_df = pd.DataFrame({"Дата": [d.strftime("%m.%y") for d in dates]})
+        for sc, fc in results.items():
+            detail_df[f"{scenario_names[sc]}"] = fc["total"]
+            if sc != "base":
+                detail_df[f"{scenario_names[sc]} эффект"] = fc["effect"]
+
+        st.dataframe(
+            detail_df.style.format(
+                {col: "{:.3f}" for col in detail_df.columns if col != "Дата"}
+            ),
+            use_container_width=True,
+            hide_index=True,
+        )
+
+
+def render_backtest_tab(horizon):
+    """Render backtest tab for given horizon."""
+    st.subheader(f"📊 Бэктест h={horizon} ({horizon} мес. вперёд)")
+
+    bt_data = load_backtest_data(horizon)
+
+    if bt_data is None:
+        st.error(f"Данные бэктеста не найдены.")
+        st.info(f"Запустите: `python3 scripts/run_backtest_h{horizon}.py`")
+        return
+
+    # Calculate metrics for each model
+    models = [m for m in ALL_MODELS if m in bt_data.columns]
+
+    metrics = []
+    for m in models:
+        errors = (bt_data["Actual"] - bt_data[m]).abs()
+        mae = errors.mean()
+        rmse = np.sqrt((errors**2).mean())
+        kpi_violations = (errors > 0.5).sum()
+        coverage = ((errors <= 0.5).sum() / len(errors)) * 100
+        metrics.append(
+            {
+                "Model": m,
+                "MAE": mae,
+                "RMSE": rmse,
+                "KPI_Violations": kpi_violations,
+                "Coverage": coverage,
+            }
+        )
+
+    metrics_df = pd.DataFrame(metrics).sort_values("MAE")
+
+    # Top 5 models
+    st.markdown("#### 🏆 Топ-5 моделей по MAE")
+    cols = st.columns(5)
+    for i, (_, row) in enumerate(metrics_df.head(5).iterrows()):
+        if i < 5:
+            cols[i].metric(
+                row["Model"].replace("_", " "),
+                f"MAE: {row['MAE']:.3f}",
+                f"KPI: {int(row['KPI_Violations'])}/{len(bt_data)}",
+            )
+
+    # Chart
+    fig = go.Figure()
+
+    # KPI Zone ±0.5
+    fig.add_trace(
+        go.Scatter(
+            x=bt_data["Date"],
+            y=bt_data["Actual"] + 0.5,
+            mode="lines",
+            line=dict(width=0),
+            showlegend=False,
+            hoverinfo="skip",
+        )
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=bt_data["Date"],
+            y=bt_data["Actual"] - 0.5,
+            mode="lines",
+            line=dict(width=0),
+            fill="tonexty",
+            fillcolor="rgba(150, 150, 150, 0.2)",
+            name="KPI (±0.5 п.п.)",
+            hoverinfo="skip",
+        )
+    )
+
+    # Actual
+    fig.add_trace(
+        go.Scatter(
+            x=bt_data["Date"],
+            y=bt_data["Actual"],
+            name="Факт",
+            mode="markers",
+            marker=dict(color="black", size=10),
+        )
+    )
+
+    # Top 5 models
+    colors = ["#10b981", "#2563eb", "#f97316", "#8b5cf6", "#ef4444"]
+    for i, (_, row) in enumerate(metrics_df.head(5).iterrows()):
+        if i < 5:
+            m = row["Model"]
+            fig.add_trace(
+                go.Scatter(
+                    x=bt_data["Date"],
+                    y=bt_data[m],
+                    name=m.replace("_", " "),
+                    line=dict(color=colors[i], width=2),
+                )
+            )
+
+    fig.update_layout(
+        title=f"Прогноз на {horizon} мес. вперёд vs Факт",
+        height=450,
+        hovermode="x unified",
+        plot_bgcolor="white",
+        paper_bgcolor="white",
+        xaxis=dict(gridcolor="#e5e5e5"),
+        yaxis=dict(gridcolor="#e5e5e5"),
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+    # Full metrics table
+    st.markdown("#### 📋 Все модели")
+    st.dataframe(
+        metrics_df.style.format(
+            {
+                "MAE": "{:.3f}",
+                "RMSE": "{:.3f}",
+                "Coverage": "{:.1f}%",
+                "KPI_Violations": "{:.0f}",
+            }
+        ),
+        use_container_width=True,
+        hide_index=True,
+    )
+
+    # KPI Optimizer section
+    st.markdown("---")
+    st.markdown("### 🎯 KPI Optimizer")
+
+    best_model = metrics_df.iloc[0]["Model"]
+    bt_data["Month"] = bt_data["Date"].dt.month
+
+    monthly_shifts, bias = calculate_kpi_corrections(bt_data, best_model)
+
+    # Apply corrections
+    bt_data["Seasonal"] = bt_data[best_model] + bt_data["Month"].map(monthly_shifts)
+    bt_data["Bias"] = bt_data[best_model] - bt_data["Month"].map(bias)
+
+    # Calculate metrics
+    errors_orig = (bt_data["Actual"] - bt_data[best_model]).abs()
+    errors_seasonal = (bt_data["Actual"] - bt_data["Seasonal"]).abs()
+    errors_bias = (bt_data["Actual"] - bt_data["Bias"]).abs()
+
+    kpi_orig = (errors_orig <= 0.5).sum()
+    kpi_seasonal = (errors_seasonal <= 0.5).sum()
+    kpi_bias = (errors_bias <= 0.5).sum()
+
+    col1, col2, col3 = st.columns(3)
+    col1.metric(
+        "Оригинал", f"KPI: {kpi_orig}/{len(bt_data)}", f"MAE: {errors_orig.mean():.3f}"
+    )
+    col2.metric(
+        "🎯 Seasonal",
+        f"KPI: {kpi_seasonal}/{len(bt_data)}",
+        f"MAE: {errors_seasonal.mean():.3f}",
+    )
+    col3.metric(
+        "📊 Bias", f"KPI: {kpi_bias}/{len(bt_data)}", f"MAE: {errors_bias.mean():.3f}"
+    )
+
+
+# =============================================================================
+# ALERT PANEL FUNCTION
+# =============================================================================
+def render_alert_panel(show_history: bool = True):
+    """
+    Render price anomaly alert panel.
+
+    Displays current anomalies from VolatilityMonitor with 1.5σ threshold.
+    Color-coded by severity (warning/critical). Shows alert history.
+
+    Args:
+        show_history: Whether to display alert history visualization
+    """
+    import json
+    from pathlib import Path
+
+    # Initialize VolatilityMonitor
+    from sirena.models.volatility_monitor import VolatilityMonitor
+
+    monitor = VolatilityMonitor()
+    monitor.initialize()
+    anomalies = monitor.check_anomalies()
+
+    # Save current alerts to history
+    alert_history_path = Path("data/alert_history.json")
+    current_timestamp = datetime.now().isoformat()
+
+    # Load existing history
+    if alert_history_path.exists():
+        with open(alert_history_path, "r") as f:
+            history = json.load(f)
+    else:
+        history = []
+
+    # Add current snapshot to history
+    snapshot = {
+        "timestamp": current_timestamp,
+        "total_anomalies": len(anomalies),
+        "critical_count": len([a for a in anomalies if a["level"] == "critical"]),
+        "warning_count": len([a for a in anomalies if a["level"] == "warning"]),
+        "anomalies": anomalies,
+    }
+    history.append(snapshot)
+
+    # Keep only last 30 days of history
+    cutoff = datetime.fromisoformat(current_timestamp).replace(
+        hour=0, minute=0, second=0, microsecond=0
+    ) - pd.Timedelta(days=30)
+    history = [h for h in history if datetime.fromisoformat(h["timestamp"]) >= cutoff]
+
+    # Save updated history
+    alert_history_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(alert_history_path, "w") as f:
+        json.dump(history, f, indent=2)
+
+    # Display alerts using st.expander("Alerts")
+    with st.expander("Alerts", expanded=True):
+        # Summary metrics
+        critical = [a for a in anomalies if a["level"] == "critical"]
+        warnings_list = [a for a in anomalies if a["level"] == "warning"]
+
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            if critical:
+                st.error(f"🚨 {len(critical)} критических")
+            else:
+                st.success("✅ 0 критических")
+
+        with col2:
+            if warnings_list:
+                st.warning(f"⚠️ {len(warnings_list)} предупреждений")
+            else:
+                st.success("✅ 0 предупреждений")
+
+        with col3:
+            st.metric("Всего аномалий", len(anomalies), help="1.5σ threshold")
+
+        # Display critical alerts
+        if critical:
+            st.markdown("### 🔴 Критические аномалии")
+            for a in critical[:10]:
+                st.markdown(
+                    f"- **{a.get('product_name', 'Unknown')[:40]}**: "
+                    f"z={a['z_score']:+.1f} ({a.get('direction', 'N/A')})"
+                )
+
+        # Display warning alerts
+        if warnings_list:
+            st.markdown("### ⚠️ Предупреждения")
+            with st.expander("Показать предупреждения", expanded=False):
+                for a in warnings_list[:10]:
+                    st.markdown(
+                        f"- {a.get('product_name', 'Unknown')[:40]}: "
+                        f"z={a['z_score']:+.1f}"
+                    )
+
+        # No alerts message
+        if not critical and not warnings_list:
+            st.success("✅ Аномалий не обнаружено")
+
+        # Alert history visualization
+        if show_history and len(history) > 1:
+            st.markdown("---")
+            st.markdown("### 📜 История аномалий (30 дней)")
+
+            # Create history DataFrame
+            history_df = pd.DataFrame(
+                [
+                    {
+                        "Timestamp": pd.to_datetime(h["timestamp"]),
+                        "Всего": h["total_anomalies"],
+                        "Критические": h["critical_count"],
+                        "Предупреждения": h["warning_count"],
+                    }
+                    for h in history
+                ]
+            )
+            history_df = history_df.sort_values("Timestamp")
+
+            # Plot history
+            fig = go.Figure()
+            fig.add_trace(
+                go.Scatter(
+                    x=history_df["Timestamp"],
+                    y=history_df["Всего"],
+                    mode="lines+markers",
+                    name="Всего",
+                    line=dict(color="#333333"),
+                )
+            )
+            fig.add_trace(
+                go.Scatter(
+                    x=history_df["Timestamp"],
+                    y=history_df["Критические"],
+                    mode="lines+markers",
+                    name="Критические",
+                    line=dict(color="#d62728"),
+                )
+            )
+            fig.add_trace(
+                go.Scatter(
+                    x=history_df["Timestamp"],
+                    y=history_df["Предупреждения"],
+                    mode="lines+markers",
+                    name="Предупреждения",
+                    line=dict(color="#ffbb78"),
+                )
+            )
+
+            fig.update_layout(
+                title="Динамика аномалий",
+                xaxis_title="Дата",
+                yaxis_title="Количество",
+                height=300,
+                margin=dict(l=0, r=0, t=40, b=0),
+            )
+
+            st.plotly_chart(fig, use_container_width=True)
+
+
+# =============================================================================
+# WEEKLY PRICES TAB
+# =============================================================================
+def render_weekly_tab():
+    """Render weekly prices monitoring tab."""
+    st.header("📈 Недельные цены")
+    st.markdown("Мониторинг недельных цен и nowcasting инфляции")
+
+    try:
+        from sirena.data.weekly_loader import (
+            load_weekly_prices,
+            compute_basket_signal,
+            HIGH_QUALITY_PRODUCTS,
+            detect_anomalies,
+        )
+        from sirena.models.weekly_prices import WeeklyPriceNowcaster
+        from sirena.models.volatility_monitor import VolatilityMonitor
+
+        # Load weekly data
+        weekly_df = load_weekly_prices()
+
+        col1, col2, col3 = st.columns(3)
+
+        # Current nowcast signal
+        signal = compute_basket_signal()
+        col1.metric(
+            "Nowcast Signal",
+            f"{signal['signal']:.3f}%",
+            help="Взвешенный сигнал недельных цен",
+        )
+        col2.metric(
+            "Food Signal",
+            f"{signal['food_signal']:.3f}%",
+            help="Продовольственные товары",
+        )
+        col3.metric(
+            "Non-Food Signal",
+            f"{signal['nonfood_signal']:.3f}%",
+            help="Непродовольственные товары",
+        )
+
+        # Nowcast model
+        st.markdown("---")
+        st.subheader("🔮 Nowcast модель")
+
+        model = WeeklyPriceNowcaster(use_macro=False, use_components=True)
+        model.fit()
+        nowcast = model.nowcast()
+
+        st.metric(
+            "Прогноз текущего месяца",
+            f"{nowcast['prediction']:.2f}%",
+            help=f"Coverage: {nowcast['coverage'] * 100:.0f}%",
+        )
+
+        # Volatility alerts
+        render_alert_panel(show_history=True)
+
+        # Price trends chart
+        st.markdown("---")
+        st.subheader("📊 Динамика цен")
+
+        # Select products to display
+        hq_codes = list(HIGH_QUALITY_PRODUCTS.keys())
+        recent_weeks = weekly_df[
+            weekly_df["date"] >= weekly_df["date"].max() - pd.Timedelta(weeks=12)
+        ]
+
+        # Aggregate by week
+        weekly_agg = recent_weeks.groupby("date")["wow_growth"].mean().reset_index()
+
+        fig = go.Figure()
+        fig.add_trace(
+            go.Scatter(
+                x=weekly_agg["date"],
+                y=weekly_agg["wow_growth"],
+                mode="lines+markers",
+                name="Средний WoW Growth",
+                line=dict(color="#1f77b4", width=2),
+            )
+        )
+        fig.add_hline(y=0, line_dash="dash", line_color="gray")
+        fig.update_layout(
+            title="Средний недельный рост цен (22 продукта)",
+            xaxis_title="Дата",
+            yaxis_title="WoW Growth (%)",
+            template="plotly_white",
+            height=400,
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
+        # Data summary
+        st.markdown("---")
+        st.subheader("📋 Данные")
+
+        col1, col2, col3, col4 = st.columns(4)
+        col1.metric("Всего строк", f"{len(weekly_df):,}")
+        col2.metric("Продуктов", weekly_df["product_code"].nunique())
+        col3.metric("High Quality", len(HIGH_QUALITY_PRODUCTS))
+        col4.metric("Coverage", f"{signal['coverage'] * 100:.0f}%")
+
+        # Recent data table
+        with st.expander("Последние данные"):
+            recent = weekly_df.nlargest(100, "date")[
+                ["date", "product_name", "price", "wow_growth"]
+            ]
+            st.dataframe(recent, use_container_width=True, hide_index=True)
+
+    except Exception as e:
+        st.error(f"Ошибка загрузки недельных данных: {e}")
+        st.info("Убедитесь что файл data/kbr_weekly_prices_2008_2026.csv существует")
+
+
+# =============================================================================
+# NOWCAST TAB
+# =============================================================================
+def render_nowcast_tab():
+    """Render nowcasting tab with regime detection and volatility comparison."""
+    st.header("📊 Nowcast - Недельный мониторинг")
+    st.markdown("Nowcasting инфляции на основе недельных цен с детекцией режима")
+
+    try:
+        from sirena.data.weekly_loader import (
+            load_weekly_prices,
+            compute_basket_signal,
+            HIGH_QUALITY_PRODUCTS,
+            detect_anomalies,
+        )
+        from sirena.models.weekly_prices import WeeklyPriceNowcaster
+        from sirena.models.volatility_monitor import VolatilityMonitor
+        from sirena.models.volatility_weighted_nowcaster import (
+            VolatilityWeightedNowcaster,
+        )
+        from sirena.models.regime_adaptive_nowcaster import RegimeAdaptiveNowcaster
+        from sirena.models.regime_detector import detect_regime, MacroRegime
+
+        # Load data
+        weekly_df = load_weekly_prices()
+
+        # Load inflation data for regime detection
+        try:
+            infl_df = pd.read_csv("data/inflation_data.csv")
+            infl_df["Date"] = pd.to_datetime(infl_df["Date"])
+            infl_df = infl_df.sort_values("Date")
+        except Exception as e:
+            st.warning(
+                f"Не удалось загрузить inflation_data.csv для детекции режима: {e}"
+            )
+            infl_df = None
+
+        # ========================================
+        # REGIME INDICATOR BADGE (Requirement 4)
+        # ========================================
+        st.markdown("---")
+        st.subheader("🎯 Индикатор режима")
+
+        if infl_df is not None and len(infl_df) > 0:
+            try:
+                regime, diagnostics = detect_regime(infl_df)
+
+                # Regime badge colors
+                regime_colors = {
+                    MacroRegime.NORMAL: "🟢",
+                    MacroRegime.SHOCK: "🔴",
+                    MacroRegime.HIGH_INFLATION: "🟠",
+                }
+
+                regime_names = {
+                    MacroRegime.NORMAL: "Нормальный",
+                    MacroRegime.SHOCK: "Шок",
+                    MacroRegime.HIGH_INFLATION: "Высокая инфляция",
+                }
+
+                col1, col2, col3 = st.columns(3)
+
+                with col1:
+                    st.markdown(
+                        f"""
+                    <div style="padding: 10px; border-radius: 5px; background-color: #f0f0f0; text-align: center;">
+                        <h3 style="margin: 0;">{regime_colors.get(regime, "⚪")}</h3>
+                        <p style="margin: 5px 0 0 0; font-weight: bold;">Текущий режим</p>
+                        <p style="margin: 0;">{regime_names.get(regime, str(regime))}</p>
+                    </div>
+                    """,
+                        unsafe_allow_html=True,
+                    )
+
+                with col2:
+                    st.metric(
+                        "Δ Ключевая ставка",
+                        f"{diagnostics.get('ki_change', 0):.2f} п.п.",
+                        help="Изменение ключевой ставки за последний месяц",
+                    )
+
+                with col3:
+                    st.metric(
+                        "Δ Ruonia",
+                        f"{diagnostics.get('ruonia_change', 0):.2f} п.п.",
+                        help="Изменение ставки RUONIA за последний месяц",
+                    )
+
+                # Regime explanation
+                with st.expander("ℹ️ Объяснение режимов"):
+                    st.markdown("""
+                    **Режимы определяются на основе изменений ставок и инфляции:**
+
+                    - 🟢 **Нормальный (NORMAL)**: Стабильная ситуация, |ΔKi| ≤ 0.5 п.п.
+                    - 🔴 **Шок (SHOCK)**: Резкие изменения ставок, |ΔKi| > 0.5 п.п. или |ΔRuonia| > 0.5 п.п.
+                    - 🟠 **Высокая инфляция (HIGH_INFLATION)**: Ускорение YoY инфляции > 1.5 п.п.
+
+                    **Влияние на nowcasting:**
+                    - В режиме Шок используются равные веса для всех продуктов
+                    - В нормальном режиме оптимизируются веса по исторической точности
+                    - При высокой инфляции повышаются веса волатильных товаров
+                    """)
+            except Exception as e:
+                st.warning(f"Не удалось определить режим: {e}")
+        else:
+            st.info("Данные для детекции режима не доступны")
+
+        # ========================================
+        # WEEKLY PRICE SIGNALS (Requirement 2)
+        # ========================================
+        st.markdown("---")
+        st.subheader("📈 Сигналы текущей недели")
+
+        # Standard weighted signal (basket weights)
+        signal = compute_basket_signal(weekly_df, use_weights=True)
+
+        col1, col2, col3 = st.columns(3)
+
+        col1.metric(
+            "Сигнал (взвешенный)",
+            f"{signal['signal']:.3f}%",
+            help="Средневзвешенный WoW рост по корзине товаров",
+        )
+        col2.metric(
+            "Food Signal",
+            f"{signal['food_signal']:.3f}%",
+            help="Продовольственные товары",
+        )
+        col3.metric(
+            "Non-Food Signal",
+            f"{signal['nonfood_signal']:.3f}%",
+            help="Непродовольственные товары",
+        )
+
+        # ========================================
+        # VOLATILITY-WEIGHTED vs EQUAL-WEIGHTED (Requirement 3)
+        # ========================================
+        st.markdown("---")
+        st.subheader("⚖️ Сравнение методов взвешивания")
+
+        col_left, col_right = st.columns(2)
+
+        with col_left:
+            st.markdown("### 📊 Volatility-Weighted")
+            st.markdown("""
+            Веса пропорциональны обратной волатильности:
+            $$w_i = \\frac{1/\\sigma_i}{\\sum(1/\\sigma_j)}$$
+
+            Стабильные товары получают больший вес.
+            """)
+
+            try:
+                # Calculate equal-weighted signal for comparison
+                signal_equal = compute_basket_signal(weekly_df, use_weights=False)
+
+                st.metric(
+                    "Equal-Weighted Signal",
+                    f"{signal_equal.get('signal', 0):.3f}%",
+                    help="Равновзвешенный сигнал",
+                )
+
+                # Show volatility info from weekly data
+                st.markdown("**Топ стабильные продукты (низкая волатильность):**")
+                hq_products = list(HIGH_QUALITY_PRODUCTS.items())
+
+                # Calculate volatility for each product from recent data
+                recent_weeks = weekly_df[
+                    weekly_df["date"]
+                    >= weekly_df["date"].max() - pd.Timedelta(weeks=12)
+                ]
+
+                vol_by_product = []
+                for code, name in hq_products:
+                    prod_data = recent_weeks[recent_weeks["product_code"] == code]
+                    if len(prod_data) > 0:
+                        vol = prod_data["wow_growth"].std()
+                        vol_by_product.append(
+                            {"code": code, "name": name, "volatility": vol}
+                        )
+
+                if vol_by_product:
+                    vol_df = (
+                        pd.DataFrame(vol_by_product).sort_values("volatility").head(5)
+                    )
+                    for _, row in vol_df.iterrows():
+                        st.markdown(f"- {row['name'][:35]}: σ={row['volatility']:.3f}%")
+
+            except Exception as e:
+                st.warning(f"Ошибка загрузки Volatility-Weighted модели: {e}")
+
+        with col_right:
+            st.markdown("### 🔹 Equal-Weighted")
+            st.markdown("""
+            Все продукты имеют равный вес:
+
+            $$w_i = \\frac{1}{N}$$
+
+            Рекомендуется в режиме Шок.
+            """)
+
+            # Calculate equal-weighted signal for comparison
+            signal_equal = compute_basket_signal(weekly_df, use_weights=False)
+
+            st.metric(
+                "Equal-Weighted Signal",
+                f"{signal_equal.get('signal', 0):.3f}%",
+                help="Равновзвешенный сигнал",
+            )
+
+            # Difference between weighted and equal-weighted
+            diff = signal_equal.get("signal", 0) - signal.get("signal", 0)
+            diff_color = "🟢" if abs(diff) < 0.05 else "🟡" if abs(diff) < 0.1 else "🔴"
+            st.markdown(f"""
+            **Разница vs Basket-Weighted:** {diff_color} {diff:+.3f} п.п.
+
+            {"" if abs(diff) < 0.05 else "⚠️ Существенное расхождение в методах взвешивания!"}
+            """)
+
+            # Equal-weighted signal
+            signal_equal = compute_basket_signal(weekly_df, use_weights=False)
+
+            st.metric(
+                "Equal-Weighted Signal",
+                f"{signal_equal['signal']:.3f}%",
+                help="Равновзвешенный сигнал",
+            )
+
+            # Difference
+            diff = signal_equal["signal"] - signal["signal"]
+            diff_color = "🟢" if abs(diff) < 0.05 else "🟡" if abs(diff) < 0.1 else "🔴"
+            st.markdown(f"""
+            **Разница:** {diff_color} {diff:+.3f} п.п.
+
+            {"" if abs(diff) < 0.05 else "⚠️ Существенное расхождение в методах взвешивания!"}
+            """)
+
+        # ========================================
+        # NOWCAST MODEL PREDICTIONS
+        # ========================================
+        st.markdown("---")
+        st.subheader("🔮 Nowcast модель")
+
+        model = WeeklyPriceNowcaster(use_macro=False, use_components=True)
+        model.fit()
+        nowcast = model.nowcast()
+
+        col1, col2, col3 = st.columns(3)
+        col1.metric(
+            "Прогноз текущего месяца",
+            f"{nowcast['prediction']:.2f}%",
+            help=f"Coverage: {nowcast['coverage'] * 100:.0f}%",
+        )
+        col2.metric(
+            "Продуктов использовано",
+            nowcast.get("n_products", 0),
+            help="Количество продуктов в nowcast",
+        )
+        col3.metric(
+            "Точность (MAE)",
+            f"{nowcast.get('mae', 0):.4f}",
+            help="Средняя абсолютная ошибка (на исторических данных)",
+        )
+
+        # ========================================
+        # VOLATILITY ALERTS
+        # ========================================
+        render_alert_panel(show_history=True)
+
+        # ========================================
+        # PRICE TRENDS CHART
+        # ========================================
+        st.markdown("---")
+        st.subheader("📈 Динамика цен (последние 12 недель)")
+
+        recent_weeks = weekly_df[
+            weekly_df["date"] >= weekly_df["date"].max() - pd.Timedelta(weeks=12)
+        ]
+        weekly_agg = recent_weeks.groupby("date")["wow_growth"].mean().reset_index()
+
+        fig = go.Figure()
+        fig.add_trace(
+            go.Scatter(
+                x=weekly_agg["date"],
+                y=weekly_agg["wow_growth"],
+                mode="lines+markers",
+                name="Средний WoW Growth",
+                line=dict(color="#1f77b4", width=2),
+                marker=dict(size=6),
+            )
+        )
+        fig.add_hline(y=0, line_dash="dash", line_color="gray")
+
+        # Add current signal line
+        if signal["signal"] is not None and not pd.isna(signal["signal"]):
+            fig.add_hline(
+                y=signal["signal"],
+                line_dash="solid",
+                line_color="green",
+                annotation_text=f"Текущий сигнал: {signal['signal']:.2f}%",
+                annotation_position="top right",
+            )
+
+        fig.update_layout(
+            title="Средний недельный рост цен",
+            xaxis_title="Дата",
+            yaxis_title="WoW Growth (%)",
+            template="plotly_white",
+            height=400,
+            hovermode="x unified",
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
+        # ========================================
+        # DATA SUMMARY
+        # ========================================
+        st.markdown("---")
+        st.subheader("📋 Сводка данных")
+
+        col1, col2, col3, col4 = st.columns(4)
+        col1.metric("Всего строк", f"{len(weekly_df):,}")
+        col2.metric("Продуктов", weekly_df["product_code"].nunique())
+        col3.metric("High Quality", len(HIGH_QUALITY_PRODUCTS))
+        col4.metric("Coverage", f"{signal['coverage'] * 100:.0f}%")
+
+        # Recent data table
+        with st.expander("📄 Последние данные"):
+            recent = weekly_df.nlargest(50, "date")[
+                ["date", "product_name", "price", "wow_growth"]
+            ]
+            st.dataframe(recent, use_container_width=True, hide_index=True)
+
+    except Exception as e:
+        st.error(f"Ошибка загрузки Nowcast данных: {e}")
+        import traceback
+
+        st.text(traceback.format_exc())
+
+
+# =============================================================================
+# SEASONALITY TAB
+# =============================================================================
+def render_seasonality_tab():
+    """Render seasonality analysis tab."""
+    st.header("📈 Сезонность")
+    st.markdown("Анализ эволюции сезонных паттернов инфляции")
+
+    try:
+        # Load seasonal indices data
+        seasonal_df = pd.read_csv("data/seasonal_indices_by_era.csv")
+
+        # Product selection (placeholder for future multi-product support)
+        st.subheader("🔍 Выбор параметров")
+        product_select = st.selectbox(
+            "Товар",
+            ["Все товары и услуги"],
+            disabled=True,
+            help="В данный момент доступен только общий ИПЦ",
+        )
+
+        # Era selection
+        era_options = seasonal_df["Era"].unique().tolist()
+        era_select = st.multiselect(
+            "Выберите периоды для сравнения",
+            era_options,
+            default=["2010-2014 (Pre-Crimea)", "2020-2024 (COVID & Recovery)"],
+            help="Сравните сезонные паттерны между разными эпохами",
+        )
+
+        if not era_select:
+            st.warning("Выберите хотя бы один период")
+            return
+
+        # Filter selected eras
+        df_filtered = seasonal_df[seasonal_df["Era"].isin(era_select)].copy()
+
+        # Month names for display
+        month_names = [
+            "Янв",
+            "Фев",
+            "Мар",
+            "Апр",
+            "Май",
+            "Июн",
+            "Июл",
+            "Авг",
+            "Сен",
+            "Окт",
+            "Ноя",
+            "Дек",
+        ]
+
+        # Create comparison plot
+        st.markdown("---")
+        st.subheader("📊 Сезонные индексы по эпохам")
+
+        fig = go.Figure()
+
+        # Colors for different eras
+        era_colors = {
+            "2010-2014 (Pre-Crimea)": "#1f77b4",
+            "2015-2019 (Post-Crimea)": "#ff7f0e",
+            "2020-2024 (COVID & Recovery)": "#2ca02c",
+        }
+
+        # Add traces for each era
+        for era in era_select:
+            era_df = df_filtered[df_filtered["Era"] == era]
+            fig.add_trace(
+                go.Scatter(
+                    x=month_names,
+                    y=era_df["Mean_Index"],
+                    mode="lines+markers",
+                    name=era,
+                    line=dict(color=era_colors.get(era, "#7f7f7f"), width=2),
+                    marker=dict(size=8),
+                    hovertemplate="%{x}: %{y:.2f}%<extra></extra>",
+                )
+            )
+
+        fig.update_layout(
+            title="Сезонные индексы инфляции (Mean Index)",
+            xaxis_title="Месяц",
+            yaxis_title="Средняя инфляция (%)",
+            template="plotly_white",
+            height=500,
+            hovermode="x unified",
+            legend=dict(
+                orientation="h", yanchor="bottom", y=1.02, xanchor="center", x=0.5
+            ),
+        )
+
+        st.plotly_chart(fig, use_container_width=True)
+
+        # Comparison metrics
+        st.markdown("---")
+        st.subheader("📋 Сравнительная статистика")
+
+        # Create pivot table for comparison
+        pivot_df = df_filtered.pivot(index="Month", columns="Era", values="Mean_Index")
+        pivot_df.index = month_names
+
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            st.metric(
+                "Средняя за период (2010-2014)",
+                f"{pivot_df['2010-2014 (Pre-Crimea)'].mean():.2f}%",
+                help="Средняя сезонность за 2010-2014",
+            )
+
+        with col2:
+            if "2015-2019 (Post-Crimea)" in pivot_df.columns:
+                st.metric(
+                    "Средняя за период (2015-2019)",
+                    f"{pivot_df['2015-2019 (Post-Crimea)'].mean():.2f}%",
+                    help="Средняя сезонность за 2015-2019",
+                )
+
+        with col3:
+            st.metric(
+                "Средняя за период (2020-2024)",
+                f"{pivot_df['2020-2024 (COVID & Recovery)'].mean():.2f}%",
+                help="Средняя сезонность за 2020-2024",
+            )
+
+        # Volatility comparison (Std)
+        st.markdown("### Волатильность сезонности (Std)")
+
+        std_pivot = df_filtered.pivot(index="Month", columns="Era", values="Std")
+        std_pivot.index = month_names
+
+        fig_std = go.Figure()
+
+        for era in era_select:
+            era_std_df = df_filtered[df_filtered["Era"] == era]
+            fig_std.add_trace(
+                go.Bar(
+                    x=month_names,
+                    y=era_std_df["Std"],
+                    name=era,
+                    marker_color=era_colors.get(era, "#7f7f7f"),
+                    hovertemplate="%{x}: Std = %{y:.3f}<extra></extra>",
+                )
+            )
+
+        fig_std.update_layout(
+            title="Стандартное отклонение сезонной инфляции",
+            xaxis_title="Месяц",
+            yaxis_title="Std",
+            template="plotly_white",
+            height=400,
+            barmode="group",
+            hovermode="x unified",
+        )
+
+        st.plotly_chart(fig_std, use_container_width=True)
+
+        # Key months analysis
+        st.markdown("---")
+        st.subheader("🗓️ Ключевые месяцы")
+
+        key_months = {
+            1: "Январь (Новый год/Тарифы)",
+            7: "Июль (Индексация тарифов)",
+            12: "Декабрь (Предпраздничный)",
+        }
+
+        for month_num, description in key_months.items():
+            month_data = df_filtered[df_filtered["Month"] == month_num].copy()
+            month_data = month_data.sort_values("Era")
+
+            with st.expander(f"{description}"):
+                for _, row in month_data.iterrows():
+                    st.write(
+                        f"**{row['Era']}**: {row['Mean_Index']:.2f}% (Std: {row['Std']:.3f})"
+                    )
+
+        # Data table
+        st.markdown("---")
+        st.subheader("📊 Полные данные")
+
+        display_df = df_filtered[
+            ["Month", "Era", "Mean_Index", "Median_Index", "Std", "Year_Count"]
+        ].copy()
+        display_df["Month_Name"] = display_df["Month"].apply(
+            lambda x: month_names[x - 1]
+        )
+        display_df = display_df[
+            ["Month_Name", "Era", "Mean_Index", "Median_Index", "Std", "Year_Count"]
+        ]
+        display_df.columns = [
+            "Месяц",
+            "Эпоха",
+            "Mean Index",
+            "Median Index",
+            "Std",
+            "Кол-во лет",
+        ]
+
+        st.dataframe(display_df, use_container_width=True, hide_index=True)
+
+    except FileNotFoundError:
+        st.error("Файл data/seasonal_indices_by_era.csv не найден")
+        st.info(
+            "Запустите скрипт python3 scripts/seasonal_evolution.py для генерации данных"
+        )
+    except Exception as e:
+        st.error(f"Ошибка загрузки данных сезонности: {e}")
+        import traceback
+
+        st.text(traceback.format_exc())
+
+
+# =============================================================================
+# MACRO ANALYSIS TAB
+# =============================================================================
+def render_macro_tab():
+    """Render macro analysis tab showing Fed Rate, Brent, USD correlations."""
+    st.header("🔍 Макро-анализ")
+    st.markdown("Анализ влияния федеральных и внешних факторов на инфляцию КБР")
+
+    try:
+        # Load Fed transmission results
+        fed_results = pd.read_csv("data/fed_transmission_results.csv")
+
+        # Load main inflation data with macro indicators
+        try:
+            df_macro = pd.read_csv("data/inflation_data.csv", sep=";", decimal=",")
+            df_macro["Date"] = pd.to_datetime(df_macro["Date"], format="%d.%m.%Y")
+            df_macro = df_macro.set_index("Date")
+
+            # Extract CPI (mom)
+            cpi = df_macro["mom"].values
+            usd = df_macro.get("usd_nom_i", pd.Series([np.nan] * len(df_macro))).values
+            brent_available = "brent" in df_macro.columns
+        except:
+            cpi = usd = None
+            brent_available = False
+
+        # Parse coefficients from string format
+        def parse_coefficients(coeff_str):
+            import ast
+
+            try:
+                return ast.literal_eval(coeff_str)
+            except:
+                return {}
+
+        fed_results["coefficients_dict"] = fed_results["coefficients"].apply(
+            parse_coefficients
+        )
+
+        st.markdown("---")
+
+        # Plot 1: Fed Rate Lag Analysis (Coefficients)
+        st.subheader("📊 Анализ лагов: Ставка ФРС vs ИПЦ")
+
+        col1, col2 = st.columns([2, 1])
+
+        with col1:
+            fig1 = go.Figure()
+
+            # Filter Simple model (no controls)
+            simple_df = fed_results[fed_results["model"] == "Simple"]
+
+            fig1.add_trace(
+                go.Bar(
+                    x=simple_df["lag"],
+                    y=simple_df["fed_coefficient"],
+                    name="Коэффициент",
+                    marker_color=simple_df["significant"].apply(
+                        lambda x: "#2ca02c" if x else "#d62728"
+                    ),
+                    text=simple_df["fed_coefficient"].round(4),
+                    textposition="outside",
+                    hovertemplate=(
+                        "Лаг: %{x} мес<br>"
+                        "Коэффициент: %{y:.4f}<br>"
+                        "Значимость: %{customdata}<extra></extra>"
+                    ),
+                    customdata=simple_df["significant"].apply(
+                        lambda x: "Да" if x else "Нет"
+                    ),
+                )
+            )
+
+            fig1.add_hline(y=0, line_dash="dash", line_color="gray", opacity=0.5)
+
+            fig1.update_layout(
+                title="Коэффициент регрессии по лагу (Simple Model)",
+                xaxis_title="Лаг (месяцев)",
+                yaxis_title="Коэффициент",
+                template="plotly_white",
+                height=400,
+                showlegend=False,
+            )
+
+            st.plotly_chart(fig1, use_container_width=True)
+
+        with col2:
+            st.markdown("### 📋 Интерпретация")
+            st.markdown("""
+            **Положительный коэффициент** → Ставка ФРС ↑ → Инфляция ↑
+            **Отрицательный коэффициент** → Ставка ФРС ↑ → Инфляция ↓
+
+            **Значимость** (зеленый):
+            - p < 0.05 → статистически значимая связь
+            - Все лаги: НЕ значимы (p > 0.1)
+            """)
+
+            st.markdown("#### R² по моделям")
+            for model in ["Simple", "Controlled", "Full"]:
+                model_df = fed_results[fed_results["model"] == model]
+                best_r2 = model_df["r2"].max()
+                best_lag = model_df.loc[model_df["r2"].idxmax(), "lag"]
+                st.markdown(f"- **{model}**: R² = {best_r2:.4f} (лаг {best_lag})")
+
+        st.markdown("---")
+
+        # Plot 2: R² Comparison
+        st.subheader("📈 Качество моделей по лагам")
+
+        fig2 = go.Figure()
+
+        for model in ["Simple", "Controlled", "Full"]:
+            model_df = fed_results[fed_results["model"] == model]
+            fig2.add_trace(
+                go.Scatter(
+                    x=model_df["lag"],
+                    y=model_df["r2"],
+                    mode="lines+markers",
+                    name=model,
+                    line=dict(width=2),
+                    marker=dict(size=8),
+                    hovertemplate="Лаг: %{x}<br>R²: %{y:.4f}<extra></extra>",
+                )
+            )
+
+        fig2.update_layout(
+            title="R² по лагам для разных моделей",
+            xaxis_title="Лаг (месяцев)",
+            yaxis_title="R² (объясняющая способность)",
+            template="plotly_white",
+            height=450,
+            hovermode="x unified",
+            legend=dict(
+                orientation="h", yanchor="bottom", y=1.02, xanchor="center", x=0.5
+            ),
+        )
+
+        st.plotly_chart(fig2, use_container_width=True)
+
+        st.markdown("""
+        **Модели:**
+        - **Simple**: Только ставка ФРС
+        - **Controlled**: Ставка ФРС + изменение курса USD
+        - **Full**: Ставка ФРС + USD + Brent
+        """)
+
+        st.markdown("---")
+
+        # Plot 3: Correlation Heatmap
+        if cpi is not None and usd is not None:
+            st.subheader("🔗 Корреляция макро-индикаторов")
+
+            # Calculate correlations
+            corr_data = {
+                "ИПЦ (CPI)": cpi,
+                "USD (номинал)": usd,
+            }
+
+            if brent_available and "brent" in df_macro.columns:
+                corr_data["Brent Oil"] = df_macro["brent"].values
+
+            corr_df = pd.DataFrame(corr_data)
+            corr_matrix = corr_df.corr()
+
+            fig3 = go.Figure(
+                data=go.Heatmap(
+                    z=corr_matrix.values,
+                    x=corr_matrix.columns,
+                    y=corr_matrix.columns,
+                    colorscale="RdBu",
+                    zmid=0,
+                    text=corr_matrix.values.round(3),
+                    texttemplate="%{text}",
+                    textfont={"size": 14},
+                    hovertemplate=(
+                        "X: %{x}<br>Y: %{y}<br>Корреляция: %{z:.3f}<extra></extra>"
+                    ),
+                )
+            )
+
+            fig3.update_layout(
+                title="Корреляционная матрица",
+                template="plotly_white",
+                height=400,
+            )
+
+            st.plotly_chart(fig3, use_container_width=True)
+
+        st.markdown("---")
+
+        # Detailed results table
+        st.subheader("📋 Детальные результаты регрессии")
+
+        # Filter to show significant results or all results
+        show_all = st.checkbox(
+            "Показать все результаты (включая незначимые)", value=False
+        )
+
+        if show_all:
+            display_df = fed_results.copy()
+        else:
+            display_df = fed_results[fed_results["significant"] == True].copy()
+
+        if display_df.empty:
+            st.warning("Нет статистически значимых результатов")
+        else:
+            # Format for display
+            display_df["Коэффициент (ФРС)"] = display_df["fed_coefficient"].round(4)
+            display_df["p-value"] = display_df["fed_p_value"].round(4)
+            display_df["R²"] = display_df["r2"].round(4)
+
+            columns_to_show = [
+                "model",
+                "lag",
+                "Коэффициент (ФРС)",
+                "p-value",
+                "R²",
+                "significant",
+            ]
+
+            st.dataframe(
+                display_df[columns_to_show].rename(
+                    columns={
+                        "model": "Модель",
+                        "lag": "Лаг",
+                        "significant": "Значимость",
+                    }
+                ),
+                use_container_width=True,
+                hide_index=True,
+            )
+
+        st.markdown("---")
+
+        # Key insights
+        st.subheader("💡 Ключевые выводы")
+
+        st.markdown("""
+        **На основе анализа (Task 524):**
+
+        1. **Прямая передача ставки ФРС**: Коэффициенты положительные, но НЕ значимы (p > 0.1)
+
+        2. **Лаг 1 месяц имеет самый сильный эффект**:
+           - Simple модель: R² = 0.0037 при лаге 1
+           - Добавление контролей (USD, Brent) улучшает R² до 0.144
+
+        3. **Механизм передачи**:
+           - Через курс USD: Ставка ФРС ↑ → USD ↓ → Инфляция ↓ (отрицательный эффект)
+           - Через цены нефти: Ставка ФРС ↑ → Нефть ↓ → Инфляция ↓
+
+        4. **Полная модель (Full) показывает лучший R²**:
+           - Лаг 4: R² = 0.0142
+           - Но даже в полной модели эффект ставки ФРС НЕ значим
+
+        **Вывод**: Ставка ФРС имеет слабое и статистически незначимое влияние на инфляцию КБР.
+        Основной канал передачи — через обменный курс USD и цены нефти.
+        """)
+
+    except FileNotFoundError as e:
+        st.error(f"Данные не найдены: {e}")
+        st.info("Запустите `python3 scripts/fed_transmission.py` для генерации данных")
+    except Exception as e:
+        st.error(f"Ошибка при загрузке данных: {e}")
+
+
+# =============================================================================
+# REGIME INDICATOR WIDGET
+# =============================================================================
+def regime_indicator(df):
+    """
+    Render regime indicator widget with badge and history timeline.
+
+    Args:
+        df: DataFrame with inflation data (must contain 'Все товары и услуги')
+
+    Returns:
+        Tuple[dict, pd.DataFrame]: (current regime info, history df)
+    """
+    try:
+        from sirena.models.regime_detector import (
+            detect_regime,
+            get_regime_history,
+            MacroRegime,
+        )
+
+        # Get current regime
+        regime, regime_diag = detect_regime(df)
+
+        # Get regime history
+        history = get_regime_history(df)
+
+        # Regime styling
+        regime_info = {
+            "value": regime.value,
+            "emoji": {"normal": "🟢", "shock": "🔴", "high_inflation": "🟠"}[
+                regime.value
+            ],
+            "label": {
+                "normal": "Нормальный",
+                "shock": "Шок",
+                "high_inflation": "Высокая инфляция",
+            }[regime.value],
+            "color": {
+                "normal": "#2ecc71",
+                "shock": "#e74c3c",
+                "high_inflation": "#f39c12",
+            }[regime.value],
+            "description": {
+                "normal": "Стандартные макроэкономические условия",
+                "shock": "Резкие изменения ставок (кризис)",
+                "high_inflation": "Ускорение инфляции >1.5% YoY",
+            }[regime.value],
+            "diagnostics": regime_diag,
+        }
+
+        return regime_info, history
+    except Exception as e:
+        # Fallback if regime detection fails
+        return {
+            "value": "normal",
+            "emoji": "🟢",
+            "label": "Нормальный",
+            "color": "#2ecc71",
+            "description": "Недостаточно данных для определения режима",
+            "diagnostics": {"ki_change": 0, "ruonia_change": 0, "yoy_change": 0},
+        }, pd.DataFrame()
+
+
+def render_regime_indicator(df):
+    """
+    Render regime indicator widget in Streamlit sidebar.
+
+    Args:
+        df: DataFrame with inflation data (must contain 'Все товары и услуги')
+
+    Displays:
+        - Colored badge showing current regime
+        - Tooltip with explanation
+        - Diagnostic metrics (Ki, Ruonia, Inflation changes)
+        - Regime history timeline chart
+
+    Supported regime types: normal, shock, high_inflation
+    """
+    try:
+        from sirena.models.regime_detector import MacroRegime
+
+        # Get regime data from existing helper function
+        regime_info, regime_history = regime_indicator(df)
+
+        # Display in sidebar (assumes called from st.sidebar context)
+        st.markdown("---")
+        st.subheader("📊 Монитор режимов")
+
+        # Regime badge with tooltip
+        badge_html = f"""
+        <div style="
+            background-color: {regime_info["color"]};
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        ">
+            <div style="font-size: 24px; margin-bottom: 5px;">
+                {regime_info["emoji"]} {regime_info["label"]}
+            </div>
+        </div>
+        """
+        st.markdown(badge_html, unsafe_allow_html=True)
+
+        # Tooltip/explanation
+        st.caption(f"💡 {regime_info['description']}")
+        st.markdown("**Диагностика:**")
+        st.caption(f"ΔKi (3м): {regime_info['diagnostics']['ki_change']:+.1f} п.п.")
+        st.caption(
+            f"ΔRuonia (3м): {regime_info['diagnostics']['ruonia_change']:+.1f} п.п."
+        )
+        st.caption(
+            f"ΔИнфляция YoY: {regime_info['diagnostics']['yoy_change']:+.1f} п.п."
+        )
+
+        # Regime history timeline
+        if not regime_history.empty:
+            st.markdown("**История режимов:**")
+
+            # Timeline chart
+            fig_timeline = go.Figure()
+
+            # Create regime timeline bars
+            for i, (date, row) in enumerate(regime_history.iterrows()):
+                regime_colors = {
+                    "normal": "#2ecc71",
+                    "shock": "#e74c3c",
+                    "high_inflation": "#f39c12",
+                }
+
+                fig_timeline.add_trace(
+                    go.Scatter(
+                        x=[date, date],
+                        y=[0, 1],
+                        mode="lines",
+                        line=dict(
+                            color=regime_colors.get(row["regime"], "#95a5a6"),
+                            width=8,
+                        ),
+                        showlegend=False,
+                        hovertemplate=f"<b>{date.strftime('%Y-%m')}</b><br>"
+                        f"Режим: {row['regime']}<br>"
+                        f"ΔKi: {row['ki_change']:+.1f} п.п.<br>"
+                        f"ΔRuonia: {row['ruonia_change']:+.1f} п.п.<extra></extra>",
+                    )
+                )
+
+            # Add regime labels on timeline
+            for regime in ["normal", "shock", "high_inflation"]:
+                regime_data = regime_history[regime_history["regime"] == regime]
+                if not regime_data.empty:
+                    fig_timeline.add_trace(
+                        go.Scatter(
+                            x=[regime_data.index[0]],
+                            y=[1.2],
+                            mode="markers+text",
+                            marker=dict(
+                                color={
+                                    "normal": "#2ecc71",
+                                    "shock": "#e74c3c",
+                                    "high_inflation": "#f39c12",
+                                }[regime],
+                                size=10,
+                            ),
+                            text={
+                                regime: {
+                                    "normal": "🟢",
+                                    "shock": "🔴",
+                                    "high_inflation": "🟠",
+                                }[regime]
+                            },
+                            textposition="top center",
+                            showlegend=False,
+                        )
+                    )
+
+            fig_timeline.update_layout(
+                title="История режимов",
+                xaxis_title="Дата",
+                yaxis=dict(showgrid=False, showticklabels=False, range=[-0.1, 1.5]),
+                height=200,
+                margin=dict(l=0, r=0, t=40, b=40),
+                template="plotly_white",
+            )
+
+            st.plotly_chart(fig_timeline, use_container_width=True)
+    except Exception as e:
+        pass  # Silently fail if sidebar widget has issues
+
+
+# =============================================================================
+# MAIN APP
+# =============================================================================
+df = load_data()
+
+if df is not None:
+    last_date = df.index.max()
+
+    # --- SIDEBAR: Regime Monitor ---
+    try:
+        with st.sidebar:
+            render_regime_indicator(df)
+    except Exception as e:
+        pass  # Silently fail if sidebar widget has issues
+
+    # --- HEADER ---
+    st.title("📊 СИРЕНА-КБР v5.3")
+    st.markdown(f"""
+    **Система прогнозирования инфляции КБР**
+    Последние данные: {last_date.strftime("%B %Y")}
+    Модели: {len(ALL_MODELS)} | Горизонты: h=1,2,3,6,12 | Weekly, Экзогенные, Сценарии Ki
+    """)
+
+    # --- TABS ---
+    (
+        tab_f1,
+        tab_f2,
+        tab_f3,
+        tab_f6,
+        tab_f12,
+        tab_sc,
+        tab_exog,
+        tab_weekly,
+        tab_nowcast,
+        tab_seasonality,
+        tab_macro,
+        tab_b1,
+        tab_b2,
+        tab_b3,
+        tab_b6,
+        tab_b12,
+    ) = st.tabs(
+        [
+            "🎯 Прогноз h=1",
+            "🎯 Прогноз h=2",
+            "🎯 Прогноз h=3",
+            "🎯 Прогноз h=6",
+            "📈 Прогноз h=12",
+            "🎚️ Сценарии Ki",
+            "📉 Экзогенные",
+            "📈 Weekly",
+            "📊 Nowcast",
+            "📈 Seasonality",
+            "🔍 Macro",
+            "📊 Бэктест h=1",
+            "📊 Бэктест h=2",
+            "📊 Бэктест h=3",
+            "📊 Бэктест h=6",
+            "📊 Бэктест h=12",
+        ]
+    )
+
+    # Preload backtest data
+    bt_h1 = load_backtest_data(1)
+    bt_h2 = load_backtest_data(2)
+    bt_h3 = load_backtest_data(3)
+    bt_h6 = load_backtest_data(6)
+
+    # --- FORECAST TABS ---
+    with tab_f1:
+        render_forecast_tab(
+            df, last_date, 1, bt_h1, ALL_MODELS, MONTH_NAMES_RU, MODEL_COLORS
+        )
+
+    with tab_f2:
+        render_forecast_tab(
+            df, last_date, 2, bt_h2, ALL_MODELS, MONTH_NAMES_RU, MODEL_COLORS
+        )
+
+    with tab_f3:
+        render_forecast_tab(
+            df, last_date, 3, bt_h3, ALL_MODELS, MONTH_NAMES_RU, MODEL_COLORS
+        )
+
+    with tab_f6:
+        render_forecast_tab(
+            df, last_date, 6, bt_h6, ALL_MODELS, MONTH_NAMES_RU, MODEL_COLORS
+        )
+
+    with tab_f12:
+        render_forecast_h12_tab(df, last_date, MODEL_COLORS, load_backtest_data, 12)
+
+    with tab_sc:
+        render_scenarios_tab(df, last_date)
+
+    with tab_exog:
+        render_exog_forecast_tab()
+
+    with tab_weekly:
+        render_weekly_tab()
+
+    with tab_nowcast:
+        render_nowcast_tab()
+
+    with tab_seasonality:
+        render_seasonality_tab()
+
+    with tab_macro:
+        render_macro_tab()
+
+    # --- BACKTEST TABS ---
+    with tab_b1:
+        render_backtest_tab(1)
+
+    with tab_b2:
+        render_backtest_tab(2)
+
+    with tab_b3:
+        render_backtest_tab(3)
+
+    with tab_b6:
+        render_backtest_tab(6)
+
+    with tab_b12:
+        render_backtest_tab(12)
+
+else:
+    st.error("Данные не загружены. Проверьте файл data/infl_kbr.csv")
