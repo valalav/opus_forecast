@@ -1,194 +1,200 @@
 # AGENTS.md
 
-This file provides guidance to AI agents (Claude, Gemini, etc.) when working with the СИРЕНА-КБР project.
+This file provides compact operational guidance for AI agents working with the СИРЕНА-КБР repository.
 
-## 🎯 Project Context
+## Core Rule: do not pretend work is verified
 
-**СИРЕНА-КБР v5.3** — Inflation forecasting system for Kabardino-Balkarian Republic (КБР), Russia.
+- Never say "done", "works", or "verified" without checking the exact thing the user asked for.
+- "Script ran" is not the same as "feature works".
+- If visual verification is impossible, say so plainly and name the exact file, tab, chart, or artifact the user should check.
+- If the user says something is broken, read the existing code first. Do not invent replacement workflows before understanding the current one.
 
-**Domain:** Economic forecasting, time series analysis, macroeconomics.
+## Start Here
 
-**Language:** Russian (data, docs), English (code comments, some docs).
+When entering a new task:
 
----
+1. Check `docs/index.md` first.
+2. Open only the docs needed for the current task.
+3. Reuse existing models, loaders, scripts, and verification paths before creating anything new.
 
-## 📁 Critical File Locations
+### Lazy-loading documentation
 
-### Data Files (Source of Truth)
+- Adding or updating a model → `docs/ADDING_MODEL_GUIDE.md`, `docs/MODEL_CATALOG.md`
+- Verification or "is this really working?" → `docs/VERIFICATION_GUIDE.md`
+- Nowcasting / weekly data → `docs/NOWCASTING.md`
+- Full project context → `README.md`
 
-| File | Path | Description |
-|------|------|-------------|
-| **Main inflation data** | `data/inflation_data.csv` | Monthly inflation (mom), components, macro indicators |
-| **KBR detailed data** | `data/infl_kbr.csv` | Alternative format with components |
-| **Weekly prices** | `data/kbr_weekly_prices_2008_2026.csv` | Weekly price data for nowcasting |
-| **Precomputed forecasts** | `data/precomputed_forecasts.json` | Cached forecasts |
+Do not read the entire docs tree by default. Use `docs/index.md` as the navigation hub.
 
-### Results & Backtests
+## Prefer Skills / Existing Workflows
 
-**🔄 Syncthing sync folder (for external sync):**
+If the environment exposes skills or commands, prefer them over ad-hoc flows.
+
+### Project skills / commands to prefer
+
+- `/models-status` — inspect current model landscape/status before proposing a new model path
+- `/charts` — regenerate or inspect chart-related outputs instead of creating custom chart scripts
+- `/add-model` — use when adding a new model or extending model registration workflow
+
+### Repository workflows to prefer
+
+- `/update-nowcast` — nowcast refresh workflow
+- `/run-backtest` — backtest workflow
+
+### Reuse before reinventing
+
+Before creating a new model, feature engineering path, or data loader, check for existing patterns in:
+
+- `sirena/models/`
+- `scripts/backtest_framework.py`
+- `sirena/data/`
+- `sirena/macro_features.py`
+- `docs/MODEL_CATALOG.md`
+
+If a similar implementation already exists, extend it or mirror its pattern instead of building a parallel one.
+
+## Project Context
+
+**СИРЕНА-КБР v5.4** — inflation forecasting system for Kabardino-Balkarian Republic (КБР), Russia.
+
+- Domain: inflation forecasting, time series, macroeconomics
+- Main KPI: h=1 forecast quality, especially keeping error within ±0.5 p.p.
+- Dashboard: `http://localhost:8503`
+
+## Canonical Data and Artifact Paths
+
+### Source-of-truth data
+
+- `data/inflation_data.csv` — main monthly inflation data, components, macro indicators
+- `data/infl_kbr.csv` — alternative KBR inflation format
+- `data/kbr_weekly_prices_2008_2026.csv` — weekly prices for nowcasting
+- `data/precomputed_forecasts.json` — cached forecast outputs
+- `data/micro_sprav.csv` — primary item weights reference
+- `data/access_weights.csv` — extended ACCDB-derived weights reference
+
+### Results and charts
+
+- `archive/results/` — production backtest outputs and comparison tables
+- `assets/charts/` — HTML and chart artifacts users actually inspect
+- `sync/` — Syncthing export folder
+
+### Important model / method locations
+
+- `sirena/models/` — forecasting models
+- `sirena/models/registry.py` — model registration pattern
+- `sirena/models/base.py` — common forecaster contract
+- `sirena/macro_features.py` — reusable macro and related feature engineering
+- `sirena/data/weekly_loader.py` — weekly data loading for nowcasting
+
+## Model Work Rules
+
+### When modifying or adding models
+
+Always look for an existing pattern first:
+
+- linear / robust production-style models → `ridge.py`, `ridge_extended.py`, `huber.py`, `ridge_shock_dummies.py`
+- subcomponent / bottom-up logic → `subcomponent_multi.py`
+- exogenous trajectories → `exog_forecaster.py`
+- nowcasting / weekly signal models → weekly and nowcast modules under `sirena/models/` and `sirena/data/weekly_loader.py`
+
+### Minimum reuse checklist
+
+Before writing new model code, check whether the task should instead:
+
+1. extend an existing model file,
+2. reuse `ModelRegistry`,
+3. reuse the existing backtest framework,
+4. reuse current feature engineering helpers,
+5. reuse current chart/report generation scripts.
+
+### Adding a new model
+
+At minimum:
+
+1. Create `sirena/models/{name}.py`
+2. Register it with `@ModelRegistry.register("name")`
+3. Export it in `sirena/models/__init__.py`
+4. Wire it into the existing backtest/dashboard path if the task requires production visibility
+5. Run the relevant backtests
+6. Regenerate forecast and chart artifacts if outputs changed
+
+Do not create a brand-new one-off evaluation path if the repository already has one.
+
+## Data Source Rules
+
+- Do not modify production data under `data/` without a clear reason and backup awareness.
+- When discussing findings, name exact file paths.
+- Treat weekly, macro, budget, and weights data as distinct source classes; do not conflate them.
+- If a model uses external or auxiliary data, identify the exact loader/file and whether the use is production, experimental, or nowcasting-only.
+
+## Verification Rules
+
+### Before claiming completion on model / forecast / dashboard work
+
+Run the closest relevant checks, typically:
+
+```bash
+python3 scripts/verify_all_tabs.py
+python3 scripts/precompute_forecasts.py
+python3 scripts/generate_charts.py
 ```
-sync/                                  # Add this to Syncthing
-├── charts/                            # PNG charts
-├── csv/                               # CSV results
-├── html/                              # HTML visualizations
-├── experiments/                       # Experiment results
-└── reports/                           # Markdown reports
 
-# ✅ Updates AUTOMATICALLY after each backtest
-# Manual update: python3 scripts/sync_to_share.py
+Use the smallest valid verification set for the task, but do not skip chart regeneration when model outputs or forecasts changed and users rely on `assets/charts/`.
+
+### For new model integration
+
+Also use:
+
+```bash
+python3 scripts/add_model_checklist.py ModelName
 ```
 
-**Production results (source):**
-```
-archive/results/
-├── backtest_h1_predictions.csv       # h=1 forecasts (most important KPI)
-├── backtest_h1_metrics.csv           # h=1 metrics
-├── backtest_h2_predictions.csv       # h=2 forecasts
-├── backtest_h12_predictions.csv      # h=12 forecasts (annual trajectory)
-└── model_comparison.csv              # Model comparison table
-```
+If verification is partial, say exactly what was checked and what remains unchecked.
 
-**Charts & Visualizations (source):**
-```
-assets/charts/
-├── backtest_h1_predictions.html      # Interactive h=1 charts
-├── forecasts.html                    # Forecast visualizations
-├── nowcast.html                      # Nowcast display
-└── sirena_score_dynamics.html        # SIRENA Score tracking
+## Backtests, charts, and sync
+
+### Main backtests
+
+```bash
+python3 scripts/run_backtest_h1.py
+python3 scripts/run_backtest_h2.py
+python3 scripts/run_backtest_h12.py
 ```
 
-### Model Files
+### Forecast/charts refresh
 
-**Production models (40+):**
-```
-sirena/models/
-├── ridge.py                          # Baseline Ridge model
-├── huber.py                          # Best h=1 model (MAE 0.289)
-├── subcomponent_multi.py             # Best SIRENA Score (0.515)
-├── prophet.py                        # Best h=12 model
-└── ...
+```bash
+python3 scripts/precompute_forecasts.py
+python3 scripts/generate_charts.py
 ```
 
-### Experiments
+### Sync trigger
 
-**Isolated experiments:**
-```
-experiments/
-└── {experiment_name}/
-    ├── models/                       # Experimental models
-    ├── scripts/                      # Experiment scripts
-    ├── results/                      # Experiment results & charts
-    └── docs/                         # Documentation
-```
-
----
-
-## 🔄 Synchronization Trigger
-
-When the user says **"синхронизируй"** (synchronize) or **"обнови sync"** (update sync):
+When the user says **"синхронизируй"** or **"обнови sync"**:
 
 ```bash
 python3 scripts/sync_to_share.py
 ```
 
-This command syncs results, charts, and reports to the `sync/` folder for Syncthing.
+## File Organization
+
+- Root: keep only essential top-level project files
+- `docs/` for documentation
+- `data/` for datasets and exported data files
+- `scripts/` for operational scripts
+- `assets/charts/` for generated chart artifacts
+- `experiments/` for isolated experiment work
+- `archive/` for backtests, older artifacts, and historical outputs
+
+Avoid cluttering the project root with new scratch files.
+
+## Related references
+
+- `GEMINI.md`
+- `CLAUDE.md`
+- `README.md`
+- `docs/index.md`
 
 ---
 
-## 🧠 Key Concepts
-
-### Forecasting Horizons
-- **h=1**: 1 month ahead — **PRIMARY KPI** (most important)
-- **h=2**: 2 months ahead
-- **h=3, h=6**: Medium-term
-- **h=12**: 12 months ahead — Annual trajectory
-
-### Key Metrics
-- **MAE**: Mean Absolute Error (main metric)
-- **KPI Rate**: % of forecasts with |error| ≤ 0.5
-- **SIRENA Score**: Weighted composite score `(0.5×MAE_h1 + 0.3×MAE_h2 + 0.2×MAE_h12)`
-
-### Seasonality Handling
-- **Global seasonality**: Historical average (all years, excluding outliers)
-- **Rolling seasonality**: Last N months (adaptive)
-- **ETS weights**: Exponential smoothing seasonal weights
-
-### Data Components
-- **Total**: "Все товары и услуги" (All goods and services)
-- **Food**: "Продовольственные товары" (39.48% weight)
-- **NonFood**: "Непродовольственные товары" (36.53% weight)
-- **Services**: "Услуги" (23.42% weight)
-
----
-
-## 🛠️ Development Workflow
-
-### Adding a New Model
-1. Create model in `sirena/models/{name}.py`
-2. Register in `ModelRegistry` (use decorator `@ModelRegistry.register("name")`)
-3. Export in `sirena/models/__init__.py`
-4. Add to `pages/constants.py` if needed for dashboard
-5. Run backtests: `python3 scripts/run_backtest_h1.py`
-6. Document results in `archive/results/`
-
-### Running Backtests
-```bash
-# Production backtests
-python3 scripts/run_backtest_h1.py    # Results → archive/results/backtest_h1_*
-python3 scripts/run_backtest_h2.py    # Results → archive/results/backtest_h2_*
-python3 scripts/run_backtest_h12.py   # Results → archive/results/backtest_h12_*
-```
-
-### Experiment Workflow
-```bash
-# Create experiment
-cd experiments
-mkdir -p new_experiment/{models,scripts,results,docs}
-
-# Run experiment
-cd new_experiment
-python3 scripts/run_experiment.py     # Results → experiments/new_experiment/results/
-
-# Visualize
-python3 scripts/plot_results.py       # Charts → experiments/new_experiment/results/*.png
-```
-
----
-
-## 📊 Output Artifacts
-
-### Must be saved explicitly:
-
-1. **Backtest results**: `archive/results/backtest_{h}_{timestamp}.csv`
-2. **Metrics**: `archive/results/backtest_{h}_metrics.csv`
-3. **Charts**: `assets/charts/` (HTML/PNG)
-4. **Experiment results**: `experiments/{name}/results/`
-
-### Naming conventions:
-- Results: `{type}_{timestamp}.csv` (e.g., `backtest_h1_20260202_155929.csv`)
-- Predictions: `predictions_{model}_{timestamp}.csv`
-- Charts: `{description}.png` or `{description}.html`
-
----
-
-## ⚠️ Critical Rules
-
-1. **Never modify production data** in `data/` without backup
-2. **Always commit results** from experiments to git
-3. **Document paths explicitly** when mentioning files
-4. **Use full paths** when referencing results: `archive/results/backtest_h1_metrics.csv`
-5. **Preserve experiment isolation**: experiments should not affect production code
-
----
-
-## 🔗 Related Documentation
-
-- [GEMINI.md](GEMINI.md) — Main project guidance
-- [README.md](README.md) — Full project documentation
-- [docs/index.md](docs/index.md) — Documentation navigation
-- [experiments/rolling_seasonality/README.md](experiments/rolling_seasonality/README.md) — Example experiment
-
----
-
-*Created: 2026-02-02*  
-*Version: 1.0*
+Updated to align agent guidance with `GEMINI.md` and `CLAUDE.md`, with stronger emphasis on skill usage, model/data-source reuse, and verification discipline.
