@@ -122,7 +122,7 @@ class DataLoader:
             df = pd.read_csv(path, sep=';', decimal=',')
 
             # Исправление типов
-            cols_to_fix = ['mom', 'Prod', 'Nonprod', 'Serv', 'usd_nom_i', 'Ruonia']
+            cols_to_fix = ['mom', 'Prod', 'Nonprod', 'Serv', 'usd_nom_i', 'Ruonia', 'Ki', 'Ki_i']
             for col in cols_to_fix:
                 if col in df.columns:
                     if df[col].dtype == object:
