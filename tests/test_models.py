@@ -177,36 +177,39 @@ class TestSirenaARIMA:
 
     def test_arima_import(self):
         """Проверка импорта ARIMA."""
-        from sirena_arima import SirenaARIMA
+        from sirena.models.arima import AR1Forecaster, SARIMAForecaster
 
-        model = SirenaARIMA()
-        assert model is not None
+        assert SARIMAForecaster is not None
+        assert AR1Forecaster is not None
 
     def test_ar1_fit(self, sample_ts):
         """Тест AR(1)."""
-        from sirena_arima import SirenaARIMA
+        from sirena.models.arima import AR1Forecaster
 
-        model = SirenaARIMA()
-        model.fit_ar1(sample_ts)
+        train_df = pd.DataFrame({'Все товары и услуги': sample_ts})
+        model: AR1Forecaster = AR1Forecaster()
+        model.fit(train_df, 'Все товары и услуги')
 
-        assert model.fit_res is not None
+        assert model.fit_result is not None
 
     def test_sarima_fit(self, sample_ts):
         """Тест SARIMA."""
-        from sirena_arima import SirenaARIMA
+        from sirena.models.arima import SARIMAForecaster
 
-        model = SirenaARIMA()
-        model.fit_sarima(sample_ts)
+        train_df = pd.DataFrame({'Все товары и услуги': sample_ts})
+        model: SARIMAForecaster = SARIMAForecaster()
+        model.fit(train_df, 'Все товары и услуги')
 
-        assert model.fit_res is not None
+        assert model.fit_result is not None
 
     def test_forecast(self, sample_ts):
         """Тест прогноза ARIMA."""
-        from sirena_arima import SirenaARIMA
+        from sirena.models.arima import SARIMAForecaster
 
-        model = SirenaARIMA()
-        model.fit_sarima(sample_ts)
-        fc = model.forecast(steps=12)
+        train_df = pd.DataFrame({'Все товары и услуги': sample_ts})
+        model: SARIMAForecaster = SARIMAForecaster()
+        model.fit(train_df, 'Все товары и услуги')
+        fc = model.forecast_with_intervals(horizon=12)
 
         assert 'mean' in fc
         assert len(fc['mean']) == 12
