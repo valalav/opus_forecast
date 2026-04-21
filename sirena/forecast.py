@@ -123,7 +123,7 @@ class EnsembleForecaster:
             DataFrame с колонками Date, SARIMA
         """
         try:
-            from sirena_arima import SirenaARIMA
+            from sirena.models.arima import SARIMAForecaster
 
             # Загрузка данных
             df_raw = pd.read_csv('data/infl_kbr.csv', sep=';', decimal=',')
@@ -148,14 +148,16 @@ class EnsembleForecaster:
             if cutoff_date is not None:
                 df = df[df.index <= cutoff_date]
 
-            ts = df['Все товары и услуги'].dropna() - 100
+            sarima_df = pd.DataFrame({
+                'Все товары и услуги': df['Все товары и услуги'].dropna()
+            })
 
             # Обучение
-            model = SirenaARIMA()
-            model.fit_sarima(ts)
-            fc = model.forecast(steps=horizon)
+            model: SARIMAForecaster = SARIMAForecaster()
+            model.fit(sarima_df, 'Все товары и услуги')
+            fc = model.forecast_with_intervals(horizon=horizon)
 
-            last_date = ts.index.max()
+            last_date = sarima_df.index.max()
             dates = pd.date_range(
                 start=last_date + pd.DateOffset(months=1),
                 periods=horizon,
@@ -163,7 +165,7 @@ class EnsembleForecaster:
             )
 
             logger.info(f"SARIMA прогноз рассчитан на {horizon} месяцев")
-            return pd.DataFrame({'Date': dates, 'SARIMA': fc['mean'].values})
+            return pd.DataFrame({'Date': dates, 'SARIMA': fc['mean']})
 
         except Exception as e:
             logger.warning(f"SARIMA недоступна: {e}")
