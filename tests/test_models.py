@@ -12,48 +12,48 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 
-class TestSirenaKBR:
-    """Тесты модели Ridge (SirenaKBR_v24)."""
+class TestRidgeForecaster:
+    """Тесты модели RidgeForecaster."""
 
     @pytest.fixture
     def sample_data(self):
         """Генерация тестовых данных."""
-        dates = pd.date_range('2020-01-01', periods=48, freq='MS')
+        dates = pd.date_range('2020-01-01', periods=60, freq='MS')
         np.random.seed(42)
 
         data = pd.DataFrame({
-            'Все товары и услуги': 100.5 + np.random.randn(48) * 0.3,
-            'Продовольственные товары': 100.6 + np.random.randn(48) * 0.4,
-            'Непродовольственные товары': 100.3 + np.random.randn(48) * 0.2,
-            'Услуги': 100.4 + np.random.randn(48) * 0.3
+            'Все товары и услуги': 100.5 + np.random.randn(60) * 0.3,
+            'Продовольственные товары': 100.6 + np.random.randn(60) * 0.4,
+            'Непродовольственные товары': 100.3 + np.random.randn(60) * 0.2,
+            'Услуги': 100.4 + np.random.randn(60) * 0.3
         }, index=dates)
 
         return data
 
     def test_model_import(self):
         """Проверка импорта модели."""
-        from sirena_kbr_v2_4_auto import SirenaKBR_v24
+        from sirena.models.ridge import RidgeForecaster
 
-        model = SirenaKBR_v24()
+        model = RidgeForecaster(use_macro=False)
         assert model is not None
 
     def test_model_parameters(self):
         """Проверка параметров модели."""
-        from sirena_kbr_v2_4_auto import SirenaKBR_v24
+        from sirena.models.ridge import RidgeForecaster
 
-        model = SirenaKBR_v24()
+        model = RidgeForecaster(use_macro=False)
 
         assert model.ALPHA == 0.3
         assert 2022 in model.OUTLIER_YEARS
         assert len(model.ETS_WEIGHTS) == 12
-        assert len(model.feature_cols) == 11
+        assert len(model.FEATURES) == 11
 
     def test_fit(self, sample_data):
         """Тест обучения модели."""
-        from sirena_kbr_v2_4_auto import SirenaKBR_v24
+        from sirena.models.ridge import RidgeForecaster
 
-        model = SirenaKBR_v24()
-        model.fit(sample_data)
+        model = RidgeForecaster(use_macro=False)
+        model.fit(sample_data, 'Все товары и услуги')
 
         assert model.ridge is not None
         assert model.seasonal_norm is not None
@@ -61,10 +61,10 @@ class TestSirenaKBR:
 
     def test_predict(self, sample_data):
         """Тест прогнозирования."""
-        from sirena_kbr_v2_4_auto import SirenaKBR_v24
+        from sirena.models.ridge import RidgeForecaster
 
-        model = SirenaKBR_v24()
-        model.fit(sample_data)
+        model = RidgeForecaster(use_macro=False)
+        model.fit(sample_data, 'Все товары и услуги')
 
         # Прогноз на последнюю дату
         target_date = sample_data.index[-1]
@@ -77,9 +77,9 @@ class TestSirenaKBR:
 
     def test_backtest(self, sample_data):
         """Тест бэктестирования."""
-        from sirena_kbr_v2_4_auto import SirenaKBR_v24
+        from sirena.models.ridge import RidgeForecaster
 
-        model = SirenaKBR_v24()
+        model = RidgeForecaster(use_macro=False)
         results = model.backtest(sample_data, start_date='2023-01-01')
 
         assert isinstance(results, pd.DataFrame)
@@ -91,9 +91,9 @@ class TestSirenaKBR:
 
     def test_metrics(self, sample_data):
         """Тест расчёта метрик."""
-        from sirena_kbr_v2_4_auto import SirenaKBR_v24
+        from sirena.models.ridge import RidgeForecaster
 
-        model = SirenaKBR_v24()
+        model = RidgeForecaster(use_macro=False)
         results = model.backtest(sample_data, start_date='2023-01-01')
 
         if not results.empty:

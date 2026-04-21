@@ -22,18 +22,13 @@ from datetime import datetime
 # Add project root to path
 sys.path.append(os.getcwd())
 
-# Add archive/scripts to path for legacy models
-sys.path.append(os.path.join(os.getcwd(), "archive", "scripts"))
-
-# Import Ridge model from archive
-from sirena_kbr_v2_4_auto import SirenaKBR_v24
-
 from sirena.models.arima import SARIMAForecaster
 from sirena.models.bvar import BayesianVAR
 from sirena.models.ebm import EBMForecaster
 from sirena.models.ets import ETSForecaster
 from sirena.models.lightgbm import LightGBMForecaster
 from sirena.models.prophet import ProphetForecaster
+from sirena.models.ridge import RidgeForecaster
 from sirena.models.ridge_extended import RidgeExtendedForecaster
 from sirena.models.bayesian_ridge import BayesianRidgeForecaster
 from sirena.models.elasticnet import ElasticNetForecaster
@@ -307,8 +302,8 @@ class BacktestRunner:
         try:
             train_ext = train_ridge.copy()
             train_ext.loc[target_date] = np.nan
-            model = SirenaKBR_v24()
-            model.fit(train_ridge)
+            model: RidgeForecaster = RidgeForecaster(use_macro=False)
+            model.fit(train_ridge, "Все товары и услуги")
             result = model.predict(train_ext, target_date)
             return result["prediction"] - 100
         except Exception as e:
@@ -742,8 +737,8 @@ class BacktestRunner:
         print("Обучение моделей...")
 
         # Ridge models (use predict for each target_date)
-        ridge_model = SirenaKBR_v24()
-        ridge_model.fit(train_ridge)
+        ridge_model: RidgeForecaster = RidgeForecaster(use_macro=False)
+        ridge_model.fit(train_ridge, "Все товары и услуги")
 
         ridge_ext_model = RidgeExtendedForecaster()
         ridge_ext_model.fit(train_ridge, "Все товары и услуги")

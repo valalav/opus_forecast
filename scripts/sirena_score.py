@@ -43,15 +43,13 @@ warnings.filterwarnings('ignore')
 # Add project root to path
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.append(str(PROJECT_ROOT))
-sys.path.append(str(PROJECT_ROOT / 'archive' / 'scripts'))
-
 # Imports
-from sirena_kbr_v2_4_auto import SirenaKBR_v24
 from sirena.models.bvar import BayesianVAR
 from sirena.models.ebm import EBMForecaster
 from sirena.models.ets import ETSForecaster
 from sirena.models.lightgbm import LightGBMForecaster
 from sirena.models.prophet import ProphetForecaster
+from sirena.models.ridge import RidgeForecaster
 from sirena.models.ridge_extended import RidgeExtendedForecaster
 from sirena.models.bayesian_ridge import BayesianRidgeForecaster
 from sirena.models.elasticnet import ElasticNetForecaster
@@ -169,8 +167,8 @@ def forecast_model(model_name: str, train_df: pd.DataFrame,
         train_ext.loc[target_date] = np.nan
 
         if model_name == 'Ridge':
-            model = SirenaKBR_v24()
-            model.fit(train_df)
+            model: RidgeForecaster = RidgeForecaster(use_macro=False)
+            model.fit(train_df, 'Все товары и услуги')
             result = model.predict(train_ext, target_date)
             return result['prediction'] - 100
 
