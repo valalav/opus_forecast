@@ -5,23 +5,40 @@
 import pandas as pd
 import json
 import os
+from pathlib import Path
 from datetime import datetime
 
+BASE_DIR = Path(__file__).resolve().parent
 MANUAL_EXOG_FILE = 'manual_exog_forecast.json'
-EXOG_SETTINGS_FILE = 'exog_settings.json'
+LEGACY_EXOG_SETTINGS_FILE = BASE_DIR / 'exog_settings.json'
+EXOG_SETTINGS_FILE = BASE_DIR / 'data' / 'exog_settings.json'
+def _load_exog_settings():
+    for path in (EXOG_SETTINGS_FILE, LEGACY_EXOG_SETTINGS_FILE):
+        if path.exists():
+            with path.open('r', encoding='utf-8') as f:
+                return json.load(f)
+    raise FileNotFoundError('exog_settings.json not found in data/ or project root')
 
 def load_last_exog_values():
-    """Загрузить последние фактические значения."""
+    """Загрузить последние фактические значения из inflation_data.csv."""
     try:
-        with open(EXOG_SETTINGS_FILE, 'r') as f:
-            settings = json.load(f)
+        settings = _load_exog_settings()
+        return {
+            'usd': settings.get('USD_RUB_CURRENT', 77.0),
+            'key_rate': settings.get('KEY_RATE_CURRENT', 16.5),
+            'ruonia': settings.get('RUONIA_CURRENT', 16.25)
+        }
+    except Exception as e:
+        # Fallback на JSON настройки
+        try:
+            settings = _load_exog_settings()
             return {
                 'usd': settings.get('USD_RUB_CURRENT', 77.0),
                 'key_rate': settings.get('KEY_RATE_CURRENT', 16.5),
                 'ruonia': settings.get('RUONIA_CURRENT', 16.25)
             }
-    except:
-        return {'usd': 77.0, 'key_rate': 16.5, 'ruonia': 16.25}
+        except:
+            return {'usd': 77.0, 'key_rate': 16.5, 'ruonia': 16.25}
 
 def generate_auto_exog_forecast(last_date, horizon, current_usd=None, current_keyrate=None, current_ruonia=None):
     """AR(1) прогноз экзогенных от фактических значений."""
