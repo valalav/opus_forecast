@@ -1,0 +1,170 @@
+{
+  "generated_at": "2026-04-24T17:49:10.431248",
+  "forecast_round_label": "2026-03",
+  "actual_data_cutoff": "2026-02-01",
+  "internal_forecast_start": "2026-03-01",
+  "export_start": "2026-04-01",
+  "export_end": "2027-12-01",
+  "models": {
+    "Ridge": {
+      "status": "ok",
+      "rows_exported": 21,
+      "source_last_date": "2026-02-01",
+      "dataset": "sa",
+      "method": "iterative",
+      "warnings": []
+    },
+    "Ridge_Ext": {
+      "status": "ok",
+      "rows_exported": 21,
+      "source_last_date": "2026-02-01",
+      "dataset": "sa",
+      "method": "iterative",
+      "warnings": []
+    },
+    "Ridge_Shock": {
+      "status": "ok",
+      "rows_exported": 21,
+      "source_last_date": "2026-02-01",
+      "dataset": "sa",
+      "method": "iterative",
+      "warnings": []
+    },
+    "Bayes_Ridge": {
+      "status": "ok",
+      "rows_exported": 21,
+      "source_last_date": "2026-02-01",
+      "dataset": "sa",
+      "method": "iterative",
+      "warnings": []
+    },
+    "ElasticNet": {
+      "status": "ok",
+      "rows_exported": 21,
+      "source_last_date": "2026-02-01",
+      "dataset": "sa",
+      "method": "iterative",
+      "warnings": []
+    },
+    "Huber": {
+      "status": "ok",
+      "rows_exported": 21,
+      "source_last_date": "2026-02-01",
+      "dataset": "sa",
+      "method": "iterative",
+      "warnings": []
+    },
+    "NGBoost": {
+      "status": "ok",
+      "rows_exported": 21,
+      "source_last_date": "2026-02-01",
+      "dataset": "sa",
+      "method": "iterative",
+      "warnings": []
+    },
+    "NGBoost_Shock": {
+      "status": "ok",
+      "rows_exported": 21,
+      "source_last_date": "2026-02-01",
+      "dataset": "sa",
+      "method": "iterative",
+      "warnings": []
+    },
+    "LightGBM": {
+      "status": "ok",
+      "rows_exported": 21,
+      "source_last_date": "2026-02-01",
+      "dataset": "sa",
+      "method": "iterative",
+      "warnings": []
+    },
+    "EBM": {
+      "status": "ok",
+      "rows_exported": 21,
+      "source_last_date": "2026-02-01",
+      "dataset": "sa",
+      "method": "iterative",
+      "warnings": []
+    },
+    "CatBoost": {
+      "status": "ok",
+      "rows_exported": 21,
+      "source_last_date": "2026-02-01",
+      "dataset": "sa",
+      "method": "iterative",
+      "warnings": []
+    },
+    "Prophet": {
+      "status": "ok",
+      "rows_exported": 21,
+      "source_last_date": "2026-02-01",
+      "dataset": "sa",
+      "method": "forecast",
+      "warnings": []
+    },
+    "ETS": {
+      "status": "ok",
+      "rows_exported": 21,
+      "source_last_date": "2026-02-01",
+      "dataset": "sa",
+      "method": "forecast",
+      "warnings": []
+    },
+    "Subcomp": {
+      "status": "ok",
+      "rows_exported": 21,
+      "source_last_date": "2025-10-01",
+      "dataset": "sa",
+      "method": "forecast",
+      "warnings": [
+        "source_data_older_than_round_cutoff"
+      ]
+    },
+    "Subcomp_Multi": {
+      "status": "ok",
+      "rows_exported": 21,
+      "source_last_date": "2025-10-01",
+      "dataset": "sa",
+      "method": "forecast",
+      "warnings": [
+        "source_data_older_than_round_cutoff"
+      ]
+    },
+    "Micro": {
+      "status": "ok",
+      "rows_exported": 21,
+      "source_last_date": "2026-01-01",
+      "dataset": "sa",
+      "method": "forecast",
+      "warnings": [
+        "source_data_older_than_round_cutoff",
+        "flat_zero_forecast"
+      ]
+    },
+    "Ridge_Macro": {
+      "status": "ok",
+      "rows_exported": 21,
+      "source_last_date": "2026-02-01",
+      "dataset": "macro",
+      "method": "forecast",
+      "warnings": []
+    },
+    "BVAR": {
+      "status": "ok",
+      "rows_exported": 21,
+      "source_last_date": "2026-02-01",
+      "dataset": "bvar",
+      "method": "forecast",
+      "warnings": []
+    },
+    "SARIMA": {
+      "status": "ok",
+      "rows_exported": 21,
+      "source_last_date": "2026-02-01",
+      "dataset": "sa",
+      "method": "forecast",
+      "warnings": []
+    }
+  },
+  "failures": {}
+}

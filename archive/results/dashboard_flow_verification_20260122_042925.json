@@ -1,0 +1,148 @@
+{
+  "timestamp": "2026-01-22T04:29:25.069907",
+  "overall_status": "SUCCESS",
+  "checks": {
+    "dashboard_all_models": {
+      "status": "PASS",
+      "models_count": 20,
+      "models": [
+        "Ridge",
+        "Ridge_Ext",
+        "Bayes_Ridge",
+        "ElasticNet",
+        "Huber",
+        "Ridge_Shock",
+        "Ridge_Macro",
+        "NGBoost",
+        "NGBoost_Shock",
+        "BVAR",
+        "SARIMA",
+        "LightGBM",
+        "Prophet",
+        "ETS",
+        "EBM",
+        "CatBoost",
+        "Subcomp",
+        "Subcomp_Multi",
+        "Micro",
+        "Ensemble"
+      ]
+    },
+    "dashboard_model_colors": {
+      "status": "PASS",
+      "colors_count": 22
+    },
+    "backtest_data": {
+      "h=1": {
+        "status": "PASS",
+        "rows": 12,
+        "columns": 23,
+        "models_found": 20,
+        "missing_models": []
+      },
+      "h=2": {
+        "status": "PASS",
+        "rows": 12,
+        "columns": 23,
+        "models_found": 20,
+        "missing_models": []
+      },
+      "h=12": {
+        "status": "PASS",
+        "rows": 12,
+        "columns": 24,
+        "models_found": 20,
+        "missing_models": []
+      }
+    },
+    "model_imports": {
+      "Ridge": {
+        "status": "PASS",
+        "class": "RidgeForecaster"
+      },
+      "Ridge_Ext": {
+        "status": "PASS",
+        "class": "RidgeExtendedForecaster"
+      },
+      "Bayes_Ridge": {
+        "status": "PASS",
+        "class": "BayesianRidgeForecaster"
+      },
+      "ElasticNet": {
+        "status": "PASS",
+        "class": "ElasticNetForecaster"
+      },
+      "Huber": {
+        "status": "PASS",
+        "class": "HuberForecaster"
+      },
+      "Ridge_Shock": {
+        "status": "PASS",
+        "class": "RidgeShockDummiesForecaster"
+      },
+      "Ridge_Macro": {
+        "status": "PASS",
+        "class": "RidgeMacroForecaster"
+      },
+      "NGBoost": {
+        "status": "PASS",
+        "class": "NGBoostForecaster"
+      },
+      "NGBoost_Shock": {
+        "status": "PASS",
+        "class": "NGBoostShockForecaster"
+      },
+      "BVAR": {
+        "status": "PASS",
+        "class": "BVARForecaster"
+      },
+      "SARIMA": {
+        "status": "PASS",
+        "class": "SARIMAForecaster"
+      },
+      "LightGBM": {
+        "status": "PASS",
+        "class": "LightGBMForecaster"
+      },
+      "Prophet": {
+        "status": "PASS",
+        "class": "ProphetForecaster"
+      },
+      "ETS": {
+        "status": "PASS",
+        "class": "ETSForecaster"
+      },
+      "EBM": {
+        "status": "PASS",
+        "class": "EBMForecaster"
+      },
+      "CatBoost": {
+        "status": "PASS",
+        "class": "CatBoostForecaster"
+      },
+      "Subcomp": {
+        "status": "PASS",
+        "class": "SubcomponentForecaster"
+      },
+      "Subcomp_Multi": {
+        "status": "PASS",
+        "class": "SubcomponentMultiForecaster"
+      },
+      "Micro": {
+        "status": "PASS",
+        "class": "MicrocomponentForecaster"
+      },
+      "Ensemble": {
+        "status": "PASS",
+        "class": "EnsembleForecaster"
+      }
+    },
+    "data_consistency": {
+      "status": "PASS",
+      "kbr_rows": 768
+    }
+  },
+  "errors": [],
+  "warnings": [],
+  "summary": {}
+}

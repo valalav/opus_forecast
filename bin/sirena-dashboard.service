@@ -1,0 +1,35 @@
+# SIRENA-KBR Dashboard Systemd Service
+# =====================================
+#
+# Installation:
+#   mkdir -p ~/.config/systemd/user
+#   cp bin/sirena-dashboard.service ~/.config/systemd/user/
+#   systemctl --user daemon-reload
+#   systemctl --user enable sirena-dashboard
+#   systemctl --user start sirena-dashboard
+#
+# Commands:
+#   systemctl --user status sirena-dashboard
+#   systemctl --user restart sirena-dashboard
+#   journalctl --user -u sirena-dashboard -f
+#
+
+[Unit]
+Description=SIRENA-KBR Dashboard (Streamlit)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/valalav/opus_forecast
+ExecStart=/home/valalav/.local/bin/streamlit run dashboard.py --server.port 8503 --server.address 0.0.0.0 --server.headless true --browser.gatherUsageStats false
+Restart=always
+RestartSec=5
+StandardOutput=append:/home/valalav/opus_forecast/logs/dashboard_stdout.log
+StandardError=append:/home/valalav/opus_forecast/logs/dashboard_stderr.log
+
+# Environment
+Environment="PATH=/home/valalav/.local/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="PYTHONUNBUFFERED=1"
+
+[Install]
+WantedBy=default.target

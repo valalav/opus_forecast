@@ -1,0 +1,142 @@
+"""Markdown reports for the experimental core inflation tool."""
+
+from __future__ import annotations
+
+import math
+
+import pandas as pd
+
+from .contributions import top_contributors
+
+
+def _format_number(value: object, digits: int = 3) -> str:
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return ""
+    if not math.isfinite(number):
+        return ""
+    return f"{number:.{digits}f}"
+
+
+def _diagnostic_section(diagnostics: pd.DataFrame) -> list[str]:
+    if diagnostics.empty:
+        return ["## Diagnostics", "", "No diagnostics were supplied.", ""]
+
+    status = diagnostics["status"].astype(str).str.lower()
+    failed = diagnostics.loc[status == "fail"]
+    warnings = diagnostics.loc[status == "warning"]
+    lines = ["## Diagnostics", ""]
+    if failed.empty:
+        lines.append("No failed diagnostics.")
+    else:
+        lines.append("FAILED DIAGNOSTICS:")
+        for _, row in failed.iterrows():
+            check = row.get("check", "unknown_check")
+            message = row.get("message", "")
+            lines.append(f"- FAIL `{check}`: {message}")
+    if not warnings.empty:
+        lines.append("")
+        lines.append("Warnings:")
+        for _, row in warnings.iterrows():
+            check = row.get("check", "unknown_check")
+            message = row.get("message", "")
+            lines.append(f"- WARNING `{check}`: {message}")
+    lines.append("")
+    return lines
+
+
+def render_jump_report(
+    series: pd.DataFrame,
+    diagnostics: pd.DataFrame,
+    contributions: pd.DataFrame,
+    jump_threshold: float = 0.5,
+    lookback_months: int = 36,
+    top_n: int = 10,
+) -> str:
+    """Render a jump-focused Markdown report with diagnostic failures visible."""
+
+    lines = [
+        "# Core Inflation Jump Report",
+        "",
+        "Experimental report. Use only with passed input diagnostics.",
+        "",
+    ]
+    lines.extend(_diagnostic_section(diagnostics))
+
+    if series.empty:
+        lines.extend(["## Series", "", "No series rows were produced.", ""])
+        return "\n".join(lines).rstrip() + "\n"
+
+    ordered = series.copy().sort_values("date").tail(lookback_months)
+    value_columns = [
+        column
+        for column in ["headline_mom", "exclusion_core_mom", "trimmed_mean_mom", "weighted_median_mom"]
+        if column in ordered.columns
+    ]
+    for column in value_columns:
+        ordered[f"{column}_change"] = ordered[column].diff()
+
+    change_columns = [f"{column}_change" for column in value_columns]
+    jump_mask = pd.Series(False, index=ordered.index)
+    for column in change_columns:
+        jump_mask = jump_mask | ordered[column].abs().ge(jump_threshold).fillna(False)
+    jumps = ordered.loc[jump_mask]
+
+    lines.extend(["## Jump Months", ""])
+    if jumps.empty:
+        lines.append(f"No month in the last {len(ordered)} rows exceeded {jump_threshold:.3f} p.p. change.")
+    else:
+        lines.append("| date | headline | core | gap | max abs change |")
+        lines.append("|---|---:|---:|---:|---:|")
+        for _, row in jumps.iterrows():
+            max_abs = max((abs(float(row.get(column, 0))) for column in change_columns), default=0.0)
+            lines.append(
+                "| {date} | {headline} | {core} | {gap} | {max_abs} |".format(
+                    date=row["date"],
+                    headline=_format_number(row.get("headline_mom")),
+                    core=_format_number(row.get("exclusion_core_mom")),
+                    gap=_format_number(row.get("headline_core_gap")),
+                    max_abs=_format_number(max_abs),
+                )
+            )
+    lines.append("")
+
+    if not jumps.empty:
+        dates_for_detail = jumps["date"].astype(str).tolist()
+    else:
+        available_dates = set(contributions["date"].astype(str)) if "date" in contributions.columns else set()
+        dates_for_detail = [date for date in ordered["date"].astype(str).tolist() if date in available_dates][-3:]
+    lines.extend(["## Component Drivers", ""])
+    for date in dates_for_detail[-6:]:
+        positive, negative = top_contributors(contributions, date, n=top_n)
+        lines.append(f"### {date}")
+        lines.append("")
+        if positive.empty:
+            lines.append("No contribution rows for this date.")
+            lines.append("")
+            continue
+        lines.append("Top positive headline contributors:")
+        for _, row in positive.iterrows():
+            lines.append(
+                f"- {row['component']}: {_format_number(row['headline_contribution_pp'])} p.p."
+            )
+        lines.append("")
+        lines.append("Top negative headline contributors:")
+        for _, row in negative.iterrows():
+            lines.append(
+                f"- {row['component']}: {_format_number(row['headline_contribution_pp'])} p.p."
+            )
+        lines.append("")
+
+    lines.extend(
+        [
+            "## Limitations",
+            "",
+            "- This report is generated by an isolated experimental CLI.",
+            "- Failed diagnostics mean the numeric series must not be used as an analytical result.",
+            "- Worker A/B loaders and indicators can replace the direct component CSV path later.",
+            "",
+        ]
+    )
+    return "\n".join(lines).rstrip() + "\n"

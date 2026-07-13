@@ -91,13 +91,55 @@ dmypy.json
 *.swo
 *~
 
-# Project-specific
+# Project-specific local state
 *.log
 out.log
+.agent/
+.pi/
+.pi-lens/
+_00_inbox/
+_workspace/
+logs/
+output/
+reports/
+forecast_asset/
+forecasts/
+samoocenka/
 
-# Large data files (optional - uncomment if needed)
-# data/*.accdb
-# data/*.csv
+# Generated, vendored, and oversized artifacts
+*.deb
+*.rar
+*.tar.gz
+*.whl
+archive/backups/
+target/
+task_*.json
+/*.xlsx
+archive/legacy_bundles/
+archive/results/**/runs/
+assets/*
+!assets/06_2026_02_Прогноз.xlsx
+edge_lab/assets/
+edge_lab/data/
+experiments/**/outputs/
+experiments/**/runs/
+experiments/code_repository_20260625/extracted/
+experiments/code_repository_20260625/nested_extracted/
+experiments/code_repository_20260625/raw/
+ibved/
+inflation_forecast/
+
+# Keep only canonical production data in Git
+data/*
+!data/access_weights.csv
+!data/infl_kbr.csv
+!data/inflation_data.csv
+!data/items_names.csv
+!data/kbr_indices.csv
+!data/kbr_weekly_prices_2008_2026.csv
+!data/micro_sprav.csv
+!data/mom_sa_kbr.csv
+!data/precomputed_forecasts.json
 
 # Temporary files
 *.tmp

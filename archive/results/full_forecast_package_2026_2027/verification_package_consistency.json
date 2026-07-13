@@ -1,0 +1,42 @@
+{
+  "zip_path": "archive/results/full_forecast_package_2026_2027/sirena_kbr_forecast_package_2026_2027.zip",
+  "zip_entries": [
+    {
+      "filename": "forecast_2026_2027_mom_yoy.csv",
+      "file_size": 636
+    },
+    {
+      "filename": "forecast_2026_2027_explanation.docx",
+      "file_size": 40292
+    },
+    {
+      "filename": "april_2026_forecast_deviation_analysis.docx",
+      "file_size": 41469
+    },
+    {
+      "filename": "april_2026_forecast_deviation_calculations.xlsx",
+      "file_size": 38821
+    }
+  ],
+  "forecast_docx_size": 40292,
+  "april_docx_size": 41469,
+  "april_xlsx_size": 38821,
+  "forecast_docx_has_glossary": true,
+  "april_docx_declares_no_may_fact": true,
+  "april_xlsx_sheets": [
+    "Summary",
+    "Component contributions",
+    "April robust history",
+    "April history",
+    "Monthly deflation seasonality",
+    "Product drivers April",
+    "Key product summary",
+    "Key product 2023-2026",
+    "2022 pattern",
+    "Recent pattern",
+    "Future template"
+  ],
+  "mismatches": [
+    "April DOCX missing phrase: первым дефляционным апрелем"
+  ]
+}

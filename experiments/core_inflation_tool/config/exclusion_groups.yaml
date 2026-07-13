@@ -1,0 +1,13 @@
+{
+  "ordinary_subcomponent_groups": [
+    "Плодоовощная продукция, включая картофель",
+    "Топливо моторное"
+  ],
+  "sa_item_codes": {
+    "housing_and_utilities": [14],
+    "fruit_vegetables": [33],
+    "motor_fuel": [42]
+  },
+  "note": "Canonical hierarchy-aligned exclusions; final production use requires business approval."
+}
+

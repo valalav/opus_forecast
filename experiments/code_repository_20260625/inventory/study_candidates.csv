@@ -1,0 +1,301 @@
+priority_score,path,top_model,extension,kind,size_bytes
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/common/data_cpi_month_gu_calculate.R,nested:a24cd898db7c9,r,code,8153
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/common/data_cpi_month_mom_from_wow_calculate.R,nested:a24cd898db7c9,r,code,7519
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/common/data_cpi_month_mom_from_wow_export.R,nested:a24cd898db7c9,r,code,12815
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/common/data_cpi_month_seas_calculate.R,nested:a24cd898db7c9,r,code,7140
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/common/data_cpi_week_bi_bias_correct.R,nested:a24cd898db7c9,r,code,8819
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/common/data_cpi_week_bi_calculate.R,nested:a24cd898db7c9,r,code,12947
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/common/data_cpi_week_bi_censor_filter.R,nested:a24cd898db7c9,r,code,2555
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/common/data_cpi_week_for_iw_excel_export.R,nested:a24cd898db7c9,r,code,8371
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/common/data_cpi_week_for_iw_graphs_export.R,nested:a24cd898db7c9,r,code,12685
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/common/data_cpi_week_gu_calculate.R,nested:a24cd898db7c9,r,code,4139
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/common/data_cpi_week_measures_calculate.R,nested:a24cd898db7c9,r,code,4616
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/common/data_cpi_week_stats_calculate.R,nested:a24cd898db7c9,r,code,3674
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/common/data_cpi_week_wow_calculate.R,nested:a24cd898db7c9,r,code,3875
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/common/data_cpi_week_wow_export.R,nested:a24cd898db7c9,r,code,8329
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/common/data_cpi_week_wow_nowcast.R,nested:a24cd898db7c9,r,code,9555
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/common/loaders.R,nested:a24cd898db7c9,r,code,8920
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/common/main_reference_tables_load.R,nested:a24cd898db7c9,r,code,10917
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/common/modified_laspeyres_by_sum.R,nested:a24cd898db7c9,r,code,1616
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/common/utils.R,nested:a24cd898db7c9,r,code,23043
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/common/week_infowatch_report_plots.R,nested:a24cd898db7c9,r,code,13201
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/parsers/bi_parse_to_fedstat.R,nested:a24cd898db7c9,r,code,10591
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/parsers/showdata_parse_to_fedstat.R,nested:a24cd898db7c9,r,code,3443
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/scripts/loaders/bi_parse_prices_week_script.R,nested:a24cd898db7c9,r,code,2478
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/scripts/loaders/data_cpi_month_fedstat_load.R,nested:a24cd898db7c9,r,code,10691
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/scripts/loaders/data_cpi_week_fedstat_load.R,nested:a24cd898db7c9,r,code,8405
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/scripts/loaders/data_prices_week_fedstat_load.R,nested:a24cd898db7c9,r,code,5029
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/scripts/loaders/showdata_parse_cpi_month_script.R,nested:a24cd898db7c9,r,code,4313
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/scripts/loaders/showdata_parse_cpi_week_script.R,nested:a24cd898db7c9,r,code,4807
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/scripts/main.R,nested:a24cd898db7c9,r,code,18827
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/scripts/misc/check_weights.R,nested:a24cd898db7c9,r,code,3293
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/scripts/misc/cpi_dictionary_order.R,nested:a24cd898db7c9,r,code,2964
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/scripts/misc/tovar_weights_parse.R,nested:a24cd898db7c9,r,code,2554
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/scripts/model/catboost_model_train_wrapper.R,nested:a24cd898db7c9,r,code,6885
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/scripts/model/linear_model_train_wrapper.R,nested:a24cd898db7c9,r,code,4089
+31,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/R/scripts/model/train_model_script.R,nested:a24cd898db7c9,r,code,15785
+26,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/weekCpiR.Rproj,nested:a24cd898db7c9,rproj,code,218
+23,experiments/code_repository_20260625/nested_extracted/a5331c69b69ea/Применение метода главных компонент и кластеризации данных/Код_кластеризация.ipynb,nested:a5331c69b69ea,ipynb,code,1116919
+23,experiments/code_repository_20260625/nested_extracted/ad21529ad3a3e/ВВГУ_ЭУ_Недельные данные по льготной ипотеке/parse_domrf.R,nested:ad21529ad3a3e,r,code,2262
+23,experiments/code_repository_20260625/nested_extracted/ae00677697d94/ARIMAX.R,nested:ae00677697d94,r,code,2722
+21,"experiments/code_repository_20260625/nested_extracted/a0ac088b0b1be/Методика отбора переменных, обеспечивающих надежные прогнозы/variable_models_code.prg",nested:a0ac088b0b1be,prg,code,15525
+18,"experiments/code_repository_20260625/nested_extracted/a0ac088b0b1be/Методика отбора переменных, обеспечивающих надежные прогнозы/example.wf1",nested:a0ac088b0b1be,wf1,code,37200
+18,experiments/code_repository_20260625/nested_extracted/a17db49e525af/Описание и код модели недельная - месячная инфляция.docx,nested:a17db49e525af,docx,doc,15961
+18,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/README.txt,nested:a24cd898db7c9,txt,doc,568
+18,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/Методические рекомендации по оценке недельной инфляции_ДГУ.docx,nested:a24cd898db7c9,docx,doc,12337850
+18,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/Сопроводительная записка.docx,nested:a24cd898db7c9,docx,doc,30213
+18,experiments/code_repository_20260625/nested_extracted/a5331c69b69ea/Применение метода главных компонент и кластеризации данных/Методика PCA.docx,nested:a5331c69b69ea,docx,doc,20000
+16,experiments/code_repository_20260625/nested_extracted/a17db49e525af/Данные недельная - месячная инфляция.xlsx,nested:a17db49e525af,xlsx,data,24280246
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data/classificators/dictionary_cpi.xlsx,nested:a24cd898db7c9,xlsx,data,735674
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data/classificators/dictionary_okato.xlsx,nested:a24cd898db7c9,xlsx,data,15684
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data/classificators/model_codes.xlsx,nested:a24cd898db7c9,xlsx,data,42868
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data/classificators/standardization_cpi.xlsx,nested:a24cd898db7c9,xlsx,data,12387
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data/classificators/standardization_okato.xlsx,nested:a24cd898db7c9,xlsx,data,9177
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data/misc/permitted_month_time_breaks.xlsx,nested:a24cd898db7c9,xlsx,data,9339
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data/misc/permitted_tovar_codes_for_all_regions.xlsx,nested:a24cd898db7c9,xlsx,data,10799
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data/misc/permitted_week_time_breaks.xlsx,nested:a24cd898db7c9,xlsx,data,10410
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data/misc/trajectory_4percents_wow_based.xlsx,nested:a24cd898db7c9,xlsx,data,15880
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data/parsers_dictionaries/bi_to_fedstat.xlsx,nested:a24cd898db7c9,xlsx,data,10397
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data/rosstat_folder/Описание товаров и услуг.xlsx,nested:a24cd898db7c9,xlsx,data,433902
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/bi_data_load_archive/2023-10-23/1.csv,nested:a24cd898db7c9,csv,data,255380
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/bi_data_load_archive/2023-10-23/2.csv,nested:a24cd898db7c9,csv,data,251958
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/bi_data_load_archive/2023-10-23/3.csv,nested:a24cd898db7c9,csv,data,121478
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/month_inflation/cpi/2023-08.csv,nested:a24cd898db7c9,csv,data,1921566
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-01-09.csv,nested:a24cd898db7c9,csv,data,56102
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-01-16.csv,nested:a24cd898db7c9,csv,data,55940
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-01-23.csv,nested:a24cd898db7c9,csv,data,55899
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-01-30.csv,nested:a24cd898db7c9,csv,data,55862
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-02-06.csv,nested:a24cd898db7c9,csv,data,55968
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-02-13.csv,nested:a24cd898db7c9,csv,data,55927
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-02-20.csv,nested:a24cd898db7c9,csv,data,55949
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-02-27.csv,nested:a24cd898db7c9,csv,data,55914
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-03-06.csv,nested:a24cd898db7c9,csv,data,55972
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-03-13.csv,nested:a24cd898db7c9,csv,data,57265
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-03-20.csv,nested:a24cd898db7c9,csv,data,57336
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-03-27.csv,nested:a24cd898db7c9,csv,data,57377
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-04-03.csv,nested:a24cd898db7c9,csv,data,57332
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-04-10.csv,nested:a24cd898db7c9,csv,data,57361
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-04-17.csv,nested:a24cd898db7c9,csv,data,57175
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-04-24.csv,nested:a24cd898db7c9,csv,data,57307
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-05-02.csv,nested:a24cd898db7c9,csv,data,57328
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-05-10.csv,nested:a24cd898db7c9,csv,data,57232
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-05-15.csv,nested:a24cd898db7c9,csv,data,57129
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-05-22.csv,nested:a24cd898db7c9,csv,data,57295
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-05-29.csv,nested:a24cd898db7c9,csv,data,57408
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-06-05.csv,nested:a24cd898db7c9,csv,data,57405
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-06-13.csv,nested:a24cd898db7c9,csv,data,57216
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-06-19.csv,nested:a24cd898db7c9,csv,data,57264
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-06-26.csv,nested:a24cd898db7c9,csv,data,57379
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-07-03.csv,nested:a24cd898db7c9,csv,data,57328
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-07-10.csv,nested:a24cd898db7c9,csv,data,57293
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-07-17.csv,nested:a24cd898db7c9,csv,data,57368
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-07-24.csv,nested:a24cd898db7c9,csv,data,57333
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-07-31.csv,nested:a24cd898db7c9,csv,data,57412
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-08-07.csv,nested:a24cd898db7c9,csv,data,57459
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-08-21.csv,nested:a24cd898db7c9,csv,data,57368
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-08-28.csv,nested:a24cd898db7c9,csv,data,57446
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-09-04.csv,nested:a24cd898db7c9,csv,data,57475
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-09-11.csv,nested:a24cd898db7c9,csv,data,57289
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-09-18.csv,nested:a24cd898db7c9,csv,data,57338
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-09-25.csv,nested:a24cd898db7c9,csv,data,57583
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-10-02.csv,nested:a24cd898db7c9,csv,data,57399
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-10-09.csv,nested:a24cd898db7c9,csv,data,57497
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/cpi/2023-10-23.csv,nested:a24cd898db7c9,csv,data,57444
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-01-09.csv,nested:a24cd898db7c9,csv,data,55261
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-01-16.csv,nested:a24cd898db7c9,csv,data,55344
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-01-23.csv,nested:a24cd898db7c9,csv,data,55335
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-01-30.csv,nested:a24cd898db7c9,csv,data,55333
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-02-06.csv,nested:a24cd898db7c9,csv,data,55374
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-02-27.csv,nested:a24cd898db7c9,csv,data,55362
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-03-06.csv,nested:a24cd898db7c9,csv,data,55371
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-03-13.csv,nested:a24cd898db7c9,csv,data,56691
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-03-20.csv,nested:a24cd898db7c9,csv,data,56706
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-03-27.csv,nested:a24cd898db7c9,csv,data,59446
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-04-03.csv,nested:a24cd898db7c9,csv,data,59465
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-04-10.csv,nested:a24cd898db7c9,csv,data,59466
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-04-17.csv,nested:a24cd898db7c9,csv,data,59433
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-04-24.csv,nested:a24cd898db7c9,csv,data,59454
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-05-02.csv,nested:a24cd898db7c9,csv,data,56696
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-05-10.csv,nested:a24cd898db7c9,csv,data,56571
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-05-15.csv,nested:a24cd898db7c9,csv,data,59420
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-05-22.csv,nested:a24cd898db7c9,csv,data,59393
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-05-29.csv,nested:a24cd898db7c9,csv,data,59429
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-06-05.csv,nested:a24cd898db7c9,csv,data,59422
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-06-13.csv,nested:a24cd898db7c9,csv,data,56602
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-06-19.csv,nested:a24cd898db7c9,csv,data,59431
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-06-26.csv,nested:a24cd898db7c9,csv,data,59439
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-07-03.csv,nested:a24cd898db7c9,csv,data,59428
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-07-10.csv,nested:a24cd898db7c9,csv,data,59437
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-07-17.csv,nested:a24cd898db7c9,csv,data,59450
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-07-24.csv,nested:a24cd898db7c9,csv,data,59422
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-07-31.csv,nested:a24cd898db7c9,csv,data,59445
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-08-07.csv,nested:a24cd898db7c9,csv,data,56609
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-08-14.csv,nested:a24cd898db7c9,csv,data,56595
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-08-21.csv,nested:a24cd898db7c9,csv,data,59426
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-08-28.csv,nested:a24cd898db7c9,csv,data,59432
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-09-04.csv,nested:a24cd898db7c9,csv,data,59474
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-09-11.csv,nested:a24cd898db7c9,csv,data,59464
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-09-18.csv,nested:a24cd898db7c9,csv,data,59446
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-09-25.csv,nested:a24cd898db7c9,csv,data,59424
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-10-02.csv,nested:a24cd898db7c9,csv,data,56592
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-10-09.csv,nested:a24cd898db7c9,csv,data,56590
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/fedstat_data_load_archive/week_inflation/prices/2023-10-16.csv,nested:a24cd898db7c9,csv,data,56591
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/showdata_data_load_archive/month_inflation/11521100300010200001_Индексы_потребительских_цен_на_товары_и_услуги.xlsx,nested:a24cd898db7c9,xlsx,data,515563
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/showdata_data_load_archive/week_inflation/11511100200030200004_Еженедельные_средние_потребительские_цены_(тарифы)_на_отдельные_товары_и_услуги.xlsx,nested:a24cd898db7c9,xlsx,data,56499
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/databases_raw/showdata_data_load_archive/week_inflation/11521100300080200001_Изменение_средних_потребительских_цен_(тарифов)_на_отдельные_товары_и_услуги.xlsx,nested:a24cd898db7c9,xlsx,data,52619
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/exr.xlsx,nested:a24cd898db7c9,xlsx,data,152363
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/rosstat_publications/CPR-sub_2023.xlsx,nested:a24cd898db7c9,xlsx,data,384251
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/week_cpi_russia.xlsx,nested:a24cd898db7c9,xlsx,data,18618
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/weights/CPR-sub_2023.xlsx,nested:a24cd898db7c9,xlsx,data,384251
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/weights/CPR_gr_tov_RF_2001-2023.xlsx,nested:a24cd898db7c9,xlsx,data,488048
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/weights/CPR_gr_tov_rf_2023.xlsx,nested:a24cd898db7c9,xlsx,data,46357
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/weights/region/weights_region_with_codes.xlsx,nested:a24cd898db7c9,xlsx,data,1534924
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/data_raw/weights/tovar/weights_tovar_with_codes.xlsx,nested:a24cd898db7c9,xlsx,data,1839467
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/tests/weights_long.xlsx,nested:a24cd898db7c9,xlsx,data,1900444
+16,experiments/code_repository_20260625/nested_extracted/a24cd898db7c9/5 Недельная инфляция/weekCpiR/tests/Структура ИПЦ 2016-2023.xlsx,nested:a24cd898db7c9,xlsx,data,988825
+15,experiments/code_repository_20260625/extracted/Репозиторий кодов/Модели для краткосрочного прогноза банковских ставок/rate_fcst.R,Модели для краткосрочного прогноза банковских ставок,r,code,5835
+15,experiments/code_repository_20260625/extracted/Репозиторий кодов/Модели для краткосрочного прогноза инфляции (без дезагрегации)/cpi_fcst.R,Модели для краткосрочного прогноза инфляции (без дезагрегации),r,code,3929
+15,experiments/code_repository_20260625/nested_extracted/a0268154c4591/ВВГУ_Мордовия_КСП инфляции Python/infl.py,nested:a0268154c4591,py,code,3617
+15,experiments/code_repository_20260625/nested_extracted/a30cb9e65d6f9/Расчёт одномерного фильтра Калмана/Kalman filter IBVED.ipynb,nested:a30cb9e65d6f9,ipynb,code,2771
+15,experiments/code_repository_20260625/nested_extracted/a3411331e3620/Выпуск/Выпуск.R,nested:a3411331e3620,r,code,40647
+15,experiments/code_repository_20260625/nested_extracted/a5805283d7399/output_decomp/.ipynb_checkpoints/ar_to_qq-checkpoint.ipynb,nested:a5805283d7399,ipynb,code,88874
+15,experiments/code_repository_20260625/nested_extracted/a5805283d7399/output_decomp/BayesNP (3).ipynb,nested:a5805283d7399,ipynb,code,280926
+15,experiments/code_repository_20260625/nested_extracted/a5805283d7399/output_decomp/capital_forecast.R,nested:a5805283d7399,r,code,190
+15,experiments/code_repository_20260625/nested_extracted/a5805283d7399/output_decomp/data_to_sa/pivot_longer.py,nested:a5805283d7399,py,code,297
+15,experiments/code_repository_20260625/nested_extracted/a5805283d7399/output_decomp/data_to_sa/simple_backcasting.ipynb,nested:a5805283d7399,ipynb,code,273530
+15,experiments/code_repository_20260625/nested_extracted/a5805283d7399/output_decomp/ewma.ipynb,nested:a5805283d7399,ipynb,code,184405
+15,experiments/code_repository_20260625/nested_extracted/a5805283d7399/output_decomp/potential_output/data_preparation/annual_to_quarterly.ipynb,nested:a5805283d7399,ipynb,code,3679
+15,experiments/code_repository_20260625/nested_extracted/a5805283d7399/output_decomp/potential_output/data_preparation/extrapolating_data.R,nested:a5805283d7399,r,code,787
+15,experiments/code_repository_20260625/nested_extracted/a5805283d7399/output_decomp/potential_output/kalman_filter.R,nested:a5805283d7399,r,code,12009
+15,experiments/code_repository_20260625/nested_extracted/a5805283d7399/output_decomp/potential_output/script.R,nested:a5805283d7399,r,code,16222
+15,experiments/code_repository_20260625/nested_extracted/a5805283d7399/output_decomp/r_scripts/00_data_preparation.R,nested:a5805283d7399,r,code,620
+15,experiments/code_repository_20260625/nested_extracted/a5805283d7399/output_decomp/r_scripts/01_model_description.R,nested:a5805283d7399,r,code,7592
+15,experiments/code_repository_20260625/nested_extracted/a5805283d7399/output_decomp/r_scripts/02_fit_and_estimation.R,nested:a5805283d7399,r,code,7198
+15,experiments/code_repository_20260625/nested_extracted/a5805283d7399/output_decomp/r_scripts/03_visualization.R,nested:a5805283d7399,r,code,2559
+15,experiments/code_repository_20260625/nested_extracted/a5805283d7399/output_decomp/r_scripts/04_decomp_vis.R,nested:a5805283d7399,r,code,9434
+15,experiments/code_repository_20260625/nested_extracted/a5805283d7399/output_decomp/r_scripts/05_forecast.R,nested:a5805283d7399,r,code,1284
+15,experiments/code_repository_20260625/nested_extracted/a5805283d7399/output_decomp/r_scripts/06_forecast_vis.R,nested:a5805283d7399,r,code,1
+15,experiments/code_repository_20260625/nested_extracted/a5805283d7399/output_decomp/r_scripts/output_files/output.R,nested:a5805283d7399,r,code,0
+15,experiments/code_repository_20260625/nested_extracted/a83e1b4a50170/Сезонная корректировка_ДГУ_R/NMFI_SA/R/analysis_NMFI.R,nested:a83e1b4a50170,r,code,17336
+15,experiments/code_repository_20260625/nested_extracted/a83e1b4a50170/Сезонная корректировка_ДГУ_R/NMFI_SA/R/laspeyres_by_sum.R,nested:a83e1b4a50170,r,code,1355
+15,experiments/code_repository_20260625/nested_extracted/a83e1b4a50170/Сезонная корректировка_ДГУ_R/NMFI_SA/R/loaders.R,nested:a83e1b4a50170,r,code,5972
+15,experiments/code_repository_20260625/nested_extracted/a83e1b4a50170/Сезонная корректировка_ДГУ_R/NMFI_SA/R/main.R,nested:a83e1b4a50170,r,code,25592
+15,experiments/code_repository_20260625/nested_extracted/a83e1b4a50170/Сезонная корректировка_ДГУ_R/NMFI_SA/R/main_reference_tables_load.R,nested:a83e1b4a50170,r,code,5416
+15,experiments/code_repository_20260625/nested_extracted/a83e1b4a50170/Сезонная корректировка_ДГУ_R/NMFI_SA/R/seasonal_wrapper.R,nested:a83e1b4a50170,r,code,1870
+15,experiments/code_repository_20260625/nested_extracted/a83e1b4a50170/Сезонная корректировка_ДГУ_R/NMFI_SA/R/utils.R,nested:a83e1b4a50170,r,code,13256
+15,experiments/code_repository_20260625/nested_extracted/a83e1b4a50170/Сезонная корректировка_ДГУ_R/NMFI_SA/R/yoy_optimizer.R,nested:a83e1b4a50170,r,code,4100
+15,experiments/code_repository_20260625/nested_extracted/a9f2976b6e29a/ВВГУ_ЭУ_Обработка данных МП/monitor.R,nested:a9f2976b6e29a,r,code,6867
+15,experiments/code_repository_20260625/nested_extracted/aa2d4ae9d6285/main.ipynb,nested:aa2d4ae9d6285,ipynb,code,11017
+15,experiments/code_repository_20260625/nested_extracted/aa972a9a24e63/Сглаживание ИПЦ/main.R,nested:aa972a9a24e63,r,code,4421
+15,experiments/code_repository_20260625/nested_extracted/ab8b13e957e65/ВВГУ_ЭУ_Подготовка данных для КСП выпуска/make_vintage.R,nested:ab8b13e957e65,r,code,8221
+15,experiments/code_repository_20260625/nested_extracted/acc974ce82ab0/Объем морских перевозок грузов SA/R/load_fedstat.R,nested:acc974ce82ab0,r,code,1819
+15,experiments/code_repository_20260625/nested_extracted/acc974ce82ab0/Объем морских перевозок грузов SA/R/main.R,nested:acc974ce82ab0,r,code,12424
+15,experiments/code_repository_20260625/nested_extracted/acf08d95a9057/Преобразование данных из Excel в длинный панельный набор данных с использованием R/code.R,nested:acf08d95a9057,r,code,2626
+15,experiments/code_repository_20260625/nested_extracted/af2c7a7ead313/LSTM.ipynb,nested:af2c7a7ead313,ipynb,code,7721
+13,experiments/code_repository_20260625/nested_extracted/a1e1b29916db4/ipc_pr.prg,nested:a1e1b29916db4,prg,code,1249
+13,experiments/code_repository_20260625/nested_extracted/a20c02d743886/SA/Скрипт_SA.prg,nested:a20c02d743886,prg,code,468
+13,experiments/code_repository_20260625/nested_extracted/a21408bf349b4/SA_надстройка/seas.prg,nested:a21408bf349b4,prg,code,1134
+13,experiments/code_repository_20260625/nested_extracted/a2363877985ef/Прогноз_ИПЦ_по компонентам_Хабаровск/khab_mod.prg,nested:a2363877985ef,prg,code,6562
+13,experiments/code_repository_20260625/nested_extracted/a2363877985ef/Прогноз_ИПЦ_по компонентам_Хабаровск/khab_mod.prg_Snapshots/snapshot_lastsave.prg,nested:a2363877985ef,prg,code,6562
+13,experiments/code_repository_20260625/nested_extracted/a23c5123c996a/Оценка ковариационной матрицы остатков в модели PVAR/Код/pvar_residual.prg,nested:a23c5123c996a,prg,code,2264
+13,experiments/code_repository_20260625/nested_extracted/a5a958227346d/СЭП_Магадан/Magadan_sripts_econom.prg,nested:a5a958227346d,prg,code,17743
+13,experiments/code_repository_20260625/nested_extracted/a65dee457d977/ARIMA_Perm/forec_inf_base_itog.prg,nested:a65dee457d977,prg,code,1310
+13,experiments/code_repository_20260625/nested_extracted/a65dee457d977/ARIMA_Perm/forec_neprod_base.prg,nested:a65dee457d977,prg,code,1826
+13,experiments/code_repository_20260625/nested_extracted/a65dee457d977/ARIMA_Perm/forec_prod_base.prg,nested:a65dee457d977,prg,code,2342
+13,experiments/code_repository_20260625/nested_extracted/a65dee457d977/ARIMA_Perm/forec_usl_base.prg,nested:a65dee457d977,prg,code,1512
+13,experiments/code_repository_20260625/nested_extracted/a76a485a2f47f/ARMA_Биробиджан/Скрипт_ARMA.prg,nested:a76a485a2f47f,prg,code,2168
+13,experiments/code_repository_20260625/nested_extracted/a7a03de241c2a/Выпуск_Магадан/Magadan_sripts_spros.prg,nested:a7a03de241c2a,prg,code,4678
+13,experiments/code_repository_20260625/nested_extracted/a7d6b9f4ef455/ВВГУ_Саратов_КСП инфляции/var.prg,nested:a7d6b9f4ef455,prg,code,1228
+13,experiments/code_repository_20260625/nested_extracted/a8dceef0607a0/ИПЦ_Магадан/Magadan_sripts_cpi.prg,nested:a8dceef0607a0,prg,code,10685
+13,experiments/code_repository_20260625/nested_extracted/a90d6955e5dfb/ВАР_ДВМР/arima_vrp.prg,nested:a90d6955e5dfb,prg,code,152
+13,experiments/code_repository_20260625/nested_extracted/a90d6955e5dfb/ВАР_ДВМР/test_var.prg,nested:a90d6955e5dfb,prg,code,8898
+13,experiments/code_repository_20260625/nested_extracted/a938d3e57df1b/Построение функции импульсных откликов в модели PVAR/Код/pvar_oirf.prg,nested:a938d3e57df1b,prg,code,1611
+13,experiments/code_repository_20260625/nested_extracted/a9dc655ed6e18/VAR_Perm/var_perm.prg,nested:a9dc655ed6e18,prg,code,3628
+13,experiments/code_repository_20260625/nested_extracted/aa27c6e220bad/ARIMA_Биробиджан/Скрипт_ARIMA.prg,nested:aa27c6e220bad,prg,code,2087
+13,experiments/code_repository_20260625/nested_extracted/ab2b35c6e5c3c/Сглаживание НЗП РЗП/run_base_salary.prg,nested:ab2b35c6e5c3c,prg,code,3285
+13,experiments/code_repository_20260625/nested_extracted/ab908e4169c60/2 ВРП/arima_vrp.prg,nested:ab908e4169c60,prg,code,152
+13,experiments/code_repository_20260625/nested_extracted/ab908e4169c60/2 ВРП/import_vrp.prg,nested:ab908e4169c60,prg,code,32693
+13,experiments/code_repository_20260625/nested_extracted/ab908e4169c60/2 ВРП/test_vrp.prg,nested:ab908e4169c60,prg,code,11616
+13,experiments/code_repository_20260625/nested_extracted/ad0459a615c6b/ВВГУ_Мордовия_КСП инфляции EViews/cpi_mord.prg,nested:ad0459a615c6b,prg,code,4389
+13,experiments/code_repository_20260625/nested_extracted/ae23229b6b5c5/8 Экономика ДВМР/prog.prg,nested:ae23229b6b5c5,prg,code,1814
+13,experiments/code_repository_20260625/nested_extracted/ae23229b6b5c5/8 Экономика ДВМР/prog.prg_Snapshots/snapshot_lastsave.prg,nested:ae23229b6b5c5,prg,code,3097
+13,experiments/code_repository_20260625/nested_extracted/ae2b6806288f5/3 ИПЦ/import_cpi.prg,nested:ae2b6806288f5,prg,code,25570
+13,experiments/code_repository_20260625/nested_extracted/ae2b6806288f5/3 ИПЦ/test_cpi.prg,nested:ae2b6806288f5,prg,code,5161
+13,experiments/code_repository_20260625/nested_extracted/ae48cf0647a33/Чита_R2_код/Chita_2_код.prg,nested:ae48cf0647a33,prg,code,926
+13,experiments/code_repository_20260625/nested_extracted/ae5b6d9e0d30d/Разрыв выпуска/Разрыв выпуска (скрипт).prg,nested:ae5b6d9e0d30d,prg,code,1356
+13,"experiments/code_repository_20260625/nested_extracted/afa0cc7c1c88b/ARIMA-45 (Омск, СГУ)/Скрипт/arima_omsk.prg",nested:afa0cc7c1c88b,prg,code,29577
+13,experiments/code_repository_20260625/nested_extracted/afb1f071e9cc6/VAR_прогноз_Баранаул/1. Отделение Барнаул. VAR по укрупненным. Исходные ряды.prg,nested:afb1f071e9cc6,prg,code,4606
+10,experiments/code_repository_20260625/extracted/Репозиторий кодов/Дезагрегированный подход к прогнозированию инфляции (на основе Python)/Описание.txt,Дезагрегированный подход к прогнозированию инфляции (на основе Python),txt,doc,1762
+10,experiments/code_repository_20260625/extracted/Репозиторий кодов/Построение ARIMAX моделей для прогнозирования ИПЦ/ARIMAX_ЮГУ.docx,Построение ARIMAX моделей для прогнозирования ИПЦ,docx,doc,21658
+10,experiments/code_repository_20260625/extracted/Репозиторий кодов/Прогноз ИПЦ на основе ARIMAX модели/Описание.txt,Прогноз ИПЦ на основе ARIMAX модели,txt,doc,889
+10,experiments/code_repository_20260625/extracted/Репозиторий кодов/Прогноз ИПЦ на основе моделей машинного обучения/Описание.txt,Прогноз ИПЦ на основе моделей машинного обучения,txt,doc,1585
+10,experiments/code_repository_20260625/extracted/Репозиторий кодов/Прогноз ежемесячной инфляции на основе еженедельной инфляции/Описание.txt,Прогноз ежемесячной инфляции на основе еженедельной инфляции,txt,doc,2600
+10,experiments/code_repository_20260625/extracted/Репозиторий кодов/Прогнозирование ИПЦ_STL метод/Код_STL_Кемерово.docx,Прогнозирование ИПЦ_STL метод,docx,doc,27100
+10,experiments/code_repository_20260625/extracted/Репозиторий кодов/Прогнозирование региональной инфляции/Код_Иркутск.docx,Прогнозирование региональной инфляции,docx,doc,28666
+10,experiments/code_repository_20260625/extracted/Репозиторий кодов/Прогнозирование региональной инфляции/Описание.txt,Прогнозирование региональной инфляции,txt,doc,977
+10,"experiments/code_repository_20260625/nested_extracted/a0ac088b0b1be/Методика отбора переменных, обеспечивающих надежные прогнозы/~$исание кода.docx",nested:a0ac088b0b1be,docx,doc,162
+10,"experiments/code_repository_20260625/nested_extracted/a0ac088b0b1be/Методика отбора переменных, обеспечивающих надежные прогнозы/~$тодика отбора переменных.docx",nested:a0ac088b0b1be,docx,doc,162
+10,"experiments/code_repository_20260625/nested_extracted/a0ac088b0b1be/Методика отбора переменных, обеспечивающих надежные прогнозы/Методика отбора переменных.docx",nested:a0ac088b0b1be,docx,doc,326524
+10,"experiments/code_repository_20260625/nested_extracted/a0ac088b0b1be/Методика отбора переменных, обеспечивающих надежные прогнозы/Описание кода.docx",nested:a0ac088b0b1be,docx,doc,29564
+10,experiments/code_repository_20260625/nested_extracted/a1d1ab49225f8/Поиск лучшей спецификации_УГУ/data.wf1,nested:a1d1ab49225f8,wf1,code,115682
+10,experiments/code_repository_20260625/nested_extracted/a1e1b29916db4/VAR_pk.wf1,nested:a1e1b29916db4,wf1,code,129491
+10,experiments/code_repository_20260625/nested_extracted/a23c5123c996a/Оценка ковариационной матрицы остатков в модели PVAR/Исходные данные/test_data.WF1,nested:a23c5123c996a,wf1,code,24224
+10,experiments/code_repository_20260625/nested_extracted/a4b19c2c5173d/Коды и база данных/ОПР2023_09_CFO.wf1,nested:a4b19c2c5173d,wf1,code,69982
+10,experiments/code_repository_20260625/nested_extracted/a5331c69b69ea/Применение метода главных компонент и кластеризации данных/Описание кода.docx,nested:a5331c69b69ea,docx,doc,16108
+10,experiments/code_repository_20260625/nested_extracted/a5805283d7399/output_decomp/r_scripts/output_files/crosstalk-1.2.0/js/crosstalk.js,nested:a5805283d7399,js,code,49030
+10,experiments/code_repository_20260625/nested_extracted/a5805283d7399/output_decomp/r_scripts/output_files/crosstalk-1.2.0/js/crosstalk.min.js,nested:a5805283d7399,js,code,18925
+10,experiments/code_repository_20260625/nested_extracted/a5805283d7399/output_decomp/r_scripts/output_files/htmlwidgets-1.6.2/htmlwidgets.js,nested:a5805283d7399,js,code,33190
+10,experiments/code_repository_20260625/nested_extracted/a5805283d7399/output_decomp/r_scripts/output_files/jquery-3.5.1/jquery.js,nested:a5805283d7399,js,code,287630
+10,experiments/code_repository_20260625/nested_extracted/a5805283d7399/output_decomp/r_scripts/output_files/jquery-3.5.1/jquery.min.js,nested:a5805283d7399,js,code,89476
+10,experiments/code_repository_20260625/nested_extracted/a5805283d7399/output_decomp/r_scripts/output_files/plotly-binding-4.10.2/plotly.js,nested:a5805283d7399,js,code,33758
+10,experiments/code_repository_20260625/nested_extracted/a5805283d7399/output_decomp/r_scripts/output_files/plotly-main-2.11.1/plotly-latest.min.js,nested:a5805283d7399,js,code,3665833
+10,experiments/code_repository_20260625/nested_extracted/a5805283d7399/output_decomp/r_scripts/output_files/typedarray-0.1/typedarray.min.js,nested:a5805283d7399,js,code,22444
+10,experiments/code_repository_20260625/nested_extracted/a5d4f31c6126f/ВВГУ_Чувашия_Недельные данные ИПЦ/ВВГУ_Чувашия_Недельные данные ИПЦ.docx,nested:a5d4f31c6126f,docx,doc,16347
+10,experiments/code_repository_20260625/nested_extracted/a65dee457d977/ARIMA_Perm/ipc.wf1,nested:a65dee457d977,wf1,code,60073
+10,experiments/code_repository_20260625/nested_extracted/a65dee457d977/ARIMA_Perm/neprod.wf1,nested:a65dee457d977,wf1,code,72740
+10,experiments/code_repository_20260625/nested_extracted/a65dee457d977/ARIMA_Perm/prod.wf1,nested:a65dee457d977,wf1,code,63474
+10,experiments/code_repository_20260625/nested_extracted/a65dee457d977/ARIMA_Perm/usl.wf1,nested:a65dee457d977,wf1,code,57325
+10,experiments/code_repository_20260625/nested_extracted/a83e1b4a50170/Сезонная корректировка_ДГУ_R/NMFI_SA/NMFI_SA.Rproj,nested:a83e1b4a50170,rproj,code,218
+10,experiments/code_repository_20260625/nested_extracted/a90d6955e5dfb/ВАР_ДВМР/vrp.wf1,nested:a90d6955e5dfb,wf1,code,21636155
+10,experiments/code_repository_20260625/nested_extracted/a90d6955e5dfb/ВАР_ДВМР/данные.wf1,nested:a90d6955e5dfb,wf1,code,329064
+10,experiments/code_repository_20260625/nested_extracted/a91e667c12a0f/4 КПМ/QPM_DVMR/DVMR_FORECAST_FULL.m,nested:a91e667c12a0f,m,code,54261
+10,experiments/code_repository_20260625/nested_extracted/a91e667c12a0f/4 КПМ/QPM_DVMR/DVMR_FORECAST_SHORT.m,nested:a91e667c12a0f,m,code,37821
+10,experiments/code_repository_20260625/nested_extracted/a91e667c12a0f/4 КПМ/QPM_DVMR/DVMR_INSAMPLE_F.m,nested:a91e667c12a0f,m,code,4631
+10,experiments/code_repository_20260625/nested_extracted/a91e667c12a0f/4 КПМ/QPM_DVMR/DVMR_OPR_FILTER_dec.m,nested:a91e667c12a0f,m,code,22036
+10,experiments/code_repository_20260625/nested_extracted/a91e667c12a0f/4 КПМ/QPM_DVMR/DVMR_OPR_MODELPROPERTIES.m,nested:a91e667c12a0f,m,code,9068
+10,experiments/code_repository_20260625/nested_extracted/a91e667c12a0f/4 КПМ/QPM_DVMR/DVMR_OPR_READMODEL.m,nested:a91e667c12a0f,m,code,13108
+10,experiments/code_repository_20260625/nested_extracted/a91e667c12a0f/4 КПМ/QPM_DVMR/DVMR_OPR__ML_ESTIMATE.m,nested:a91e667c12a0f,m,code,12879
+10,experiments/code_repository_20260625/nested_extracted/a938d3e57df1b/Построение функции импульсных откликов в модели PVAR/Исходные данные/test_data.WF1,nested:a938d3e57df1b,wf1,code,24224
+10,experiments/code_repository_20260625/nested_extracted/a9c66f72e388c/Комбинированный прогноз ИПЦ моделей машинного обучения/forecasts/Ensembles.Rmd,nested:a9c66f72e388c,rmd,code,2152
+10,experiments/code_repository_20260625/nested_extracted/a9c66f72e388c/Комбинированный прогноз ИПЦ моделей машинного обучения/forecasts/Neural network.Rmd,nested:a9c66f72e388c,rmd,code,3648
+10,experiments/code_repository_20260625/nested_extracted/a9c66f72e388c/Комбинированный прогноз ИПЦ моделей машинного обучения/forecasts/Random forest.Rmd,nested:a9c66f72e388c,rmd,code,3350
+10,experiments/code_repository_20260625/nested_extracted/a9c66f72e388c/Комбинированный прогноз ИПЦ моделей машинного обучения/forecasts/SVM.Rmd,nested:a9c66f72e388c,rmd,code,3266
+10,experiments/code_repository_20260625/nested_extracted/a9c66f72e388c/Комбинированный прогноз ИПЦ моделей машинного обучения/forecasts/XGB.Rmd,nested:a9c66f72e388c,rmd,code,3707
+10,experiments/code_repository_20260625/nested_extracted/a9c66f72e388c/Комбинированный прогноз ИПЦ моделей машинного обучения/forecasts/kNN.Rmd,nested:a9c66f72e388c,rmd,code,3627
+10,experiments/code_repository_20260625/nested_extracted/a9c66f72e388c/Комбинированный прогноз ИПЦ моделей машинного обучения/methodology.Rmd,nested:a9c66f72e388c,rmd,code,3115
+10,experiments/code_repository_20260625/nested_extracted/a9c66f72e388c/Комбинированный прогноз ИПЦ моделей машинного обучения/results.Rmd,nested:a9c66f72e388c,rmd,code,5445
+10,experiments/code_repository_20260625/nested_extracted/a9c66f72e388c/Комбинированный прогноз ИПЦ моделей машинного обучения/results/analysis.Rmd,nested:a9c66f72e388c,rmd,code,7423
+10,experiments/code_repository_20260625/nested_extracted/a9c66f72e388c/Комбинированный прогноз ИПЦ моделей машинного обучения/results/analysis/ranking.Rmd,nested:a9c66f72e388c,rmd,code,1525
+10,experiments/code_repository_20260625/nested_extracted/a9dc655ed6e18/VAR_Perm/var_perm.wf1,nested:a9dc655ed6e18,wf1,code,97099
+10,experiments/code_repository_20260625/nested_extracted/ab908e4169c60/2 ВРП/vrp.wf1,nested:ab908e4169c60,wf1,code,21636155
+10,experiments/code_repository_20260625/nested_extracted/ac2294d8a53ba/ARDL_Челябинск/model_cfr_10_2023.wf1,nested:ac2294d8a53ba,wf1,code,78226
+10,experiments/code_repository_20260625/nested_extracted/ad21529ad3a3e/ВВГУ_ЭУ_Недельные данные по льготной ипотеке/ВВГУ_ЭУ_Недельные данные по льготной ипотеке.docx,nested:ad21529ad3a3e,docx,doc,14491
+10,experiments/code_repository_20260625/nested_extracted/adbb010e3b1c5/Коды и база/QPM/BAYES.m,nested:adbb010e3b1c5,m,code,8987
+10,experiments/code_repository_20260625/nested_extracted/adbb010e3b1c5/Коды и база/QPM/a0_filter_external.m,nested:adbb010e3b1c5,m,code,3377
+10,experiments/code_repository_20260625/nested_extracted/adbb010e3b1c5/Коды и база/QPM/a0_forecast_external.m,nested:adbb010e3b1c5,m,code,3756
+10,experiments/code_repository_20260625/nested_extracted/adbb010e3b1c5/Коды и база/QPM/a1_filter.m,nested:adbb010e3b1c5,m,code,4664
+10,experiments/code_repository_20260625/nested_extracted/adbb010e3b1c5/Коды и база/QPM/a1_filter_calibr_mult.m,nested:adbb010e3b1c5,m,code,3387
+10,experiments/code_repository_20260625/nested_extracted/adbb010e3b1c5/Коды и база/QPM/a2_forecast.m,nested:adbb010e3b1c5,m,code,7193
+10,experiments/code_repository_20260625/nested_extracted/adbb010e3b1c5/Коды и база/QPM/a3_alternative.m,nested:adbb010e3b1c5,m,code,7311
+10,experiments/code_repository_20260625/nested_extracted/adbb010e3b1c5/Коды и база/QPM/a3_alternative_all.m,nested:adbb010e3b1c5,m,code,10777
+10,experiments/code_repository_20260625/nested_extracted/adbb010e3b1c5/Коды и база/QPM/a3_alternative_standart.m,nested:adbb010e3b1c5,m,code,10776
+10,experiments/code_repository_20260625/nested_extracted/adbb010e3b1c5/Коды и база/QPM/a_general_settings.m,nested:adbb010e3b1c5,m,code,2116
+10,experiments/code_repository_20260625/nested_extracted/adbb010e3b1c5/Коды и база/QPM/all_fcastdb.m,nested:adbb010e3b1c5,m,code,1722
+10,experiments/code_repository_20260625/nested_extracted/adbb010e3b1c5/Коды и база/QPM/estimate_external.m,nested:adbb010e3b1c5,m,code,13939
+10,experiments/code_repository_20260625/nested_extracted/adbb010e3b1c5/Коды и база/QPM/estimate_ru.m,nested:adbb010e3b1c5,m,code,10699
+10,experiments/code_repository_20260625/nested_extracted/adbb010e3b1c5/Коды и база/QPM/estimate_temp.m,nested:adbb010e3b1c5,m,code,7463
+10,experiments/code_repository_20260625/nested_extracted/adbb010e3b1c5/Коды и база/QPM/models/ext_setparam.m,nested:adbb010e3b1c5,m,code,9093
+10,experiments/code_repository_20260625/nested_extracted/adbb010e3b1c5/Коды и база/QPM/models/ru_setparam.m,nested:adbb010e3b1c5,m,code,7177
+10,experiments/code_repository_20260625/nested_extracted/adbb010e3b1c5/Коды и база/QPM/models/trade_matrices/ext_trade_matrix.m,nested:adbb010e3b1c5,m,code,3090
+10,experiments/code_repository_20260625/nested_extracted/adbb010e3b1c5/Коды и база/QPM/models/trade_matrices/ru_trade_matrix.m,nested:adbb010e3b1c5,m,code,3723
+10,experiments/code_repository_20260625/nested_extracted/adbb010e3b1c5/Коды и база/QPM/qqqqq.m,nested:adbb010e3b1c5,m,code,13329

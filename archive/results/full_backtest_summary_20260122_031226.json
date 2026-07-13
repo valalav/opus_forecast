@@ -1,0 +1,756 @@
+{
+  "timestamp": "2026-01-22T03:10:43.625777",
+  "overall_status": "FAILED",
+  "backtests": {
+    "h=1": {
+      "status": "SUCCESS",
+      "coverage": {
+        "total_rows": 12,
+        "models": {
+          "Actual": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Ridge": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Ridge_Ext": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Bayes_Ridge": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "ElasticNet": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Huber": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Ridge_Shock": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Ridge_Macro": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "NGBoost": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "NGBoost_Shock": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "LMMR_Hybrid": {
+            "non_null_count": "0",
+            "null_count": "12",
+            "coverage_pct": 0.0
+          },
+          "BVAR": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "SARIMA": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "LightGBM": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Prophet": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "ETS": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "EBM": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "CatBoost": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Subcomp": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Subcomp_Multi": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Micro": {
+            "non_null_count": "10",
+            "null_count": "2",
+            "coverage_pct": 83.33333333333334
+          },
+          "Ensemble": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          }
+        },
+        "missing_models": [],
+        "models_with_nan": [
+          "LMMR_Hybrid",
+          "Micro"
+        ],
+        "all_models_predicted": false,
+        "column_count": 23,
+        "expected_model_count": 21
+      }
+    },
+    "h=2": {
+      "status": "SUCCESS",
+      "coverage": {
+        "total_rows": 12,
+        "models": {
+          "Actual": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Ridge": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Ridge_Ext": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Bayes_Ridge": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "ElasticNet": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Huber": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Ridge_Shock": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Ridge_Macro": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "NGBoost": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "NGBoost_Shock": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "LMMR_Hybrid": {
+            "non_null_count": "0",
+            "null_count": "12",
+            "coverage_pct": 0.0
+          },
+          "BVAR": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "SARIMA": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "LightGBM": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Prophet": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "ETS": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "EBM": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "CatBoost": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Subcomp": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Subcomp_Multi": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Micro": {
+            "non_null_count": "11",
+            "null_count": "1",
+            "coverage_pct": 91.66666666666666
+          },
+          "Ensemble": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          }
+        },
+        "missing_models": [],
+        "models_with_nan": [
+          "LMMR_Hybrid",
+          "Micro"
+        ],
+        "all_models_predicted": false,
+        "column_count": 23,
+        "expected_model_count": 21
+      }
+    },
+    "h=12": {
+      "status": "SUCCESS",
+      "coverage": {
+        "total_rows": 12,
+        "models": {
+          "Actual": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Ridge": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Ridge_Ext": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Bayes_Ridge": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "ElasticNet": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Huber": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Ridge_Shock": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Ridge_Macro": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "NGBoost": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "NGBoost_Shock": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "LMMR_Hybrid": {
+            "non_null_count": "0",
+            "null_count": "12",
+            "coverage_pct": 0.0
+          },
+          "EBM": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "CatBoost": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Subcomp": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Subcomp_Multi": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Micro": {
+            "non_null_count": "1",
+            "null_count": "11",
+            "coverage_pct": 8.333333333333332
+          },
+          "BVAR": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "SARIMA": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "LightGBM": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Prophet": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "ETS": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          },
+          "Ensemble": {
+            "non_null_count": "12",
+            "null_count": "0",
+            "coverage_pct": 100.0
+          }
+        },
+        "missing_models": [],
+        "models_with_nan": [
+          "LMMR_Hybrid",
+          "Micro"
+        ],
+        "all_models_predicted": false,
+        "column_count": 24,
+        "expected_model_count": 21
+      }
+    }
+  },
+  "model_coverage": {
+    "h=1": {
+      "total_rows": 12,
+      "models": {
+        "Actual": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Ridge": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Ridge_Ext": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Bayes_Ridge": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "ElasticNet": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Huber": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Ridge_Shock": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Ridge_Macro": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "NGBoost": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "NGBoost_Shock": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "LMMR_Hybrid": {
+          "non_null_count": "0",
+          "null_count": "12",
+          "coverage_pct": 0.0
+        },
+        "BVAR": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "SARIMA": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "LightGBM": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Prophet": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "ETS": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "EBM": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "CatBoost": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Subcomp": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Subcomp_Multi": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Micro": {
+          "non_null_count": "10",
+          "null_count": "2",
+          "coverage_pct": 83.33333333333334
+        },
+        "Ensemble": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        }
+      },
+      "missing_models": [],
+      "models_with_nan": [
+        "LMMR_Hybrid",
+        "Micro"
+      ],
+      "all_models_predicted": false,
+      "column_count": 23,
+      "expected_model_count": 21
+    },
+    "h=2": {
+      "total_rows": 12,
+      "models": {
+        "Actual": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Ridge": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Ridge_Ext": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Bayes_Ridge": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "ElasticNet": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Huber": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Ridge_Shock": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Ridge_Macro": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "NGBoost": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "NGBoost_Shock": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "LMMR_Hybrid": {
+          "non_null_count": "0",
+          "null_count": "12",
+          "coverage_pct": 0.0
+        },
+        "BVAR": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "SARIMA": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "LightGBM": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Prophet": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "ETS": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "EBM": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "CatBoost": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Subcomp": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Subcomp_Multi": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Micro": {
+          "non_null_count": "11",
+          "null_count": "1",
+          "coverage_pct": 91.66666666666666
+        },
+        "Ensemble": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        }
+      },
+      "missing_models": [],
+      "models_with_nan": [
+        "LMMR_Hybrid",
+        "Micro"
+      ],
+      "all_models_predicted": false,
+      "column_count": 23,
+      "expected_model_count": 21
+    },
+    "h=12": {
+      "total_rows": 12,
+      "models": {
+        "Actual": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Ridge": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Ridge_Ext": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Bayes_Ridge": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "ElasticNet": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Huber": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Ridge_Shock": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Ridge_Macro": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "NGBoost": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "NGBoost_Shock": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "LMMR_Hybrid": {
+          "non_null_count": "0",
+          "null_count": "12",
+          "coverage_pct": 0.0
+        },
+        "EBM": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "CatBoost": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Subcomp": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Subcomp_Multi": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Micro": {
+          "non_null_count": "1",
+          "null_count": "11",
+          "coverage_pct": 8.333333333333332
+        },
+        "BVAR": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "SARIMA": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "LightGBM": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Prophet": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "ETS": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        },
+        "Ensemble": {
+          "non_null_count": "12",
+          "null_count": "0",
+          "coverage_pct": 100.0
+        }
+      },
+      "missing_models": [],
+      "models_with_nan": [
+        "LMMR_Hybrid",
+        "Micro"
+      ],
+      "all_models_predicted": false,
+      "column_count": 24,
+      "expected_model_count": 21
+    }
+  },
+  "errors": []
+}

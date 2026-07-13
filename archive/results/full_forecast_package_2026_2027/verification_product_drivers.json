@@ -1,0 +1,232 @@
+{
+  "source": "data/Сравнение еженедельных цен_01.csv",
+  "period": "2026-03-30 to 2026-04-27",
+  "counts": {
+    "food": 44,
+    "nonfood": 43,
+    "services": 20
+  },
+  "matched_items": 107,
+  "approx_sum_contribution_pp": 0.13762591881597253,
+  "top_negative": [
+    {
+      "product": "Огурцы свежие, кг",
+      "component": "food",
+      "price_start": 223.21,
+      "price_end": 172.69,
+      "change_pct": -22.633394561175578,
+      "approx_contribution_pp": -0.2050379789110133
+    },
+    {
+      "product": "Помидоры свежие, кг",
+      "component": "food",
+      "price_start": 322.33,
+      "price_end": 264.72,
+      "change_pct": -17.872987311140744,
+      "approx_contribution_pp": -0.16191301686865228
+    },
+    {
+      "product": "Бананы, кг",
+      "component": "food",
+      "price_start": 161.76,
+      "price_end": 148.09,
+      "change_pct": -8.450791295746773,
+      "approx_contribution_pp": -0.07655648660192417
+    },
+    {
+      "product": "Яйца куриные, 10 шт.",
+      "component": "food",
+      "price_start": 113.66,
+      "price_end": 105.06,
+      "change_pct": -7.566426183353858,
+      "approx_contribution_pp": -0.06854494265192836
+    },
+    {
+      "product": "Телевизор, шт.",
+      "component": "nonfood",
+      "price_start": 31798.84,
+      "price_end": 30027.12,
+      "change_pct": -5.571649783451226,
+      "approx_contribution_pp": -0.04713874863301294
+    },
+    {
+      "product": "Смартфон, шт.",
+      "component": "nonfood",
+      "price_start": 18866.51,
+      "price_end": 18015.65,
+      "change_pct": -4.509896106911116,
+      "approx_contribution_pp": -0.03815581869056428
+    },
+    {
+      "product": "Крупа гречневая-ядрица, кг",
+      "component": "food",
+      "price_start": 80.53,
+      "price_end": 77.83,
+      "change_pct": -3.352787780951205,
+      "approx_contribution_pp": -0.030373209306526146
+    },
+    {
+      "product": "Куры охлажденные и мороженые, кг",
+      "component": "food",
+      "price_start": 225.95,
+      "price_end": 218.82,
+      "change_pct": -3.155565390573134,
+      "approx_contribution_pp": -0.02858655374278298
+    },
+    {
+      "product": "Мука пшеничная, кг",
+      "component": "food",
+      "price_start": 59.6,
+      "price_end": 57.74,
+      "change_pct": -3.1208053691275106,
+      "approx_contribution_pp": -0.02827165954850513
+    },
+    {
+      "product": "Картофель, кг",
+      "component": "food",
+      "price_start": 52.49,
+      "price_end": 51.02,
+      "change_pct": -2.800533434939989,
+      "approx_contribution_pp": -0.02537028698106999
+    },
+    {
+      "product": "Валидол, 60 мг, 10 таблеток",
+      "component": "nonfood",
+      "price_start": 41.08,
+      "price_end": 39.86,
+      "change_pct": -2.969814995131448,
+      "approx_contribution_pp": -0.025126016168112112
+    },
+    {
+      "product": "Рис шлифованный, кг",
+      "component": "food",
+      "price_start": 117.93,
+      "price_end": 114.94,
+      "change_pct": -2.5354023573306295,
+      "approx_contribution_pp": -0.022968440446181567
+    },
+    {
+      "product": "Мыло туалетное, 100 г",
+      "component": "nonfood",
+      "price_start": 67.4,
+      "price_end": 65.79,
+      "change_pct": -2.388724035608303,
+      "approx_contribution_pp": -0.02020971637568141
+    },
+    {
+      "product": "Плиты древесностружечные, ориентированно-стружечные, м2",
+      "component": "nonfood",
+      "price_start": 318.16,
+      "price_end": 311.35,
+      "change_pct": -2.140432486799093,
+      "approx_contribution_pp": -0.01810905438831419
+    },
+    {
+      "product": "Яблоки, кг",
+      "component": "food",
+      "price_start": 149.61,
+      "price_end": 147.27,
+      "change_pct": -1.5640665730900394,
+      "approx_contribution_pp": -0.014169021273492947
+    }
+  ],
+  "top_positive": [
+    {
+      "product": "Капуста белокочанная свежая, кг",
+      "component": "food",
+      "price_start": 34.73,
+      "price_end": 40.24,
+      "change_pct": 15.865246184854609,
+      "approx_contribution_pp": 0.1437247074837056
+    },
+    {
+      "product": "Свёкла столовая, кг",
+      "component": "food",
+      "price_start": 36.56,
+      "price_end": 40.25,
+      "change_pct": 10.092997811816184,
+      "approx_contribution_pp": 0.09143338472249844
+    },
+    {
+      "product": "Пеленки для новорожденных, шт.",
+      "component": "nonfood",
+      "price_start": 288.74,
+      "price_end": 306.72,
+      "change_pct": 6.227055482440957,
+      "approx_contribution_pp": 0.05268378568632606
+    },
+    {
+      "product": "Кроссовые туфли для взрослых, пара",
+      "component": "nonfood",
+      "price_start": 4121.15,
+      "price_end": 4352.74,
+      "change_pct": 5.619547941715308,
+      "approx_contribution_pp": 0.047543989330140216
+    },
+    {
+      "product": "Корвалол, 25 мл",
+      "component": "nonfood",
+      "price_start": 52.18,
+      "price_end": 54.67,
+      "change_pct": 4.771943273284784,
+      "approx_contribution_pp": 0.04037285960048848
+    },
+    {
+      "product": "Лук репчатый, кг",
+      "component": "food",
+      "price_start": 41.05,
+      "price_end": 42.85,
+      "change_pct": 4.38489646772231,
+      "approx_contribution_pp": 0.03972317572804802
+    },
+    {
+      "product": "Щетка зубная, шт.",
+      "component": "nonfood",
+      "price_start": 161.82,
+      "price_end": 168.85,
+      "change_pct": 4.344333209739215,
+      "approx_contribution_pp": 0.03675507957449131
+    },
+    {
+      "product": "Футболка детская, шт.",
+      "component": "nonfood",
+      "price_start": 661.15,
+      "price_end": 688.84,
+      "change_pct": 4.1881569991681245,
+      "approx_contribution_pp": 0.03543375619296194
+    },
+    {
+      "product": "Восстановление зуба пломбой, услуга",
+      "component": "services",
+      "price_start": 2749.35,
+      "price_end": 2821.94,
+      "change_pct": 2.6402604251914097,
+      "approx_contribution_pp": 0.031366293851273944
+    },
+    {
+      "product": "Проживание в гостинице 3*, сутки с человека",
+      "component": "services",
+      "price_start": 2821.79,
+      "price_end": 2894.87,
+      "change_pct": 2.589845452709083,
+      "approx_contribution_pp": 0.030767363978183908
+    },
+    {
+      "product": "Вермишель, кг",
+      "component": "food",
+      "price_start": 123.64,
+      "price_end": 127.74,
+      "change_pct": 3.3160789388547274,
+      "approx_contribution_pp": 0.03004066056880669
+    },
+    {
+      "product": "Брюки для детей школьного возраста из джинсовой ткани, шт.",
+      "component": "nonfood",
+      "price_start": 2074.5,
+      "price_end": 2139.83,
+      "change_pct": 3.149192576524462,
+      "approx_contribution_pp": 0.026643633938130216
+    }
+  ],
+  "mismatches": []
+}

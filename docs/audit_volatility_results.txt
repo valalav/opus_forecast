@@ -1,0 +1,4 @@
+Sigma 2024: 0.406
+Sigma 2025: 0.551
+Growth: 35.7%
+Anomalies: 4

@@ -1,0 +1,104 @@
+version: '3.8'
+
+services:
+  # =============================================================================
+  # API Service - FastAPI Backend
+  # =============================================================================
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: api
+    container_name: sirena-api
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    volumes:
+      - ./data:/app/data:ro
+      - ./sirena:/app/sirena:ro
+      - ./api:/app/api:ro
+      - ./scripts:/app/scripts:ro
+      - ./archive:/app/archive:rw
+    networks:
+      - sirena-network
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+
+  # =============================================================================
+  # Dashboard Service - Streamlit Frontend
+  # =============================================================================
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dashboard
+    container_name: sirena-dashboard
+    ports:
+      - "8503:8501"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - STREAMLIT_SERVER_PORT=8501
+      - STREAMLIT_SERVER_ADDRESS=0.0.0.0
+    volumes:
+      - ./data:/app/data:ro
+      - ./sirena:/app/sirena:ro
+      - ./dashboard.py:/app/dashboard.py:ro
+      - ./assets:/app/assets:rw
+      - ./archive:/app/archive:rw
+      - ./.streamlit:/app/.streamlit:rw
+    networks:
+      - sirena-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+
+  # =============================================================================
+  # Redis Service - Cache (Optional)
+  # =============================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: sirena-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - sirena-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+# =============================================================================
+  # Networks
+  # =============================================================================
+networks:
+  sirena-network:
+    driver: bridge
+
+# =============================================================================
+  # Volumes
+  # =============================================================================
+volumes:
+  redis-data:
+    driver: local

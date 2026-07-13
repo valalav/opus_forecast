@@ -1,0 +1,4 @@
+Output: I'll now review Task 570 by running verification commands independently.
+```json
+{
+    "decision": "...

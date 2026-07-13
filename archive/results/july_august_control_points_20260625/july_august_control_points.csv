@@ -1,0 +1,5 @@
+scenario_id,scenario_name,july_index,august_index,july_mom_pp,august_mom_pp,decision_use,key_assumption
+production_cache,Production cache Ensemble,100.6486656683938,100.33984386022861,0.6486656683938037,0.339843860228612,Reference only unless no expert override is allowed,"Current precomputed Ensemble, no explicit July tariff correction"
+policy_adjusted,Policy-adjusted baseline,100.4001890183938,100.33984386022861,0.40018901839380305,0.339843860228612,Recommended working baseline before final June fact,No July ЖКУ indexation; KBR45 tariff delta applied to Ensemble
+policy_plus_gasoline_reversion,Policy-adjusted + gasoline reversion,99.97268901839381,100.33984386022861,-0.02731098160619183,0.339843860228612,Lower-risk bound if July gasoline returns to early-June level,Policy-adjusted baseline plus direct gasoline drag -0.4275 p.p.
+policy_plus_gasoline_diesel_reversion,Policy-adjusted + gasoline/diesel reversion,99.9364890183938,100.33984386022861,-0.06351098160619983,0.339843860228612,"Hard downside sensitivity, not central",Policy-adjusted baseline plus motor-fuel drag -0.4637 p.p.

@@ -1,0 +1,56 @@
+# Ranking by MASE
+
+```{r}
+pacman::p_load(tidyverse, magrittr, here, yardstick)
+main <- read_xlsx(here("data", "main1.xlsx")) %>% select(date, ipc) %>% rowid_to_column(".row")
+```
+
+```{r}
+metrics_import <- function(pattern, key) {
+  key <- enquo(key)
+  
+  data <- 
+    dir(pattern = pattern) %>% 
+    map(read_csv) %>% 
+    reduce(bind_rows) %>% 
+    filter(.metric == "mase") %>% 
+    dplyr::mutate(horizon = c(12, 24, 3, 9), key = !!key) %>% 
+    relocate(key, horizon) %>% 
+    select(-.estimator, -.metric) %>% 
+    rename("estimate" = .estimate) %>% 
+    arrange(horizon)
+  
+  return(data)
+}
+```
+
+```{r}
+setwd(here("results"))
+svm <- metrics_import(pattern = "^svm.*metrics.csv", key = "svm")
+rf <- metrics_import(pattern = "^rf.*metrics.csv", key = "rf")
+xgb <- metrics_import(pattern = "xgb.*metrics.csv", key = "xgb")
+mlp <- metrics_import(pattern = "^mlp.*metrics.csv", key = "mlp")
+knn <- metrics_import(pattern = "^knn.*metrics.csv", key = "knn")
+ml_ensamble <- metrics_import(pattern = "^ml.*metrics.csv", key = "ensemble")
+setwd(here())
+```
+
+```{r}
+mase <- 
+  svm %>% 
+  bind_rows(rf, xgb, mlp, knn) %>% 
+  select(-.config) %>% 
+  mutate(horizon = as_factor(paste("h = ", as.character(horizon), sep = "")),
+         key = as_factor(key),
+         id = rep(1:5, each = 4))
+```
+
+```{r}
+mase %>% write_csv(here("results", "analysis", "ranking_mase.csv"))
+```
+
+```{r}
+mase %>% 
+  ggplot(aes(key, estimate, fill = horizon)) +
+  geom_col(position = "dodge2")
+```

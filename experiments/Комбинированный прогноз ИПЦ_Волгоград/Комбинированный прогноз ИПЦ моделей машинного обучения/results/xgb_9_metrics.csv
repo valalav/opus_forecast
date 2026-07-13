@@ -1,0 +1,3 @@
+.metric,.estimator,.estimate,.config
+mae,standard,1.5214071035385135,Preprocessor1_Model1
+mase,standard,0.6150205572667057,Preprocessor1_Model1

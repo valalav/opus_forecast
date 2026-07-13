@@ -1,0 +1,831 @@
+{
+  "generated_at": "2026-06-25T09:30:27.596206",
+  "last_data_date": "2026-05-01",
+  "horizon": 12,
+  "forecasts": {
+    "Ridge": [
+      0.4525939497969773,
+      0.7461323423294743,
+      0.3815340309495099,
+      0.7433707643106828,
+      0.40775414823166045,
+      0.40999232072833536,
+      0.41387963449238896,
+      0.2865610331171524,
+      0.23457976389121882,
+      0.22784883183409477,
+      0.46545463935481735,
+      0.3027133300803371
+    ],
+    "Huber": [
+      0.44228673199606305,
+      0.5117914033424995,
+      0.17220598149658883,
+      0.7120740535050345,
+      0.34330112888845576,
+      0.13186064473003967,
+      0.3550046870812338,
+      0.2615026836814991,
+      0.056562680215449745,
+      0.24051623612754724,
+      0.4001927560543095,
+      0.2836639271650938
+    ],
+    "RidgeShockDummies": [
+      0.4515616482087381,
+      0.7940998537686426,
+      0.35505383010021774,
+      0.7354696516052286,
+      0.39773026050738736,
+      0.36511858888849247,
+      0.38326095917015834,
+      0.2875555388116169,
+      0.2468621711677912,
+      0.23144215195652862,
+      0.4751114892123667,
+      0.2999651463381099
+    ],
+    "Ridge_Shock_Roll24": [
+      0.36637819394027815,
+      0.7459019043177477,
+      0.41817144894267244,
+      1.0392029715404902,
+      0.6883523228034534,
+      0.49849393650544016,
+      0.38862589159580807,
+      0.5968092887574556,
+      0.2640193248235789,
+      0.34111577962269735,
+      0.1827385002983135,
+      0.3555013140143899
+    ],
+    "Ridge_ProdProxy": [
+      0.5188888888888812,
+      0.87222222222222,
+      0.44111111111111256,
+      0.7511111111111148,
+      0.42222222222221717,
+      0.4300000000000068,
+      0.5033333333333303,
+      0.2990000000000066,
+      0.29999999999999716,
+      0.26500000000000057,
+      0.48699999999999477,
+      0.3100000000000023
+    ],
+    "Ridge_AsymERPT": [
+      0.45205114127260515,
+      0.7544021869167779,
+      0.3829601421492441,
+      0.7432088688678959,
+      0.4082014950413253,
+      0.4153146848480418,
+      0.4137364823539684,
+      0.2868603703784629,
+      0.23705891292404146,
+      0.2293125543515231,
+      0.4631284183271305,
+      0.30297662982904683
+    ],
+    "ElasticNet": [
+      0.4568865734505607,
+      0.6058055016619619,
+      0.41220570061850026,
+      0.7310400901942558,
+      0.42005819028602787,
+      0.39363154461712213,
+      0.4233708067753241,
+      0.30091746747781656,
+      0.3204000637177842,
+      0.2848426866827083,
+      0.43615551366045224,
+      0.31170924678741585
+    ],
+    "NGBoostShock": [
+      0.5594535649010624,
+      0.5635104842162377,
+      0.3780749970349291,
+      0.7156225121213993,
+      0.4046704108386763,
+      0.4885493004364889,
+      0.47444799086935063,
+      0.3090512526508178,
+      0.3977180585588229,
+      0.3688284447299566,
+      0.6242682441110219,
+      0.32595065870589224
+    ],
+    "NGBoost": [
+      0.6492798310687817,
+      0.6264207047369013,
+      0.41662629200521906,
+      0.7315640631398139,
+      0.4030982624554582,
+      0.5042998403002343,
+      0.45623228394569537,
+      0.3133041525301792,
+      0.49342895551163224,
+      0.35572127880286075,
+      0.5556452383685269,
+      0.3293844309563241
+    ],
+    "RidgeExtended": [
+      0.4390356085923628,
+      0.7715413070133792,
+      0.2944772269200371,
+      0.7403461157498725,
+      0.3924513782155543,
+      0.3726319973001466,
+      0.3656433361049807,
+      0.2849448273792916,
+      0.21746476266456227,
+      0.2537938655058838,
+      0.47191129287148215,
+      0.3032905808180715
+    ],
+    "EBM": [
+      0.5188888888888812,
+      0.87222222222222,
+      0.44111111111111256,
+      0.7511111111111148,
+      0.42222222222221717,
+      0.4300000000000068,
+      0.5033333333333303,
+      0.2990000000000066,
+      0.29999999999999716,
+      0.26500000000000057,
+      0.48699999999999477,
+      0.3100000000000023
+    ],
+    "Prophet": [
+      0.2771183852003216,
+      0.5836700623287343,
+      0.19636005454027042,
+      0.6105416932358769,
+      0.18077032864821577,
+      0.2876425418567524,
+      0.26102385043373344,
+      0.14677836325068663,
+      0.27883986409780276,
+      0.06263629374733842,
+      0.21295692116474152,
+      0.10032876812324615
+    ],
+    "VARPolicy": [
+      0.4387911670348559,
+      0.713305552644027,
+      0.37651892067880666,
+      0.7296356438997202,
+      0.4284794191911497,
+      0.3781405933127433,
+      0.4757088622633248,
+      0.3260845534378472,
+      0.31342327617421056,
+      0.7016275226395672,
+      0.7134533178189821,
+      0.3534559001686177
+    ],
+    "FactorPolicy": [
+      0.4561643243682305,
+      0.7655598317794774,
+      0.35620844757579995,
+      0.6855562026719194,
+      0.37808913960679663,
+      0.32617776967124434,
+      0.42328362443742046,
+      0.27347472750590424,
+      0.260724020451941,
+      0.6488806508458435,
+      0.6606783006185865,
+      0.3006620783891469
+    ],
+    "Nowcast": [
+      0.8100356778400615,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "Micro": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Micro_SM": [
+      -0.24170755321664217,
+      -0.1545842899156753,
+      -0.40308671877012614,
+      0.23465051989651897,
+      0.23113417931556057,
+      0.2676053659103985,
+      0.4184485955894246,
+      0.7077320463294399,
+      0.5433758352159543,
+      0.6313648135996033,
+      0.4852335378004824,
+      0.1026328073693179
+    ],
+    "Ensemble": [
+      0.4840880403622115,
+      0.6486656683937987,
+      0.3398438602286113,
+      0.7223254704200811,
+      0.3870516362353678,
+      0.3663891940946151,
+      0.4109349647933447,
+      0.28693927343047443,
+      0.27969798028996085,
+      0.29683844005777615,
+      0.48933452399228083,
+      0.300981770148822
+    ]
+  },
+  "forecast_dates": [
+    "2026-06-01",
+    "2026-07-01",
+    "2026-08-01",
+    "2026-09-01",
+    "2026-10-01",
+    "2026-11-01",
+    "2026-12-01",
+    "2027-01-01",
+    "2027-02-01",
+    "2027-03-01",
+    "2027-04-01",
+    "2027-05-01"
+  ],
+  "diagnostics": {
+    "VARPolicy": {
+      "model": "var_policy",
+      "last_train_date": "2026-05-01",
+      "last_regime": "h1:normal_macro_varx;h2plus:seasonal_var",
+      "policy": "h1 RegimeMacroVARX; h2+ SeasonalVAR trajectory",
+      "no_random_noise": true
+    },
+    "FactorPolicy": {
+      "model": "factor_policy",
+      "kind": "Robust seasonal FAVAR",
+      "n_factors": 2,
+      "lags": 1,
+      "seasonal": true,
+      "robust": true,
+      "info_cols": [
+        "Food",
+        "NonFood",
+        "Services",
+        "USD",
+        "Ki_i",
+        "Ruonia"
+      ],
+      "pca_explained_variance_ratio": [
+        0.4072443072544513,
+        0.22612955796271766
+      ],
+      "pca_explained_variance_sum": 0.633373865217169,
+      "last_train_date": "2026-05-01"
+    },
+    "weekly_bridge": {
+      "method": "weekly_bridge_v1",
+      "description": "Diagnostic weekly bridge from fresh semicolon Rosstat rows; not a production model and not included in Ensemble.",
+      "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
+      "raw_rows": 16708,
+      "deduped_rows": 14404,
+      "duplicates_removed": 2304,
+      "data_date_range": {
+        "start": "2023-10-09",
+        "end": "2026-06-22"
+      },
+      "by_month": {
+        "2026-06": {
+          "target_month": "2026-06",
+          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
+          "raw_rows": 16708,
+          "deduped_rows": 14404,
+          "duplicates_removed": 2304,
+          "weights": {
+            "food": 0.3948,
+            "nonfood": 0.3653,
+            "services": 0.2399
+          },
+          "status": "ok",
+          "chain": {
+            "weeks_count": 4,
+            "weeks": [
+              {
+                "date": "2026-06-01",
+                "index": 100.027081,
+                "mom": 0.027081,
+                "cumulative_mom": 0.027081,
+                "n_items": 107,
+                "components": {
+                  "food": {
+                    "index": 99.96659090909093,
+                    "mom": -0.033409090909074735,
+                    "n_items": 44
+                  },
+                  "nonfood": {
+                    "index": 99.95,
+                    "mom": -0.04999999999999716,
+                    "n_items": 43
+                  },
+                  "services": {
+                    "index": 100.244,
+                    "mom": 0.24399999999999977,
+                    "n_items": 20
+                  }
+                }
+              },
+              {
+                "date": "2026-06-08",
+                "index": 100.204127,
+                "mom": 0.204127,
+                "cumulative_mom": 0.231263,
+                "n_items": 107,
+                "components": {
+                  "food": {
+                    "index": 100.48863636363636,
+                    "mom": 0.48863636363635976,
+                    "n_items": 44
+                  },
+                  "nonfood": {
+                    "index": 100.03069767441862,
+                    "mom": 0.030697674418618703,
+                    "n_items": 43
+                  },
+                  "services": {
+                    "index": 100.0,
+                    "mom": 0.0,
+                    "n_items": 20
+                  }
+                }
+              },
+              {
+                "date": "2026-06-15",
+                "index": 100.310614,
+                "mom": 0.310614,
+                "cumulative_mom": 0.542596,
+                "n_items": 107,
+                "components": {
+                  "food": {
+                    "index": 100.60022727272727,
+                    "mom": 0.6002272727272668,
+                    "n_items": 44
+                  },
+                  "nonfood": {
+                    "index": 100.31488372093023,
+                    "mom": 0.31488372093022576,
+                    "n_items": 43
+                  },
+                  "services": {
+                    "index": 99.8275,
+                    "mom": -0.17249999999999943,
+                    "n_items": 20
+                  }
+                }
+              },
+              {
+                "date": "2026-06-22",
+                "index": 100.304368,
+                "mom": 0.304368,
+                "cumulative_mom": 0.848616,
+                "n_items": 107,
+                "components": {
+                  "food": {
+                    "index": 99.52681818181819,
+                    "mom": -0.47318181818181415,
+                    "n_items": 44
+                  },
+                  "nonfood": {
+                    "index": 101.1479069767442,
+                    "mom": 1.1479069767441956,
+                    "n_items": 43
+                  },
+                  "services": {
+                    "index": 100.2995,
+                    "mom": 0.29949999999999477,
+                    "n_items": 20
+                  }
+                }
+              }
+            ],
+            "index": 100.848616,
+            "mom": 0.848616,
+            "avg_weekly_mom": 0.211548,
+            "remaining_weeks": 0,
+            "decay_factor": 0.6,
+            "extrapolated_mom": 0.848616
+          },
+          "month_end": {
+            "base_date": "2026-05-25",
+            "end_date": "2026-06-22",
+            "index": 100.945779,
+            "mom": 0.945779,
+            "matched_items": 107,
+            "components": {
+              "food": {
+                "index": 100.77777559143397,
+                "mom": 0.777775591433965,
+                "n_items": 44
+              },
+              "nonfood": {
+                "index": 101.44224430835116,
+                "mom": 1.4422443083511638,
+                "n_items": 43
+              },
+              "services": {
+                "index": 100.46628270765164,
+                "mom": 0.4662827076516436,
+                "n_items": 20
+              }
+            },
+            "top_decreases": [
+              {
+                "product_name": "Яйца куриные, 10 шт.",
+                "component": "food",
+                "index": 82.9493,
+                "mom": -17.0507,
+                "price_base": 88.09,
+                "price_end": 73.07,
+                "approx_contribution_pp": -0.152992
+              },
+              {
+                "product_name": "Мыло хозяйственное, 200 г",
+                "component": "nonfood",
+                "index": 90.147,
+                "mom": -9.853,
+                "price_base": 83.02,
+                "price_end": 74.84,
+                "approx_contribution_pp": -0.083705
+              },
+              {
+                "product_name": "Телевизор, шт.",
+                "component": "nonfood",
+                "index": 92.0093,
+                "mom": -7.9907,
+                "price_base": 28658.2,
+                "price_end": 26368.21,
+                "approx_contribution_pp": -0.067884
+              },
+              {
+                "product_name": "Валидол, 60 мг, 10 таблеток",
+                "component": "nonfood",
+                "index": 93.396,
+                "mom": -6.604,
+                "price_base": 48.91,
+                "price_end": 45.68,
+                "approx_contribution_pp": -0.056103
+              },
+              {
+                "product_name": "Колбаса полукопченая и варено-копченая, кг",
+                "component": "food",
+                "index": 93.4968,
+                "mom": -6.5032,
+                "price_base": 694.58,
+                "price_end": 649.41,
+                "approx_contribution_pp": -0.058352
+              },
+              {
+                "product_name": "Шампунь, 250 мл",
+                "component": "nonfood",
+                "index": 93.7702,
+                "mom": -6.2298,
+                "price_base": 204.66,
+                "price_end": 191.91,
+                "approx_contribution_pp": -0.052925
+              },
+              {
+                "product_name": "Печенье, кг",
+                "component": "food",
+                "index": 93.9306,
+                "mom": -6.0694,
+                "price_base": 315.68,
+                "price_end": 296.52,
+                "approx_contribution_pp": -0.054459
+              },
+              {
+                "product_name": "Помидоры свежие, кг",
+                "component": "food",
+                "index": 94.3889,
+                "mom": -5.6111,
+                "price_base": 186.06,
+                "price_end": 175.62,
+                "approx_contribution_pp": -0.050347
+              },
+              {
+                "product_name": "Носки мужские, пара",
+                "component": "nonfood",
+                "index": 94.758,
+                "mom": -5.242,
+                "price_base": 159.48,
+                "price_end": 151.12,
+                "approx_contribution_pp": -0.044533
+              },
+              {
+                "product_name": "Яблоки, кг",
+                "component": "food",
+                "index": 96.4683,
+                "mom": -3.5317,
+                "price_base": 150.07,
+                "price_end": 144.77,
+                "approx_contribution_pp": -0.031689
+              },
+              {
+                "product_name": "Бананы, кг",
+                "component": "food",
+                "index": 96.5597,
+                "mom": -3.4403,
+                "price_base": 142.14,
+                "price_end": 137.25,
+                "approx_contribution_pp": -0.030869
+              },
+              {
+                "product_name": "Консервы фруктово-ягодные для детского питания, кг",
+                "component": "food",
+                "index": 96.7502,
+                "mom": -3.2498,
+                "price_base": 688.05,
+                "price_end": 665.69,
+                "approx_contribution_pp": -0.029159
+              }
+            ],
+            "top_increases": [
+              {
+                "product_name": "Лук репчатый, кг",
+                "component": "food",
+                "index": 142.4814,
+                "mom": 42.4814,
+                "price_base": 45.62,
+                "price_end": 65.0,
+                "approx_contribution_pp": 0.381174
+              },
+              {
+                "product_name": "Бензин автомобильный марки АИ-95, л",
+                "component": "nonfood",
+                "index": 120.478,
+                "mom": 20.478,
+                "price_base": 69.88,
+                "price_end": 84.19,
+                "approx_contribution_pp": 0.173967
+              },
+              {
+                "product_name": "Бензин автомобильный",
+                "component": "nonfood",
+                "index": 119.1604,
+                "mom": 19.1604,
+                "price_base": 68.84,
+                "price_end": 82.03,
+                "approx_contribution_pp": 0.162774
+              },
+              {
+                "product_name": "Бензин автомобильный марки АИ-92, л",
+                "component": "nonfood",
+                "index": 118.8825,
+                "mom": 18.8825,
+                "price_base": 64.61,
+                "price_end": 76.81,
+                "approx_contribution_pp": 0.160414
+              },
+              {
+                "product_name": "Дизельное топливо, л",
+                "component": "nonfood",
+                "index": 115.1037,
+                "mom": 15.1037,
+                "price_base": 72.83,
+                "price_end": 83.83,
+                "approx_contribution_pp": 0.128311
+              },
+              {
+                "product_name": "Картофель, кг",
+                "component": "food",
+                "index": 114.1163,
+                "mom": 14.1163,
+                "price_base": 50.58,
+                "price_end": 57.72,
+                "approx_contribution_pp": 0.126661
+              },
+              {
+                "product_name": "Бензин автомобильный марки АИ-98 и выше, л",
+                "component": "nonfood",
+                "index": 107.5888,
+                "mom": 7.5888,
+                "price_base": 92.11,
+                "price_end": 99.1,
+                "approx_contribution_pp": 0.064469
+              },
+              {
+                "product_name": "Мойка легкового автомобиля, услуга",
+                "component": "services",
+                "index": 107.0309,
+                "mom": 7.0309,
+                "price_base": 861.2,
+                "price_end": 921.75,
+                "approx_contribution_pp": 0.084335
+              },
+              {
+                "product_name": "Активированный уголь, 10 таблеток",
+                "component": "nonfood",
+                "index": 106.1564,
+                "mom": 6.1564,
+                "price_base": 18.03,
+                "price_end": 19.14,
+                "approx_contribution_pp": 0.052301
+              },
+              {
+                "product_name": "Паста зубная, 100 г (100 мл)",
+                "component": "nonfood",
+                "index": 106.0409,
+                "mom": 6.0409,
+                "price_base": 178.12,
+                "price_end": 188.88,
+                "approx_contribution_pp": 0.051319
+              },
+              {
+                "product_name": "Консервы мясные для детского питания, кг",
+                "component": "food",
+                "index": 106.0059,
+                "mom": 6.0059,
+                "price_base": 1329.53,
+                "price_end": 1409.38,
+                "approx_contribution_pp": 0.053889
+              },
+              {
+                "product_name": "Водка, л",
+                "component": "food",
+                "index": 104.1441,
+                "mom": 4.1441,
+                "price_base": 956.55,
+                "price_end": 996.19,
+                "approx_contribution_pp": 0.037184
+              }
+            ]
+          },
+          "nowcast_blend": {
+            "model_proxy": 0.4628127784006142,
+            "weekly_weight": 0.9,
+            "model_weight": 0.1,
+            "nowcast_mom": 0.8100356778400615
+          }
+        },
+        "2026-07": {
+          "target_month": "2026-07",
+          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
+          "raw_rows": 16708,
+          "deduped_rows": 14404,
+          "duplicates_removed": 2304,
+          "weights": {
+            "food": 0.3948,
+            "nonfood": 0.3653,
+            "services": 0.2399
+          },
+          "status": "no_weekly_data_for_month"
+        },
+        "2026-08": {
+          "target_month": "2026-08",
+          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
+          "raw_rows": 16708,
+          "deduped_rows": 14404,
+          "duplicates_removed": 2304,
+          "weights": {
+            "food": 0.3948,
+            "nonfood": 0.3653,
+            "services": 0.2399
+          },
+          "status": "no_weekly_data_for_month"
+        },
+        "2026-09": {
+          "target_month": "2026-09",
+          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
+          "raw_rows": 16708,
+          "deduped_rows": 14404,
+          "duplicates_removed": 2304,
+          "weights": {
+            "food": 0.3948,
+            "nonfood": 0.3653,
+            "services": 0.2399
+          },
+          "status": "no_weekly_data_for_month"
+        },
+        "2026-10": {
+          "target_month": "2026-10",
+          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
+          "raw_rows": 16708,
+          "deduped_rows": 14404,
+          "duplicates_removed": 2304,
+          "weights": {
+            "food": 0.3948,
+            "nonfood": 0.3653,
+            "services": 0.2399
+          },
+          "status": "no_weekly_data_for_month"
+        },
+        "2026-11": {
+          "target_month": "2026-11",
+          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
+          "raw_rows": 16708,
+          "deduped_rows": 14404,
+          "duplicates_removed": 2304,
+          "weights": {
+            "food": 0.3948,
+            "nonfood": 0.3653,
+            "services": 0.2399
+          },
+          "status": "no_weekly_data_for_month"
+        },
+        "2026-12": {
+          "target_month": "2026-12",
+          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
+          "raw_rows": 16708,
+          "deduped_rows": 14404,
+          "duplicates_removed": 2304,
+          "weights": {
+            "food": 0.3948,
+            "nonfood": 0.3653,
+            "services": 0.2399
+          },
+          "status": "no_weekly_data_for_month"
+        },
+        "2027-01": {
+          "target_month": "2027-01",
+          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
+          "raw_rows": 16708,
+          "deduped_rows": 14404,
+          "duplicates_removed": 2304,
+          "weights": {
+            "food": 0.3948,
+            "nonfood": 0.3653,
+            "services": 0.2399
+          },
+          "status": "no_weekly_data_for_month"
+        },
+        "2027-02": {
+          "target_month": "2027-02",
+          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
+          "raw_rows": 16708,
+          "deduped_rows": 14404,
+          "duplicates_removed": 2304,
+          "weights": {
+            "food": 0.3948,
+            "nonfood": 0.3653,
+            "services": 0.2399
+          },
+          "status": "no_weekly_data_for_month"
+        },
+        "2027-03": {
+          "target_month": "2027-03",
+          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
+          "raw_rows": 16708,
+          "deduped_rows": 14404,
+          "duplicates_removed": 2304,
+          "weights": {
+            "food": 0.3948,
+            "nonfood": 0.3653,
+            "services": 0.2399
+          },
+          "status": "no_weekly_data_for_month"
+        },
+        "2027-04": {
+          "target_month": "2027-04",
+          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
+          "raw_rows": 16708,
+          "deduped_rows": 14404,
+          "duplicates_removed": 2304,
+          "weights": {
+            "food": 0.3948,
+            "nonfood": 0.3653,
+            "services": 0.2399
+          },
+          "status": "no_weekly_data_for_month"
+        },
+        "2027-05": {
+          "target_month": "2027-05",
+          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
+          "raw_rows": 16708,
+          "deduped_rows": 14404,
+          "duplicates_removed": 2304,
+          "weights": {
+            "food": 0.3948,
+            "nonfood": 0.3653,
+            "services": 0.2399
+          },
+          "status": "no_weekly_data_for_month"
+        }
+      }
+    }
+  }
+}

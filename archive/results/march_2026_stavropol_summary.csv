@@ -1,0 +1,40 @@
+row_type,target_month,item,selected_expert_forecast,ensemble_plan_forecast,latest_model_series,metric,value,source,note
+forecast_horizon,2026-04,Target forecast after March,0.44,0.50,0.829,,,"forecasts/2026_mom_forecast_v1.md; archive/results/forecast_latest.csv",March data used as input context
+forecast_horizon,2026-05,Target forecast after March,0.20,0.44,0.475,,,"forecasts/2026_mom_forecast_v1.md; archive/results/forecast_latest.csv",March data used as input context
+forecast_horizon,2026-06,Target forecast after March,0.23,0.08,0.210,,,"forecasts/2026_mom_forecast_v1.md; archive/results/forecast_latest.csv",March data used as input context
+forecast_horizon,2026-07,Target forecast after March,-0.07,0.16,0.378,,,"forecasts/2026_mom_forecast_v1.md; archive/results/forecast_latest.csv",March data used as input context
+forecast_horizon,2026-08,Target forecast after March,-0.20,-0.08,0.019,,,"forecasts/2026_mom_forecast_v1.md; archive/results/forecast_latest.csv",March data used as input context
+forecast_horizon,2026-09,Target forecast after March,0.39,0.48,0.499,,,"forecasts/2026_mom_forecast_v1.md; archive/results/forecast_latest.csv",March data used as input context
+forecast_horizon,2026-10,Target forecast after March,0.70,0.55,0.588,,,"forecasts/2026_mom_forecast_v1.md; archive/results/forecast_latest.csv",March data used as input context
+forecast_horizon,2026-11,Target forecast after March,0.20,0.30,,,,forecasts/2026_mom_forecast_v1.md,No latest_model_series value present in read slice
+forecast_horizon,2026-12,Target forecast after March,0.22,0.43,,,,forecasts/2026_mom_forecast_v1.md,No latest_model_series value present in read sources
+forecast_horizon,2027-01,Target forecast 2027,,,,MoM,0.90,forecasts/2027_mom_forecast_v1.md,Source value 100.90 converted to +0.90% MoM
+forecast_horizon,2027-02,Target forecast 2027,,,,MoM,0.55,forecasts/2027_mom_forecast_v1.md,Source value 100.55 converted to +0.55% MoM
+forecast_horizon,2027-03,Target forecast 2027,,,,MoM,0.40,forecasts/2027_mom_forecast_v1.md,Source value 100.40 converted to +0.40% MoM
+forecast_horizon,2027-04,Target forecast 2027,,,,MoM,0.35,forecasts/2027_mom_forecast_v1.md,Source value 100.35 converted to +0.35% MoM
+forecast_horizon,2027-05,Target forecast 2027,,,,MoM,0.15,forecasts/2027_mom_forecast_v1.md,Source value 100.15 converted to +0.15% MoM
+forecast_horizon,2027-06,Target forecast 2027,,,,MoM,0.05,forecasts/2027_mom_forecast_v1.md,Source value 100.05 converted to +0.05% MoM
+forecast_horizon,2027-07,Target forecast 2027,,,,MoM,0.00,forecasts/2027_mom_forecast_v1.md,Source value 100.00 converted to +0.00% MoM
+forecast_horizon,2027-08,Target forecast 2027,,,,MoM,-0.10,forecasts/2027_mom_forecast_v1.md,Source value 99.90 converted to -0.10% MoM
+forecast_horizon,2027-09,Target forecast 2027,,,,MoM,0.50,forecasts/2027_mom_forecast_v1.md,Source value 100.50 converted to +0.50% MoM
+forecast_horizon,2027-10,Target forecast 2027,,,,MoM,0.65,forecasts/2027_mom_forecast_v1.md,Source value 100.65 converted to +0.65% MoM
+forecast_horizon,2027-11,Target forecast 2027,,,,MoM,0.20,forecasts/2027_mom_forecast_v1.md,Source value 100.20 converted to +0.20% MoM
+forecast_horizon,2027-12,Target forecast 2027,,,,MoM,0.30,forecasts/2027_mom_forecast_v1.md,Source value 100.30 converted to +0.30% MoM
+march_input,2026-03,Selected March tracking forecast,,,,MoM,0.750,docs/research/analysis/march_2026_forecast_tracking.md,March was input context not target horizon
+march_input,2026-03,Final March nowcast,,,,MoM,0.620,forecasts/nowcast_log.csv,Final log row dated 2026-04-08 for target_month=2026-03
+march_input,2026-03,March weekly signal,,,,MoM cumulative,0.771,forecasts/nowcast_log.csv,Signal before final seasonal correction
+april_model_option,2026-04,Ridge,,,,April 2026 MoM forecast,0.770,archive/results/forecasts_current.csv,Forecast date 2026-04-01
+april_model_option,2026-04,Ridge_Ext,,,,April 2026 MoM forecast,0.689,archive/results/forecasts_current.csv,Forecast date 2026-04-01
+april_model_option,2026-04,Ridge_Shock,,,,April 2026 MoM forecast,0.622,archive/results/forecasts_current.csv,Forecast date 2026-04-01
+april_model_option,2026-04,ElasticNet,,,,April 2026 MoM forecast,0.647,archive/results/forecasts_current.csv,Forecast date 2026-04-01
+april_model_option,2026-04,Huber,,,,April 2026 MoM forecast,0.568,archive/results/forecasts_current.csv,Forecast date 2026-04-01
+april_model_option,2026-04,NGBoost,,,,April 2026 MoM forecast,0.772,archive/results/forecasts_current.csv,Forecast date 2026-04-01
+april_model_option,2026-04,NGBoost_Shock,,,,April 2026 MoM forecast,0.808,archive/results/forecasts_current.csv,Forecast date 2026-04-01
+april_model_option,2026-04,EBM,,,,April 2026 MoM forecast,0.562,archive/results/forecasts_current.csv,Forecast date 2026-04-01
+april_model_option,2026-04,Prophet,,,,April 2026 MoM forecast,1.091,archive/results/forecasts_current.csv,Forecast date 2026-04-01
+april_model_option,2026-04,Subcomp,,,,April 2026 MoM forecast,0.659,archive/results/forecasts_current.csv,Forecast date 2026-04-01
+april_model_option,2026-04,Subcomp_Multi,,,,April 2026 MoM forecast,0.638,archive/results/forecasts_current.csv,Forecast date 2026-04-01
+april_model_option,2026-04,Ridge_Macro,,,,April 2026 MoM forecast,0.327,archive/results/forecasts_current.csv,Forecast date 2026-04-01
+backtest_reference,,Ridge_ProdProxy_Roll24,,,,h=1 MAE,0.267,archive/results/backtest_h1_summary.md,Best h=1 model in latest summary
+backtest_reference,,Ridge_ProdProxy_Roll24,,,,h=2 MAE,0.280,archive/results/backtest_h2_summary.md,Best h=2 model in latest summary
+backtest_reference,,Ridge_Ext_Roll24,,,,h=12 MAE,0.281,archive/results/backtest_h12_summary.md,Best h=12 model in latest summary

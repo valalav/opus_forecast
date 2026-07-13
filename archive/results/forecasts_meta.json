@@ -1,0 +1,35 @@
+{
+  "generated_at": "2025-12-30T13:34:21.263698",
+  "last_data_date": "2025-11-01T00:00:00",
+  "horizon": 12,
+  "models": [
+    "Ridge",
+    "Ridge_Ext",
+    "Ridge_Shock",
+    "Bayes_Ridge",
+    "ElasticNet",
+    "Huber",
+    "NGBoost",
+    "NGBoost_Shock",
+    "LightGBM",
+    "EBM",
+    "CatBoost",
+    "Prophet",
+    "ETS",
+    "Subcomp",
+    "Subcomp_Multi",
+    "Micro",
+    "Ridge_Macro",
+    "BVAR",
+    "SARIMA"
+  ],
+  "exog_variables": [
+    "usd_nom_i",
+    "Ki_i",
+    "Ruonia",
+    "brent",
+    "Prod",
+    "Serv",
+    "Nonprod"
+  ]
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "title": "Verify RegimeWeighter class exists and is importable",
+    "description": "Check that edge_lab/scripts/weekly_regime_weights.py has a RegimeWeighter class and verify it can be imported without errors. Use functional test: cd edge_lab && python3 -c 'from scripts.weekly_regime_weights import RegimeWeighter; print(\"Class imported successfully\")'",
+    "acceptance_criteria": [
+      "@metric: grep -c 'class RegimeWeighter' edge_lab/scripts/weekly_regime_weights.py >= 1",
+      "@functional: cd edge_lab && python3 -c 'from scripts.weekly_regime_weights import RegimeWeighter; print(\"OK\")' outputs OK",
+      "@metric: cd edge_lab && python3 -c 'from scripts.weekly_regime_weights import RegimeWeighter; print(hasattr(RegimeWeighter, \"__init__\"))' outputs True"
+    ],
+    "priority": "medium"
+  },
+  {
+    "title": "Add/fix compute_weights method signature",
+    "description": "Ensure RegimeWeighter class in edge_lab/scripts/weekly_regime_weights.py has a compute_weights method with correct signature. The method should accept at minimum: self, regime (str), and df (pd.DataFrame). Current file has compute_weights at line 147 with signature (self, X, y, n_products, regime_name) - verify this is the correct method or add a new one that matches expected interface.",
+    "acceptance_criteria": [
+      "@metric: grep -c 'def compute_weights' edge_lab/scripts/weekly_regime_weights.py >= 1",
+      "@metric: grep 'def compute_weights' edge_lab/scripts/weekly_regime_weights.py | grep -c 'regime' >= 1",
+      "@functional: cd edge_lab && python3 -c 'from scripts.weekly_regime_weights import RegimeWeighter; print(hasattr(RegimeWeighter, \"compute_weights\"))' outputs True"
+    ],
+    "priority": "high"
+  },
+  {
+    "title": "Test compute_weights method can be called",
+    "description": "Create a minimal test to verify compute_weights method can be instantiated and called without errors. Create test script edge_lab/test_regime_weighter.py that imports RegimeWeighter, creates an instance, and calls compute_weights with mock data or validates the method signature.",
+    "acceptance_criteria": [
+      "@file: edge_lab/test_regime_weighter.py exists",
+      "@metric: grep -c 'from scripts.weekly_regime_weights import RegimeWeighter' edge_lab/test_regime_weighter.py >= 1",
+      "@functional: cd edge_lab && python3 test_regime_weighter.py exits with code 0"
+    ],
+    "priority": "medium"
+  }
+]

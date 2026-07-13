@@ -1,0 +1,336 @@
+{
+  "project": "Opus Autopoiesis: Self-Evolving Economic Strategy (Hybrid V3.2)",
+  "version": "3.2",
+  "meta_instructions": "Prioritize High Priority Reliability tasks first, then spawn Visionary tasks.",
+  "user_stories": [
+    {
+      "id": 100,
+      "title": "\ud83e\uddec The Spark: Hypothesis Generator Agent",
+      "description": "Create agents/hypothesis_generator.py to brainstorm new correlation theories.",
+      "acceptance_criteria": [
+        "Agent appends new tasks to PRD"
+      ],
+      "status": "DONE"
+    },
+    {
+      "id": 101,
+      "title": "\ud83e\udde0 Cognitive Architecture: News Sentiment",
+      "description": "Scrape CBR press releases and train BERT for 'Hawkishness' index.",
+      "acceptance_criteria": [
+        "Sentiment Index created"
+      ],
+      "status": "DONE"
+    },
+    {
+      "id": 104,
+      "title": "\ud83d\udee1\ufe0f Immune System: Adversarial Stress Testing",
+      "description": "Inject synthetic 'Black Swan' events to test model survival.",
+      "acceptance_criteria": [
+        "Survival Rate > 90%"
+      ],
+      "status": "DONE"
+    },
+    {
+      "id": 1,
+      "title": "Test RidgeExtendedForecaster",
+      "priority": "high",
+      "status": "DONE",
+      "description": "Create unit tests for RidgeExtendedForecaster...",
+      "acceptance_criteria": [
+        "pytest passes"
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Test RidgeShockDummiesForecaster",
+      "priority": "high",
+      "status": "DONE",
+      "description": "Verify shock dummies...",
+      "acceptance_criteria": [
+        "pytest passes"
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Test RidgeMacroForecaster",
+      "priority": "high",
+      "status": "DONE",
+      "description": "Test macro features...",
+      "acceptance_criteria": [
+        "pytest passes"
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Test ElasticNetForecaster",
+      "priority": "high",
+      "status": "DONE",
+      "description": "Test regularization...",
+      "acceptance_criteria": [
+        "pytest passes"
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Test HuberForecaster",
+      "priority": "high",
+      "status": "DONE",
+      "description": "Test robust regression...",
+      "acceptance_criteria": [
+        "pytest passes"
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Test NGBoostForecaster",
+      "priority": "high",
+      "status": "DONE",
+      "description": "Test probabilistic predictions...",
+      "acceptance_criteria": [
+        "pytest passes"
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Test NGBoostShockForecaster",
+      "priority": "medium",
+      "status": "DONE",
+      "description": "Test shock output...",
+      "acceptance_criteria": [
+        "pytest passes"
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Test EBMForecaster",
+      "priority": "medium",
+      "status": "DONE",
+      "description": "Test interpretability...",
+      "acceptance_criteria": [
+        "pytest passes"
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Test BayesianRidgeForecaster",
+      "priority": "medium",
+      "status": "DONE",
+      "description": "Test Bayesian inference...",
+      "acceptance_criteria": [
+        "pytest passes"
+      ]
+    },
+    {
+      "id": 10,
+      "title": "Test SubcomponentForecaster",
+      "priority": "high",
+      "status": "DONE",
+      "description": "Test bottom-up aggregation...",
+      "acceptance_criteria": [
+        "pytest passes"
+      ]
+    },
+    {
+      "id": 11,
+      "title": "Test SubcomponentMultiForecaster",
+      "priority": "high",
+      "status": "DONE",
+      "description": "Test multi-model subcomponents...",
+      "acceptance_criteria": [
+        "pytest passes"
+      ]
+    },
+    {
+      "id": 12,
+      "title": "Test MicrocomponentForecaster",
+      "priority": "medium",
+      "status": "DONE",
+      "description": "Test 497 micro models...",
+      "acceptance_criteria": [
+        "pytest passes"
+      ]
+    },
+    {
+      "id": 13,
+      "title": "Test HierarchicalMicroForecaster",
+      "priority": "medium",
+      "status": "DONE",
+      "description": "Test reconciliation...",
+      "acceptance_criteria": [
+        "pytest passes"
+      ]
+    },
+    {
+      "id": 14,
+      "title": "Test HorizonEnsembleForecaster",
+      "priority": "high",
+      "status": "DONE",
+      "description": "Test adaptive weights...",
+      "acceptance_criteria": [
+        "pytest passes"
+      ]
+    },
+    {
+      "id": 15,
+      "title": "Test RegimeDetector",
+      "priority": "medium",
+      "status": "DONE",
+      "description": "Test shock detection...",
+      "acceptance_criteria": [
+        "pytest passes"
+      ]
+    },
+    {
+      "id": 16,
+      "title": "Test ScenarioRateModel",
+      "priority": "medium",
+      "status": "DONE",
+      "description": "Test rate transmission...",
+      "acceptance_criteria": [
+        "pytest passes"
+      ]
+    },
+    {
+      "id": 17,
+      "title": "Test KiTrajectoryForecaster",
+      "priority": "medium",
+      "status": "DONE",
+      "description": "Test Taylor rule...",
+      "acceptance_criteria": [
+        "pytest passes"
+      ]
+    },
+    {
+      "id": 18,
+      "title": "Test UnifiedSubcomponentForecaster",
+      "priority": "medium",
+      "status": "DONE",
+      "description": "Test scenario integration...",
+      "acceptance_criteria": [
+        "pytest passes"
+      ]
+    },
+    {
+      "id": 19,
+      "title": "Integration: Full backtest",
+      "priority": "high",
+      "status": "DONE",
+      "description": "Run pipeline end-to-end...",
+      "acceptance_criteria": [
+        "All models predict"
+      ]
+    },
+    {
+      "id": 20,
+      "title": "Integration: Dashboard flow",
+      "priority": "high",
+      "status": "DONE",
+      "description": "Verify dashboard loading...",
+      "acceptance_criteria": [
+        "Data matches"
+      ]
+    },
+    {
+      "id": 21,
+      "title": "New: MIDAS Model",
+      "priority": "low",
+      "status": "TODO",
+      "description": "Implement Mixed Data Sampling...",
+      "acceptance_criteria": [
+        "MAE improved"
+      ],
+      "feedback": "Rejected by Critic: : Acceptance criterion \"MAE improved\" is NOT met. MIDAS backtest results show MAE of 0.432 on h=1 horizon, which is 34.6% WORSE than the Ridge baseline (0.321). While the implementation exists, is integrated into the backtest framework, and tests pass, the performance metric requirement has not been satisfied."
+    },
+    {
+      "id": 22,
+      "title": "New: Temporal Fusion Transformer",
+      "priority": "low",
+      "status": "TODO",
+      "description": "Implement TFT...",
+      "acceptance_criteria": [
+        "Weights extracted"
+      ],
+      "feedback": "Rejected by Critic: : Acceptance criterion \"Weights extracted\" cannot be verified independently. While the implementation exists and tests pass, the weights have never been extracted on production data. The `get_weights()` method returns attention weights and network weights structure but these are only computed on synthetic test data, not on real inflation forecasts."
+    },
+    {
+      "id": 23,
+      "title": "New: Conformal Prediction",
+      "priority": "medium",
+      "status": "TODO",
+      "description": "Wrap models with CI...",
+      "acceptance_criteria": [
+        "Coverage > 88%"
+      ]
+    },
+    {
+      "id": 24,
+      "title": "Improve ExogProphet",
+      "priority": "medium",
+      "status": "TODO",
+      "description": "Add Brent regressor...",
+      "acceptance_criteria": [
+        "MAE <= 0.30"
+      ]
+    },
+    {
+      "id": 25,
+      "title": "Report: Model Comparison",
+      "priority": "medium",
+      "status": "TODO",
+      "description": "Generate HTML comparison...",
+      "acceptance_criteria": [
+        "Report exists"
+      ]
+    },
+    {
+      "id": 26,
+      "title": "API: /explain",
+      "priority": "low",
+      "status": "TODO",
+      "description": "Add SHAP endpoint...",
+      "acceptance_criteria": [
+        "Returns JSON"
+      ]
+    },
+    {
+      "id": 27,
+      "title": "Nowcasting: Weekly Signal",
+      "priority": "medium",
+      "status": "TODO",
+      "description": "Improve weekly basket...",
+      "acceptance_criteria": [
+        "MAE <= 0.25"
+      ]
+    },
+    {
+      "id": 28,
+      "title": "Data Validation Script",
+      "priority": "high",
+      "status": "TODO",
+      "description": "Check nulls/outliers...",
+      "acceptance_criteria": [
+        "Reports issues"
+      ]
+    },
+    {
+      "id": 29,
+      "title": "Performance: Cache",
+      "priority": "medium",
+      "status": "TODO",
+      "description": "Implement Redis cache...",
+      "acceptance_criteria": [
+        "Load time -50%"
+      ]
+    },
+    {
+      "id": 30,
+      "title": "Docs: Update CLAUDE.md",
+      "priority": "high",
+      "status": "TODO",
+      "description": "Document all 37 models...",
+      "acceptance_criteria": [
+        "File updated"
+      ]
+    }
+  ]
+}

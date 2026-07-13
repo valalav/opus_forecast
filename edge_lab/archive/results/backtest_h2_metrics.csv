@@ -1,0 +1,2 @@
+MAE,RMSE,MAPE,Bias,N,model,horizon
+1.3463,6.5807,0.67,-0.0743,83,opr_ridge,2

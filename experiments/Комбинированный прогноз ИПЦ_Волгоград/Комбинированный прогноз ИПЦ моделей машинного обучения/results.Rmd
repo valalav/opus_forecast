@@ -1,0 +1,159 @@
+# Результаты
+
+```{r include=FALSE}
+pacman::p_load(tidyverse, kableExtra, magrittr, here, patchwork, ggforce, readxl)
+main <- read_xlsx(here("data", "main1.xlsx")) %>% select(date, ipc) %>% rowid_to_column(".row")
+```
+
+MAE и rMAE для каждой модели и горизонта прогнозирования
+
+```{r include=FALSE}
+mae <- read_csv(here("results", "analysis", "final_mae.csv"))
+rmae <- read_csv(here("results", "analysis", "final_rmae.csv")) %>% 
+  rename("h = 3 " = 2, "h = 9 " = 3, "h = 12 " = 4, "h = 24 " = 5)
+
+results_one <- 
+  mae %>% 
+  left_join(rmae) %>% 
+  mutate(across(where(is.numeric), ~ round(., 2)),
+         key = str_remove_all(key, "[()]")) %>% 
+  rename(" " = 1) %>% 
+  filter(` ` != "ts & ml ensemble") %>%
+  mutate(` ` = str_replace(` `, "svm", "svr"))
+```
+
+```{r table_four, echo=FALSE}
+kbl(results_one, 
+    booktabs = T,
+    align = c("lcccccccc")) %>%
+  kable_styling(font_size = 17,
+                full_width = T) %>% 
+  add_header_above(c(" " = 1, "MAE" = 4, "rMAE" = 4), align = "l") %>%
+  column_spec(1, width = "3.9cm") %>% 
+  group_rows(start_row = 1, 
+             end_row = 6, 
+             latex_gap_space = "-0.55cm") 
+```
+
+\textbf{Рисунок 2:} Прогнозы на 24 месяца вперед
+
+```{r include=FALSE}
+ml_forecasts <- read_csv(here("results", "analysis", "ml_24_forecasts.csv")) %>%
+  mutate(model = str_replace(model, "svm", "svr"))
+```
+
+```{r include=FALSE}
+p2 <- 
+  ggplot(filter(ml_forecasts, model != "ipc"), aes(date, value, color = model)) +
+  geom_line(aes(date, value, color = model)) +
+  geom_line(data = filter(ml_forecasts, model == "ipc"), linetype = "dashed") +
+  labs(title = "Модели машинного обучения") +
+  theme_bw() +
+  theme(
+        # X axis
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(size = 12, color = "black"),
+        # Y axis
+        axis.title.y = element_blank(),
+        axis.text.y = element_text(size = 12, color = "black"),
+        # Title
+        plot.title = element_text(hjust = 0.5, 
+                                  margin = margin(0, 0, 0.7, 0, "cm")),
+        # Panel
+        panel.grid = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.background = element_rect(fill = "white", color = "black"),
+        # Legend
+        legend.title = element_blank(),
+        legend.text = element_text(size = 11),
+        legend.position = "bottom",
+        legend.justification = "center",
+        legend.margin = margin(.5, 0, 0, 0, "cm")
+    ) + 
+    guides(colour = guide_legend(nrow = 1))
+```
+
+```{r fig_two, echo=FALSE, warning=FALSE, message=FALSE, fig.align = 'center', fig.dim = c(11.5, 4.7)}
+p2
+```
+
+$$
+w_i = 1 - \frac{MAE_h}{\sum_{h=1}^H MAE},
+$$
+
+Объединение прогнозов по классам методов
+
+```{r include=FALSE}
+ml_mean_forecasts <- read_csv(here("results", "analysis", "ml_mean_forecasts.csv"))
+ensamble <- ml_mean_forecasts %>% filter(model != "ipc")
+```
+
+```{r fig_three, echo=FALSE, warning=FALSE, message=FALSE, fig.align = 'center', fig.dim = c(11.5, 4.7)}
+ggplot(filter(ensamble, model != "ipc"), aes(date, value, color = model)) +
+  geom_line(aes(date, value, color = model)) +
+  geom_line(data = filter(ensamble, model == "ipc"), linetype = "dashed") +
+  theme_bw() +
+  theme(
+        # X axis
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(size = 12, color = "black"),
+        # Y axis
+        axis.title.y = element_blank(),
+        axis.text.y = element_text(size = 12, color = "black"),
+        # Title
+        plot.title = element_blank(),
+        # Panel
+        panel.grid = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.background = element_rect(fill = "white", color = "black"),
+        # Legend
+        legend.title = element_blank(),
+        legend.text = element_text(size = 11),
+        legend.position = "bottom",
+        legend.justification = "center",
+        legend.margin = margin(.5, 0, 0, 0, "cm")
+    ) + 
+    guides(colour = guide_legend(nrow = 1))
+```
+
+MASE по модели и горизонту прогнозирования
+
+```{r include=FALSE}
+mase <- read_csv(here("results", "analysis", "final_mase.csv")) %>% 
+  rename(" " = name)
+
+mase_mean <- 
+  mase %>% 
+  summarise(across(where(is.numeric), mean)) %>% 
+  mutate(` ` = "Media") %>% 
+  relocate(` `)
+
+mase %<>% 
+  bind_rows(mase_mean) %>%
+  mutate(across(where(is.numeric), ~ round(., 2))) %>% 
+  rename("svr" = svm)
+```
+
+```{r table_five, echo=FALSE}
+kbl(mase, 
+    booktabs = T,
+    align = c("lcccccccccc")) %>%
+  kable_classic() %>% 
+  add_header_above(c(" " = 1, "MASE" = 5), align = "l") %>%
+  kable_styling(font_size = 15,
+                full_width = T,
+                latex_options = "hold_position") %>% 
+  column_spec(1, width = "1cm") %>% 
+  column_spec(3, width = "1cm") %>% 
+  group_rows(start_row = 1, 
+             end_row = 4, 
+             label_row_css = "l",
+             latex_gap_space = "-0.25cm") %>% 
+  group_rows(start_row = 5, 
+             end_row = 5, 
+             label_row_css = "l",
+             latex_gap_space = "-0.10cm") %>% 
+  row_spec(5, bold = TRUE)
+```

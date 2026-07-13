@@ -1,0 +1,50 @@
+{
+  "source": "data/inflation_data.csv",
+  "forecast_index": 100.45,
+  "forecast_mom_pct": 0.45000000000000284,
+  "fact_index": 99.72,
+  "fact_mom_pct": -0.28000000000000114,
+  "error_pp": 0.730000000000004,
+  "abs_error_pp": 0.730000000000004,
+  "kpi_0_5_pass": false,
+  "component_contributions": {
+    "Prod": {
+      "mom_pct": -0.6500000000000057,
+      "weight": 0.3986,
+      "contribution_pp": -0.25909000000000226
+    },
+    "Nonprod": {
+      "mom_pct": -0.1599999999999966,
+      "weight": 0.3638,
+      "contribution_pp": -0.05820799999999876
+    },
+    "Serv": {
+      "mom_pct": 0.1599999999999966,
+      "weight": 0.2376,
+      "contribution_pp": 0.03801599999999919
+    }
+  },
+  "component_sum_pp": -0.2792820000000018,
+  "component_residual_vs_fact_pp": -0.0007179999999993303,
+  "april_history_pre2026": {
+    "n": 16,
+    "mean_pct": 0.9218749999999991,
+    "median_pct": 0.6749999999999972,
+    "trim10_pct": 0.7921428571428564,
+    "std_pct": 0.6973590060602457,
+    "q1_pct": 0.5750000000000028,
+    "q3_pct": 1.1275000000000013,
+    "iqr_pct": 0.5524999999999984,
+    "lower_fence_pct": -0.2537499999999948,
+    "upper_fence_pct": 1.956249999999999,
+    "outlier_years": [
+      2022
+    ],
+    "min_pct": 0.37999999999999545,
+    "min_year": 2024,
+    "deflation_count_before_2026": 0,
+    "april_2026_is_first_deflation": true,
+    "robust_z": -3.578548196111935
+  },
+  "mismatches": []
+}

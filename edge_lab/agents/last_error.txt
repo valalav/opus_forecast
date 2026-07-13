@@ -1,0 +1,4 @@
+CMD: ['opencode', 'run', '--model', 'zai-coding-plan/glm-4.7']
+STDERR: [91m[1mError: [0mError: unknown certificate verification error
+
+STDOUT: 

@@ -1,0 +1,3 @@
+source,status,backend,method,output_dir,obsidian_dir,markdown_files,json_files,started_at,finished_at,duration_seconds,return_code,error
+/home/valalav/_projects/sirena-kbr/ibved/info-stat-11-2025/001-011 титул и содержание.pdf,dry-run,pipeline,auto,/home/valalav/_projects/sirena-kbr/archive/results/mineru/smoke/001-011_титул_и_содержание-9f852b0d4a,,,,2026-07-03T13:37:41+00:00,2026-07-03T13:37:41+00:00,0.0,0,
+/home/valalav/_projects/sirena-kbr/ibved/info-stat-11-2025/001-011 титул и содержание.pdf,failed,pipeline,auto,/home/valalav/_projects/sirena-kbr/archive/results/mineru/smoke/001-011_титул_и_содержание-9f852b0d4a,,,,2026-07-03T13:37:54+00:00,2026-07-03T13:38:20+00:00,25.649,1,mineru command failed

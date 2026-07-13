@@ -1,0 +1,21 @@
+{
+  "timestamp": "2026-01-23T09:56:44.000070",
+  "dry_run": false,
+  "status": "completed",
+  "models": {
+    "opr_ridge": {
+      "model": "opr_ridge",
+      "status": "success",
+      "mae": 0.4942,
+      "mae_delta": -99.7801,
+      "weights_path": "/home/valalav/opus_forecast/edge_lab/archive/weights/opr_ridge_20260123_095644.pkl",
+      "error": null
+    }
+  },
+  "summary": {
+    "total_models": 1,
+    "successful": 1,
+    "errors": 0,
+    "avg_mae": 0.4942
+  }
+}

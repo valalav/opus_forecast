@@ -1,0 +1,21 @@
+[Unit]
+Description=Sirena API Service - Opus Edge Lab
+After=network.target
+
+[Service]
+Type=simple
+User=valalav
+Group=valalav
+WorkingDirectory=/home/valalav/opus_forecast
+Environment="PATH=/home/valalav/.local/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="PYTHONPATH=/home/valalav/opus_forecast"
+ExecStart=/home/valalav/.local/bin/uvicorn api.main:app --host 0.0.0.0 --port 8000 --log-level info
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=sirena-api
+
+[Install]
+WantedBy=multi-user.target

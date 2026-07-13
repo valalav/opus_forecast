@@ -1,0 +1,2 @@
+latest_weekly_date,weekly_matched_contribution_pp,weekly_fuel_contribution_pp,weekly_fuel_weight,kbr45_june_fuel_contribution_pp,fuel_overlay_delta_pp,interpretation
+2026-06-22,0.6098221907209312,0.5612185227615154,0.029689999999999998,0.015143399999999934,0.5460751227615155,June-only overlay replaces KBR45 mechanical fuel contribution with observed weekly month-end fuel pressure.

@@ -1,0 +1,6 @@
+item,value_pp,source,comment
+Production Ensemble July,0.6486656683938037,data/precomputed_forecasts.json,Current production cache before expert policy correction
+Production Ensemble August,0.339843860228612,data/precomputed_forecasts.json,Current production cache
+KBR45 July tariff delta,-0.24847665000000063,archive/results/kbr45_forecast_comparison_20260625/control_point_forecasts_wide.csv,KBR45 baseline minus KBR45 July ЖКУ=100 scenario
+Gasoline reversion drag,-0.4275,archive/results/analysis_notes/2026-06-25_july_2026_gasoline_reversion_floor.md,Direct July drag if gasoline returns to 2026-06-01 level
+Gasoline + diesel reversion drag,-0.4637,archive/results/analysis_notes/2026-06-25_july_2026_gasoline_reversion_floor.md,Hard downside sensitivity

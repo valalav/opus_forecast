@@ -1,0 +1,4 @@
+parent_component,components,canonical_weight,latest_region_weight,micro_weight_sum,micro_item_count
+Nonprod,20,0.36534,0.36378,0.3611899999999997,284
+Prod,15,0.39481,0.39859,0.39216,134
+Serv,10,0.23984999999999998,0.23763,0.2322999999999999,119

@@ -1,0 +1,155 @@
+from pathlib import Path
+from typing import Any, Protocol, cast
+
+import numpy as np
+import pandas as pd
+import pytest
+
+from sirena.models import ModelRegistry
+from sirena.models.ridge_extended_production_proxy_rolling import (
+    RidgeExtendedProductionProxyRollingForecaster,
+)
+
+
+class RidgeExtendedProdProxyRollingLike(Protocol):
+    alpha: float
+    use_macro: bool
+    data_dir: str
+    seasonality_window: int
+    name: str
+    ridge: Any
+    scaler: Any
+    seasonal_norm: Any
+    _features: list[str] | None
+
+    def fit(self, df: pd.DataFrame, target_col: str = ...) -> Any: ...
+    def predict(self, df: pd.DataFrame, target_date: pd.Timestamp) -> dict[str, Any]: ...
+    def backtest(self, df: pd.DataFrame, start_date: str = ..., target_col: str = ...) -> pd.DataFrame: ...
+    def _prepare_features(self, df: pd.DataFrame) -> pd.DataFrame: ...
+    def _compute_seasonal_norm(self, df: pd.DataFrame) -> pd.Series: ...
+
+
+def build_model(**kwargs: object) -> Any:
+    return RidgeExtendedProductionProxyRollingForecaster(**kwargs)
+
+
+@pytest.fixture
+def sample_data() -> pd.DataFrame:
+    dates = pd.date_range("2018-01-01", periods=96, freq="MS")
+    np.random.seed(42)
+    return pd.DataFrame(
+        {
+            "Все товары и услуги": 100.5 + np.random.randn(96) * 0.3,
+            "Продовольственные товары": 100.6 + np.random.randn(96) * 0.4,
+            "Непродовольственные товары": 100.3 + np.random.randn(96) * 0.2,
+            "Услуги": 100.4 + np.random.randn(96) * 0.3,
+            "Ki": 12 + np.random.randn(96) * 0.4,
+            "Ruonia": 11 + np.random.randn(96) * 0.3,
+        },
+        index=dates,
+    )
+
+
+@pytest.fixture
+def temp_data_dir(tmp_path: Path) -> str:
+    raw_dir = tmp_path / "raw"
+    raw_dir.mkdir(parents=True, exist_ok=True)
+
+    infostat_dates = pd.date_range("2017-01-01", periods=96, freq="MS")
+    infostat_df = pd.DataFrame(
+        {
+            "Date": infostat_dates.strftime("%d.%m.%Y"),
+            "Torg": np.linspace(100, 130, len(infostat_dates)),
+            "pp": np.linspace(95, 120, len(infostat_dates)),
+        }
+    )
+    infostat_df.to_csv(
+        raw_dir / "infostat.csv",
+        sep=";",
+        decimal=",",
+        index=False,
+        encoding="utf-8-sig",
+    )
+    return str(raw_dir)
+
+
+def test_model_import_and_registry() -> None:
+    registry_model = ModelRegistry.get("ridge_extended_production_proxy_rolling_24m")
+    assert isinstance(registry_model, RidgeExtendedProductionProxyRollingForecaster)
+
+
+def test_model_parameters(temp_data_dir: str) -> None:
+    model = cast(
+        RidgeExtendedProdProxyRollingLike,
+        build_model(data_dir=temp_data_dir, use_macro=True, seasonality_window=24),
+    )
+    assert model.data_dir == temp_data_dir
+    assert model.use_macro is True
+    assert model.seasonality_window == 24
+    assert model.name == "ridge_extended_production_proxy_rolling_24m"
+
+
+def test_fit_predict_backtest(sample_data: pd.DataFrame, temp_data_dir: str) -> None:
+    model = cast(
+        RidgeExtendedProdProxyRollingLike,
+        build_model(data_dir=temp_data_dir, use_macro=True, seasonality_window=24),
+    )
+    model.fit(sample_data, "Все товары и услуги")
+
+    assert model.ridge is not None
+    assert model.scaler is not None
+    assert model.seasonal_norm is not None
+    assert model._features is not None
+    assert "torg_lag3" in model._features
+    assert "pp_lag3" in model._features
+
+    target_date = cast(pd.Timestamp, sample_data.index.to_list()[-1])
+    result = model.predict(sample_data, target_date)
+    assert "prediction" in result
+    assert "pred_ridge" in result
+    assert "pred_ets" in result
+    assert "production_features" in result
+    assert "seasonality_window" in result
+    assert result["seasonality_window"] == 24
+    assert "torg_lag3" in result["production_features"]
+
+    bt = model.backtest(sample_data, start_date="2024-01-01")
+    assert isinstance(bt, pd.DataFrame)
+    if not bt.empty:
+        assert "prediction" in bt.columns
+        assert "production_features_count" in bt.columns
+        assert "seasonality_window" in bt.columns
+
+
+def test_rolling_seasonal_norm_uses_recent_window(temp_data_dir: str) -> None:
+    dates = pd.date_range("2018-01-01", periods=72, freq="MS")
+    values = np.full(72, 100.0)
+    date_series = pd.Series(dates, index=dates)
+    january_mask = cast(pd.Series, date_series.dt.month == 1).to_numpy(dtype=bool)
+    values[january_mask] = [101.0, 101.0, 101.0, 110.0, 110.0, 110.0]
+
+    df = pd.DataFrame(
+        {
+            "Все товары и услуги": values,
+            "Продовольственные товары": values,
+            "Непродовольственные товары": values,
+            "Услуги": values,
+            "Ki": np.full(72, 10.0),
+            "Ruonia": np.full(72, 8.0),
+        },
+        index=dates,
+    )
+
+    model = cast(
+        RidgeExtendedProdProxyRollingLike,
+        build_model(data_dir=temp_data_dir, use_macro=False, seasonality_window=24),
+    )
+    prepared = cast(pd.DataFrame, model._prepare_features(df))
+    prepared = cast(pd.DataFrame, prepared)
+    prepared = cast(pd.DataFrame, prepared)
+    prepared = cast(pd.DataFrame, prepared)
+    prepared = cast(pd.DataFrame, model._prepare_features(df))
+    seasonal_norm = model._compute_seasonal_norm(prepared)
+
+    jan_value = float(seasonal_norm.loc[1])
+    assert jan_value > 105.0

@@ -1,0 +1,338 @@
+{
+  "project": "SIRENA-KBR v5.0 Test Coverage & Model Improvements",
+  "user_stories": [
+    {
+      "id": 1,
+      "title": "Test RidgeExtendedForecaster",
+      "description": "Create unit tests for RidgeExtendedForecaster (ridge_extended.py). Test fit(), predict(), backtest() methods. Verify calendar features (is_jan, is_jul, quarter_sin).",
+      "acceptance_criteria": [
+        "pytest tests/test_ridge_extended.py passes",
+        "Coverage >= 80% for ridge_extended.py"
+      ],
+      "priority": "high",
+      "status": "TODO"
+    },
+    {
+      "id": 2,
+      "title": "Test RidgeShockDummiesForecaster",
+      "description": "Create unit tests for RidgeShockDummiesForecaster. Test shock dummy variables (is_shock_dec2014, is_shock_jan2015, is_tariff_jul2017).",
+      "acceptance_criteria": [
+        "pytest tests/test_ridge_shock.py passes",
+        "Verify shock dummies are correctly created for 2014-2015"
+      ],
+      "priority": "high",
+      "status": "TODO"
+    },
+    {
+      "id": 3,
+      "title": "Test RidgeMacroForecaster",
+      "description": "Create unit tests for RidgeMacroForecaster. Test macro features (ki_L6, usd_L2, brent_L5) with optimal lags from Granger tests.",
+      "acceptance_criteria": [
+        "pytest tests/test_ridge_macro.py passes",
+        "Verify feature importance includes macro variables"
+      ],
+      "priority": "high",
+      "status": "TODO"
+    },
+    {
+      "id": 4,
+      "title": "Test ElasticNetForecaster",
+      "description": "Create unit tests for ElasticNetForecaster. Test L1+L2 regularization, automatic feature selection via CV.",
+      "acceptance_criteria": [
+        "pytest tests/test_elasticnet.py passes",
+        "Verify alpha and l1_ratio are properly tuned"
+      ],
+      "priority": "high",
+      "status": "TODO"
+    },
+    {
+      "id": 5,
+      "title": "Test HuberForecaster",
+      "description": "Create unit tests for HuberForecaster. Test robustness to outliers with Huber loss.",
+      "acceptance_criteria": [
+        "pytest tests/test_huber.py passes",
+        "Verify epsilon parameter effect on outlier handling"
+      ],
+      "priority": "high",
+      "status": "TODO"
+    },
+    {
+      "id": 6,
+      "title": "Test NGBoostForecaster",
+      "description": "Create unit tests for NGBoostForecaster. Test probabilistic predictions (prediction, ci_lower, ci_upper, std).",
+      "acceptance_criteria": [
+        "pytest tests/test_ngboost.py passes",
+        "Verify confidence intervals are calibrated"
+      ],
+      "priority": "high",
+      "status": "TODO"
+    },
+    {
+      "id": 7,
+      "title": "Test NGBoostShockForecaster",
+      "description": "Create unit tests for NGBoostShockForecaster. Test shock dummies integration with NGBoost.",
+      "acceptance_criteria": [
+        "pytest tests/test_ngboost_shock.py passes",
+        "Verify shock periods are handled correctly"
+      ],
+      "priority": "medium",
+      "status": "TODO"
+    },
+    {
+      "id": 8,
+      "title": "Test EBMForecaster",
+      "description": "Create unit tests for EBMForecaster (Explainable Boosting Machine). Test feature interpretability.",
+      "acceptance_criteria": [
+        "pytest tests/test_ebm.py passes",
+        "Verify feature contributions can be extracted"
+      ],
+      "priority": "medium",
+      "status": "TODO"
+    },
+    {
+      "id": 9,
+      "title": "Test BayesianRidgeForecaster",
+      "description": "Create unit tests for BayesianRidgeForecaster. Test automatic regularization, confidence intervals.",
+      "acceptance_criteria": [
+        "pytest tests/test_bayesian_ridge.py passes",
+        "Verify alpha/lambda are learned from data"
+      ],
+      "priority": "medium",
+      "status": "TODO"
+    },
+    {
+      "id": 10,
+      "title": "Test SubcomponentForecaster",
+      "description": "Create unit tests for SubcomponentForecaster. Test bottom-up aggregation of 45 subcomponents with optimal features.",
+      "acceptance_criteria": [
+        "pytest tests/test_subcomponent.py passes",
+        "Verify weighted aggregation matches Rosstat formula"
+      ],
+      "priority": "high",
+      "status": "TODO"
+    },
+    {
+      "id": 11,
+      "title": "Test SubcomponentMultiForecaster",
+      "description": "Create unit tests for SubcomponentMultiForecaster. Test multi-model approach (Ridge, Prophet, NGBoost per subcomponent).",
+      "acceptance_criteria": [
+        "pytest tests/test_subcomponent_multi.py passes",
+        "Verify model selection per subcomponent"
+      ],
+      "priority": "high",
+      "status": "TODO"
+    },
+    {
+      "id": 12,
+      "title": "Test MicrocomponentForecaster",
+      "description": "Create unit tests for MicrocomponentForecaster. Test 497 individual models aggregation.",
+      "acceptance_criteria": [
+        "pytest tests/test_microcomponent.py passes",
+        "Verify chain index aggregation formula"
+      ],
+      "priority": "medium",
+      "status": "TODO"
+    },
+    {
+      "id": 13,
+      "title": "Test HierarchicalMicroForecaster",
+      "description": "Create unit tests for HierarchicalMicroForecaster. Test 4-level hierarchy (micro→subcomp→comp→total).",
+      "acceptance_criteria": [
+        "pytest tests/test_hierarchical_micro.py passes",
+        "Verify coherence at each level"
+      ],
+      "priority": "medium",
+      "status": "TODO"
+    },
+    {
+      "id": 14,
+      "title": "Test HorizonEnsembleForecaster",
+      "description": "Create unit tests for HorizonEnsembleForecaster. Test adaptive weights (Huber for h=1, Micro for h=12).",
+      "acceptance_criteria": [
+        "pytest tests/test_horizon_ensemble.py passes",
+        "Verify weights change with horizon"
+      ],
+      "priority": "high",
+      "status": "TODO"
+    },
+    {
+      "id": 15,
+      "title": "Test RegimeDetector",
+      "description": "Create unit tests for RegimeDetector. Test regime classification (normal, shock, high_inflation).",
+      "acceptance_criteria": [
+        "pytest tests/test_regime_detector.py passes",
+        "Verify 2014-2015, 2022 detected as shock"
+      ],
+      "priority": "medium",
+      "status": "TODO"
+    },
+    {
+      "id": 16,
+      "title": "Test ScenarioRateModel",
+      "description": "Create unit tests for ScenarioRateModel. Test rate transmission calibration.",
+      "acceptance_criteria": [
+        "pytest tests/test_scenario_rate.py passes",
+        "Verify asymmetric transmission params"
+      ],
+      "priority": "medium",
+      "status": "TODO"
+    },
+    {
+      "id": 17,
+      "title": "Test KiTrajectoryForecaster",
+      "description": "Create unit tests for KiTrajectoryForecaster. Test Taylor rule implementation.",
+      "acceptance_criteria": [
+        "pytest tests/test_ki_trajectory.py passes",
+        "Verify key rate forecasts are reasonable"
+      ],
+      "priority": "medium",
+      "status": "TODO"
+    },
+    {
+      "id": 18,
+      "title": "Test UnifiedSubcomponentForecaster",
+      "description": "Create unit tests for UnifiedSubcomponentForecaster. Test baseline + scenario integration.",
+      "acceptance_criteria": [
+        "pytest tests/test_unified_subcomp.py passes",
+        "Verify scenario adjustments applied correctly"
+      ],
+      "priority": "medium",
+      "status": "TODO"
+    },
+    {
+      "id": 19,
+      "title": "Integration test: Full backtest pipeline",
+      "description": "Create integration test that runs backtest_framework.py for all models on h=1, h=2, h=12.",
+      "acceptance_criteria": [
+        "pytest tests/test_backtest_integration.py passes",
+        "All 19 models produce valid predictions"
+      ],
+      "priority": "high",
+      "status": "TODO"
+    },
+    {
+      "id": 20,
+      "title": "Integration test: Dashboard data flow",
+      "description": "Create integration test for dashboard.py data pipeline (load → model → plot).",
+      "acceptance_criteria": [
+        "pytest tests/test_dashboard_integration.py passes",
+        "Precomputed forecasts match live calculations"
+      ],
+      "priority": "high",
+      "status": "TODO"
+    },
+    {
+      "id": 21,
+      "title": "New model: MIDAS (Mixed Data Sampling)",
+      "description": "Implement MIDASForecaster using weekly prices to improve monthly forecasts. Use Almon polynomial distributed lags.",
+      "acceptance_criteria": [
+        "sirena/models/midas.py exists",
+        "pytest tests/test_midas.py passes",
+        "MAE h=1 improvement vs baseline"
+      ],
+      "priority": "low",
+      "status": "TODO"
+    },
+    {
+      "id": 22,
+      "title": "New model: Temporal Fusion Transformer",
+      "description": "Implement TFTForecaster using pytorch-forecasting. Multi-horizon attention-based model.",
+      "acceptance_criteria": [
+        "sirena/models/tft.py exists",
+        "pytest tests/test_tft.py passes",
+        "Interpretable attention weights extracted"
+      ],
+      "priority": "low",
+      "status": "TODO"
+    },
+    {
+      "id": 23,
+      "title": "New model: Conformal Prediction wrapper",
+      "description": "Implement ConformalForecaster that wraps any base model with calibrated prediction intervals.",
+      "acceptance_criteria": [
+        "sirena/models/conformal.py exists",
+        "pytest tests/test_conformal.py passes",
+        "90% CI achieves >= 88% coverage"
+      ],
+      "priority": "medium",
+      "status": "TODO"
+    },
+    {
+      "id": 24,
+      "title": "Improve ExogProphetForecaster",
+      "description": "Add Brent oil prices as regressor. Tune changepoint_prior_scale for KBR data.",
+      "acceptance_criteria": [
+        "ExogProphet uses brent_L3 as regressor",
+        "MAE h=12 <= 0.30"
+      ],
+      "priority": "medium",
+      "status": "TODO"
+    },
+    {
+      "id": 25,
+      "title": "Add model comparison report generator",
+      "description": "Create script that generates HTML report comparing all models across h=1, h=2, h=12 with charts.",
+      "acceptance_criteria": [
+        "scripts/generate_model_report.py exists",
+        "assets/charts/model_comparison.html generated"
+      ],
+      "priority": "medium",
+      "status": "TODO"
+    },
+    {
+      "id": 26,
+      "title": "API endpoint: /models/{name}/explain",
+      "description": "Add REST API endpoint that returns feature importance and SHAP values for any model.",
+      "acceptance_criteria": [
+        "GET /models/ridge/explain returns JSON with feature_importance",
+        "pytest tests/test_api.py::test_explain passes"
+      ],
+      "priority": "low",
+      "status": "TODO"
+    },
+    {
+      "id": 27,
+      "title": "Nowcasting: Weekly signal integration",
+      "description": "Improve weekly nowcasting signal by using more products (top 20 by weight).",
+      "acceptance_criteria": [
+        "Weekly signal covers >= 30% of CPI basket",
+        "Nowcast MAE for current month <= 0.25"
+      ],
+      "priority": "medium",
+      "status": "TODO"
+    },
+    {
+      "id": 28,
+      "title": "Data validation: Monthly data checks",
+      "description": "Add data validation script that checks for missing values, outliers, format issues in input CSVs.",
+      "acceptance_criteria": [
+        "scripts/validate_data.py exists",
+        "Reports issues in data/infl_kbr.csv, inflation_data.csv"
+      ],
+      "priority": "high",
+      "status": "TODO"
+    },
+    {
+      "id": 29,
+      "title": "Performance: Cache model predictions",
+      "description": "Add Redis/file caching for expensive model predictions (BVAR, Prophet, NGBoost).",
+      "acceptance_criteria": [
+        "sirena/cache.py implements LRU cache",
+        "Dashboard load time reduced by 50%"
+      ],
+      "priority": "medium",
+      "status": "TODO"
+    },
+    {
+      "id": 30,
+      "title": "Documentation: Update CLAUDE.md",
+      "description": "Update CLAUDE.md with all new models, test commands, and backtest results from v5.0.",
+      "acceptance_criteria": [
+        "All 37 models documented",
+        "Backtest results for Jan-Dec 2025 included"
+      ],
+      "priority": "high",
+      "status": "TODO"
+    }
+  ]
+}

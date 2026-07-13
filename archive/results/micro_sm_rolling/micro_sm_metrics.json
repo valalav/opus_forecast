@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-05-22T13:04:53",
+  "actuals_file": "/home/valalav/_projects/sirena-kbr/data/inflation_data.csv",
+  "windows": 12,
+  "horizons": [
+    1,
+    2,
+    3,
+    12
+  ],
+  "metrics": {
+    "h1": {
+      "n": 12,
+      "mae": 0.45835095714000573,
+      "rmse": 0.5425910328205095,
+      "mean_error": 0.12976990848190204,
+      "max_abs_error": 1.0902917263412064,
+      "kpi_violations_abs_gt_0_5": 4
+    },
+    "h2": {
+      "n": 12,
+      "mae": 0.49563617028590085,
+      "rmse": 0.5636296935051672,
+      "mean_error": 0.1455245839894109,
+      "max_abs_error": 1.194381665986441,
+      "kpi_violations_abs_gt_0_5": 4
+    },
+    "h3": {
+      "n": 12,
+      "mae": 0.4420914603775235,
+      "rmse": 0.5294502239209905,
+      "mean_error": 0.17632830522742182,
+      "max_abs_error": 1.1353119394489255,
+      "kpi_violations_abs_gt_0_5": 3
+    },
+    "h12": {
+      "n": 12,
+      "mae": 0.4775017817244927,
+      "rmse": 0.5958119343696239,
+      "mean_error": 0.3615242382133381,
+      "max_abs_error": 1.2000422149396996,
+      "kpi_violations_abs_gt_0_5": 5
+    }
+  }
+}

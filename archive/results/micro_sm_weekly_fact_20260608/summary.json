@@ -1,0 +1,21 @@
+{
+  "generated_at": "2026-06-08T14:37:00",
+  "target_month": "2026-05-01",
+  "base_week": "2026-04-27",
+  "fact_week": "2026-05-25",
+  "forecast_file": "data/external/micro_cpi_region_export/statsmodels_forecast.csv",
+  "weekly_file": "data/Сравнение еженедельных цен_01.csv",
+  "micro_items": 537,
+  "micro_weight_sum": 0.9935100000000001,
+  "matched_items": 90,
+  "matched_weight_sum": 0.31684,
+  "direct_item1_index": 100.133781,
+  "baseline_micro_weighted_index": 100.26020842289458,
+  "hybrid_weekly_fact_index": 100.1423203611819,
+  "baseline_micro_mom_pp": 0.26020842289457846,
+  "hybrid_weekly_fact_mom_pp": 0.14232036118190194,
+  "hybrid_minus_baseline_pp": -0.11788806171267652,
+  "hybrid_yoy_index": 104.91,
+  "baseline_micro_yoy_index": 105.03,
+  "send_form_yoy_index": 104.86
+}
