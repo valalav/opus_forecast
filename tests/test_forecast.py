@@ -2,6 +2,8 @@
 Тесты модуля прогнозирования
 """
 
+import importlib.util
+import json
 import pytest
 import numpy as np
 import pandas as pd
@@ -148,3 +150,96 @@ class TestEnsembleForecaster:
         ensemble = forecaster.combine_forecasts(ridge, None, None)
 
         assert ensemble is None
+
+
+class TestForecastH12ProductionCache:
+    """Contracts for the dashboard's production h=12 trajectory."""
+
+    def test_h12_table_uses_cached_production_ensemble(self, monkeypatch):
+        """The table exposes the canonical Ensemble, not a live auxiliary mean."""
+        page_path = Path(__file__).parent.parent / "pages" / "1_Forecast.py"
+        spec = importlib.util.spec_from_file_location("forecast_page", page_path)
+        assert spec is not None and spec.loader is not None
+        forecast_page = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(forecast_page)
+
+        class FakeColumn:
+            def metric(self, *args, **kwargs):
+                pass
+
+        class FakeStreamlit:
+            def __init__(self):
+                self.errors = []
+                self.table = None
+
+            def subheader(self, *args, **kwargs):
+                pass
+
+            def error(self, message):
+                self.errors.append(message)
+
+            def warning(self, *args, **kwargs):
+                pass
+
+            def markdown(self, *args, **kwargs):
+                pass
+
+            def columns(self, count):
+                return [FakeColumn() for _ in range(count)]
+
+            def caption(self, *args, **kwargs):
+                pass
+
+            def dataframe(self, styled, **kwargs):
+                self.table = styled.data.copy()
+
+            def download_button(self, *args, **kwargs):
+                pass
+
+            def plotly_chart(self, *args, **kwargs):
+                pass
+
+        fake_st = FakeStreamlit()
+        monkeypatch.setattr(forecast_page, "st", fake_st)
+
+        raw = pd.read_csv(
+            Path(__file__).parent.parent / "data" / "inflation_data.csv",
+            sep=";",
+            decimal=",",
+            encoding="utf-8-sig",
+        )
+        raw["Date"] = (
+            pd.to_datetime(raw["Date"], format="%d.%m.%Y")
+            .dt.to_period("M")
+            .dt.to_timestamp()
+        )
+        df = raw.set_index("Date")[
+            ["mom", "Prod", "Nonprod", "Serv"]
+        ].rename(
+            columns={
+                "mom": "Все товары и услуги",
+                "Prod": "Продовольственные товары",
+                "Nonprod": "Непродовольственные товары",
+                "Serv": "Услуги",
+            }
+        )
+
+        forecast_page.render_forecast_h12_tab(
+            df,
+            df.index.max(),
+            {},
+            lambda horizon: None,
+        )
+
+        cache = json.loads(
+            (
+                Path(__file__).parent.parent / "data" / "precomputed_forecasts.json"
+            ).read_text(encoding="utf-8")
+        )
+        assert not fake_st.errors
+        assert fake_st.table is not None
+        assert "BVAR" not in fake_st.table.columns
+        assert "VARPolicy" in fake_st.table.columns
+        assert fake_st.table.loc[0, "Ensemble"] == pytest.approx(
+            cache["forecasts"]["Ensemble"][0]
+        )

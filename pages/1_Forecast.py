@@ -5,11 +5,13 @@ Contains functions for rendering forecast tabs and helper functions
 for generating predictions from various models.
 """
 
+import json
 import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 from datetime import datetime
+from pathlib import Path
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -260,189 +262,80 @@ def render_forecast_tab(
 def render_forecast_h12_tab(
     df, last_date, MODEL_COLORS, load_backtest_data, horizon=12
 ):
-    """Render 12-month trajectory forecast tab."""
+    """Render the cached, weighted production trajectory for 12 months."""
     st.subheader("📈 Прогноз траектории на 12 месяцев")
 
-    # Load precomputed forecasts or calculate
-    bt_h12 = load_backtest_data(12)
-
-    if bt_h12 is None:
-        st.error(
-            "Данные бэктеста h=12 не найдены. Запустите: python3 scripts/run_backtest_h12.py"
-        )
-        return
-
-    # Get ensemble forecast
-    with st.spinner("Расчёт ансамбля моделей..."):
-        forecasts = {}
-        dates = pd.date_range(
-            start=last_date + pd.DateOffset(months=1), periods=horizon, freq="MS"
-        )
-
-        # Try to get forecasts from multiple models (top performers)
-        models_to_try = [
-            "Ridge",
-            "Prophet",
-            "BVAR",
-            "ETS",
-            "Huber",
-            "LightGBM",
-            "SubcompMulti",
-            "Micro_SM",
-        ]
-
-        for model_name in models_to_try:
-            try:
-                if model_name == "Ridge":
-                    from sirena.models.ridge_extended import RidgeExtendedForecaster
-
-                    model = RidgeExtendedForecaster()
-                    model.fit(df)
-                    fc_vals = []
-                    for h in range(horizon):
-                        target = dates[h]
-                        df_ext = df.copy()
-                        df_ext.loc[target] = np.nan
-                        pred = model.predict(df_ext, target)["prediction"] - 100
-                        fc_vals.append(pred)
-                    forecasts["Ridge"] = fc_vals
-
-                elif model_name == "Prophet":
-                    from sirena.models.prophet import ProphetForecaster
-
-                    model = ProphetForecaster()
-                    model.fit(df, "Все товары и услуги")
-                    fc = model.forecast(horizon=horizon)
-                    forecasts["Prophet"] = list(fc)
-
-                elif model_name == "BVAR":
-                    from sirena.models.bvar import BayesianVAR
-
-                    # Load BVAR data
-                    bvar_df = pd.read_csv(
-                        "data/inflation_data.csv", sep=";", decimal=","
-                    )
-                    for col in [
-                        "mom",
-                        "Prod",
-                        "Nonprod",
-                        "Serv",
-                        "usd_nom_i",
-                        "Ruonia",
-                    ]:
-                        if col in bvar_df.columns:
-                            if bvar_df[col].dtype == object:
-                                bvar_df[col] = (
-                                    bvar_df[col].astype(str).str.replace(",", ".")
-                                )
-                            bvar_df[col] = pd.to_numeric(bvar_df[col], errors="coerce")
-                    bvar_df["Date"] = pd.to_datetime(
-                        bvar_df["Date"], format="%d.%m.%Y", errors="coerce"
-                    )
-                    bvar_df["Date"] = (
-                        bvar_df["Date"].dt.to_period("M").dt.to_timestamp()
-                    )
-                    bvar_df = bvar_df.set_index("Date").sort_index()
-
-                    data = pd.DataFrame()
-                    data["CPI"] = bvar_df["mom"] - 100
-                    data["Food"] = bvar_df["Prod"] - 100
-                    data["NonFood"] = bvar_df["Nonprod"] - 100
-                    data["Services"] = bvar_df["Serv"] - 100
-
-                    model = BayesianVAR(
-                        lags=6,
-                        random_state=42,
-                        var_names=["CPI", "Food", "NonFood", "Services"],
-                    )
-                    model.fit(data, target_col="CPI")
-                    fc = model.forecast(horizon=horizon)
-                    forecasts["BVAR"] = fc.tolist()
-
-                elif model_name == "ETS":
-                    from sirena.models.ets import ETSForecaster
-
-                    model = ETSForecaster()
-                    model.fit(df, "Все товары и услуги")
-                    fc = model.forecast(horizon=horizon)
-                    forecasts["ETS"] = list(fc)
-
-                elif model_name == "Huber":
-                    from sirena.models.huber import HuberForecaster
-
-                    model = HuberForecaster()
-                    model.fit(df)
-                    fc_vals = []
-                    for h in range(horizon):
-                        target = dates[h]
-                        df_ext = df.copy()
-                        df_ext.loc[target] = np.nan
-                        pred = model.predict(df_ext, target)["prediction"] - 100
-                        fc_vals.append(pred)
-                    forecasts["Huber"] = fc_vals
-
-                elif model_name == "LightGBM":
-                    from sirena.models.lightgbm import LightGBMForecaster
-
-                    model = LightGBMForecaster()
-                    model.fit(df, "Все товары и услуги")
-                    fc = model.forecast(horizon=horizon)
-                    forecasts["LightGBM"] = list(fc)
-
-                elif model_name == "SubcompMulti":
-                    from sirena.models.unified_subcomp import (
-                        UnifiedSubcomponentForecaster,
-                    )
-
-                    model = UnifiedSubcomponentForecaster(horizon=horizon)
-                    model.fit(df)
-                    forecasts["SubcompMulti"] = model.forecast(horizon=horizon).tolist()
-                elif model_name == "Micro_SM":
-                    from sirena.models.micro_statsmodels_external import (
-                        MicroStatsmodelsExternalForecaster,
-                    )
-
-                    model = MicroStatsmodelsExternalForecaster(horizon=1)
-                    model.fit(df)
-                    fc = model.forecast(horizon=horizon)
-                    forecasts["Micro_SM"] = [
-                        value - 100 if value > 50 else value for value in fc
-                    ]
-
-            except Exception as e:
-                st.warning(f"Не удалось получить прогноз от {model_name}: {e}")
-                continue
-
-    if not forecasts:
-        st.error("Не удалось получить прогноз ни от одной модели")
-        return
-
-    # Create forecast dataframe
-    forecast_df = pd.DataFrame(
-        {"Date": dates, **{k: v for k, v in forecasts.items() if len(v) == horizon}}
+    expected_dates = pd.date_range(
+        start=last_date + pd.DateOffset(months=1), periods=horizon, freq="MS"
     )
+    try:
+        cache_path = Path("data/precomputed_forecasts.json")
+        cached = json.loads(cache_path.read_text(encoding="utf-8"))
+        cached_dates = pd.to_datetime(cached["forecast_dates"])
+        cached_forecasts = cached["forecasts"]
+        if (
+            len(cached_dates) != horizon
+            or not np.array_equal(cached_dates.to_numpy(), expected_dates.to_numpy())
+        ):
+            raise ValueError(
+                "cache dates do not match the latest official observation; "
+                "run scripts/precompute_forecasts.py"
+            )
+        if not isinstance(cached_forecasts, dict):
+            raise ValueError("forecast cache has no forecasts mapping")
 
-    # Calculate ensemble (simple average)
-    forecast_cols = [c for c in forecast_df.columns if c != "Date"]
-    forecast_df["Ensemble"] = forecast_df[forecast_cols].mean(axis=1)
+        production_forecasts = {}
+        for name, values in cached_forecasts.items():
+            try:
+                path = np.asarray(values, dtype=float)
+            except (TypeError, ValueError):
+                continue
+            if len(path) == horizon and np.isfinite(path).all():
+                production_forecasts[name] = path
 
-    # Display metrics
+        if "Ensemble" not in production_forecasts:
+            raise ValueError("forecast cache has no finite production Ensemble")
+        forecast_df = pd.DataFrame({"Date": cached_dates, **production_forecasts})
+    except (
+        KeyError,
+        OSError,
+        TypeError,
+        ValueError,
+        json.JSONDecodeError,
+    ) as exc:
+        st.error(f"Не удалось загрузить production h=12 Ensemble: {exc}")
+        return
+
+    if load_backtest_data(12) is None:
+        st.warning(
+            "Бэктест h=12 не загружен; показана текущая production-траектория "
+            "из precomputed_forecasts.json."
+        )
+
+    forecast_cols = [column for column in forecast_df.columns if column != "Date"]
+    diagnostic_cols = [column for column in forecast_cols if column != "Ensemble"]
+
     st.markdown("#### 📊 Метрики")
     col1, col2, col3 = st.columns(3)
-    col1.metric("Количество моделей", len(forecast_cols))
+    col1.metric("Моделей в production cache", len(diagnostic_cols))
     col2.metric("Горизонт", f"{horizon} мес.")
     col3.metric("Среднее (Ensemble)", f"{forecast_df['Ensemble'].mean():.2f}%")
+    st.caption(
+        "Ensemble — сохранённая взвешенная production-траектория из "
+        "`data/precomputed_forecasts.json`. BVAR, ETS, LightGBM и другие "
+        "auxiliary-модели не пересчитываются и не усредняются на этой вкладке. "
+        "VARPolicy использует обязательную SeasonalVAR траекторию после h=1."
+    )
 
     st.markdown("#### 📋 Прогнозные значения")
     st.dataframe(
         forecast_df.style.format(
-            {c: "{:.2f}%" for c in forecast_df.columns if c != "Date"}
+            {column: "{:.2f}%" for column in forecast_df.columns if column != "Date"}
         ),
         use_container_width=True,
         hide_index=True,
     )
 
-    # Download button
     csv = forecast_df.to_csv(index=False).encode("utf-8")
     st.download_button(
         label="📥 Скачать прогноз (CSV)",
@@ -451,41 +344,49 @@ def render_forecast_h12_tab(
         mime="text/csv",
     )
 
-    # Plot forecast trajectory
     fig = go.Figure()
-
-    # Historical data
-    hist_months = 12
-    hist_df = df.tail(hist_months).reset_index()
+    hist_df = df.tail(12).reset_index()
+    history = pd.to_numeric(
+        hist_df["Все товары и услуги"], errors="coerce"
+    ).to_numpy(dtype=float)
+    if np.nanmedian(history) > 50:
+        history = history - 100
     fig.add_trace(
         go.Scatter(
             x=hist_df["Date"],
-            y=hist_df["Все товары и услуги"],
+            y=history,
             mode="lines",
             name="Факт",
             line=dict(color="#000000", width=2),
         )
     )
 
-    # Forecast lines
-    for model in ["Ensemble"] + forecast_cols[:5]:
-        color = MODEL_COLORS.get(model, "#000000")
+    for model in [
+        "Ensemble",
+        "VARPolicy",
+        "Ridge_ProdProxy",
+        "Huber",
+        "Micro",
+    ]:
+        if model not in forecast_df.columns:
+            continue
         fig.add_trace(
             go.Scatter(
                 x=forecast_df["Date"],
                 y=forecast_df[model],
                 mode="lines+markers",
                 name=model,
-                line=dict(color=color, width=2),
+                line=dict(color=MODEL_COLORS.get(model, "#000000"), width=2),
                 marker=dict(size=6),
             )
         )
 
     fig.update_layout(
-        title="Прогноз MoM инфляции на 12 месяцев",
+        title="Production-прогноз MoM инфляции на 12 месяцев",
         xaxis_title="Дата",
         yaxis_title="Инфляция MoM (%)",
         hovermode="x unified",
-        legend=dict(x=0.01, y=0.99),
+        template="plotly_white",
+        height=450,
     )
     st.plotly_chart(fig, use_container_width=True)
