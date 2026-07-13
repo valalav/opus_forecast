@@ -131,6 +131,14 @@ nowcast-сигналы, модельные ориентиры и ОПР-конт
 weighted weekly diagnostics и внешняя проверка YoY: 
 `archive/results/july_2026_fuel_trajectory_20260713/july_august_fuel_trajectory_report.md`.
 
+Для dashboard отправочная ветка публикуется отдельно в стабильном текущем
+артефакте `data/send_ready_policy_trajectory.json`; это не псевдоним
+model Ensemble и не ссылка на dated report. При появлении нового официального
+месяца необходимо одновременно обновить forecast dates и значения этого файла.
+Вкладка h=12 сверяет их с `data/precomputed_forecasts.json`; при несовпадении
+безопасно показывает только model Ensemble с предупреждением, а не переносит
+устаревшую экспертную траекторию.
+
 ## Рабочие правила для агентов
 
 1. Перед изменением отправочной формы открыть этот документ, `docs/NOWCASTING.md`

@@ -155,7 +155,7 @@ class TestEnsembleForecaster:
 class TestForecastH12ProductionCache:
     """Contracts for the dashboard's production h=12 trajectory."""
 
-    def test_h12_table_uses_cached_production_ensemble(self, monkeypatch):
+    def test_h12_table_uses_send_ready_and_cached_paths(self, monkeypatch, tmp_path):
         """The table exposes the canonical Ensemble, not a live auxiliary mean."""
         page_path = Path(__file__).parent.parent / "pages" / "1_Forecast.py"
         spec = importlib.util.spec_from_file_location("forecast_page", page_path)
@@ -171,6 +171,7 @@ class TestForecastH12ProductionCache:
             def __init__(self):
                 self.errors = []
                 self.table = None
+                self.warnings = []
 
             def subheader(self, *args, **kwargs):
                 pass
@@ -178,8 +179,8 @@ class TestForecastH12ProductionCache:
             def error(self, message):
                 self.errors.append(message)
 
-            def warning(self, *args, **kwargs):
-                pass
+            def warning(self, message, *args, **kwargs):
+                self.warnings.append(message)
 
             def markdown(self, *args, **kwargs):
                 pass
@@ -236,6 +237,13 @@ class TestForecastH12ProductionCache:
                 Path(__file__).parent.parent / "data" / "precomputed_forecasts.json"
             ).read_text(encoding="utf-8")
         )
+        policy = json.loads(
+            (
+                Path(__file__).parent.parent
+                / "data"
+                / "send_ready_policy_trajectory.json"
+            ).read_text(encoding="utf-8")
+        )
         assert not fake_st.errors
         assert fake_st.table is not None
         assert "BVAR" not in fake_st.table.columns
@@ -243,3 +251,61 @@ class TestForecastH12ProductionCache:
         assert fake_st.table.loc[0, "Ensemble"] == pytest.approx(
             cache["forecasts"]["Ensemble"][0]
         )
+        assert fake_st.table.columns[1] == "Отправочная траектория"
+        assert fake_st.table.iloc[0]["Отправочная траектория"] == pytest.approx(
+            policy["mom_pp"][0]
+        )
+        assert fake_st.table.iloc[1]["Отправочная траектория"] == pytest.approx(
+            policy["mom_pp"][1]
+        )
+
+        stale_policy = tmp_path / "stale_policy.json"
+        stale_policy.write_text(
+            json.dumps(
+                {
+                    "forecast_dates": [
+                        "2026-08-01",
+                        *cache["forecast_dates"][1:],
+                    ],
+                    "mom_pp": [1.7] + [0.5] * 11,
+                }
+            ),
+            encoding="utf-8",
+        )
+        stale_st = FakeStreamlit()
+        monkeypatch.setattr(forecast_page, "st", stale_st)
+        monkeypatch.setattr(forecast_page, "SEND_READY_POLICY_PATH", stale_policy)
+        forecast_page.render_forecast_h12_tab(
+            df,
+            df.index.max(),
+            {},
+            lambda horizon: None,
+        )
+        assert not stale_st.errors
+        assert stale_st.table is not None
+        assert "Отправочная траектория" not in stale_st.table.columns
+        assert any("устарела" in warning for warning in stale_st.warnings)
+
+    def test_send_ready_policy_rejects_non_vector_values(self, tmp_path):
+        """A malformed policy artifact must not reach dataframe insertion."""
+        page_path = Path(__file__).parent.parent / "pages" / "1_Forecast.py"
+        spec = importlib.util.spec_from_file_location("forecast_page", page_path)
+        assert spec is not None and spec.loader is not None
+        forecast_page = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(forecast_page)
+
+        malformed = tmp_path / "malformed_policy.json"
+        malformed.write_text(
+            json.dumps(
+                {
+                    "forecast_dates": ["2026-07-01", "2026-08-01"],
+                    "mom_pp": [[1.7, 0.5]],
+                }
+            ),
+            encoding="utf-8",
+        )
+        with pytest.raises(ValueError, match="does not match"):
+            forecast_page.load_send_ready_policy_trajectory(
+                malformed,
+                pd.to_datetime(["2026-07-01", "2026-08-01"]),
+            )

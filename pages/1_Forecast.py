@@ -19,6 +19,30 @@ warnings.filterwarnings("ignore")
 
 # =============================================================================
 # FORECAST FUNCTIONS
+SEND_READY_POLICY_PATH = Path("data/send_ready_policy_trajectory.json")
+SEND_READY_POLICY_COLUMN = "Отправочная траектория"
+
+
+def load_send_ready_policy_trajectory(path, expected_dates):
+    """Load a current expert policy path aligned to the cached production horizon."""
+    payload = json.loads(Path(path).read_text(encoding="utf-8"))
+    policy_dates = pd.to_datetime(payload["forecast_dates"])
+    policy_values = np.asarray(payload["mom_pp"], dtype=float)
+    expected_dates = pd.DatetimeIndex(expected_dates)
+
+    if (
+        policy_values.ndim != 1
+        or len(policy_values) != len(expected_dates)
+        or len(policy_dates) != len(expected_dates)
+        or not np.array_equal(policy_dates.to_numpy(), expected_dates.to_numpy())
+        or not np.isfinite(policy_values).all()
+    ):
+        raise ValueError(
+            "send-ready policy trajectory does not match the production horizon"
+        )
+    return policy_values
+
+
 # =============================================================================
 
 
@@ -262,7 +286,7 @@ def render_forecast_tab(
 def render_forecast_h12_tab(
     df, last_date, MODEL_COLORS, load_backtest_data, horizon=12
 ):
-    """Render the cached, weighted production trajectory for 12 months."""
+    """Render the current send-ready path and cached production trajectory."""
     st.subheader("📈 Прогноз траектории на 12 месяцев")
 
     expected_dates = pd.date_range(
@@ -306,6 +330,18 @@ def render_forecast_h12_tab(
         st.error(f"Не удалось загрузить production h=12 Ensemble: {exc}")
         return
 
+    try:
+        policy_values = load_send_ready_policy_trajectory(
+            SEND_READY_POLICY_PATH, cached_dates
+        )
+    except (OSError, TypeError, ValueError, KeyError, json.JSONDecodeError) as exc:
+        st.warning(
+            "Текущая отправочная траектория недоступна или устарела; показан "
+            f"только model Ensemble. Обновите `{SEND_READY_POLICY_PATH}`: {exc}"
+        )
+    else:
+        forecast_df.insert(1, SEND_READY_POLICY_COLUMN, policy_values)
+
     if load_backtest_data(12) is None:
         st.warning(
             "Бэктест h=12 не загружен; показана текущая production-траектория "
@@ -313,18 +349,51 @@ def render_forecast_h12_tab(
         )
 
     forecast_cols = [column for column in forecast_df.columns if column != "Date"]
-    diagnostic_cols = [column for column in forecast_cols if column != "Ensemble"]
+    diagnostic_cols = [
+        column
+        for column in forecast_cols
+        if column not in {"Ensemble", SEND_READY_POLICY_COLUMN}
+    ]
+    has_send_ready_policy = SEND_READY_POLICY_COLUMN in forecast_df.columns
+    first_period = forecast_df.loc[0, "Date"].strftime("%Y-%m")
+    second_period = forecast_df.loc[1, "Date"].strftime("%Y-%m")
 
-    st.markdown("#### 📊 Метрики")
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Моделей в production cache", len(diagnostic_cols))
-    col2.metric("Горизонт", f"{horizon} мес.")
-    col3.metric("Среднее (Ensemble)", f"{forecast_df['Ensemble'].mean():.2f}%")
+    st.markdown("#### 📊 Текущая отправочная траектория и модельный ориентир")
+    col1, col2, col3, col4 = st.columns(4)
+    if has_send_ready_policy:
+        col1.metric(
+            f"{first_period}: отправочная",
+            f"{forecast_df.loc[0, SEND_READY_POLICY_COLUMN]:.2f}%",
+        )
+        col2.metric(
+            f"{second_period}: отправочная",
+            f"{forecast_df.loc[1, SEND_READY_POLICY_COLUMN]:.2f}%",
+        )
+        col3.metric(
+            f"{first_period}: model Ensemble",
+            f"{forecast_df.loc[0, 'Ensemble']:.2f}%",
+        )
+        st.caption(
+            "Отправочная траектория — экспертная central policy-ветка с частичной "
+            "реализацией топливного риска; она является текущим send-ready путём. "
+            "Ensemble — отдельный сохранённый взвешенный модельный ориентир."
+        )
+    else:
+        col1.metric(
+            f"{first_period}: model Ensemble",
+            f"{forecast_df.loc[0, 'Ensemble']:.2f}%",
+        )
+        col2.metric("Среднее: model Ensemble", f"{forecast_df['Ensemble'].mean():.2f}%")
+        col3.metric("Горизонт", f"{horizon} мес.")
+        st.caption(
+            "Показан только сохранённый взвешенный model Ensemble; отправочная "
+            "траектория требует актуализации."
+        )
+    col4.metric("Моделей в production cache", len(diagnostic_cols))
     st.caption(
-        "Ensemble — сохранённая взвешенная production-траектория из "
-        "`data/precomputed_forecasts.json`. BVAR, ETS, LightGBM и другие "
-        "auxiliary-модели не пересчитываются и не усредняются на этой вкладке. "
-        "VARPolicy использует обязательную SeasonalVAR траекторию после h=1."
+        "BVAR, ETS, LightGBM и другие auxiliary-модели не пересчитываются и не "
+        "усредняются на этой вкладке. VARPolicy использует обязательную "
+        "SeasonalVAR траекторию после h=1."
     )
 
     st.markdown("#### 📋 Прогнозные значения")
@@ -360,6 +429,17 @@ def render_forecast_h12_tab(
             line=dict(color="#000000", width=2),
         )
     )
+    if has_send_ready_policy:
+        fig.add_trace(
+            go.Scatter(
+                x=forecast_df["Date"],
+                y=forecast_df[SEND_READY_POLICY_COLUMN],
+                mode="lines+markers",
+                name=SEND_READY_POLICY_COLUMN,
+                line=dict(color="#D62728", width=4),
+                marker=dict(size=7),
+            )
+        )
 
     for model in [
         "Ensemble",
@@ -382,7 +462,11 @@ def render_forecast_h12_tab(
         )
 
     fig.update_layout(
-        title="Production-прогноз MoM инфляции на 12 месяцев",
+        title=(
+            "Отправочная и production-траектории MoM на 12 месяцев"
+            if has_send_ready_policy
+            else "Production-траектории MoM на 12 месяцев"
+        ),
         xaxis_title="Дата",
         yaxis_title="Инфляция MoM (%)",
         hovermode="x unified",
