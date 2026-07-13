@@ -1,0 +1,2 @@
+date,matched_items,matched_weight,observed_basket_index,observed_basket_mom_pp,headline_partial_index,headline_partial_mom_pp,component_scaled_index,component_scaled_mom_pp,cum_observed_basket_mom_pp,cum_headline_partial_mom_pp,cum_component_scaled_mom_pp
+2026-07-06,105,0.3468699999999998,100.89838181451265,0.8983818145126463,100.3116217,0.31162170000000344,101.0303256168014,1.0303256168014059,0.8983818145126499,0.31162170000000877,1.0303256168014086

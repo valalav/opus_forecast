@@ -350,10 +350,14 @@ def render_forecast_h12_tab(
                     data["NonFood"] = bvar_df["Nonprod"] - 100
                     data["Services"] = bvar_df["Serv"] - 100
 
-                    model = BayesianVAR(lags=6)
-                    model.fit(data)
+                    model = BayesianVAR(
+                        lags=6,
+                        random_state=42,
+                        var_names=["CPI", "Food", "NonFood", "Services"],
+                    )
+                    model.fit(data, target_col="CPI")
                     fc = model.forecast(horizon=horizon)
-                    forecasts["BVAR"] = (fc["CPI"] + 100).tolist()
+                    forecasts["BVAR"] = fc.tolist()
 
                 elif model_name == "ETS":
                     from sirena.models.ets import ETSForecaster
@@ -386,16 +390,13 @@ def render_forecast_h12_tab(
                     forecasts["LightGBM"] = list(fc)
 
                 elif model_name == "SubcompMulti":
-                    from sirena.models.subcomponent_scenario import (
+                    from sirena.models.unified_subcomp import (
                         UnifiedSubcomponentForecaster,
                     )
 
-                    model = UnifiedSubcomponentForecaster(horizon=12)
+                    model = UnifiedSubcomponentForecaster(horizon=horizon)
                     model.fit(df)
-                    result = model.predict(df, last_date + pd.DateOffset(months=12))
-                    if "forecast" in result:
-                        forecasts["SubcompMulti"] = result["forecast"]
-
+                    forecasts["SubcompMulti"] = model.forecast(horizon=horizon).tolist()
                 elif model_name == "Micro_SM":
                     from sirena.models.micro_statsmodels_external import (
                         MicroStatsmodelsExternalForecaster,

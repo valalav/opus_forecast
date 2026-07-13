@@ -310,11 +310,12 @@ def write_summary(
     out_dir: Path,
     target_month: str,
     weekly_rows: pd.DataFrame,
-    matches: pd.DataFrame,
+    month_details: pd.DataFrame,
     month_end_stats: dict[str, Any],
 ) -> None:
     last = weekly_rows.iloc[-1] if not weekly_rows.empty else None
-    matched = matches[matches["matched"]]
+    month_items = month_details.drop_duplicates(subset=["item_key"])
+    matched = month_items[month_items["matched"]]
     lines = [
         "# Weekly Laspeyres Nowcast Prototype",
         "",
@@ -322,13 +323,13 @@ def write_summary(
         "",
         "## Coverage",
         "",
-        f"- Weekly unique items: `{len(matches)}`",
+        f"- Weekly unique items: `{len(month_items)}`",
         f"- Matched items: `{len(matched)}`",
         f"- Matched item weight: `{matched['weight'].sum():.4f}`",
-        f"- Exact matches: `{int((matches['match_method'] == 'exact').sum())}`",
-        f"- Fuzzy matches: `{int((matches['match_method'] == 'fuzzy').sum())}`",
+        f"- Exact matches: `{int((month_items['match_method'] == 'exact').sum())}`",
+        f"- Fuzzy matches: `{int((month_items['match_method'] == 'fuzzy').sum())}`",
         "",
-        "## June Signal",
+        f"## {pd.Timestamp(target_month).strftime('%B %Y')} Signal",
         "",
     ]
     if last is not None:
@@ -418,7 +419,7 @@ def main() -> int:
         out_dir / "weekly_laspeyres_contributions.csv", index=False, encoding="utf-8"
     )
 
-    write_summary(out_dir, args.month, weekly_rows, matches, month_end_stats)
+    write_summary(out_dir, args.month, weekly_rows, weekly_details, month_end_stats)
     print(out_dir)
     print(weekly_rows.tail(1).to_string(index=False))
     if month_end_stats:

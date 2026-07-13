@@ -71,11 +71,25 @@ def extract_full_kbr():
     print(f"    Date range: {df['Date'].min().strftime('%Y-%m')} — {df['Date'].max().strftime('%Y-%m')}")
     print(f"    Unique Item_codes: {df['Item_code'].nunique()}")
     
-    # Also create kbr_micro_full.csv (micro items only, top items by weight)
-    micro_items = {10, 1100, 21, 42, 1700, 4700, 9400, 7400, 33, 14, 5, 6, 7, 8}
-    micro = df[df['Item_code'].isin(micro_items)]
-    micro.to_csv('data/kbr_micro_full.csv', index=False)
-    print(f"  → data/kbr_micro_full.csv ({len(micro)} rows)")
+    # The production micro models require every item in the canonical KBR basket,
+    # not only a small aggregate proxy list.
+    canonical_basket = pd.read_csv(
+        "data/micro_sprav.csv",
+        sep=";",
+        encoding="utf-8-sig",
+        usecols=["Item_code"],
+    )
+    micro_codes = set(
+        pd.to_numeric(canonical_basket["Item_code"], errors="raise").astype(int)
+    )
+    micro = df[df["Item_code"].isin(micro_codes)].copy()
+    if micro.empty:
+        raise ValueError("No canonical micro-basket observations found for KBR")
+    micro.to_csv("data/kbr_micro_full.csv", index=False)
+    print(
+        f"  → data/kbr_micro_full.csv ({len(micro)} rows, "
+        f"{micro['Item_code'].nunique()} basket items)"
+    )
     
     return df
 

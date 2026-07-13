@@ -53,6 +53,7 @@ class BVARForecaster(BaseForecaster):
         lambda3: float = 1.0,
         lambda4: float = 100,
         n_draws: int = 1000,
+        random_state: Optional[int] = 42,
         # Inverse-Wishart параметры
         sigma_prior_df: Optional[int] = None,
         sigma_prior_scale: float = 1.0,
@@ -77,6 +78,7 @@ class BVARForecaster(BaseForecaster):
             lambda3: Lag decay
             lambda4: Intercept prior variance
             n_draws: Количество draws для прогноза
+            random_state: Seed for locally scoped posterior draws; ``None`` uses entropy.
             sigma_prior_df: Степени свободы IW prior (по умолчанию k+2)
             sigma_prior_scale: Масштаб IW prior
             auto_lambda: Автоматический выбор lambda1 через Empirical Bayes
@@ -94,6 +96,7 @@ class BVARForecaster(BaseForecaster):
         self.lambda3 = lambda3
         self.lambda4 = lambda4
         self.n_draws = n_draws
+        self.random_state = random_state
 
         # Inverse-Wishart
         self.sigma_prior_df = sigma_prior_df
@@ -135,6 +138,10 @@ class BVARForecaster(BaseForecaster):
         # Оптимальные параметры (после auto-tuning)
         self.optimal_lambda1 = None
         self.optimal_lags = None
+
+    def _make_rng(self) -> np.random.Generator:
+        """Create an isolated random generator for reproducible posterior draws."""
+        return np.random.default_rng(self.random_state)
 
     def _prepare_var_data(self, df: pd.DataFrame, lags: int = None) -> None:
         """Подготовка данных для VAR."""
@@ -397,6 +404,7 @@ class BVARForecaster(BaseForecaster):
             B_samples: List of coefficient matrices
             Sigma_samples: List of covariance matrices
         """
+        rng = self._make_rng()
         B_samples = []
         Sigma_samples = []
 
@@ -423,11 +431,11 @@ class BVARForecaster(BaseForecaster):
                 )
 
                 try:
-                    B_curr[:, i] = np.random.multivariate_normal(
+                    B_curr[:, i] = rng.multivariate_normal(
                         beta_post_i, V_post_i
                     )
                 except:
-                    B_curr[:, i] = np.random.normal(
+                    B_curr[:, i] = rng.normal(
                         beta_post_i, np.sqrt(np.maximum(np.diag(V_post_i), 1e-10))
                     )
 
@@ -437,7 +445,7 @@ class BVARForecaster(BaseForecaster):
             d_post = d0 + self.T
 
             try:
-                Sigma_curr = invwishart.rvs(df=d_post, scale=S_post)
+                Sigma_curr = invwishart.rvs(df=d_post, scale=S_post, random_state=rng)
             except:
                 Sigma_curr = S_post / max(1, d_post - self.k - 1)
 
@@ -534,13 +542,16 @@ class BVARForecaster(BaseForecaster):
         if self.use_gibbs and self.B_samples is not None:
             return self._forecast_gibbs(horizon)
 
+        rng = self._make_rng()
         forecasts = np.zeros((self.n_draws, horizon, self.k))
         Y_history = self.raw_data[-self.lags:, :].copy()
 
         for draw in range(self.n_draws):
             # Draw Σ из IW posterior
             try:
-                Sigma_draw = invwishart.rvs(df=self.d_post, scale=self.S_post)
+                Sigma_draw = invwishart.rvs(
+                    df=self.d_post, scale=self.S_post, random_state=rng
+                )
             except:
                 Sigma_draw = self.Sigma_post
 
@@ -553,7 +564,7 @@ class BVARForecaster(BaseForecaster):
                 scale_factor = Sigma_draw[i, i] / (self.sigma_i[i]**2)
                 V_scaled = self.V_post[:, i] * scale_factor
 
-                beta_draw[:, i] = np.random.normal(
+                beta_draw[:, i] = rng.normal(
                     self.B_post[:, i],
                     np.sqrt(np.maximum(V_scaled, 1e-10))
                 )
@@ -573,7 +584,7 @@ class BVARForecaster(BaseForecaster):
                     X_t[1 + (lag - 1) * self.k: 1 + lag * self.k] = Y_curr[idx, :]
 
                 Y_mean = X_t @ beta_draw
-                shock = L @ np.random.randn(self.k)
+                shock = L @ rng.standard_normal(self.k)
                 Y_new = Y_mean + shock
 
                 forecasts[draw, t, :] = Y_new
@@ -591,6 +602,7 @@ class BVARForecaster(BaseForecaster):
         Returns:
             numpy array с прогнозами
         """
+        rng = self._make_rng()
         n_samples = len(self.B_samples)
         forecasts = np.zeros((n_samples, horizon, self.k))
         Y_history = self.raw_data[-self.lags:, :].copy()
@@ -609,7 +621,7 @@ class BVARForecaster(BaseForecaster):
                     X_t[1 + (lag - 1) * self.k: 1 + lag * self.k] = Y_curr[-lag, :]
 
                 Y_mean = X_t @ B_s
-                shock = L @ np.random.randn(self.k)
+                shock = L @ rng.standard_normal(self.k)
                 Y_new = Y_mean + shock
 
                 forecasts[s, t, :] = Y_new
@@ -626,6 +638,7 @@ class BVARForecaster(BaseForecaster):
         """
         self._check_fitted()
 
+        rng = self._make_rng()
         # Если есть Gibbs samples, используем их
         if self.use_gibbs and self.B_samples is not None:
             n_samples = len(self.B_samples)
@@ -646,7 +659,7 @@ class BVARForecaster(BaseForecaster):
                         X_t[1 + (lag - 1) * self.k: 1 + lag * self.k] = Y_curr[-lag, :]
 
                     Y_mean = X_t @ B_s
-                    shock = L @ np.random.randn(self.k)
+                    shock = L @ rng.standard_normal(self.k)
                     Y_new = Y_mean + shock
 
                     forecasts[s, t, :] = Y_new
@@ -657,7 +670,9 @@ class BVARForecaster(BaseForecaster):
 
             for draw in range(self.n_draws):
                 try:
-                    Sigma_draw = invwishart.rvs(df=self.d_post, scale=self.S_post)
+                    Sigma_draw = invwishart.rvs(
+                        df=self.d_post, scale=self.S_post, random_state=rng
+                    )
                 except:
                     Sigma_draw = self.Sigma_post
 
@@ -669,7 +684,7 @@ class BVARForecaster(BaseForecaster):
                     scale_factor = Sigma_draw[i, i] / (self.sigma_i[i]**2)
                     V_scaled = self.V_post[:, i] * scale_factor
 
-                    beta_draw[:, i] = np.random.normal(
+                    beta_draw[:, i] = rng.normal(
                         self.B_post[:, i],
                         np.sqrt(np.maximum(V_scaled, 1e-10))
                     )
@@ -687,7 +702,7 @@ class BVARForecaster(BaseForecaster):
                         X_t[1 + (lag - 1) * self.k: 1 + lag * self.k] = Y_curr[-lag, :]
 
                     Y_mean = X_t @ beta_draw
-                    shock = L @ np.random.randn(self.k)
+                    shock = L @ rng.standard_normal(self.k)
                     Y_new = Y_mean + shock
 
                     forecasts[draw, t, :] = Y_new
@@ -739,6 +754,7 @@ class BVARForecaster(BaseForecaster):
                     auto_lambda=self.auto_lambda,
                     auto_lags=False,  # Не пересчитываем лаги в бэктесте
                     n_draws=500,
+                    random_state=self.random_state,
                     use_gibbs=False  # Быстрее для бэктеста
                 )
                 model.fit(train_df, target_col)

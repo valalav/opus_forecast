@@ -159,6 +159,55 @@ class TestBayesianVAR:
         assert fc['median'].shape[0] == 12
         assert fc['median'].shape[1] == 4  # 4 переменные
 
+    def test_bvar_forecast_is_seed_reproducible(self, sample_bvar_data):
+        """A fixed seed yields an identical posterior point trajectory."""
+        from sirena.models.bvar import BVARForecaster
+
+        kwargs = {
+            'lags': 4,
+            'lambda1': 1.0,
+            'n_draws': 50,
+            'random_state': 42,
+            'var_names': ['CPI', 'Food', 'USD', 'RUONIA'],
+        }
+        first = BVARForecaster(**kwargs).fit(sample_bvar_data, target_col='CPI')
+        second = BVARForecaster(**kwargs).fit(sample_bvar_data, target_col='CPI')
+
+        np.testing.assert_array_equal(
+            first.forecast(horizon=3),
+            second.forecast(horizon=3),
+        )
+
+    def test_bvar_backtest_forwards_random_state(
+        self, sample_bvar_data, monkeypatch
+    ):
+        """Each rolling-cutoff model receives the caller's random seed."""
+        import sirena.models.bvar as bvar_module
+
+        captured_seeds = []
+
+        class SpyBVAR:
+            def __init__(self, **kwargs):
+                captured_seeds.append(kwargs['random_state'])
+
+            def fit(self, df, target_col):
+                return self
+
+            def forecast(self, horizon):
+                return np.zeros(horizon)
+
+        model = bvar_module.BVARForecaster(
+            lags=4,
+            random_state=314159,
+            var_names=['CPI', 'Food', 'USD', 'RUONIA'],
+        )
+        monkeypatch.setattr(bvar_module, 'BVARForecaster', SpyBVAR)
+
+        model.backtest(sample_bvar_data, start_date='2022-01-01', target_col='CPI')
+
+        assert captured_seeds
+        assert set(captured_seeds) == {314159}
+
 
 class TestSirenaARIMA:
     """Тесты ARIMA модели."""

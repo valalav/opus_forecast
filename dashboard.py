@@ -52,31 +52,32 @@ warnings.filterwarnings("ignore")
 def load_data():
     """Load main inflation data."""
     try:
-        df_raw = pd.read_csv("data/infl_kbr.csv", sep=";", decimal=",")
-        if "MoM" in df_raw.columns and df_raw["MoM"].dtype == object:
-            df_raw["MoM"] = df_raw["MoM"].astype(str).str.replace(",", ".")
-            df_raw["MoM"] = pd.to_numeric(df_raw["MoM"], errors="coerce")
-        if "Day" in df_raw.columns:
-            df_raw["Date"] = pd.to_datetime(
-                df_raw["Day"], format="%d.%m.%Y", errors="coerce"
+        df_raw = pd.read_csv("data/inflation_data.csv", sep=";", decimal=",")
+        df_raw["Date"] = pd.to_datetime(
+            df_raw["Date"], format="%d.%m.%Y", errors="coerce"
+        ).dt.to_period("M").dt.to_timestamp()
+
+        source_columns = {
+            "mom": "Все товары и услуги",
+            "Prod": "Продовольственные товары",
+            "Nonprod": "Непродовольственные товары",
+            "Serv": "Услуги",
+        }
+        missing = [column for column in source_columns if column not in df_raw]
+        if missing:
+            raise KeyError(
+                "Missing canonical inflation columns: " + ", ".join(missing)
             )
-            if df_raw["Date"].isna().any():
-                df_raw["Date"] = pd.to_datetime(df_raw["Day"])
-        if "Товар" in df_raw.columns and "MoM" in df_raw.columns:
-            df = df_raw.pivot_table(
-                index="Date", columns="Товар", values="MoM", aggfunc="first"
+
+        df = df_raw.set_index("Date")[list(source_columns)].rename(
+            columns=source_columns
+        )
+        for column in df.columns:
+            df[column] = pd.to_numeric(
+                df[column].astype(str).str.replace(",", ".", regex=False),
+                errors="coerce",
             )
-        else:
-            df = df_raw.set_index("Date")
-        df = df[
-            [
-                "Все товары и услуги",
-                "Продовольственные товары",
-                "Непродовольственные товары",
-                "Услуги",
-            ]
-        ].copy()
-        return df.sort_index()
+        return df.dropna(how="all").sort_index()
     except Exception as e:
         st.error(f"Ошибка загрузки данных: {e}")
         return None

@@ -19,6 +19,15 @@ def _format_percent(value):
         return "n/a"
 
 
+def _json_default(value):
+    """Serialize scalar values produced by pandas and NumPy."""
+    if isinstance(value, np.generic):
+        return value.item()
+    if isinstance(value, (datetime, pd.Timestamp)):
+        return value.isoformat()
+    raise TypeError(f"{type(value).__name__} is not JSON serializable")
+
+
 def _render_weekly_bridge_diagnostics(key_prefix: str):
     """Render precomputed weekly bridge diagnostics when available."""
     data_path = Path("data/precomputed_forecasts.json")
@@ -161,8 +170,14 @@ def render_alert_panel(show_history: bool = True):
 
     # Load existing history
     if alert_history_path.exists():
-        with open(alert_history_path, "r") as f:
-            history = json.load(f)
+        try:
+            with open(alert_history_path, "r", encoding="utf-8") as f:
+                history = json.load(f)
+            if not isinstance(history, list):
+                raise ValueError("alert history must be a JSON list")
+        except (OSError, json.JSONDecodeError, ValueError) as exc:
+            st.warning(f"История alert-панели повреждена и будет пересоздана: {exc}")
+            history = []
     else:
         history = []
 
@@ -184,8 +199,10 @@ def render_alert_panel(show_history: bool = True):
 
     # Save updated history
     alert_history_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(alert_history_path, "w") as f:
-        json.dump(history, f, indent=2)
+    temporary_history_path = alert_history_path.with_suffix(".json.tmp")
+    with open(temporary_history_path, "w", encoding="utf-8") as f:
+        json.dump(history, f, ensure_ascii=False, indent=2, default=_json_default)
+    temporary_history_path.replace(alert_history_path)
 
     # Display alerts using st.expander("Alerts")
     with st.expander("Alerts", expanded=True):
@@ -426,8 +443,20 @@ def render_nowcast_tab():
 
         # Load inflation data for regime detection
         try:
-            infl_df = pd.read_csv("data/inflation_data.csv")
-            infl_df["Date"] = pd.to_datetime(infl_df["Date"])
+            infl_df = pd.read_csv(
+                "data/inflation_data.csv",
+                sep=";",
+                decimal=",",
+                encoding="utf-8-sig",
+            )
+            infl_df["Date"] = pd.to_datetime(
+                infl_df["Date"], format="%d.%m.%Y", errors="raise"
+            )
+            for column in ("mom", "Ki", "Ruonia"):
+                if column in infl_df.columns:
+                    infl_df[column] = pd.to_numeric(infl_df[column], errors="coerce")
+            if "mom" in infl_df.columns and infl_df["mom"].median() > 50:
+                infl_df["mom"] = infl_df["mom"] - 100
             infl_df = infl_df.sort_values("Date")
         except Exception as e:
             st.warning(
@@ -570,12 +599,16 @@ def render_nowcast_tab():
                 ]
 
                 vol_by_product = []
-                for code, name in hq_products:
+                for code, metadata in hq_products:
                     prod_data = recent_weeks[recent_weeks["product_code"] == code]
                     if len(prod_data) > 0:
                         vol = prod_data["wow_growth"].std()
                         vol_by_product.append(
-                            {"code": code, "name": name, "volatility": vol}
+                            {
+                                "code": code,
+                                "name": metadata.get("name", str(code)),
+                                "volatility": vol,
+                            }
                         )
 
                 if vol_by_product:
@@ -646,21 +679,44 @@ def render_nowcast_tab():
         model.fit()
         nowcast = model.nowcast()
 
-        col1, col2, col3 = st.columns(3)
+        legacy_target = pd.to_datetime(nowcast.get("target_date"), errors="coerce")
+        target_label = (
+            legacy_target.strftime("%Y-%m") if pd.notna(legacy_target) else "н/д"
+        )
+        latest_legacy_week = weekly_df["date"].max()
         col1.metric(
-            "Прогноз текущего месяца",
+            f"Прогноз месяца {target_label}",
             f"{nowcast['prediction']:.2f}%",
             help=f"Coverage: {nowcast['coverage'] * 100:.0f}%",
         )
+        latest_official_month = infl_df["Date"].max() if infl_df is not None else None
+        if (
+            latest_official_month is not None
+            and pd.notna(legacy_target)
+            and legacy_target.to_period("M")
+            < latest_official_month.to_period("M")
+        ):
+            st.warning(
+                "Историческая weekly-модель отстаёт: последние недельные данные "
+                f"{latest_legacy_week:%Y-%m-%d}, тогда как официальный ряд уже "
+                f"до {latest_official_month:%Y-%m}. Для текущего месяца используйте "
+                "fresh weekly bridge выше."
+            )
         col2.metric(
             "Продуктов использовано",
             nowcast.get("n_products", 0),
             help="Количество продуктов в nowcast",
         )
+        mae = nowcast.get("mae")
+        mae_value = (
+            f"{float(mae):.4f}"
+            if isinstance(mae, (int, float, np.number)) and pd.notna(mae)
+            else "н/д"
+        )
         col3.metric(
             "Точность (MAE)",
-            f"{nowcast.get('mae', 0):.4f}",
-            help="Средняя абсолютная ошибка (на исторических данных)",
+            mae_value,
+            help="Нужен отдельный исторический бэктест; текущий nowcast его не рассчитывает.",
         )
 
         # ========================================

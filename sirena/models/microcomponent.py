@@ -123,9 +123,9 @@ class MicrocomponentForecaster:
 
         # Справочник with weights
         sprav = pd.read_csv(
-            data_dir / "raw" / "micro_sprav.csv",
+            data_dir / "micro_sprav.csv",
             sep=";",
-            decimal=",",
+            decimal=".",
             encoding="utf-8-sig",
         )
         self.weights = dict(zip(sprav["Item_code"], sprav["Weight"]))
@@ -138,6 +138,11 @@ class MicrocomponentForecaster:
 
         # Filter to items in справочник with valid data
         valid_cols = [c for c in micro_pivot.columns if c in self.weights]
+        if not valid_cols:
+            raise ValueError(
+                "No overlapping item codes between data/kbr_micro_full.csv "
+                "and data/micro_sprav.csv"
+            )
         micro_pivot = micro_pivot[valid_cols]
 
         # Convert MoM to changes
@@ -283,6 +288,11 @@ class MicrocomponentForecaster:
                 self.micro_models[item_code] = result
                 fitted_count += 1
 
+        if fitted_count == 0:
+            raise ValueError(
+                "No microcomponent models fitted from data/kbr_micro_full.csv; "
+                f"matched item codes: {len(micro_data.columns)}"
+            )
         self._is_fitted = True
         print(
             f"MicrocomponentForecaster: fitted {fitted_count} models "
