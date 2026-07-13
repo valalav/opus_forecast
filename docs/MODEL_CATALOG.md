@@ -87,6 +87,10 @@
 | **KiTrajectory** | `ki_trajectory.py` | Эндогенный прогноз ключевой ставки (Taylor Rule) |
 | **ScenarioRate** | `scenario_rate.py` | Модель трансмиссии ставки с калибровкой |
 | **RegimeDetector** | `regime_detector.py` | Адаптивные лаги на основе макрорежима (shock/normal/high_inflation) |
+| **VARPolicy** | `var_policy.py` | Обязательная VAR-family policy: RegimeMacroVARX для h=1, SeasonalVAR для траектории h=12 |
+| **FactorPolicy** | `factor_policy.py` | Обязательная factor-family policy: Robust seasonal FAVAR, 2 PCA-фактора, h=1 MAE 0.371 |
+| **FactorBridge** | `factor_bridge.py` | Agent-reviewed block-factor bridge challenger: direct Huber/Ridge equations, best compact h=1 MAE 0.370, not promoted on h=2/h=12 |
+| **StationaryBlockFAVAR** | `stationary_block_favar.py` | Diagnostics-aware factor report model: component and monetary PCA blocks on stationary inputs, selected on ADF/KPSS/BG/LB/ARCH gates, h=1 MAE 0.378 |
 
 ### Nowcasting Models
 

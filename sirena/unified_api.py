@@ -87,8 +87,8 @@ class ForecastResult:
 
     def to_dataframe(self) -> pd.DataFrame:
         """Конвертация в DataFrame."""
-        # Format dates as YYYY-MM (without time)
-        date_index = pd.Index([d.strftime('%Y-%m') for d in self.dates], name='Date')
+        # Format dates as mm.yy
+        date_index = pd.Index([d.strftime('%m.%y') for d in self.dates], name='Date')
         df = pd.DataFrame({
             'Baseline': self.baseline,
             'Effect': self.effect,

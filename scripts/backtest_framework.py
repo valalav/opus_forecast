@@ -30,10 +30,18 @@ from sirena.models.lightgbm import LightGBMForecaster
 from sirena.models.prophet import ProphetForecaster
 from sirena.models.ridge import RidgeForecaster
 from sirena.models.ridge_extended import RidgeExtendedForecaster
+from sirena.models.ridge_extended_rolling import RidgeExtendedRollingForecaster
+from sirena.models.ridge_extended_production_proxy import RidgeExtendedProductionProxyForecaster
 from sirena.models.bayesian_ridge import BayesianRidgeForecaster
 from sirena.models.elasticnet import ElasticNetForecaster
 from sirena.models.huber import HuberForecaster
+from sirena.models.huber_rolling import HuberRollingForecaster
+from sirena.models.huber_production_proxy import HuberProductionProxyForecaster
 from sirena.models.ridge_shock_dummies import RidgeShockDummiesForecaster
+from sirena.models.ridge_shock_rolling import RidgeShockRollingForecaster
+from sirena.models.ridge_production_proxy import RidgeProductionProxyForecaster
+from sirena.models.ridge_production_proxy_rolling import RidgeProductionProxyRollingForecaster
+from sirena.models.ridge_asymmetric_erpt_proxy import RidgeAsymmetricERPTProxyForecaster
 from sirena.models.ridge_macro import RidgeMacroForecaster  # Optimal macro features
 
 # Rolling Seasonality (experimental)
@@ -110,6 +118,32 @@ try:
 except ImportError:
     MICRO_ARIMA_AVAILABLE = False
     print("WARNING: Micro ARIMA loader not available")
+
+# External Linux statsmodels micro forecast
+try:
+    from sirena.models.micro_statsmodels_external import MicroStatsmodelsExternalForecaster
+
+    MICRO_SM_AVAILABLE = True
+except ImportError:
+    MICRO_SM_AVAILABLE = False
+    print("WARNING: Micro_SM external loader not available")
+
+# Mandatory factor-family policy model
+try:
+    from sirena.models.factor_policy import FactorPolicyForecaster
+
+    FACTOR_POLICY_AVAILABLE = True
+except ImportError:
+    FACTOR_POLICY_AVAILABLE = False
+    print("WARNING: FactorPolicy model not available")
+
+try:
+    from sirena.models.var_policy import VARPolicyForecaster
+
+    VAR_POLICY_AVAILABLE = True
+except ImportError:
+    VAR_POLICY_AVAILABLE = False
+    print("WARNING: VARPolicy model not available")
 
 warnings.filterwarnings("ignore")
 
@@ -365,6 +399,62 @@ class BacktestRunner:
         except Exception as e:
             return np.nan
 
+    def _forecast_huber_rolling(
+        self, train_ridge: pd.DataFrame, target_date: pd.Timestamp
+    ) -> float:
+        """Прогноз Huber Rolling (24m rolling seasonality)."""
+        try:
+            train_ext = train_ridge.copy()
+            train_ext.loc[target_date] = np.nan
+            model = HuberRollingForecaster(use_macro=True, seasonality_window=24)
+            model.fit(train_ridge, "Все товары и услуги")
+            result = model.predict(train_ext, target_date)
+            return result["prediction"] - 100
+        except Exception:
+            return np.nan
+
+    def _forecast_huber_production_proxy(
+        self, train_ridge: pd.DataFrame, target_date: pd.Timestamp
+    ) -> float:
+        """Прогноз Huber Production Proxy"""
+        try:
+            train_ext = train_ridge.copy()
+            train_ext.loc[target_date] = np.nan
+            model = HuberProductionProxyForecaster(use_macro=True)
+            model.fit(train_ridge, "Все товары и услуги")
+            result = model.predict(train_ext, target_date)
+            return result["prediction"] - 100
+        except Exception as e:
+            return np.nan
+
+    def _forecast_ridge_extended_production_proxy(
+        self, train_ridge: pd.DataFrame, target_date: pd.Timestamp
+    ) -> float:
+        """Прогноз Ridge Extended Production Proxy"""
+        try:
+            train_ext = train_ridge.copy()
+            train_ext.loc[target_date] = np.nan
+            model = RidgeExtendedProductionProxyForecaster(use_macro=True)
+            model.fit(train_ridge, "Все товары и услуги")
+            result = model.predict(train_ext, target_date)
+            return result["prediction"] - 100
+        except Exception:
+            return np.nan
+
+    def _forecast_ridge_extended_rolling(
+        self, train_ridge: pd.DataFrame, target_date: pd.Timestamp
+    ) -> float:
+        """Прогноз Ridge Extended Rolling (24m rolling seasonality)."""
+        try:
+            train_ext = train_ridge.copy()
+            train_ext.loc[target_date] = np.nan
+            model = RidgeExtendedRollingForecaster(use_macro=True, seasonality_window=24)
+            model.fit(train_ridge, "Все товары и услуги")
+            result = model.predict(train_ext, target_date)
+            return result["prediction"] - 100
+        except Exception:
+            return np.nan
+
     def _forecast_ridge_shock(
         self, train_ridge: pd.DataFrame, target_date: pd.Timestamp
     ) -> float:
@@ -373,6 +463,67 @@ class BacktestRunner:
             train_ext = train_ridge.copy()
             train_ext.loc[target_date] = np.nan
             model = RidgeShockDummiesForecaster(use_2022_dummy=False)
+            model.fit(train_ridge, "Все товары и услуги")
+            result = model.predict(train_ext, target_date)
+            return result["prediction"] - 100
+        except Exception as e:
+            return np.nan
+
+    def _forecast_ridge_shock_rolling(
+        self, train_ridge: pd.DataFrame, target_date: pd.Timestamp
+    ) -> float:
+        """Прогноз Ridge Shock Rolling (24m rolling seasonality)."""
+        try:
+            train_ext = train_ridge.copy()
+            train_ext.loc[target_date] = np.nan
+            model = RidgeShockRollingForecaster(
+                seasonality_window=24, use_2022_dummy=False
+            )
+            model.fit(train_ridge, "Все товары и услуги")
+            result = model.predict(train_ext, target_date)
+            return result["prediction"] - 100
+        except Exception as e:
+            return np.nan
+
+    def _forecast_ridge_production_proxy(
+        self, train_ridge: pd.DataFrame, target_date: pd.Timestamp
+    ) -> float:
+        """Прогноз Ridge Production Proxy."""
+        try:
+            train_ext = train_ridge.copy()
+            train_ext.loc[target_date] = np.nan
+            model = RidgeProductionProxyForecaster(use_2022_dummy=False)
+            model.fit(train_ridge, "Все товары и услуги")
+            result = model.predict(train_ext, target_date)
+            return result["prediction"] - 100
+        except Exception as e:
+            return np.nan
+
+    def _forecast_ridge_production_proxy_rolling(
+        self, train_ridge: pd.DataFrame, target_date: pd.Timestamp
+    ) -> float:
+        """Прогноз Ridge Production Proxy Rolling (24m rolling seasonality)."""
+        try:
+            train_ext = train_ridge.copy()
+            train_ext.loc[target_date] = np.nan
+            model = RidgeProductionProxyRollingForecaster(
+                use_2022_dummy=False,
+                seasonality_window=24,
+            )
+            model.fit(train_ridge, "Все товары и услуги")
+            result = model.predict(train_ext, target_date)
+            return result["prediction"] - 100
+        except Exception as e:
+            return np.nan
+
+    def _forecast_ridge_asymmetric_erpt_proxy(
+        self, train_ridge: pd.DataFrame, target_date: pd.Timestamp
+    ) -> float:
+        """Прогноз Ridge Asymmetric ERPT Proxy."""
+        try:
+            train_ext = train_ridge.copy()
+            train_ext.loc[target_date] = np.nan
+            model = RidgeAsymmetricERPTProxyForecaster(use_2022_dummy=False)
             model.fit(train_ridge, "Все товары и услуги")
             result = model.predict(train_ext, target_date)
             return result["prediction"] - 100
@@ -608,6 +759,46 @@ class BacktestRunner:
         except Exception as e:
             return np.nan
 
+    def _forecast_micro_sm(
+        self, train_ridge: pd.DataFrame, target_date: pd.Timestamp
+    ) -> float:
+        """Прогноз Micro_SM из staged external statsmodels matrix."""
+        if not MICRO_SM_AVAILABLE:
+            return np.nan
+        try:
+            model = MicroStatsmodelsExternalForecaster(horizon=self.horizon)
+            model.fit(train_ridge)
+            result = model.predict(train_ridge, target_date)
+            if result and "prediction" in result and not np.isnan(result["prediction"]):
+                return result["prediction"] - 100
+            return np.nan
+        except Exception:
+            return np.nan
+
+    def _forecast_factor_policy(self, train_ridge: pd.DataFrame) -> float:
+        """Прогноз mandatory factor-family policy model."""
+        if not FACTOR_POLICY_AVAILABLE:
+            return np.nan
+        try:
+            model = FactorPolicyForecaster()
+            model.fit(train_ridge, "Все товары и услуги")
+            fc = model.forecast(horizon=self.horizon)
+            return fc[self.horizon - 1]
+        except Exception:
+            return np.nan
+
+    def _forecast_var_policy(self, train_ridge: pd.DataFrame) -> float:
+        """Прогноз mandatory VAR-family policy model (RegimeMacroVARX_l1 + SeasonalVAR)."""
+        if not VAR_POLICY_AVAILABLE:
+            return np.nan
+        try:
+            model = VARPolicyForecaster()
+            model.fit(train_ridge, "Все товары и услуги")
+            fc = model.forecast(horizon=self.horizon)
+            return float(fc[self.horizon - 1])
+        except Exception:
+            return np.nan
+
     def _forecast_ensemble(self, predictions: Dict[str, float]) -> float:
         """Прогноз Ensemble (7 моделей с весами)"""
         try:
@@ -667,6 +858,12 @@ class BacktestRunner:
             predictions["Ridge_Ext"] = self._forecast_ridge_extended(
                 train_ridge, target_date
             )
+            predictions["Ridge_Ext_ProdProxy"] = self._forecast_ridge_extended_production_proxy(
+                train_ridge, target_date
+            )
+            predictions["Ridge_Ext_Roll24"] = self._forecast_ridge_extended_rolling(
+                train_ridge, target_date
+            )
             predictions["Bayes_Ridge"] = self._forecast_bayes_ridge(
                 train_ridge, target_date
             )
@@ -674,7 +871,25 @@ class BacktestRunner:
                 train_ridge, target_date
             )
             predictions["Huber"] = self._forecast_huber(train_ridge, target_date)
+            predictions["Huber_Roll24"] = self._forecast_huber_rolling(
+                train_ridge, target_date
+            )
+            predictions["Huber_ProdProxy"] = self._forecast_huber_production_proxy(
+                train_ridge, target_date
+            )
             predictions["Ridge_Shock"] = self._forecast_ridge_shock(
+                train_ridge, target_date
+            )
+            predictions["Ridge_Shock_Roll24"] = self._forecast_ridge_shock_rolling(
+                train_ridge, target_date
+            )
+            predictions["Ridge_ProdProxy"] = self._forecast_ridge_production_proxy(
+                train_ridge, target_date
+            )
+            predictions["Ridge_ProdProxy_Roll24"] = self._forecast_ridge_production_proxy_rolling(
+                train_ridge, target_date
+            )
+            predictions["Ridge_AsymERPT"] = self._forecast_ridge_asymmetric_erpt_proxy(
                 train_ridge, target_date
             )
             predictions["Ridge_Macro"] = self._forecast_ridge_macro(
@@ -703,6 +918,9 @@ class BacktestRunner:
                 train_ridge, target_date
             )
             predictions["Micro"] = self._forecast_micro(train_ridge, target_date)
+            predictions["Micro_SM"] = self._forecast_micro_sm(train_ridge, target_date)
+            predictions["FactorPolicy"] = self._forecast_factor_policy(train_ridge)
+            predictions["VARPolicy"] = self._forecast_var_policy(train_ridge)
             predictions["Ensemble"] = self._forecast_ensemble(predictions)
 
             # Store result
@@ -743,6 +961,14 @@ class BacktestRunner:
         ridge_ext_model = RidgeExtendedForecaster()
         ridge_ext_model.fit(train_ridge, "Все товары и услуги")
 
+        ridge_ext_production_proxy_model = RidgeExtendedProductionProxyForecaster()
+        ridge_ext_production_proxy_model.fit(train_ridge, "Все товары и услуги")
+
+        ridge_ext_rolling_model = RidgeExtendedRollingForecaster(
+            use_macro=True, seasonality_window=24
+        )
+        ridge_ext_rolling_model.fit(train_ridge, "Все товары и услуги")
+
         bayes_ridge_model = BayesianRidgeForecaster()
         bayes_ridge_model.fit(train_ridge, "Все товары и услуги")
 
@@ -752,8 +978,37 @@ class BacktestRunner:
         huber_model = HuberForecaster()
         huber_model.fit(train_ridge, "Все товары и услуги")
 
-        ridge_shock_model = RidgeShockDummiesForecaster()
+        huber_rolling_model = HuberRollingForecaster(
+            use_macro=True, seasonality_window=24
+        )
+        huber_rolling_model.fit(train_ridge, "Все товары и услуги")
+
+        huber_production_proxy_model = HuberProductionProxyForecaster()
+        huber_production_proxy_model.fit(train_ridge, "Все товары и услуги")
+
+        ridge_shock_model = RidgeShockDummiesForecaster(use_2022_dummy=False)
         ridge_shock_model.fit(train_ridge, "Все товары и услуги")
+
+        ridge_shock_rolling_model = RidgeShockRollingForecaster(
+            seasonality_window=24, use_2022_dummy=False
+        )
+        ridge_shock_rolling_model.fit(train_ridge, "Все товары и услуги")
+
+        ridge_production_proxy_model = RidgeProductionProxyForecaster(
+            use_2022_dummy=False
+        )
+        ridge_production_proxy_model.fit(train_ridge, "Все товары и услуги")
+
+        ridge_production_proxy_rolling_model = RidgeProductionProxyRollingForecaster(
+            use_2022_dummy=False,
+            seasonality_window=24,
+        )
+        ridge_production_proxy_rolling_model.fit(train_ridge, "Все товары и услуги")
+
+        ridge_asymmetric_erpt_proxy_model = RidgeAsymmetricERPTProxyForecaster(
+            use_2022_dummy=False
+        )
+        ridge_asymmetric_erpt_proxy_model.fit(train_ridge, "Все товары и услуги")
 
         ridge_macro_model = RidgeMacroForecaster()
         ridge_macro_model.fit(train_ridge, "Все товары и услуги")
@@ -784,6 +1039,15 @@ class BacktestRunner:
         if CATBOOST_AVAILABLE:
             catboost_model = CatBoostForecaster()
             catboost_model.fit(train_ridge, "Все товары и услуги")
+
+        factor_policy_fc = None
+        if FACTOR_POLICY_AVAILABLE:
+            try:
+                factor_policy_model = FactorPolicyForecaster()
+                factor_policy_model.fit(train_ridge, "Все товары и услуги")
+                factor_policy_fc = factor_policy_model.forecast(12)
+            except Exception:
+                factor_policy_fc = None
 
         # MIDAS model
         midas_model = None
@@ -870,6 +1134,26 @@ class BacktestRunner:
                 predictions["Ridge_Ext"] = np.nan
 
             try:
+                ridge_ext_prodproxy_result = ridge_ext_production_proxy_model.predict(
+                    train_ext, target_date
+                )
+                predictions["Ridge_Ext_ProdProxy"] = (
+                    ridge_ext_prodproxy_result["prediction"] - 100
+                )
+            except:
+                predictions["Ridge_Ext_ProdProxy"] = np.nan
+
+            try:
+                ridge_ext_rolling_result = ridge_ext_rolling_model.predict(
+                    train_ext, target_date
+                )
+                predictions["Ridge_Ext_Roll24"] = (
+                    ridge_ext_rolling_result["prediction"] - 100
+                )
+            except:
+                predictions["Ridge_Ext_Roll24"] = np.nan
+
+            try:
                 bayes_result = bayes_ridge_model.predict(train_ext, target_date)
                 predictions["Bayes_Ridge"] = bayes_result["prediction"] - 100
             except:
@@ -888,10 +1172,66 @@ class BacktestRunner:
                 predictions["Huber"] = np.nan
 
             try:
+                huber_rolling_result = huber_rolling_model.predict(train_ext, target_date)
+                predictions["Huber_Roll24"] = huber_rolling_result["prediction"] - 100
+            except:
+                predictions["Huber_Roll24"] = np.nan
+
+            try:
+                huber_prodproxy_result = huber_production_proxy_model.predict(
+                    train_ext, target_date
+                )
+                predictions["Huber_ProdProxy"] = (
+                    huber_prodproxy_result["prediction"] - 100
+                )
+            except:
+                predictions["Huber_ProdProxy"] = np.nan
+
+            try:
                 ridge_shock_result = ridge_shock_model.predict(train_ext, target_date)
                 predictions["Ridge_Shock"] = ridge_shock_result["prediction"] - 100
             except:
                 predictions["Ridge_Shock"] = np.nan
+
+            try:
+                ridge_shock_rolling_result = ridge_shock_rolling_model.predict(
+                    train_ext, target_date
+                )
+                predictions["Ridge_Shock_Roll24"] = (
+                    ridge_shock_rolling_result["prediction"] - 100
+                )
+            except:
+                predictions["Ridge_Shock_Roll24"] = np.nan
+
+            try:
+                ridge_production_proxy_result = ridge_production_proxy_model.predict(
+                    train_ext, target_date
+                )
+                predictions["Ridge_ProdProxy"] = (
+                    ridge_production_proxy_result["prediction"] - 100
+                )
+            except:
+                predictions["Ridge_ProdProxy"] = np.nan
+
+            try:
+                ridge_production_proxy_rolling_result = (
+                    ridge_production_proxy_rolling_model.predict(train_ext, target_date)
+                )
+                predictions["Ridge_ProdProxy_Roll24"] = (
+                    ridge_production_proxy_rolling_result["prediction"] - 100
+                )
+            except:
+                predictions["Ridge_ProdProxy_Roll24"] = np.nan
+
+            try:
+                ridge_asymmetric_erpt_proxy_result = (
+                    ridge_asymmetric_erpt_proxy_model.predict(train_ext, target_date)
+                )
+                predictions["Ridge_AsymERPT"] = (
+                    ridge_asymmetric_erpt_proxy_result["prediction"] - 100
+                )
+            except:
+                predictions["Ridge_AsymERPT"] = np.nan
 
             try:
                 ridge_macro_result = ridge_macro_model.predict(train_ext, target_date)
@@ -1007,6 +1347,18 @@ class BacktestRunner:
             except:
                 predictions["Micro"] = np.nan
 
+            try:
+                predictions["Micro_SM"] = self._forecast_micro_sm(
+                    train_ridge, target_date
+                )
+            except:
+                predictions["Micro_SM"] = np.nan
+
+            if factor_policy_fc is not None and i < len(factor_policy_fc):
+                predictions["FactorPolicy"] = factor_policy_fc[i]
+            else:
+                predictions["FactorPolicy"] = np.nan
+
             # Other models: use pre-computed forecasts (with bounds checking)
             predictions["BVAR"] = bvar_fc[i] if i < len(bvar_fc) else np.nan
             predictions["SARIMA"] = sarima_fc[i] if i < len(sarima_fc) else np.nan
@@ -1060,6 +1412,14 @@ class BacktestRunner:
             coverage_50pct = (errors.abs() <= 0.5).mean() * 100
             max_error = errors.abs().max()
             std_error = errors.std()
+
+            actual_vals = valid["Actual"].to_numpy(dtype=float)
+            if len(actual_vals) >= 2:
+                naive_pred = np.concatenate([[actual_vals[0]], actual_vals[:-1]])
+                rmse_naive = float(np.sqrt(np.mean((actual_vals - naive_pred) ** 2)))
+                theil_u = rmse / rmse_naive if rmse_naive > 1e-12 else np.nan
+            else:
+                theil_u = np.nan
             mean_error = errors.mean()
 
             metrics.append(

@@ -45,15 +45,29 @@ from .registry import ModelRegistry, registry
 # Ridge family (core)
 from .ridge import RidgeForecaster
 from .ridge_extended import RidgeExtendedForecaster
+from .ridge_extended_production_proxy import RidgeExtendedProductionProxyForecaster
+from .ridge_extended_rolling import RidgeExtendedRollingForecaster
 from .ridge_shock_dummies import RidgeShockDummiesForecaster
-from .ridge_macro import RidgeMacroForecaster  # Optimal macro features (USD lag 2, Ki lag 6, Brent lag 5)
+from .ridge_shock_rolling import RidgeShockRollingForecaster
+from .ridge_production_proxy import RidgeProductionProxyForecaster
+from .ridge_production_proxy_rolling import RidgeProductionProxyRollingForecaster
+from .ridge_asymmetric_erpt_proxy import RidgeAsymmetricERPTProxyForecaster
+from .ridge_macro import (
+    RidgeMacroForecaster,
+)  # Optimal macro features (USD lag 2, Ki lag 6, Brent lag 5)
+from .budget_ridge import BudgetRidgeForecaster  # Budget-enhanced Ridge (budget lag 3)
 
 # Regularized models
 from .elasticnet import ElasticNetForecaster
 from .huber import HuberForecaster
+from .huber_rolling import HuberRollingForecaster
+from .huber_production_proxy import HuberProductionProxyForecaster
 
 # Probabilistic models
 from .prophet import ProphetForecaster
+from .exog_prophet import (
+    ExogProphetForecaster,
+)  # Prophet with exogenous (USD, Brent, Ki)
 from .ebm import EBMForecaster, create_ebm_model
 
 # NGBoost (optional, requires ngboost)
@@ -75,8 +89,14 @@ except ImportError:
 
 from .arima import SARIMAForecaster, AR1Forecaster
 from .ets import ETSForecaster
+from .holt_winters import HoltWintersForecaster
+from .naive_seasonal import NaiveSeasonalForecaster
 from .bvar import BVARForecaster
 from .bvar_rate import BVARRateForecaster
+from .var_policy import VARPolicyForecaster
+from .factor_policy import FactorPolicyForecaster
+from .factor_bridge import FactorBridgeForecaster
+from .stationary_block_favar import StationaryBlockFAVARForecaster
 from .bayesian_ridge import BayesianRidgeForecaster
 from .lightgbm import LightGBMForecaster
 
@@ -100,16 +120,23 @@ except ImportError:
 
 # Subcomponent models (bottom-up with 45 subcomponents)
 from .subcomponent import SubcomponentForecaster  # Optimal features (USD, Brent, etc.)
-from .subcomponent_multi import SubcomponentMultiForecaster  # Optimal models (Ridge, Prophet, NGBoost)
+from .subcomponent_multi import (
+    SubcomponentMultiForecaster,
+)  # Optimal models (Ridge, Prophet, NGBoost)
 
 # Microcomponent model (bottom-up with 537 microcomponents)
-from .microcomponent import MicrocomponentForecaster  # Individual Ridge/Voting per micro
+from .microcomponent import (
+    MicrocomponentForecaster,
+)  # Individual Ridge/Voting per micro
+from .micro_statsmodels_external import MicroStatsmodelsExternalForecaster
 
 # Hierarchical Microcomponent (full hierarchy: micro → subcomp → comp → total)
 from .hierarchical_micro import HierarchicalMicroForecaster  # Hierarchical bottom-up
 
 # Optimized Microcomponent (category-specific models)
-from .micro_optimized import MicroOptimizedForecaster  # Huber for stable, Ridge for volatile
+from .micro_optimized import (
+    MicroOptimizedForecaster,
+)  # Huber for stable, Ridge for volatile
 
 # Horizon-adaptive Ensemble (Huber + Micro with adaptive weights)
 from .horizon_ensemble import HorizonEnsembleForecaster  # Best of both worlds
@@ -124,6 +151,16 @@ from .ki_trajectory import KiTrajectoryForecaster, TaylorRuleParams
 # Unified Subcomponent Model (integrated baseline + scenario)
 from .unified_subcomp import UnifiedSubcomponentForecaster
 
+# MIDAS Model (Mixed Data Sampling)
+from .midas import MIDASForecaster
+from .stacking_regressor import StackingRegressorForecaster
+
+# Temporal Fusion Transformer (TFT)
+from .tft import TemporalFusionForecaster
+
+# Conformal Prediction (calibrated confidence intervals)
+from .conformal import ConformalForecaster
+
 # Regime Detector (adaptive lags based on macro regime)
 from .regime_detector import (
     MacroRegime,
@@ -134,8 +171,12 @@ from .regime_detector import (
     get_regime_lags,
     get_regime_history,
     detect_shock_periods,
-    KNOWN_SHOCK_PERIODS
+    KNOWN_SHOCK_PERIODS,
 )
+
+# Weekly Nowcasting models (experimental)
+from .volatility_weighted_nowcaster import VolatilityWeightedNowcaster
+from .regime_adaptive_nowcaster import RegimeAdaptiveNowcaster
 
 # =============================================================================
 # Exports
@@ -143,75 +184,81 @@ from .regime_detector import (
 
 __all__ = [
     # Base
-    'BaseForecaster',
-    'ForecastResult',
-    'ModelRegistry',
-    'registry',
-
+    "BaseForecaster",
+    "ForecastResult",
+    "ModelRegistry",
+    "registry",
     # Production Models (v4.8 ensemble)
-    'RidgeForecaster',
-    'RidgeExtendedForecaster',
-    'RidgeShockDummiesForecaster',
-    'RidgeMacroForecaster',
-    'ElasticNetForecaster',
-    'HuberForecaster',
-    'ProphetForecaster',
-    'EBMForecaster',
-    'create_ebm_model',
-    'NGBoostForecaster',
-    'NGBOOST_AVAILABLE',
-    'NGBoostShockForecaster',
-
+    "RidgeForecaster",
+    "RidgeExtendedForecaster",
+    "RidgeExtendedProductionProxyForecaster",
+    "RidgeExtendedRollingForecaster",
+    "RidgeShockDummiesForecaster",
+    "RidgeShockRollingForecaster",
+    "RidgeProductionProxyForecaster",
+    "RidgeProductionProxyRollingForecaster",
+    "RidgeAsymmetricERPTProxyForecaster",
+    "RidgeMacroForecaster",
+    "BudgetRidgeForecaster",
+    "ElasticNetForecaster",
+    "HuberForecaster",
+    "HuberRollingForecaster",
+    "HuberProductionProxyForecaster",
+    "ProphetForecaster",
+    "ExogProphetForecaster",
+    "EBMForecaster",
+    "create_ebm_model",
+    "NGBoostForecaster",
+    "NGBOOST_AVAILABLE",
+    "NGBoostShockForecaster",
     # Auxiliary Models
-    'SARIMAForecaster',
-    'AR1Forecaster',
-    'ETSForecaster',
-    'BVARForecaster',
-    'BVARRateForecaster',
-    'BayesianRidgeForecaster',
-    'LightGBMForecaster',
-    'CatBoostForecaster',
-    'CATBOOST_AVAILABLE',
-    'XGBoostForecaster',
-    'XGBOOST_AVAILABLE',
-
+    "SARIMAForecaster",
+    "AR1Forecaster",
+    "ETSForecaster",
+    "NaiveSeasonalForecaster",
+    "BVARForecaster",
+    "BVARRateForecaster",
+    "VARPolicyForecaster",
+    "FactorPolicyForecaster",
+    "FactorBridgeForecaster",
+    "StationaryBlockFAVARForecaster",
+    "BayesianRidgeForecaster",
+    "LightGBMForecaster",
+    "CatBoostForecaster",
+    "CATBOOST_AVAILABLE",
+    "XGBoostForecaster",
+    "XGBOOST_AVAILABLE",
     # Experimental (Subcomponent models)
-    'SubcomponentForecaster',
-    'SubcomponentMultiForecaster',
-
+    "SubcomponentForecaster",
+    "SubcomponentMultiForecaster",
     # Experimental (Microcomponent model)
-    'MicrocomponentForecaster',
-
+    "MicrocomponentForecaster",
+    "MicroStatsmodelsExternalForecaster",
     # Experimental (Hierarchical Microcomponent)
-    'HierarchicalMicroForecaster',
-
+    "HierarchicalMicroForecaster",
     # Experimental (Optimized Microcomponent)
-    'MicroOptimizedForecaster',
-
+    "MicroOptimizedForecaster",
     # Experimental (Horizon-adaptive Ensemble)
-    'HorizonEnsembleForecaster',
-
+    "HorizonEnsembleForecaster",
     # Scenario Models (Rate transmission)
-    'ScenarioRateModel',
-    'TransmissionParams',
-    'AsymmetricParams',
-    'SubcomponentScenarioForecaster',
-
+    "ScenarioRateModel",
+    "TransmissionParams",
+    "AsymmetricParams",
+    "SubcomponentScenarioForecaster",
     # Ki Trajectory (v5.0)
-    'KiTrajectoryForecaster',
-    'TaylorRuleParams',
-
+    "KiTrajectoryForecaster",
+    "TaylorRuleParams",
     # Unified Subcomponent (v5.0)
-    'UnifiedSubcomponentForecaster',
-
-    # Regime Detector (v2.5)
-    'MacroRegime',
-    'RegimeConfig',
-    'RegimeThresholds',
-    'REGIME_CONFIGS',
-    'detect_regime',
-    'get_regime_lags',
-    'get_regime_history',
-    'detect_shock_periods',
-    'KNOWN_SHOCK_PERIODS',
+    "UnifiedSubcomponentForecaster",
+    # MIDAS (Mixed Data Sampling)
+    "MIDASForecaster",
+    # Temporal Fusion Transformer (TFT)
+    "TemporalFusionForecaster",
+    # Conformal Prediction (calibrated CI)
+    "ConformalForecaster",
+    # Weekly Nowcasting models (experimental)
+    "VolatilityWeightedNowcaster",
+    "RegimeAdaptiveNowcaster",
+    # StackingRegressor (meta-model)
+    "StackingRegressorForecaster",
 ]
