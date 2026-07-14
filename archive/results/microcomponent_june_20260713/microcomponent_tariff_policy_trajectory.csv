@@ -1,0 +1,13 @@
+date,microcomponent_raw_pp,tariff_policy_overlay_pp,microcomponent_tariff_adjusted_pp,overlay_method
+2026-07-01,0.483439,-0.065290,0.418149,reset June-cutoff regulated microitems to 100.0
+2026-08-01,-0.321334,0.000000,-0.321334,no tariff override
+2026-09-01,0.622695,0.000000,0.622695,no tariff override
+2026-10-01,0.621878,0.876980,1.498858,set June-cutoff regulated microitems to 110.0
+2026-11-01,1.109684,0.000000,1.109684,no tariff override
+2026-12-01,0.910090,0.000000,0.910090,no tariff override
+2027-01-01,0.992676,0.000000,0.992676,no tariff override
+2027-02-01,0.821137,0.000000,0.821137,no tariff override
+2027-03-01,0.831806,0.000000,0.831806,no tariff override
+2027-04-01,0.791231,0.000000,0.791231,no tariff override
+2027-05-01,0.222500,0.000000,0.222500,no tariff override
+2027-06-01,-0.143151,0.000000,-0.143151,no tariff override

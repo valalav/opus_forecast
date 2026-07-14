@@ -23,10 +23,33 @@
 ## Модельные и недельные ориентиры на июль
 
 - Weighted production Ensemble: **+1.14%**.
+- В central nonfuel base отсутствие июльской индексации уже учтено: cached
+  Ensemble `+1.139663` минус tariff bridge `−0.250079` даёт
+  `+0.889584 п.п.`. Bridge согласуется с KBR45 scenario delta
+  `−0.248477 п.п.` из
+  `archive/results/july_august_control_points_20260625/assumption_bridge.csv`;
+  разница `0.001602 п.п.` — округление и разные model vintages.
 - Auxiliary weekly bridge Nowcast: **+1.41%**. Он основан на одной неделе и простых средних внутри компонент; не используется как production-модель.
 - Item-weighted Laspeyres diagnostic на 06.07: component-scaled **+1.03%**, headline partial **+0.31%**, покрытие **34.687%** корзины (105 позиций). См. `weekly_laspeyres/`.
 - Полученный рыночный сигнал — цена около `120` руб./л. Последний официальный weekly CPI proxy от 06.07 ещё показывает АИ-92 `87.99`, АИ-95 `93.97`, АИ-98 `105.00`, дизель `94.87` руб./л: это measurement gap, а не опровержение рыночного наблюдения. Сигнал включён в центральную ветку с неполной реализацией.
 - Canonical h=1 rolling backtest после обновления данных: в июне ensemble дал `+0.37%` против факта `+1.06%` (ошибка `−0.69 п.п.`). Поэтому механический ensemble не используется как единственная точка в топливном режиме.
+
+### Обновление внутреннего micro-прогноза по июньскому cutoff
+
+- `MicrocomponentForecaster` повторно обучен на `data/kbr_micro_full.csv`:
+  максимум источника — июнь 2026, `513` позиций в последнем месяце; fit дал
+  `514` пересекающихся с весами micro-моделей.
+- Raw Micro для июля: `+0.483439 п.п.`. Для June-cutoff item-level сценария
+  регулируемые позиции ЖКХ (`20` кодов из
+  `experiments/kbr_45_component_mapping/kbr_45_micro_item_mapping.csv`) заданы
+  как `100.0` в июле: прямой overlay `−0.065290 п.п.`, итого `+0.418149 п.п.`.
+  В октябре те же позиции заданы как `110.0`: overlay `+0.876980 п.п.`,
+  итого `+1.498858 п.п.`. Полная траектория:
+  `archive/results/microcomponent_june_20260713/microcomponent_tariff_policy_trajectory.csv`.
+- Это independent June-updated micro sensitivity, а не второй вычет из central
+  `+1.70`: tariff-neutralisation уже входит в его nonfuel base выше.
+- Внешний `Micro_SM` не обновлён: его source matrix заканчивается маем 2026;
+  он не используется как June-updated micro signal.
 
 ## Топливный механизм
 
