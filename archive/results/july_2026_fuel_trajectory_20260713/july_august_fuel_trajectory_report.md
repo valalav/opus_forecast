@@ -40,11 +40,14 @@
   максимум источника — июнь 2026, `513` позиций в последнем месяце; fit дал
   `514` пересекающихся с весами micro-моделей.
 - Raw Micro для июля: `+0.483439 п.п.`. Для June-cutoff item-level сценария
-  регулируемые позиции ЖКХ (`20` кодов из
-  `experiments/kbr_45_component_mapping/kbr_45_micro_item_mapping.csv`) заданы
-  как `100.0` в июле: прямой overlay `−0.065290 п.п.`, итого `+0.418149 п.п.`.
-  В октябре те же позиции заданы как `110.0`: overlay `+0.876980 п.п.`,
-  итого `+1.498858 п.п.`. Полная траектория:
+  `16` leaf-позиций регулируемых тарифов (газ, отопление, вода,
+  водоотведение, электроэнергия, ТКО, содержание жилья, капремонт и
+  регулируемый найм) заданы как `100.0` в июле: прямой overlay
+  `−0.059997 п.п.`, итого `+0.423442 п.п.`. В октябре те же позиции заданы
+  как `110.0`: overlay `+0.797637 п.п.`, итого `+1.419515 п.п.`. Набор
+  сверён с `leaf_regulated_no_aggregates` из
+  `archive/results/micro_tariff_scenario_july100_oct110/micro_tariff_scenario_details.csv`;
+  частная аренда и банковский сейф исключены. Полная траектория:
   `archive/results/microcomponent_june_20260713/microcomponent_tariff_policy_trajectory.csv`.
 - Это independent June-updated micro sensitivity, а не второй вычет из central
   `+1.70`: tariff-neutralisation уже входит в его nonfuel base выше.
