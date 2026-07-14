@@ -9,10 +9,10 @@
 |---|---:|---:|---:|
 | Июнь 2026 | 101.06 | +1.06 | 106.01 |
 | **Июль 2026** | **101.40** | **+1.40** | **107.08** |
-| **Август 2026** | **100.50** | **+0.50** | **108.58** |
-| Декабрь 2026 | 100.50 | +0.50 | 109.59 |
+| **Август 2026** | **100.50** | **+0.50** | **108.23** |
+| Декабрь 2026 | 100.50 | +0.50 | 109.23 |
 
-Расчётный Dec/Dec 2026: **109.59**.
+Расчётный Dec/Dec 2026: **109.23**.
 
 ## Что изменилось в данных
 
@@ -23,15 +23,13 @@
 ## Модельные и недельные ориентиры на июль
 
 - Weighted production Ensemble: **+1.14%**.
-- В central nonfuel base отсутствие июльской индексации уже учтено: cached
-  Ensemble `+1.139663` минус tariff bridge `−0.250079` даёт
-  `+0.889584 п.п.`. Bridge согласуется с KBR45 scenario delta
-  `−0.248477 п.п.` из
-  `archive/results/july_august_control_points_20260625/assumption_bridge.csv`;
-  разница `0.001602 п.п.` — округление и разные model vintages.
+- Для tariff-adjusted model reference absence of July indexation gives cached
+  Ensemble `+1.139663` minus tariff bridge `−0.250079` =
+  `+0.889584 п.п.`. Это headline reference, содержащий embedded fuel, и не
+  является nonfuel base для механического сложения с новым fuel overlay.
 - Auxiliary weekly bridge Nowcast: **+1.41%**. Он основан на одной неделе и простых средних внутри компонент; не используется как production-модель.
 - Item-weighted Laspeyres diagnostic на 06.07: component-scaled **+1.03%**, headline partial **+0.31%**, покрытие **34.687%** корзины (105 позиций). См. `weekly_laspeyres/`.
-- Полученный рыночный сигнал — цена около `120` руб./л. Последний официальный weekly CPI proxy от 06.07 ещё показывает АИ-92 `87.99`, АИ-95 `93.97`, АИ-98 `105.00`, дизель `94.87` руб./л: это measurement gap, а не опровержение рыночного наблюдения. Сигнал включён в центральную ветку с неполной реализацией.
+- Полученный рыночный сигнал — цена около `120` руб./л. Последний официальный weekly CPI proxy от 06.07 ещё показывает АИ-92 `87.99`, АИ-95 `93.97`, АИ-98 `105.00`, дизель `94.87` руб./л. Он остаётся conditional fuel-upside, а не central input.
 - Canonical h=1 rolling backtest после обновления данных: в июне ensemble дал `+0.37%` против факта `+1.06%` (ошибка `−0.69 п.п.`). Поэтому механический ensemble не используется как единственная точка в топливном режиме.
 
 ### Обновление внутреннего micro-прогноза по июньскому cutoff
@@ -49,8 +47,8 @@
   `archive/results/micro_tariff_scenario_july100_oct110/micro_tariff_scenario_details.csv`;
   частная аренда и банковский сейф исключены. Полная траектория:
   `archive/results/microcomponent_june_20260713/microcomponent_tariff_policy_trajectory.csv`.
-- Это independent June-updated micro sensitivity, а не второй вычет из central
-  `+1.70`: tariff-neutralisation уже входит в его nonfuel base выше.
+- Это independent June-updated micro sensitivity; она не используется как
+  дополнительный вычет из expert central `+1.40`.
 - Внешний `Micro_SM` не обновлён: его source matrix заканчивается маем 2026;
   он не используется как June-updated micro signal.
 
@@ -74,7 +72,7 @@
 
 ## Траектория и ОПР-форма
 
-Полный путь находится в `central_policy_trajectory.csv`. В `assets/06_2026_02_Прогноз.xlsx`, лист `Прогноз`, обновлены E55:E68: факты мая–июня и центральная траектория июля 2026 — июня 2027. Формулы YoY в колонке F сохранены; Excel принудительно пересчитает их при открытии. Резервная копия до изменения: `06_2026_02_Прогноз.before_july_fuel_trajectory.xlsx`.
+Полный путь находится в `central_policy_trajectory.csv`. В `assets/06_2026_02_Прогноз.xlsx`, лист `Прогноз`, обновлены E55:E68: факты мая–июня и центральная траектория июля 2026 — июня 2027. Формулы YoY в колонке F сохранены; Excel принудительно пересчитает их при открытии. Резервная копия до KPI-ревизии: `06_2026_02_Прогноз.before_kpi_revision.xlsx`.
 
 ## Ограничения
 

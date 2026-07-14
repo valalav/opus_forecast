@@ -6,17 +6,18 @@ Date: 2026-07-13
 
 Central control points for KBR CPI:
 
-- July 2026: **101.70** (+1.70% MoM)
+- July 2026: **101.40** (+1.40% MoM); KPI tolerance is ±0.5 p.p., not a confidence interval.
 - August 2026: **100.50** (+0.50% MoM)
 
-The reported market price near `120 rub./litre` is accepted as a leading observation. The last official weekly CPI proxy on 2026-07-06 was lower—AI-92 `87.99`, AI-95 `93.97`, AI-98 `105.00`, and diesel `94.87`—which is a measurement lag, not a contradiction. The central path realises half of the direct price gap; persistence in the next two weekly publications triggers the upper branch.
+The July point rounds the fresh weekly bridge (`+1.41%`). The reported 120 rub./litre market price remains a conditional fuel-upside signal, not the central input.
 
 ## Fuel Scenarios
 
 | Scenario | July | August | Rule |
 |---|---:|---:|---|
 | Fast correction to the 29 June official level | 100.85 | 99.95 | The direct fuel increment to June is removed. |
-| Central | 101.70 | 100.50 | Half of the direct gap between the official 6 July proxy and 120 rub./litre is realised; August has no repeated direct effect. |
+| Expert central (KPI) | 101.40 | 100.50 | Rounded fresh weekly bridge; working KPI band is 100.90–101.90. |
+| Fuel upside: partial 120 | 101.70 | 100.50 | Mechanical ceiling with embedded-fuel double-count risk; not central. |
 | Stress: 120 rub./litre | 102.30 | 100.75 | Direct July fuel contribution is +1.192 p.p.; August contains no repeat direct contribution, only a separately marked expectations/logistics risk. |
 
 ## Evidence
@@ -32,7 +33,7 @@ The reported market price near `120 rub./litre` is accepted as a leading observa
 - Scenario calculation: `archive/results/july_2026_fuel_trajectory_20260713/fuel_scenario_contributions.csv`
 - Central path: `archive/results/july_2026_fuel_trajectory_20260713/central_policy_trajectory.csv`
 - Weighted weekly diagnostic: `archive/results/july_2026_fuel_trajectory_20260713/weekly_laspeyres/`
-- OPR-form backup: `archive/results/july_2026_fuel_trajectory_20260713/06_2026_02_Прогноз.before_july_fuel_trajectory.xlsx`
+- OPR-form backup: `archive/results/july_2026_fuel_trajectory_20260713/06_2026_02_Прогноз.before_kpi_revision.xlsx`
 
 ## Limits
 
