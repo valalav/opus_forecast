@@ -2,7 +2,7 @@
 
 **Period:** 2025-08-01 to 2026-07-01 (12 months)
 **Horizon:** 2 month(s) ahead
-**Generated:** 2026-08-17 10:36:19
+**Generated:** 2026-08-17 11:42:23
 
 ## Top 5 Models
 
@@ -19,8 +19,8 @@
 - Huber_ProdProxy: 1/12 (8.3%)
 - Rolling_Ridge: 4/12 (33.3%)
 - EBM: 6/12 (50.0%)
-- Prophet: 5/12 (41.7%)
 - Subcomp_Multi: 5/12 (41.7%)
+- Prophet: 5/12 (41.7%)
 - Huber_Roll24: 5/12 (41.7%)
 - Ridge_Ext_Roll24: 5/12 (41.7%)
 - Ridge_Ext_ProdProxy: 4/12 (33.3%)
@@ -34,8 +34,8 @@
 | Huber_ProdProxy | 0.374 | 0.430 | 1 | 75.0% |
 | Rolling_Ridge | 0.455 | 0.550 | 4 | 66.7% |
 | EBM | 0.460 | 0.522 | 6 | 50.0% |
+| Subcomp_Multi | 0.464 | 0.544 | 5 | 58.3% |
 | Prophet | 0.466 | 0.515 | 5 | 58.3% |
-| Subcomp_Multi | 0.466 | 0.549 | 5 | 58.3% |
 | Huber_Roll24 | 0.490 | 0.592 | 5 | 58.3% |
 | Ridge_Ext_Roll24 | 0.492 | 0.604 | 5 | 58.3% |
 | Ridge_Ext_ProdProxy | 0.492 | 0.599 | 4 | 66.7% |

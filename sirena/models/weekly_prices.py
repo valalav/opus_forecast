@@ -493,6 +493,16 @@ class WeeklyPriceNowcaster:
         # Merge weekly signals with monthly CPI
         df = monthly_cpi.copy()
         df.index = pd.to_datetime(df.index)
+
+        # Недельные данные опережают месячный ИПЦ: текущий месяц уже наблюдается
+        # по неделям, но месячного значения ещё нет. Без этого расширения
+        # nowcast откатывался на последний закрытый месяц и переставал быть
+        # nowcast'ом. Продлеваем индекс только вперёд, историю не трогаем.
+        weekly_index = pd.to_datetime(weekly_signals.index)
+        future_months = weekly_index[weekly_index > df.index.max()]
+        if len(future_months):
+            df = df.reindex(df.index.union(future_months))
+
         df = df.join(weekly_signals, how='left')
 
         # Target: MoM inflation (subtract 100 to get percentage)
@@ -714,6 +724,11 @@ class WeeklyPriceNowcaster:
             # Use standard weighting
             signal_info = compute_basket_signal(month_data, weighting=self.weighting)
 
+        # Модель обучена на ПОЛНЫХ месяцах. Если целевой месяц ещё набирается,
+        # недельный сигнал несопоставим с обучающим, и прогноз недостоверен.
+        weeks_observed = int(month_data["date"].nunique()) if len(month_data) else 0
+        partial_month = 0 < weeks_observed < 4
+
         # Build result
         result = {
             "prediction": prediction,
@@ -723,8 +738,20 @@ class WeeklyPriceNowcaster:
             "nonfood_signal": signal_info["nonfood_signal"],
             "coverage": signal_info["coverage"],
             "n_products": signal_info["n_products"],
-            "confidence": "high" if signal_info["coverage"] > 0.8 else "medium",
+            "weeks_observed": weeks_observed,
+            "partial_month": partial_month,
+            "confidence": (
+                "low (неполный месяц)"
+                if partial_month
+                else ("high" if signal_info["coverage"] > 0.8 else "medium")
+            ),
         }
+        if partial_month:
+            result["warning"] = (
+                f"Целевой месяц наблюдается лишь {weeks_observed} нед. из ~4; "
+                "модель обучена на полных месяцах. Использовать "
+                "scripts/weekly_calibrated_nowcast.py."
+            )
 
         # Add regime info if using regime switching
         if self.use_regime:

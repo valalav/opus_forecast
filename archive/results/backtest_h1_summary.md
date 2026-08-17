@@ -2,7 +2,7 @@
 
 **Period:** 2025-08-01 to 2026-07-01 (12 months)
 **Horizon:** 1 month(s) ahead
-**Generated:** 2026-08-17 10:31:59
+**Generated:** 2026-08-17 11:41:28
 
 ## Top 5 Models
 

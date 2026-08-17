@@ -7,16 +7,23 @@ import sys
 def parse_date_range(date_str):
     """
     Parses a date range string like 'с 07.01.2008 по 14.01.2008'
-    Returns the end date as a datetime object.
+    Returns the REGISTRATION date (interval start) as a datetime object.
+
+    Previously this returned the interval end, which put every observation one
+    week late. The operational weekly file (data/Еженедельные цены.csv) labels
+    the same observation by the interval start, and that labelling is the one
+    that reconciles with the official monthly index: on 2023-09..2025-12 the
+    fuel bridge scores MAE 0.558 / corr 0.942 against subcomponent 42 using the
+    start date, versus MAE 0.789 / corr 0.892 using the end date.
     """
     if not isinstance(date_str, str):
         return None
-    
-    # Try pattern "с start по end"
-    match = re.search(r'по\s+(\d{2}\.\d{2}\.\d{4})', date_str)
+
+    # Try pattern "с start по end" -> registration happens at `start`
+    match = re.search(r'с\s+(\d{2}\.\d{2}\.\d{4})\s+по', date_str)
     if match:
         return pd.to_datetime(match.group(1), dayfirst=True)
-    
+
     # Fallback: try parsing just the date if it's not a range
     try:
         return pd.to_datetime(date_str, dayfirst=True)
