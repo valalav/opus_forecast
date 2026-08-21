@@ -31,6 +31,13 @@ When entering a new task:
 
 Do not read the entire docs tree by default. Use `docs/index.md` as the navigation hub.
 
+## Completed Task Log
+
+- After every completed task, add one newest-first row to `docs/TASK_LOG.md` before committing.
+- Required fields: ISO date, concise task, one-sentence brief description, and repo-relative link to the primary report or artifact.
+- Keep specialized registries such as `archive/results/analysis_notes/analysis_index.csv` updated as well; the task log does not replace them.
+- Do not mark a task complete until its log row has been added.
+
 ## Prefer Skills / Existing Workflows
 
 If the environment exposes skills or commands, prefer them over ad-hoc flows.
