@@ -72,6 +72,7 @@ def main() -> int:
     print(
         "Rows: "
         f"raw={result.get('raw_rows')}, deduped={result.get('deduped_rows')}, "
+        f"invalid_removed={result.get('invalid_rows_removed')}, "
         f"duplicates_removed={result.get('duplicates_removed')}"
     )
     print(f"Status: {result.get('status')}")

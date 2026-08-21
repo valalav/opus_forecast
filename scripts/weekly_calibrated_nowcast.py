@@ -34,7 +34,7 @@ from sirena.data.weekly_bridge import (  # noqa: E402
 )
 
 ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_WEEKLY = ROOT / "data" / "Еженедельные цены.csv"
+DEFAULT_WEEKLY = ROOT / "data" / "Сравнение еженедельных цен_01.csv"
 MICRO_SPRAV = ROOT / "data" / "raw" / "micro_sprav.csv"
 MONTHLY = ROOT / "data" / "inflation_data.csv"
 

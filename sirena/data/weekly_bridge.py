@@ -19,7 +19,6 @@ from .weekly_loader import COMPONENT_WEIGHTS
 
 DEFAULT_SEMICOLON_WEEKLY_PATH = Path("data") / "Сравнение еженедельных цен_01.csv"
 DEFAULT_DECAY_FACTOR = 0.6
-DEFAULT_WEEKS_PER_MONTH = 4
 
 
 def _project_root() -> Path:
@@ -57,6 +56,22 @@ def _parse_russian_float(value: Any) -> float:
         return float(text)
     except ValueError:
         return np.nan
+
+
+def _parse_weekly_dates(values: pd.Series) -> pd.Series:
+    """Parse Russian dates and Excel serial dates from weekly exports."""
+    text = values.fillna("").astype(str).str.strip()
+    parsed = pd.to_datetime(text, format="%d.%m.%Y", errors="coerce")
+
+    serials = pd.to_numeric(text, errors="coerce")
+    serial_mask = parsed.isna() & serials.between(20_000, 80_000)
+    parsed.loc[serial_mask] = pd.to_datetime(
+        serials.loc[serial_mask],
+        unit="D",
+        origin="1899-12-30",
+        errors="coerce",
+    )
+    return parsed
 
 
 def classify_component(component: Any) -> Optional[str]:
@@ -103,7 +118,7 @@ def load_semicolon_weekly_prices(path: Optional[str | Path] = None) -> pd.DataFr
 
     df = pd.DataFrame(
         {
-            "date": pd.to_datetime(raw[date_col], format="%d.%m.%Y", errors="coerce"),
+            "date": _parse_weekly_dates(raw[date_col]),
             "product_name": raw[name_col].fillna("").astype(str).str.strip(),
             "price": raw[price_col].map(_parse_russian_float),
             "change_index": raw[change_col].map(_parse_russian_float),
@@ -120,16 +135,18 @@ def load_semicolon_weekly_prices(path: Optional[str | Path] = None) -> pd.DataFr
     df["component"] = cast(pd.Series, df["component_raw"]).map(classify_component)
     df["source_file"] = str(data_path)
 
-    before = len(df)
+    raw_rows = len(df)
     df = df.dropna(subset=["date"])
     df = df[df["product_name"] != ""]
     df = cast(pd.DataFrame, df[cast(pd.Series, df["component"]).notna()])
+    valid_rows = len(df)
     df = df.drop_duplicates(subset=["date", "item_key"], keep="first")
     df = df.sort_values(["date", "item_key"]).reset_index(drop=True)
 
-    df.attrs["raw_rows"] = before
+    df.attrs["raw_rows"] = raw_rows
     df.attrs["deduped_rows"] = len(df)
-    df.attrs["duplicates_removed"] = before - len(df)
+    df.attrs["invalid_rows_removed"] = raw_rows - valid_rows
+    df.attrs["duplicates_removed"] = valid_rows - len(df)
     df.attrs["source_file"] = str(data_path)
     return df
 
@@ -278,7 +295,7 @@ def compute_weekly_bridge_nowcast(
     data_path: Optional[str | Path] = None,
     weights: Optional[Dict[str, float]] = None,
     decay_factor: float = DEFAULT_DECAY_FACTOR,
-    weeks_per_month: int = DEFAULT_WEEKS_PER_MONTH,
+    weeks_per_month: Optional[int] = None,
     driver_limit: int = 12,
 ) -> Dict[str, Any]:
     """Compute diagnostic weekly bridge signals for one target month."""
@@ -292,6 +309,7 @@ def compute_weekly_bridge_nowcast(
         "source_file": str(weekly.attrs.get("source_file", data_path or DEFAULT_SEMICOLON_WEEKLY_PATH)),
         "raw_rows": int(weekly.attrs.get("raw_rows", len(weekly))),
         "deduped_rows": int(weekly.attrs.get("deduped_rows", len(weekly))),
+        "invalid_rows_removed": int(weekly.attrs.get("invalid_rows_removed", 0)),
         "duplicates_removed": int(weekly.attrs.get("duplicates_removed", 0)),
         "weights": {key: _safe_round(value) for key, value in component_weights.items()},
         "status": "ok",
@@ -324,7 +342,12 @@ def compute_weekly_bridge_nowcast(
 
     cumulative_mom = (cumulative - 1.0) * 100.0
     avg_weekly_change = float(np.mean([idx - 100.0 for idx in weekly_indices]))
-    remaining_weeks = max(0, weeks_per_month - len(weekly_indices))
+    first_week_date = cast(pd.Timestamp, pd.Timestamp(min(month_dates)))
+    calendar_weeks = len(
+        pd.date_range(start=first_week_date, end=month_end, freq="7D", inclusive="left")
+    )
+    expected_weeks = int(weeks_per_month or calendar_weeks)
+    remaining_weeks = max(0, expected_weeks - len(weekly_indices))
     extrapolated_mom = cumulative_mom + avg_weekly_change * decay_factor * remaining_weeks
     result["chain"] = {
         "weeks_count": int(len(weekly_indices)),
@@ -332,6 +355,7 @@ def compute_weekly_bridge_nowcast(
         "index": _safe_round(cumulative * 100.0),
         "mom": _safe_round(cumulative_mom),
         "avg_weekly_mom": _safe_round(avg_weekly_change),
+        "weeks_expected": expected_weeks,
         "remaining_weeks": int(remaining_weeks),
         "decay_factor": _safe_round(decay_factor),
         "extrapolated_mom": _safe_round(extrapolated_mom),
@@ -392,6 +416,7 @@ def compute_weekly_bridge_for_months(
         "source_file": str(weekly.attrs.get("source_file", data_path or DEFAULT_SEMICOLON_WEEKLY_PATH)),
         "raw_rows": int(weekly.attrs.get("raw_rows", len(weekly))),
         "deduped_rows": int(weekly.attrs.get("deduped_rows", len(weekly))),
+        "invalid_rows_removed": int(weekly.attrs.get("invalid_rows_removed", 0)),
         "duplicates_removed": int(weekly.attrs.get("duplicates_removed", 0)),
         "data_date_range": {
             "start": cast(

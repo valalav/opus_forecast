@@ -251,11 +251,16 @@ def take_screenshots():
         lines = result.stdout.splitlines()
         ok_count = sum(1 for line in lines if 'OK →' in line)
         error_count = sum(1 for line in lines if line.strip().startswith('ERROR:'))
+        warning_count = sum(1 for line in lines if line.strip().startswith('WARNING:'))
 
         print(f"  Успешно: {ok_count} вкладок")
-        if error_count > 0:
-            print(f"  Ошибки: {error_count}")
-            return [f"screenshots: {error_count} ошибок"]
+        if error_count > 0 or warning_count > 0 or ok_count == 0:
+            print(f"  Ошибки: {error_count}; предупреждения: {warning_count}")
+            return [
+                "screenshots: "
+                f"{error_count} ошибок, {warning_count} предупреждений, "
+                f"{ok_count} успешных вкладок"
+            ]
 
         print("\n  Скриншоты сохранены в assets/screenshots/")
         return []

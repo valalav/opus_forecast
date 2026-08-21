@@ -70,6 +70,7 @@ async def take_screenshots():
         try:
             await page.goto(DASHBOARD_URL, timeout=60000)
             await page.wait_for_load_state('networkidle', timeout=60000)
+            await page.get_by_role('tab').first.wait_for(state='visible', timeout=60000)
         except Exception as e:
             print(f"ERROR: Не удалось открыть dashboard: {e}")
             await browser.close()
@@ -88,7 +89,7 @@ async def take_screenshots():
 
             try:
                 # Find and click the tab
-                tab_button = page.locator(f'button:has-text("{tab_name}")')
+                tab_button = page.get_by_role('tab', name=tab_name, exact=True)
 
                 if await tab_button.count() == 0:
                     print(f"  WARNING: Tab '{tab_name}' not found!")

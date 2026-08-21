@@ -39,8 +39,27 @@ def test_load_semicolon_weekly_prices_dedupes_and_classifies(tmp_path):
 
     assert df.attrs["raw_rows"] == 13
     assert df.attrs["deduped_rows"] == 12
+    assert df.attrs["invalid_rows_removed"] == 0
     assert df.attrs["duplicates_removed"] == 1
     assert set(df["component"]) == {"food", "nonfood", "services"}
+
+
+def test_load_semicolon_weekly_prices_parses_excel_serial_dates(tmp_path):
+    data_path = tmp_path / "weekly.csv"
+    data_path.write_text(
+        "\n".join(
+            [
+                "Name;Наименование ;Средние цены, рублей ;Изменение цен, в % к предыдущей неделе ;Компонент;№",
+                "45117;Хлеб;100,0;100,0;Продовольственные товары;1",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    df = load_semicolon_weekly_prices(data_path)
+
+    assert df.attrs["deduped_rows"] == 1
+    assert df.iloc[0]["date"].strftime("%Y-%m-%d") == "2023-07-10"
 
 
 @pytest.mark.parametrize(
@@ -64,12 +83,31 @@ def test_compute_weekly_bridge_nowcast_chain_and_month_end(tmp_path):
 
     assert result["status"] == "ok"
     assert result["chain"]["weeks_count"] == 2
+    assert result["chain"]["weeks_expected"] == 4
     assert result["chain"]["remaining_weeks"] == 2
     assert result["chain"]["mom"] == pytest.approx(0.35015)
     assert result["chain"]["extrapolated_mom"] == pytest.approx(0.56015)
     assert result["month_end"]["matched_items"] == 3
     assert result["month_end"]["mom"] == pytest.approx(0.35)
     assert result["first_next_week_vs_month_end"]["mom"] == pytest.approx(0.282539)
+
+
+def test_compute_weekly_bridge_nowcast_counts_five_calendar_weeks(tmp_path):
+    data_path = tmp_path / "weekly.csv"
+    rows = [
+        "Name;Наименование ;Средние цены, рублей ;Изменение цен, в % к предыдущей неделе ;Компонент;№",
+        "27.07.2026;Хлеб;100,0;100,0;Продовольственные товары;1",
+        "03.08.2026;Хлеб;101,0;101,0;Продовольственные товары;1",
+        "10.08.2026;Хлеб;102,0;101,0;Продовольственные товары;1",
+        "17.08.2026;Хлеб;103,0;101,0;Продовольственные товары;1",
+    ]
+    data_path.write_text("\n".join(rows), encoding="utf-8")
+
+    result = compute_weekly_bridge_nowcast("2026-08", data_path=data_path)
+
+    assert result["chain"]["weeks_count"] == 3
+    assert result["chain"]["weeks_expected"] == 5
+    assert result["chain"]["remaining_weeks"] == 2
 
 
 def test_compute_weekly_bridge_for_months_schema(tmp_path):
