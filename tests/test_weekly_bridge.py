@@ -126,4 +126,5 @@ def test_compute_weekly_bridge_for_months_schema(tmp_path):
 def test_weekly_model_blend_weights():
     assert weekly_model_blend_weights(1) == (0.60, 0.40)
     assert weekly_model_blend_weights(4) == (0.90, 0.10)
-    assert weekly_model_blend_weights(6) == (0.70, 0.30)
+    assert weekly_model_blend_weights(5) == (0.90, 0.10)
+    assert weekly_model_blend_weights(6) == (0.90, 0.10)

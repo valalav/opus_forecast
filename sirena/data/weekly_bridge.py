@@ -436,6 +436,7 @@ def weekly_model_blend_weights(weeks_count: int) -> Tuple[float, float]:
         1: (0.60, 0.40),
         2: (0.70, 0.30),
         3: (0.80, 0.20),
-        4: (0.90, 0.10),
     }
+    if weeks_count >= 4:
+        return 0.90, 0.10
     return weight_map.get(weeks_count, (0.70, 0.30))
