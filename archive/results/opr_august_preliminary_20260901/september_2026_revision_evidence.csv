@@ -1,0 +1,10 @@
+metric,value_pp_or_index,period,n,source,interpretation
+model_ensemble_mom,0.757,2026-09,1,data/precomputed_forecasts.json,Monthly model anchor before preliminary August information
+historical_september_mean_mom,0.597,2010-2025,16,data/inflation_data.csv,Unconditional September mean
+historical_september_median_mom,0.520,2010-2025,16,data/inflation_data.csv,Robust unconditional September anchor
+september_mean_after_near_zero_august_mom,0.409,2010-2025,9,data/inflation_data.csv,Conditional mean when August headline MoM is within plus or minus 0.2 pp
+september_median_after_near_zero_august_mom,0.420,2010-2025,9,data/inflation_data.csv,Conditional median when August headline MoM is within plus or minus 0.2 pp
+early_vegetable_decline_group_september_headline_mean_mom,0.705,"2011;2012;2015;2024",4,data/inflation_data.csv,Headline outcome for the previously identified early-decline years
+early_vegetable_decline_group_subcomponent_mom,-2.400,"2011;2012;2015;2024",4,archive/results/aug_2026_update/plodovoshchi_pattern_and_sep2023.md,Expected September fruit-and-vegetable subcomponent path
+vegetable_adjustment_to_headline,-0.053,2026-09,4,archive/results/aug_2026_update/plodovoshchi_pattern_and_sep2023.md,Existing expert adjustment relative to normal September seasonality
+selected_pr3_mom_index,100.500,2026-09,1,assets/06_2026_02_Прогноз.xlsx,Expert point after preliminary August around zero and late-August vegetable weakness

@@ -40,6 +40,7 @@ Check `analysis_index.csv` before continuing discussions about:
 
 | Date | Topic | Note |
 |---|---|---|
+| 2026-09-01 | PR3 revision after preliminary August near zero | [2026-09-01_august_preliminary_pr3_revision.md](../archive/results/analysis_notes/2026-09-01_august_preliminary_pr3_revision.md) |
 | 2026-08-27 | August 2026 nowcast through 24 August | [2026-08-27_august_nowcast_week4.md](../archive/results/analysis_notes/2026-08-27_august_nowcast_week4.md) |
 | 2026-08-21 | August 2026 nowcast through 17 August | [2026-08-21_august_nowcast_week3.md](../archive/results/analysis_notes/2026-08-21_august_nowcast_week3.md) |
 | 2026-06-25 | July 2026 gasoline reversion lower-bound scenario | [2026-06-25_july_2026_gasoline_reversion_floor.md](../archive/results/analysis_notes/2026-06-25_july_2026_gasoline_reversion_floor.md) |

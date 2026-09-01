@@ -264,7 +264,7 @@ class TestForecastH12ProductionCache:
             json.dumps(
                 {
                     "forecast_dates": [
-                        "2026-08-01",
+                        "2026-07-01",
                         *cache["forecast_dates"][1:],
                     ],
                     "mom_pp": [1.7] + [0.5] * 11,
