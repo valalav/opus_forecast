@@ -18,6 +18,9 @@ from .weekly_loader import COMPONENT_WEIGHTS
 
 
 DEFAULT_SEMICOLON_WEEKLY_PATH = Path("data") / "Сравнение еженедельных цен_01.csv"
+DEFAULT_ACCOUNTING_MONTH_OVERRIDES_PATH = (
+    Path("data") / "weekly_accounting_month_overrides.csv"
+)
 DEFAULT_DECAY_FACTOR = 0.6
 
 
@@ -44,6 +47,56 @@ def get_semicolon_weekly_path(path: Optional[str | Path] = None) -> Path:
     raise FileNotFoundError(
         f"Fresh weekly semicolon file not found: {DEFAULT_SEMICOLON_WEEKLY_PATH}"
     )
+
+
+def get_accounting_month_overrides_path(
+    path: Optional[str | Path] = None,
+) -> Optional[Path]:
+    """Return the optional operational week-to-month override file."""
+    if path is not None:
+        candidate = Path(path)
+        resolved = candidate if candidate.is_absolute() else _project_root() / candidate
+        if not resolved.exists():
+            raise FileNotFoundError(
+                f"Weekly accounting-month overrides not found: {resolved}"
+            )
+        return resolved
+
+    candidate = _project_root() / DEFAULT_ACCOUNTING_MONTH_OVERRIDES_PATH
+    return candidate if candidate.exists() else None
+
+
+def _load_accounting_month_overrides(
+    path: Optional[str | Path] = None,
+) -> Tuple[Dict[pd.Timestamp, pd.Timestamp], Optional[Path]]:
+    """Load explicit week-date assignments used at reporting boundaries."""
+    resolved = get_accounting_month_overrides_path(path)
+    if resolved is None:
+        return {}, None
+
+    overrides = pd.read_csv(resolved, comment="#")
+    required = {"week_date", "accounting_month"}
+    missing = required.difference(overrides.columns)
+    if missing:
+        raise ValueError(
+            "Weekly accounting-month overrides are missing columns: "
+            + ", ".join(sorted(missing))
+        )
+
+    week_dates = pd.to_datetime(overrides["week_date"], errors="raise").dt.normalize()
+    accounting_months = (
+        pd.to_datetime(overrides["accounting_month"], errors="raise")
+        .dt.to_period("M")
+        .dt.to_timestamp()
+    )
+    if week_dates.duplicated().any():
+        duplicates = week_dates[week_dates.duplicated()].dt.strftime("%Y-%m-%d")
+        raise ValueError(
+            "Duplicate weekly accounting-month overrides: "
+            + ", ".join(duplicates.tolist())
+        )
+
+    return dict(zip(week_dates, accounting_months)), resolved
 
 
 def _parse_russian_float(value: Any) -> float:
@@ -94,7 +147,10 @@ def _first_existing_column(columns: Iterable[str], candidates: Iterable[str]) ->
     raise KeyError(f"None of the expected columns found: {', '.join(candidates)}")
 
 
-def load_semicolon_weekly_prices(path: Optional[str | Path] = None) -> pd.DataFrame:
+def load_semicolon_weekly_prices(
+    path: Optional[str | Path] = None,
+    accounting_overrides_path: Optional[str | Path] = None,
+) -> pd.DataFrame:
     """Load fresh weekly prices from the row-wise Rosstat semicolon export.
 
     Rows are deduplicated by ``(date, item_key)`` because recent files contain
@@ -143,11 +199,31 @@ def load_semicolon_weekly_prices(path: Optional[str | Path] = None) -> pd.DataFr
     df = df.drop_duplicates(subset=["date", "item_key"], keep="first")
     df = df.sort_values(["date", "item_key"]).reset_index(drop=True)
 
+    accounting_overrides, resolved_overrides_path = _load_accounting_month_overrides(
+        accounting_overrides_path
+    )
+    default_accounting_month = (
+        cast(pd.Series, df["date"]).dt.to_period("M").dt.to_timestamp()
+    )
+    overridden_accounting_month = cast(pd.Series, df["date"]).map(accounting_overrides)
+    df["accounting_month"] = overridden_accounting_month.fillna(default_accounting_month)
+    overrides_applied = int(
+        df.loc[overridden_accounting_month.notna(), "date"].nunique()
+    )
+
     df.attrs["raw_rows"] = raw_rows
     df.attrs["deduped_rows"] = len(df)
     df.attrs["invalid_rows_removed"] = raw_rows - valid_rows
     df.attrs["duplicates_removed"] = valid_rows - len(df)
     df.attrs["source_file"] = str(data_path)
+    df.attrs["accounting_overrides_file"] = (
+        str(resolved_overrides_path) if resolved_overrides_path else None
+    )
+    df.attrs["accounting_month_overrides"] = {
+        week_date.strftime("%Y-%m-%d"): accounting_month.strftime("%Y-%m")
+        for week_date, accounting_month in accounting_overrides.items()
+    }
+    df.attrs["accounting_overrides_applied"] = overrides_applied
     return df
 
 
@@ -297,13 +373,24 @@ def compute_weekly_bridge_nowcast(
     decay_factor: float = DEFAULT_DECAY_FACTOR,
     weeks_per_month: Optional[int] = None,
     driver_limit: int = 12,
+    accounting_overrides_path: Optional[str | Path] = None,
 ) -> Dict[str, Any]:
     """Compute diagnostic weekly bridge signals for one target month."""
-    weekly = df.copy() if df is not None else load_semicolon_weekly_prices(data_path)
+    weekly = (
+        df.copy()
+        if df is not None
+        else load_semicolon_weekly_prices(data_path, accounting_overrides_path)
+    )
     component_weights = _normalised_weights(weights)
     month_start, month_end = _month_bounds(target_month)
 
-    month_data = weekly[(weekly["date"] >= month_start) & (weekly["date"] < month_end)]
+    if "accounting_month" in weekly.columns:
+        accounting_month = cast(pd.Series, weekly["accounting_month"])
+    else:
+        accounting_month = (
+            cast(pd.Series, weekly["date"]).dt.to_period("M").dt.to_timestamp()
+        )
+    month_data = weekly[accounting_month == month_start]
     result: Dict[str, Any] = {
         "target_month": month_start.strftime("%Y-%m"),
         "source_file": str(weekly.attrs.get("source_file", data_path or DEFAULT_SEMICOLON_WEEKLY_PATH)),
@@ -311,6 +398,10 @@ def compute_weekly_bridge_nowcast(
         "deduped_rows": int(weekly.attrs.get("deduped_rows", len(weekly))),
         "invalid_rows_removed": int(weekly.attrs.get("invalid_rows_removed", 0)),
         "duplicates_removed": int(weekly.attrs.get("duplicates_removed", 0)),
+        "accounting_overrides_file": weekly.attrs.get("accounting_overrides_file"),
+        "accounting_overrides_applied": int(
+            weekly.attrs.get("accounting_overrides_applied", 0)
+        ),
         "weights": {key: _safe_round(value) for key, value in component_weights.items()},
         "status": "ok",
     }
@@ -343,8 +434,21 @@ def compute_weekly_bridge_nowcast(
     cumulative_mom = (cumulative - 1.0) * 100.0
     avg_weekly_change = float(np.mean([idx - 100.0 for idx in weekly_indices]))
     first_week_date = cast(pd.Timestamp, pd.Timestamp(min(month_dates)))
-    calendar_weeks = len(
-        pd.date_range(start=first_week_date, end=month_end, freq="7D", inclusive="left")
+    scheduled_dates = pd.date_range(
+        start=first_week_date, end=month_end, freq="7D", inclusive="left"
+    )
+    override_months = {
+        pd.Timestamp(week_date): pd.Timestamp(f"{assigned_month}-01")
+        for week_date, assigned_month in weekly.attrs.get(
+            "accounting_month_overrides", {}
+        ).items()
+    }
+    calendar_weeks = sum(
+        override_months.get(
+            date.normalize(), date.to_period("M").to_timestamp()
+        )
+        == month_start
+        for date in scheduled_dates
     )
     expected_weeks = int(weeks_per_month or calendar_weeks)
     remaining_weeks = max(0, expected_weeks - len(weekly_indices))
@@ -361,8 +465,7 @@ def compute_weekly_bridge_nowcast(
         "extrapolated_mom": _safe_round(extrapolated_mom),
     }
 
-    weekly_dates = cast(pd.Series, weekly["date"])
-    previous_dates = cast(pd.Series, weekly.loc[weekly_dates < month_start, "date"])
+    previous_dates = cast(pd.Series, weekly.loc[accounting_month < month_start, "date"])
     if not previous_dates.empty:
         base_date = cast(pd.Timestamp, pd.Timestamp(previous_dates.max()))
         end_date = cast(pd.Timestamp, pd.Timestamp(cast(pd.Series, month_data["date"]).max()))
@@ -373,8 +476,8 @@ def compute_weekly_bridge_nowcast(
     next_month_data = cast(
         pd.DataFrame,
         weekly[
-            (weekly_dates >= month_end)
-            & (weekly_dates < month_end + pd.DateOffset(months=1))
+            (accounting_month >= month_end)
+            & (accounting_month < month_end + pd.DateOffset(months=1))
         ],
     )
     if "month_end" in result and not next_month_data.empty:

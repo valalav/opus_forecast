@@ -1,8 +1,11 @@
 {
-  "generated_at": "2026-09-01T11:21:01+03:00",
+  "generated_at": "2026-09-01T13:48:11+03:00",
   "latest_official_month": "2026-07-01",
   "preliminary_month": "2026-08-01",
   "preliminary_source": "User-reported preliminary Rosstat staff estimate; not an official published fact",
+  "operational_anchor_month": "2026-08-01",
+  "operational_anchor_mom_pp": 0.0,
+  "weekly_accounting_note": "The week dated 2026-08-31 counts toward the September 2026 live nowcast",
   "forecast_dates": [
     "2026-08-01",
     "2026-09-01",
@@ -31,7 +34,7 @@
     0.15,
     0.05
   ],
-  "scenario": "august_preliminary_pr3_revision",
-  "source_artifact": "archive/results/analysis_notes/2026-09-01_august_preliminary_pr3_revision.md",
-  "description": "Current PR3 path: August 2026 is a preliminary near-zero Rosstat staff estimate, not an official fact; September is revised to +0.50% with late-August vegetable weakness and historical September anchors considered."
+  "scenario": "august_anchor_september_live_nowcast",
+  "source_artifact": "archive/results/analysis_notes/2026-09-01_september_live_nowcast_protocol.md",
+  "description": "Current PR3 path: preliminary August 2026 at 0.00% is the operational anchor, while September remains at +0.50% pending its first weekly cutoff; the week dated 2026-08-31 is assigned to September."
 }

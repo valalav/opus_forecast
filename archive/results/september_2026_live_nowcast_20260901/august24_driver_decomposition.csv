@@ -1,0 +1,15 @@
+level,name,component,wow_pp,approx_headline_contribution_pp,n_items
+summary,weekly_bridge_total,all,-0.111350,-0.111350,107
+component,food,food,-0.415227,-0.163932,44
+component,nonfood,nonfood,0.018837,0.006881,43
+component,services,services,0.190500,0.045701,20
+summary,selected_fruit_and_vegetables,food,-17.460000,-0.156664,9
+item,"Помидоры свежие, кг",food,-6.310000,-0.056618,1
+item,"Лук репчатый, кг",food,-5.650000,-0.050696,1
+item,"Свёкла столовая, кг",food,-5.330000,-0.047825,1
+item,"Морковь, кг",food,-4.830000,-0.043338,1
+item,"Капуста белокочанная свежая, кг",food,-2.530000,-0.022701,1
+item,"Картофель, кг",food,-1.840000,-0.016510,1
+item,"Бананы, кг",food,0.540000,0.004845,1
+item,"Яблоки, кг",food,1.940000,0.017407,1
+item,"Огурцы свежие, кг",food,6.550000,0.058771,1

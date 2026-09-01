@@ -140,6 +140,7 @@ data/*
 !data/micro_sprav.csv
 !data/mom_sa_kbr.csv
 !data/precomputed_forecasts.json
+!data/weekly_accounting_month_overrides.csv
 
 # Temporary files
 *.tmp

@@ -42,6 +42,7 @@ def test_load_semicolon_weekly_prices_dedupes_and_classifies(tmp_path):
     assert df.attrs["invalid_rows_removed"] == 0
     assert df.attrs["duplicates_removed"] == 1
     assert set(df["component"]) == {"food", "nonfood", "services"}
+    assert "accounting_month" in df.columns
 
 
 def test_load_semicolon_weekly_prices_parses_excel_serial_dates(tmp_path):
@@ -92,7 +93,7 @@ def test_compute_weekly_bridge_nowcast_chain_and_month_end(tmp_path):
     assert result["first_next_week_vs_month_end"]["mom"] == pytest.approx(0.282539)
 
 
-def test_compute_weekly_bridge_nowcast_counts_five_calendar_weeks(tmp_path):
+def test_compute_weekly_bridge_respects_august_accounting_cutoff(tmp_path):
     data_path = tmp_path / "weekly.csv"
     rows = [
         "Name;Наименование ;Средние цены, рублей ;Изменение цен, в % к предыдущей неделе ;Компонент;№",
@@ -106,8 +107,31 @@ def test_compute_weekly_bridge_nowcast_counts_five_calendar_weeks(tmp_path):
     result = compute_weekly_bridge_nowcast("2026-08", data_path=data_path)
 
     assert result["chain"]["weeks_count"] == 3
-    assert result["chain"]["weeks_expected"] == 5
-    assert result["chain"]["remaining_weeks"] == 2
+    assert result["chain"]["weeks_expected"] == 4
+    assert result["chain"]["remaining_weeks"] == 1
+
+
+def test_compute_weekly_bridge_assigns_august_31_to_september(tmp_path):
+    data_path = tmp_path / "weekly.csv"
+    rows = [
+        "Name;Наименование ;Средние цены, рублей ;Изменение цен, в % к предыдущей неделе ;Компонент;№",
+        "24.08.2026;Хлеб;100,0;100,0;Продовольственные товары;1",
+        "31.08.2026;Хлеб;99,9;99,9;Продовольственные товары;1",
+        "07.09.2026;Хлеб;100,0;100,1;Продовольственные товары;1",
+    ]
+    data_path.write_text("\n".join(rows), encoding="utf-8")
+
+    august = compute_weekly_bridge_nowcast("2026-08", data_path=data_path)
+    september = compute_weekly_bridge_nowcast("2026-09", data_path=data_path)
+
+    assert august["chain"]["weeks_count"] == 1
+    assert [week["date"] for week in september["chain"]["weeks"]] == [
+        "2026-08-31",
+        "2026-09-07",
+    ]
+    assert september["chain"]["weeks_expected"] == 5
+    assert september["month_end"]["base_date"] == "2026-08-24"
+    assert september["accounting_overrides_applied"] == 1
 
 
 def test_compute_weekly_bridge_for_months_schema(tmp_path):
