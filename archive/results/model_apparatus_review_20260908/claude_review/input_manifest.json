@@ -1,0 +1,105 @@
+{
+  "inputs": [
+    {
+      "bytes": 22412,
+      "sha256": "350BFEABD6257E6EAE528725FB082D7E0C138207B6A568AB91C032853E58B519",
+      "path": "scripts/precompute_forecasts.py"
+    },
+    {
+      "bytes": 61110,
+      "sha256": "DB7D47914EE343A657C576F5C1F1EE53C676B11580AE7F1A2E53E72CC70907DF",
+      "path": "scripts/backtest_framework.py"
+    },
+    {
+      "bytes": 2208,
+      "sha256": "B50F3F354D662870E96F0F4E0FEAC6EFF041A62E99C0443F33DE7020CC63F351",
+      "path": "scripts/run_backtest_h1.py"
+    },
+    {
+      "bytes": 2255,
+      "sha256": "141FD728C8E6D4B68BD3C4BD9B44B8FD052923EA2942C76D132C82B1C8C4D1EF",
+      "path": "scripts/run_backtest_h2.py"
+    },
+    {
+      "bytes": 2313,
+      "sha256": "F7F64D71737D855C4586D0DE4F0CBD51F44E478340D865B12812D8EE28452D47",
+      "path": "scripts/run_backtest_h12.py"
+    },
+    {
+      "bytes": 7947,
+      "sha256": "155B37773FC1FC9D47AA6B96DC5BC5F395FC90B7BC37583EBFA7BB5512668672",
+      "path": "scripts/weekly_calibrated_nowcast.py"
+    },
+    {
+      "bytes": 20990,
+      "sha256": "90D578CFF7D5D88AD9F511AE411939DB04E09A9A718FAA1CC86A6E2AD4A831B6",
+      "path": "sirena/data/weekly_bridge.py"
+    },
+    {
+      "bytes": 15457,
+      "sha256": "CEB11D6128417F7EFB22D38CC1EBA0DE06459E7B93A052FCC14B85B0BD8A0CA1",
+      "path": "sirena/models/ridge.py"
+    },
+    {
+      "bytes": 14172,
+      "sha256": "31492DA067338CF5CF59A136CA928392988C8DCEBD771DFC7E7B6A7391A2C307",
+      "path": "sirena/models/ridge_extended.py"
+    },
+    {
+      "bytes": 16585,
+      "sha256": "2648BF2FD56A86BAB3B74B6625FBB4E048C4FDB63A02564AA59133D2F8F4C25D",
+      "path": "docs/BACKTEST_METHODOLOGY.md"
+    },
+    {
+      "bytes": 11376,
+      "sha256": "45198E0DD5571C60952750D4C0EF01156E92294EFFC974A697BD48F0D3878F58",
+      "path": "docs/NOWCASTING.md"
+    },
+    {
+      "bytes": 12734,
+      "sha256": "0975996D3FD6D51D7F9DC243827C4AA6F483909FB1A6E5CF79C37A0F97C28290",
+      "path": "docs/MODEL_CATALOG.md"
+    },
+    {
+      "bytes": 12445,
+      "sha256": "C92DAACA1913D0503D16DA5A8B81C7095D24159B709F8027925EE6C232D39894",
+      "path": "docs/VAR_MODEL_RESEARCH.md"
+    },
+    {
+      "bytes": 15815,
+      "sha256": "D312B3C01D29D6E454C0F6574B8332B6A0329615E2D0B704A83492B413E86383",
+      "path": "docs/FACTOR_MODEL_RESEARCH.md"
+    },
+    {
+      "bytes": 7746,
+      "sha256": "91514A682C562B701B3FD2E284A64A88A1A39B3FABF396713038F3D715B5970A",
+      "path": "archive/results/backtest_h1_predictions.csv"
+    },
+    {
+      "bytes": 4832,
+      "sha256": "83FAB4D0BBC297EFBDF36049E933B755BE418244439DB951FCCF72F2C38EB9D8",
+      "path": "archive/results/backtest_h1_metrics.csv"
+    },
+    {
+      "bytes": 7828,
+      "sha256": "AE3558D1A808C810F88550A7A97D4336CFD32E24561662B435987645246D6D7B",
+      "path": "archive/results/backtest_h2_predictions.csv"
+    },
+    {
+      "bytes": 4720,
+      "sha256": "8D6D0A10B900BE685109E34B072DA450DA618C77B42AE6F0F23B8638B9E4A508",
+      "path": "archive/results/backtest_h2_metrics.csv"
+    },
+    {
+      "bytes": 8131,
+      "sha256": "60DB680D7D52ABD4A71316D7D35F4C597FABCC94994D2362D36D232F1BC1F8F4",
+      "path": "archive/results/backtest_h12_predictions.csv"
+    },
+    {
+      "bytes": 4518,
+      "sha256": "694567BA33627BAC302B2C7821011F01E53B8A5FB34423190F71344FEDCD3238",
+      "path": "archive/results/backtest_h12_metrics.csv"
+    }
+  ],
+  "prompt_sha256": "BE4536CD7D7D2E78F68D639058B7DF74D760C9032CFA7052917DE5407947DB6D"
+}

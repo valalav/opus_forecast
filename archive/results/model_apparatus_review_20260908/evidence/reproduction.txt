@@ -1,0 +1,42 @@
+Traceback (most recent call last):
+  File "<stdin>", line 23, in <module>
+  File "/home/valalav/_projects/sirena-kbr/sirena/models/ridge_production_proxy_rolling.py", line 120, in predict
+    result = super().predict(df, target_date)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/valalav/_projects/sirena-kbr/sirena/models/ridge_production_proxy.py", line 268, in predict
+    pred_ridge = self.ridge.predict(X_test)[0]
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_base.py", line 311, in predict
+    return self._decision_function(X)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_base.py", line 290, in _decision_function
+    X = validate_data(self, X, accept_sparse=["csr", "csc", "coo"], reset=False)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/sklearn/utils/validation.py", line 2902, in validate_data
+    out = check_array(X, input_name="X", **check_params)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/sklearn/utils/validation.py", line 1074, in check_array
+    _assert_all_finite(
+  File "/usr/local/lib/python3.12/dist-packages/sklearn/utils/validation.py", line 133, in _assert_all_finite
+    _assert_all_finite_element_wise(
+  File "/usr/local/lib/python3.12/dist-packages/sklearn/utils/validation.py", line 182, in _assert_all_finite_element_wise
+    raise ValueError(msg_err)
+ValueError: Input X contains NaN.
+Ridge does not accept missing values encoded as NaN natively. For supervised learning, you might want to consider sklearn.ensemble.HistGradientBoostingClassifier and Regressor which accept missing values encoded as NaNs natively. Alternatively, it is possible to preprocess the data, for instance by using an imputer transformer in a pipeline or drop samples with missing values. See https://scikit-learn.org/stable/modules/impute.html You can find a list of all estimators that handle NaN values at the following page: https://scikit-learn.org/stable/modules/impute.html#estimators-that-handle-nan-values
+WARNING: LMMR Hybrid not available
+
+======================================================================
+BACKTEST h=1 (12 test windows)
+======================================================================
+
+Загрузка данных...
+Данные загружены: 199 месяцев
+Последняя дата: 2026-07-01
+
+  WARNING: sa_fl.csv lags inflation_data.csv; appending raw source-of-truth rows for 5 month(s): 2026-03, 2026-04, 2026-05, 2026-06, 2026-07
+LIVE_INPUT 2016-01-01 00:00:00 2026-07-01 00:00:00 ['Все товары и услуги', 'Продовольственные товары', 'Непродовольственные товары', 'Услуги']
+BACKTEST_INPUT 2010-01-01 00:00:00 2026-03-01 00:00:00 ['Все товары и услуги', 'Непродовольственные товары', 'Продовольственные товары', 'Услуги', 'usd_nom_i', 'Ki', 'Ruonia', 'Ki_i']
+REPRO 2025-10-01 00:00:00 cutoff 2025-09-01 00:00:00 last input 2025-09-01 00:00:00
+PREDICTION {'date': Timestamp('2025-10-01 00:00:00'), 'prediction': 100.7086510084538, 'pred_ridge': 100.4265100845381, 'pred_ets': 100.74, 'ets_weight': 0.9, 'model': 'ridge_production_proxy_rolling_24m', 'has_macro': True, 'use_2022_dummy': False, 'production_features': ['torg_lag3', 'torg_lag6', 'torg_diff_lag3', 'torg_ma3', 'pp_lag3', 'pp_lag6', 'pp_diff_lag3'], 'seasonality_window': 24}
+REPRO 2025-11-01 00:00:00 cutoff 2025-10-01 00:00:00 last input 2025-10-01 00:00:00
+SOURCE_DIFFERENCES [{"month": "2025-08-01", "backtest_total": 99.43, "live_total": 100.14}, {"month": "2025-09-01", "backtest_total": 101.0, "live_total": 101.27}, {"month": "2026-01-01", "backtest_total": 101.57, "live_total": 100.98}, {"month": "2026-03-01", "backtest_total": 100.54, "live_total": 100.54}]

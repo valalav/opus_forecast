@@ -1,0 +1,8 @@
+{
+  "started": "2026-09-08T15:24:17.3367439+03:00",
+  "route": "omniroute/cc/claude-opus-5",
+  "snapshot_commit": "76fb044",
+  "exit_code": 0,
+  "latency_seconds": 281.2353324,
+  "ended": "2026-09-08T15:28:58.5771664+03:00"
+}

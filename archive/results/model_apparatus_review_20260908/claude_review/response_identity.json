@@ -1,0 +1,22 @@
+{
+  "stopReason": "stop",
+  "usage": {
+    "input": 104502,
+    "output": 19275,
+    "cacheRead": 0,
+    "cacheWrite": 0,
+    "reasoning": 9939,
+    "totalTokens": 123777,
+    "cost": {
+      "input": 0,
+      "output": 0,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "total": 0
+    }
+  },
+  "responseModel": "keepalive",
+  "provider": "omniroute",
+  "requested_model": "cc/claude-opus-5",
+  "model": "cc/claude-opus-5"
+}
