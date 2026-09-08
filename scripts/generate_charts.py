@@ -758,6 +758,13 @@ def generate_all_charts(open_browser: bool = False):
         generate_forecast_table.generate_html_table(data, str(forecast_table_path))
         print(f"  ✓ forecast_table.html")
         charts.append(str(forecast_table_path))
+        policy_path = PROJECT_ROOT / "data" / "send_ready_policy_trajectory.json"
+        policy = (generate_forecast_table.load_forecasts(policy_path)
+                  if policy_path.exists() else None)
+        nowcast_path = CHARTS_DIR / "nowcast.html"
+        generate_forecast_table.generate_nowcast_html(data, nowcast_path, policy)
+        print("  ✓ nowcast.html")
+        charts.append(str(nowcast_path))
     except Exception as e:
         print(f"Error generating table: {e}")
 
@@ -898,7 +905,7 @@ def create_index(charts: list):
             <div class="section-title">Прогнозы</div>
             <div class="grid">
                 <div class="card"><a href="forecasts.html" style="color:#e67e22;">Прогноз 12 мес</a><p>Все модели вперёд</p></div>
-                <div class="card" style="background:#e8f8f5;"><a href="forecast_table.html" style="color:#16a085;">📋 Детальная таблица</a><p>Все модели + Nowcast</p></div>
+                <div class="card" style="background:#e8f8f5;"><a href="forecast_table.html" style="color:#16a085;">📋 Детальная таблица</a><p>Все модели + <a href="nowcast.html">Nowcast по неделям</a></p></div>
             </div>
         </div>
 

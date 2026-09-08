@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "target_month": "2026-08",
+  "generated_at": "2026-09-08T15:08:48.654495",
+  "latest_weekly_date": "2026-08-31",
+  "august_weekly_dates": [
+    "2026-08-03",
+    "2026-08-10",
+    "2026-08-17",
+    "2026-08-24"
+  ],
+  "raw_chain_mom": 0.23357252068603174,
+  "price_level_bridge_mom": 0.405048,
+  "model_proxy_mom": 0.50408125171261,
+  "nowcast_mom": 0.26062382517126104,
+  "nowcast_index": 100.26062382517127,
+  "previous_nowcast_mom": 0.29127410524731456,
+  "change_pp": -0.030650280076053527,
+  "calendar_effect_pp": -0.03153239999999999,
+  "model_recompute_effect_pp": 0.0008821199239464284,
+  "ensemble_mom": 0.5079239961340942,
+  "september_aux_nowcast_mom": 0.5378620178809655,
+  "september_weekly_mom": 0.111212,
+  "source_hashes_unchanged": true,
+  "html_values_match_cache": true,
+  "live_dashboard_verification": "Unavailable: no listener on localhost:8503"
+}
