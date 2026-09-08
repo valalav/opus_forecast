@@ -43,6 +43,7 @@ class FactorPolicyForecaster(BaseForecaster):
     """Leakage-safe factor model selected from the 2026 factor research track."""
 
     name = "factor_policy"
+    input_representation = "raw"
     MIN_TRAIN_SIZE = 60
 
     def __init__(

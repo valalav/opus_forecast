@@ -59,7 +59,7 @@ def temp_data_dir(tmp_path: Path) -> str:
     raw_dir = tmp_path / "raw"
     raw_dir.mkdir(parents=True, exist_ok=True)
 
-    infostat_dates = pd.date_range("2017-01-01", periods=96, freq="MS")
+    infostat_dates = pd.date_range("2017-01-01", end="2025-12-01", freq="MS")
     infostat_df = pd.DataFrame(
         {
             "Date": infostat_dates.strftime("%d.%m.%Y"),
@@ -131,3 +131,12 @@ def test_production_features_present(sample_data: pd.DataFrame, temp_data_dir: s
     assert model._features is not None
     for feature in ["torg_lag3", "torg_lag6", "pp_lag3", "pp_diff_lag3"]:
         assert feature in model._features
+
+
+def test_stale_proxy_is_rejected(sample_data, temp_data_dir):
+    from sirena.data_loader import DataFreshnessError
+    path = Path(temp_data_dir) / "infostat.csv"
+    proxy = pd.read_csv(path, sep=";", decimal=",")
+    proxy.iloc[:-12].to_csv(path, sep=";", decimal=",", index=False)
+    with pytest.raises(DataFreshnessError, match="2025-12"):
+        build_model(data_dir=temp_data_dir).fit(sample_data)

@@ -20,12 +20,13 @@ warnings.filterwarnings("ignore")
 # =============================================================================
 
 
-@st.cache_data
 def load_precomputed_forecasts():
     """Load precomputed forecasts from JSON file."""
     try:
         with open("data/precomputed_forecasts.json", "r") as f:
             data = json.load(f)
+        from sirena.data_loader import validate_forecast_cache
+        validate_forecast_cache(data)
         return data
     except Exception as e:
         st.error(f"Ошибка загрузки прогнозов: {e}")
@@ -51,7 +52,8 @@ def render_compare_tab(df, last_date, ALL_MODELS, MONTH_NAMES_RU, MODEL_COLORS):
         return
 
     # Get available models from forecasts
-    available_models = forecast_data.get("forecasts", {}).keys()
+    available_models = [name for name, values in forecast_data.get("forecasts", {}).items()
+                        if values is not None and all(v is not None and np.isfinite(v) for v in values)]
     available_models = sorted([m for m in available_models if m in ALL_MODELS])
 
     if len(available_models) < 2:

@@ -37,6 +37,7 @@ class ProphetForecaster(BaseForecaster):
     """
 
     name = "prophet"
+    input_representation = "raw"
     MIN_TRAIN_SIZE = 24
 
     def __init__(

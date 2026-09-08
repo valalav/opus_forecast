@@ -39,6 +39,7 @@ class VARPolicyForecaster(BaseForecaster):
     """Leakage-safe mandatory VAR-family policy model."""
 
     name = "var_policy"
+    input_representation = "raw"
     MIN_TRAIN_SIZE = 48
 
     def __init__(

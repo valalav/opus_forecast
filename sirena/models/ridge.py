@@ -37,6 +37,7 @@ class RidgeForecaster(BaseForecaster):
     """
 
     name = "ridge"
+    input_representation = "raw"
     MIN_TRAIN_SIZE = 36
 
     # Годы-выбросы

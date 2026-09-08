@@ -221,6 +221,10 @@ class BaseForecaster(ABC):
         Returns:
             Series с целевой переменной
         """
+        expected = getattr(self, 'input_representation', None)
+        supplied = df.attrs.get('input_contract', {}).get('representation')
+        if expected and supplied and expected != supplied:
+            raise ValueError(f'{self.name}: expected {expected}, received {supplied}')
         if df.empty:
             raise ValueError("DataFrame пустой")
 

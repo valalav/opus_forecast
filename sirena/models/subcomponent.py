@@ -248,6 +248,10 @@ class SubcomponentForecaster:
 
         # Load subcomponent data
         sub_data = self._load_data(data_dir)
+        from sirena.data_loader import require_observations
+        cutoff = pd.Timestamp(df.index.max()).to_period('M').to_timestamp()
+        sub_data = sub_data.loc[:cutoff]
+        require_observations(sub_data, sub_data.columns, cutoff, 'data/raw/subcomp.csv or sub_mom.csv')
 
         # Store macro data for later
         self.macro_df = df.copy()

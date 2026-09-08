@@ -25,7 +25,7 @@ from typing import Any, Dict, List, Optional, cast
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from sirena.sa_data_loader import get_sa_with_total
+from sirena.data_loader import load_model_data, forecast_source_manifest, DataFreshnessError
 
 
 def _to_float_array(forecast_values: Any) -> np.ndarray:
@@ -36,6 +36,8 @@ def _to_float_array(forecast_values: Any) -> np.ndarray:
 def _store_forecast(results: Dict[str, Any], model_key: str, forecast_values: Any) -> np.ndarray:
     """Normalize model forecast output and store it under the target key."""
     fc = _to_float_array(forecast_values)
+    if fc.ndim != 1 or not len(fc) or not np.isfinite(fc).all():
+        raise DataFreshnessError(f'{model_key}: incomplete/non-finite forecast')
     if fc[0] > 50:
         fc = fc - 100
     results['forecasts'][model_key] = fc.tolist()
@@ -43,47 +45,8 @@ def _store_forecast(results: Dict[str, Any], model_key: str, forecast_values: An
 
 
 def _load_forecast_input_data() -> pd.DataFrame:
-    """Load model input data and append fresh raw facts when SA data lags.
-
-    The legacy forecast path is trained on ``sa_fl.csv``. Monthly facts arrive first in
-    ``inflation_data.csv``; until official/derived SA rows are refreshed, append only the
-    missing latest months from the source-of-truth file so forecast dates move forward.
-    """
-    sa_df = get_sa_with_total()
-
-    raw = pd.read_csv('data/inflation_data.csv', sep=';', decimal=',', encoding='utf-8-sig')
-    raw['Date'] = pd.to_datetime(raw['Date'], format='%d.%m.%Y', errors='coerce')
-    raw['Date'] = raw['Date'].dt.to_period('M').dt.to_timestamp()
-
-    source_cols = {
-        'mom': 'Все товары и услуги',
-        'Prod': 'Продовольственные товары',
-        'Nonprod': 'Непродовольственные товары',
-        'Serv': 'Услуги',
-    }
-    raw_indexed = raw.set_index('Date')
-    raw_input = cast(pd.DataFrame, raw_indexed[list(source_cols)].copy())
-    raw_input.columns = [source_cols[str(col)] for col in raw_input.columns]
-    for col in raw_input.columns:
-        raw_input[col] = pd.to_numeric(raw_input[col], errors='coerce')
-    raw_input = raw_input.dropna(how='all').sort_index()
-
-    sa_last = cast(pd.Timestamp, pd.to_datetime(pd.Index(sa_df.index)).max())
-    raw_last = cast(pd.Timestamp, pd.to_datetime(pd.Index(raw_input.index)).max())
-
-    if raw_last > sa_last:
-        missing = raw_input[raw_input.index > sa_last]
-        print(
-            "  WARNING: sa_fl.csv lags inflation_data.csv; "
-            f"appending raw source-of-truth rows for {len(missing)} month(s): "
-            + ", ".join(
-                cast(pd.Timestamp, pd.Timestamp(d)).strftime('%Y-%m')
-                for d in missing.index
-            )
-        )
-        sa_df = pd.concat([sa_df, missing], axis=0).sort_index()
-
-    return cast(pd.DataFrame, sa_df)
+    """Production aggregate models estimate raw MoM with explicit seasonality."""
+    return load_model_data('raw', include_macro=True)
 
 
 def compute_all_forecasts(horizon: int = 12) -> Dict[str, Any]:
@@ -103,7 +66,10 @@ def compute_all_forecasts(horizon: int = 12) -> Dict[str, Any]:
         'generated_at': datetime.now().isoformat(),
         'last_data_date': last_date.strftime('%Y-%m-%d'),
         'horizon': horizon,
-        'forecasts': {}
+        'forecasts': {},
+        'input_contract': df.attrs['input_contract'],
+        'source_manifest': forecast_source_manifest(),
+        'model_status': {}
     }
 
     # Generate forecast dates
@@ -129,6 +95,7 @@ def compute_all_forecasts(horizon: int = 12) -> Dict[str, Any]:
     except Exception as e:
         print(f"  ERROR: {e}")
         results['forecasts']['Ridge'] = None
+        results['model_status']['Ridge'] = {'status': 'unavailable', 'reason': str(e)}
 
     # =========================================================================
     # Model 2: Huber
@@ -145,6 +112,7 @@ def compute_all_forecasts(horizon: int = 12) -> Dict[str, Any]:
     except Exception as e:
         print(f"  ERROR: {e}")
         results['forecasts']['Huber'] = None
+        results['model_status']['Huber'] = {'status': 'unavailable', 'reason': str(e)}
 
     # =========================================================================
     # Model 3: RidgeShockDummies
@@ -161,6 +129,7 @@ def compute_all_forecasts(horizon: int = 12) -> Dict[str, Any]:
     except Exception as e:
         print(f"  ERROR: {e}")
         results['forecasts']['RidgeShockDummies'] = None
+        results['model_status']['RidgeShockDummies'] = {'status': 'unavailable', 'reason': str(e)}
 
     # =========================================================================
     # Model 3b: Ridge Shock Rolling (First-wave derivative)
@@ -178,6 +147,7 @@ def compute_all_forecasts(horizon: int = 12) -> Dict[str, Any]:
     except Exception as e:
         print(f"  ERROR: {e}")
         results['forecasts']['Ridge_Shock_Roll24'] = None
+        results['model_status']['Ridge_Shock_Roll24'] = {'status': 'unavailable', 'reason': str(e)}
 
     # =========================================================================
     # Model 3c: Ridge Production Proxy (First-wave derivative)
@@ -195,6 +165,7 @@ def compute_all_forecasts(horizon: int = 12) -> Dict[str, Any]:
     except Exception as e:
         print(f"  ERROR: {e}")
         results['forecasts']['Ridge_ProdProxy'] = None
+        results['model_status']['Ridge_ProdProxy'] = {'status': 'unavailable', 'reason': str(e)}
 
     # =========================================================================
     # Model 3d: Ridge Asymmetric ERPT Proxy (First-wave derivative)
@@ -214,6 +185,7 @@ def compute_all_forecasts(horizon: int = 12) -> Dict[str, Any]:
     except Exception as e:
         print(f"  ERROR: {e}")
         results['forecasts']['Ridge_AsymERPT'] = None
+        results['model_status']['Ridge_AsymERPT'] = {'status': 'unavailable', 'reason': str(e)}
 
     # =========================================================================
     # Model 4: ElasticNet
@@ -230,6 +202,7 @@ def compute_all_forecasts(horizon: int = 12) -> Dict[str, Any]:
     except Exception as e:
         print(f"  ERROR: {e}")
         results['forecasts']['ElasticNet'] = None
+        results['model_status']['ElasticNet'] = {'status': 'unavailable', 'reason': str(e)}
 
     # =========================================================================
     # Model 5: NGBoostShock
@@ -246,6 +219,7 @@ def compute_all_forecasts(horizon: int = 12) -> Dict[str, Any]:
     except Exception as e:
         print(f"  ERROR: {e}")
         results['forecasts']['NGBoostShock'] = None
+        results['model_status']['NGBoostShock'] = {'status': 'unavailable', 'reason': str(e)}
 
     # =========================================================================
     # Model 6: NGBoost
@@ -262,6 +236,7 @@ def compute_all_forecasts(horizon: int = 12) -> Dict[str, Any]:
     except Exception as e:
         print(f"  ERROR: {e}")
         results['forecasts']['NGBoost'] = None
+        results['model_status']['NGBoost'] = {'status': 'unavailable', 'reason': str(e)}
     
     # =========================================================================
     # Model 7: RidgeExtended
@@ -278,6 +253,7 @@ def compute_all_forecasts(horizon: int = 12) -> Dict[str, Any]:
     except Exception as e:
         print(f"  ERROR: {e}")
         results['forecasts']['RidgeExtended'] = None
+        results['model_status']['RidgeExtended'] = {'status': 'unavailable', 'reason': str(e)}
 
     # =========================================================================
     # Model 8: EBM
@@ -294,6 +270,7 @@ def compute_all_forecasts(horizon: int = 12) -> Dict[str, Any]:
     except Exception as e:
         print(f"  ERROR: {e}")
         results['forecasts']['EBM'] = None
+        results['model_status']['EBM'] = {'status': 'unavailable', 'reason': str(e)}
 
     # =========================================================================
     # Model 9: Prophet
@@ -310,6 +287,7 @@ def compute_all_forecasts(horizon: int = 12) -> Dict[str, Any]:
     except Exception as e:
         print(f"  ERROR: {e}")
         results['forecasts']['Prophet'] = None
+        results['model_status']['Prophet'] = {'status': 'unavailable', 'reason': str(e)}
 
     # =========================================================================
     # Model 10: Mandatory VAR-family policy
@@ -329,6 +307,7 @@ def compute_all_forecasts(horizon: int = 12) -> Dict[str, Any]:
     except Exception as e:
         print(f"  ERROR: {e}")
         results['forecasts']['VARPolicy'] = None
+        results['model_status']['VARPolicy'] = {'status': 'unavailable', 'reason': str(e)}
 
     # =========================================================================
     # Model 11: Mandatory factor-family policy
@@ -348,6 +327,7 @@ def compute_all_forecasts(horizon: int = 12) -> Dict[str, Any]:
     except Exception as e:
         print(f"  ERROR: {e}")
         results['forecasts']['FactorPolicy'] = None
+        results['model_status']['FactorPolicy'] = {'status': 'unavailable', 'reason': str(e)}
 
     # =========================================================================
     # 12. Nowcast (Auxiliary) + Weekly Bridge Diagnostics
@@ -434,12 +414,13 @@ def compute_all_forecasts(horizon: int = 12) -> Dict[str, Any]:
         model = MicrocomponentForecaster(horizon=1)
         model.fit(df)
         fc = model.forecast(horizon=horizon)
-        results['forecasts']['Micro'] = fc.tolist()
+        fc = _store_forecast(results, 'Micro', fc)
         print(f"  Done in {time.time()-start:.1f}s")
         print(f"  Trajectory: {fc[0]:.2f}% → {fc[-1]:.2f}%")
     except Exception as e:
         print(f"  ERROR: {e}")
         results['forecasts']['Micro'] = None
+        results['model_status']['Micro'] = {'status': 'unavailable', 'reason': str(e)}
 
     # =========================================================================
     # 13. Micro_SM (external Linux statsmodels forecast)
@@ -456,6 +437,7 @@ def compute_all_forecasts(horizon: int = 12) -> Dict[str, Any]:
     except Exception as e:
         print(f"  ERROR: {e}")
         results['forecasts']['Micro_SM'] = None
+        results['model_status']['Micro_SM'] = {'status': 'unavailable', 'reason': str(e)}
 
     # =========================================================================
     # Ensemble (weighted average v5.2)
@@ -491,18 +473,25 @@ def compute_all_forecasts(horizon: int = 12) -> Dict[str, Any]:
         if total_w > 0:
             ensemble_fc.append(weighted_sum / total_w)
         else:
-            ensemble_fc.append(0)
+            ensemble_fc.append(None)
 
     results['forecasts']['Ensemble'] = ensemble_fc
-    print(f"  Trajectory: {ensemble_fc[0]:.2f}% → {ensemble_fc[-1]:.2f}%")
+    print(f"  Ensemble trajectory: {ensemble_fc}")
 
+    for key, values in results['forecasts'].items():
+        results['model_status'].setdefault(key, {'status': 'available' if values is not None else 'unavailable', 'input_representation': 'raw', 'last_observation': results['last_data_date']})
+    if results['source_manifest'] != forecast_source_manifest():
+        raise DataFreshnessError('Inputs changed during computation; rerun on a consistent snapshot')
     return results
 
 
 def save_results(results, output_path):
     """Save results to JSON."""
-    with open(output_path, 'w', encoding='utf-8') as f:
-        json.dump(results, f, indent=2, ensure_ascii=False)
+    output_path = Path(output_path)
+    temporary = output_path.with_suffix('.json.tmp')
+    with open(temporary, 'w', encoding='utf-8') as f:
+        json.dump(results, f, indent=2, ensure_ascii=False, allow_nan=False)
+    temporary.replace(output_path)
     print(f"\nSaved to: {output_path}")
 
 

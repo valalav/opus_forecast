@@ -1,0 +1,81 @@
+WARNING: LMMR Hybrid not available
+
+======================================================================
+BACKTEST h=12 (1 test windows)
+======================================================================
+
+Загрузка данных...
+Данные загружены: 199 месяцев
+Последняя дата: 2026-07-01
+
+h=12: cutoff=2025-07, траектория 12 месяцев
+Фиксированный cutoff: 2025-07-01 00:00:00
+Траектория: 2025-08 → 2026-07
+
+Обучение моделей...
+15:55:33 - cmdstanpy - INFO - Chain [1] start processing
+15:55:33 - cmdstanpy - INFO - Chain [1] done processing
+15:55:33 - cmdstanpy - INFO - Chain [1] start processing
+15:55:33 - cmdstanpy - INFO - Chain [1] done processing
+15:55:33 - cmdstanpy - INFO - Chain [1] start processing
+15:55:33 - cmdstanpy - INFO - Chain [1] done processing
+15:55:34 - cmdstanpy - INFO - Chain [1] start processing
+15:55:34 - cmdstanpy - INFO - Chain [1] done processing
+15:55:34 - cmdstanpy - INFO - Chain [1] start processing
+15:55:34 - cmdstanpy - INFO - Chain [1] done processing
+15:55:34 - cmdstanpy - INFO - Chain [1] start processing
+15:55:34 - cmdstanpy - INFO - Chain [1] done processing
+15:55:35 - cmdstanpy - INFO - Chain [1] start processing
+15:55:35 - cmdstanpy - INFO - Chain [1] done processing
+
+Прогноз траектории...
+
+Месяц      |   Факт |  Ridge |   BVAR |  SARIMA |    ETS |  Ансамбль
+--------------------------------------------------------------------------------
+2025-08    |  -0.57 |  -0.07 |   0.48 |    0.10 |  -0.09 |      0.07
+2025-09    |   1.00 |   0.43 |   0.57 |    0.20 |   0.49 |      0.42
+2025-10    |   0.53 |   0.57 |   0.60 |    0.25 |   0.51 |      0.51
+2025-11    |   0.15 |   0.45 |   0.61 |    0.34 |   0.58 |      0.54
+2025-12    |   0.29 |   0.58 |   0.62 |    0.21 |   0.73 |      0.57
+2026-01    |   1.57 |   0.98 |   0.59 |    0.19 |   0.95 |      0.79
+2026-02    |   1.10 |   0.74 |   0.54 |    0.29 |   0.80 |      0.70
+2026-03    |   0.54 |   0.67 |   0.62 |    0.18 |   0.93 |      0.58
+2026-04    |  -0.28 |   0.69 |   0.55 |    0.12 |   0.83 |      0.60
+2026-05    |   0.09 |   0.46 |   0.64 |   -0.00 |   0.39 |      0.39
+2026-06    |   1.06 |   0.09 |   0.54 |   -0.00 |   0.03 |      0.15
+2026-07    |   0.82 |   0.15 |   0.60 |    0.09 |   0.11 |      0.24
+
+======================================================================
+МЕТРИКИ
+======================================================================
+
+Top 5 моделей по MAE:
+  Ridge_Ext_Roll24    : MAE 0.398, KPI violations 5/12
+  Ridge_ProdProxy_Roll24: MAE 0.406, KPI violations 6/12
+  Rolling_Ridge       : MAE 0.416, KPI violations 5/12
+  Ridge_Shock_Roll24  : MAE 0.418, KPI violations 5/12
+  Huber_Roll24        : MAE 0.420, KPI violations 4/12
+
+Прогнозы сохранены: archive/results/backtest_h12_predictions.csv
+Метрики сохранены: archive/results/backtest_h12_metrics.csv
+Summary сохранен: archive/results/backtest_h12_summary.md
+
+======================================================================
+
+
+======================================================================
+BACKTEST h=12 ЗАВЕРШЕН
+======================================================================
+
+Top 3 модели:
+  4. Ridge_Ext_Roll24: MAE 0.398
+  13. Ridge_ProdProxy_Roll24: MAE 0.406
+  16. Rolling_Ridge: MAE 0.416
+
+Результаты сохранены в archive/results/
+  - backtest_h12_predictions.csv
+  - backtest_h12_metrics.csv
+  - backtest_h12_summary.md
+
+🔄 Синхронизация результатов в sync/...
+✅ Результаты синхронизированы в sync/

@@ -24,6 +24,7 @@ class RidgeProductionProxyForecaster(RidgeShockDummiesForecaster):
     """RidgeShockDummies с признаками спроса/услуг из infostat."""
 
     name = "ridge_production_proxy"
+    input_representation = "raw"
     BASE_FEATURES = [
         "y_lag1",
         "y_lag2",
@@ -169,6 +170,8 @@ class RidgeProductionProxyForecaster(RidgeShockDummiesForecaster):
     ) -> "RidgeProductionProxyForecaster":
         """Обучение модели с production proxy features."""
         _ = self._validate_data(df, target_col)
+        from sirena.macro_features import validate_production_origin
+        validate_production_origin(df.index.max(), self.data_dir)
 
         df_prep = self._prepare_features(df)
         self.seasonal_norm = self._compute_seasonal_norm(df_prep)

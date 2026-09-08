@@ -295,6 +295,8 @@ def render_forecast_h12_tab(
     try:
         cache_path = Path("data/precomputed_forecasts.json")
         cached = json.loads(cache_path.read_text(encoding="utf-8"))
+        from sirena.data_loader import validate_forecast_cache
+        validate_forecast_cache(cached)
         cached_dates = pd.to_datetime(cached["forecast_dates"])
         cached_forecasts = cached["forecasts"]
         if (
@@ -310,6 +312,8 @@ def render_forecast_h12_tab(
 
         production_forecasts = {}
         for name, values in cached_forecasts.items():
+            if values is None:
+                continue
             try:
                 path = np.asarray(values, dtype=float)
             except (TypeError, ValueError):
@@ -320,6 +324,11 @@ def render_forecast_h12_tab(
         if "Ensemble" not in production_forecasts:
             raise ValueError("forecast cache has no finite production Ensemble")
         forecast_df = pd.DataFrame({"Date": cached_dates, **production_forecasts})
+        contract = cached.get('input_contract', {})
+        st.caption(f"Данные: {contract.get('last_observation')}; ряд: {contract.get('representation')}")
+        for model_name, status in cached.get('model_status', {}).items():
+            if status.get('status') == 'unavailable':
+                st.warning(f"{model_name}: расчет недоступен. {status.get('reason', '')}")
     except (
         KeyError,
         OSError,

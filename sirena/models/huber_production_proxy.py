@@ -98,6 +98,8 @@ class HuberProductionProxyForecaster(HuberForecaster):
         self, df: pd.DataFrame, target_col: str = "Все товары и услуги"
     ) -> "HuberProductionProxyForecaster":
         _ = self._validate_data(df, target_col)
+        from sirena.macro_features import validate_production_origin
+        validate_production_origin(df.index.max(), self.data_dir)
 
         df_prep = self._prepare_features(df)
         self.seasonal_norm = self._compute_seasonal_norm(df_prep)

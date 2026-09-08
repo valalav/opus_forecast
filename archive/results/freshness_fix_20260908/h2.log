@@ -1,0 +1,145 @@
+15:54:54 - cmdstanpy - INFO - Chain [1] start processing
+15:54:54 - cmdstanpy - INFO - Chain [1] done processing
+WARNING: LMMR Hybrid not available
+
+======================================================================
+BACKTEST h=2 (12 test windows)
+======================================================================
+
+Загрузка данных...
+Данные загружены: 199 месяцев
+Последняя дата: 2026-07-01
+
+h=2: rolling window, 12 месяцев
+
+Месяц      |   Факт |  Ridge | RollRdg |   BVAR | NGBoost | LMMR_Hyb |  Ансамбль
+--------------------------------------------------------------------------------
+15:54:55 - cmdstanpy - INFO - Chain [1] start processing
+15:54:55 - cmdstanpy - INFO - Chain [1] done processing
+15:54:55 - cmdstanpy - INFO - Chain [1] start processing
+15:54:55 - cmdstanpy - INFO - Chain [1] done processing
+15:54:55 - cmdstanpy - INFO - Chain [1] start processing
+15:54:55 - cmdstanpy - INFO - Chain [1] done processing
+15:54:56 - cmdstanpy - INFO - Chain [1] start processing
+15:54:56 - cmdstanpy - INFO - Chain [1] done processing
+15:54:56 - cmdstanpy - INFO - Chain [1] start processing
+15:54:56 - cmdstanpy - INFO - Chain [1] done processing
+15:54:56 - cmdstanpy - INFO - Chain [1] start processing
+15:54:56 - cmdstanpy - INFO - Chain [1] done processing
+15:54:59 - cmdstanpy - INFO - Chain [1] start processing
+15:54:59 - cmdstanpy - INFO - Chain [1] done processing
+15:55:00 - cmdstanpy - INFO - Chain [1] start processing
+15:55:00 - cmdstanpy - INFO - Chain [1] done processing
+15:55:00 - cmdstanpy - INFO - Chain [1] start processing
+15:55:00 - cmdstanpy - INFO - Chain [1] done processing
+15:55:00 - cmdstanpy - INFO - Chain [1] start processing
+15:55:00 - cmdstanpy - INFO - Chain [1] done processing
+15:55:01 - cmdstanpy - INFO - Chain [1] start processing
+15:55:01 - cmdstanpy - INFO - Chain [1] done processing
+15:55:01 - cmdstanpy - INFO - Chain [1] start processing
+15:55:01 - cmdstanpy - INFO - Chain [1] done processing
+15:55:01 - cmdstanpy - INFO - Chain [1] start processing
+15:55:01 - cmdstanpy - INFO - Chain [1] done processing
+15:55:03 - cmdstanpy - INFO - Chain [1] start processing
+15:55:03 - cmdstanpy - INFO - Chain [1] done processing
+15:55:05 - cmdstanpy - INFO - Chain [1] start processing
+15:55:05 - cmdstanpy - INFO - Chain [1] done processing
+15:55:05 - cmdstanpy - INFO - Chain [1] start processing
+15:55:05 - cmdstanpy - INFO - Chain [1] done processing
+15:55:05 - cmdstanpy - INFO - Chain [1] start processing
+15:55:05 - cmdstanpy - INFO - Chain [1] done processing
+15:55:06 - cmdstanpy - INFO - Chain [1] start processing
+15:55:06 - cmdstanpy - INFO - Chain [1] done processing
+15:55:06 - cmdstanpy - INFO - Chain [1] start processing
+15:55:06 - cmdstanpy - INFO - Chain [1] done processing
+15:55:06 - cmdstanpy - INFO - Chain [1] start processing
+15:55:06 - cmdstanpy - INFO - Chain [1] done processing
+15:55:08 - cmdstanpy - INFO - Chain [1] start processing
+15:55:08 - cmdstanpy - INFO - Chain [1] done processing
+15:55:09 - cmdstanpy - INFO - Chain [1] start processing
+15:55:09 - cmdstanpy - INFO - Chain [1] done processing
+15:55:09 - cmdstanpy - INFO - Chain [1] start processing
+15:55:09 - cmdstanpy - INFO - Chain [1] done processing
+15:55:09 - cmdstanpy - INFO - Chain [1] start processing
+15:55:09 - cmdstanpy - INFO - Chain [1] done processing
+15:55:10 - cmdstanpy - INFO - Chain [1] start processing
+15:55:10 - cmdstanpy - INFO - Chain [1] done processing
+15:55:10 - cmdstanpy - INFO - Chain [1] start processing
+15:55:10 - cmdstanpy - INFO - Chain [1] done processing
+15:55:10 - cmdstanpy - INFO - Chain [1] start processing
+15:55:10 - cmdstanpy - INFO - Chain [1] done processing
+15:55:13 - cmdstanpy - INFO - Chain [1] start processing
+15:55:13 - cmdstanpy - INFO - Chain [1] done processing
+15:55:13 - cmdstanpy - INFO - Chain [1] start processing
+15:55:13 - cmdstanpy - INFO - Chain [1] done processing
+15:55:14 - cmdstanpy - INFO - Chain [1] start processing
+15:55:14 - cmdstanpy - INFO - Chain [1] done processing
+15:55:14 - cmdstanpy - INFO - Chain [1] start processing
+15:55:14 - cmdstanpy - INFO - Chain [1] done processing
+15:55:15 - cmdstanpy - INFO - Chain [1] start processing
+15:55:15 - cmdstanpy - INFO - Chain [1] done processing
+15:55:15 - cmdstanpy - INFO - Chain [1] start processing
+15:55:15 - cmdstanpy - INFO - Chain [1] done processing
+15:55:15 - cmdstanpy - INFO - Chain [1] start processing
+15:55:15 - cmdstanpy - INFO - Chain [1] done processing
+15:55:17 - cmdstanpy - INFO - Chain [1] start processing
+15:55:17 - cmdstanpy - INFO - Chain [1] done processing
+15:55:19 - cmdstanpy - INFO - Chain [1] start processing
+15:55:19 - cmdstanpy - INFO - Chain [1] done processing
+15:55:21 - cmdstanpy - INFO - Chain [1] start processing
+15:55:21 - cmdstanpy - INFO - Chain [1] done processing
+15:55:23 - cmdstanpy - INFO - Chain [1] start processing
+15:55:23 - cmdstanpy - INFO - Chain [1] done processing
+15:55:24 - cmdstanpy - INFO - Chain [1] start processing
+15:55:24 - cmdstanpy - INFO - Chain [1] done processing
+15:55:26 - cmdstanpy - INFO - Chain [1] start processing
+15:55:26 - cmdstanpy - INFO - Chain [1] done processing
+15:55:28 - cmdstanpy - INFO - Chain [1] start processing
+15:55:28 - cmdstanpy - INFO - Chain [1] done processing
+2025-08    |  -0.57 |  -0.05 |   -0.26 |  -0.29 |    0.04 |    nan |     -0.09
+2025-09    |   1.00 |   0.43 |    1.08 |  -0.94 |    0.57 |    nan |      0.12
+2025-10    |   0.53 |   0.59 |    0.65 |  -0.59 |    0.57 |    nan |      0.25
+2025-11    |   0.15 |   0.83 |    0.53 |   0.95 |    0.43 |    nan |      0.78
+2025-12    |   0.29 |   0.89 |    0.63 |   0.73 |    0.80 |    nan |      0.74
+2026-01    |   1.57 |   0.96 |    0.83 |   0.67 |    0.97 |    nan |      0.75
+2026-02    |   1.10 |   0.53 |    0.88 |   0.39 |    0.43 |    nan |      0.55
+2026-03    |   0.54 |   0.75 |    0.78 |   1.13 |    0.91 |    nan |      0.88
+2026-04    |  -0.28 |   0.78 |    0.66 |   1.01 |    0.55 |    nan |      0.79
+2026-05    |   0.09 |   0.44 |    0.41 |   0.78 |    0.46 |    nan |      0.46
+2026-06    |   1.06 |  -0.10 |   -0.03 |   0.57 |   -0.06 |    nan |      0.02
+2026-07    |   0.82 |   0.02 |    0.12 |   0.70 |    0.07 |    nan |      0.15
+
+======================================================================
+МЕТРИКИ
+======================================================================
+
+Top 5 моделей по MAE:
+  Ridge_ProdProxy_Roll24: MAE 0.289, KPI violations 0/12
+  Ridge_Ext_ProdProxy : MAE 0.347, KPI violations 1/12
+  Ridge_ProdProxy     : MAE 0.354, KPI violations 1/12
+  Huber_ProdProxy     : MAE 0.373, KPI violations 1/12
+  Rolling_Ridge       : MAE 0.457, KPI violations 4/12
+
+Прогнозы сохранены: archive/results/backtest_h2_predictions.csv
+Метрики сохранены: archive/results/backtest_h2_metrics.csv
+Summary сохранен: archive/results/backtest_h2_summary.md
+
+======================================================================
+
+
+======================================================================
+BACKTEST h=2 ЗАВЕРШЕН
+======================================================================
+
+Top 3 модели:
+  13. Ridge_ProdProxy_Roll24: MAE 0.289
+  3. Ridge_Ext_ProdProxy: MAE 0.347
+  12. Ridge_ProdProxy: MAE 0.354
+
+Результаты сохранены в archive/results/
+  - backtest_h2_predictions.csv
+  - backtest_h2_metrics.csv
+  - backtest_h2_summary.md
+
+🔄 Синхронизация результатов в sync/...
+✅ Результаты синхронизированы в sync/

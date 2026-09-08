@@ -37,6 +37,8 @@ def _render_weekly_bridge_diagnostics(key_prefix: str):
     try:
         with data_path.open("r", encoding="utf-8") as f:
             precomputed = json.load(f)
+        from sirena.data_loader import validate_forecast_cache
+        validate_forecast_cache(precomputed)
     except Exception as exc:
         st.warning(f"Не удалось прочитать weekly bridge diagnostics: {exc}")
         return

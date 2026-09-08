@@ -226,51 +226,8 @@ class BacktestRunner:
         self.bvar_data["RUONIA"] = bvar_df_full["Ruonia"]
         self.bvar_data = self.bvar_data.dropna()
 
-        # Load Ridge data (from infl_kbr.csv)
-        try:
-            df_ridge_raw = pd.read_csv("data/infl_kbr.csv", sep=";", decimal=",")
-
-            # Fix dates
-            if "Day" in df_ridge_raw.columns:
-                df_ridge_raw["Date"] = pd.to_datetime(
-                    df_ridge_raw["Day"], format="%d.%m.%Y", errors="coerce"
-                )
-            elif "Date" in df_ridge_raw.columns:
-                df_ridge_raw["Date"] = pd.to_datetime(
-                    df_ridge_raw["Date"], errors="coerce"
-                )
-
-            # Fix MoM numeric format
-            if "MoM" in df_ridge_raw.columns:
-                if df_ridge_raw["MoM"].dtype == object:
-                    df_ridge_raw["MoM"] = (
-                        df_ridge_raw["MoM"].astype(str).str.replace(",", ".")
-                    )
-                df_ridge_raw["MoM"] = pd.to_numeric(
-                    df_ridge_raw["MoM"], errors="coerce"
-                )
-
-            # Pivot
-            if "Товар" in df_ridge_raw.columns and "MoM" in df_ridge_raw.columns:
-                self.df_ridge = df_ridge_raw.pivot_table(
-                    index="Date", columns="Товар", values="MoM", aggfunc="first"
-                )
-            else:
-                self.df_ridge = df_ridge_raw.set_index("Date")
-
-            self.df_ridge = self.df_ridge.sort_index()
-        except Exception as e:
-            print(f"WARNING: Could not load infl_kbr.csv: {e}")
-            print("Will use inflation_data.csv for Ridge models")
-            # Create pivot from BVAR data
-            self.df_ridge = pd.DataFrame(
-                {
-                    "Все товары и услуги": bvar_df_full["mom"],
-                    "Продовольственные товары": bvar_df_full["Prod"],
-                    "Непродовольственные товары": bvar_df_full["Nonprod"],
-                    "Услуги": bvar_df_full["Serv"],
-                }
-            )
+        from sirena.data_loader import load_model_data
+        self.df_ridge = load_model_data('raw', include_macro=True)
 
         # ADD MACRO DATA to df_ridge for models that support it
         macro_cols = ["usd_nom_i", "Ki", "Ruonia", "Ki_i"]
@@ -327,6 +284,9 @@ class BacktestRunner:
         train_ridge = self.df_ridge[self.df_ridge.index <= cutoff].copy()
         train_bvar = self.bvar_data[self.bvar_data.index <= cutoff].copy()
 
+        from sirena.data_loader import require_observations, MONTHLY_COLUMNS
+        require_observations(train_ridge, MONTHLY_COLUMNS.values(), cutoff, 'backtest raw input')
+        require_observations(train_bvar, ['CPI', 'Food', 'NonFood', 'Services', 'USD', 'RUONIA'], cutoff, 'backtest macro input')
         return train_ridge, train_bvar, cutoff
 
     def _forecast_ridge(

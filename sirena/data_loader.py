@@ -26,50 +26,9 @@ class DataLoader:
         self._inflation_data: Optional[pd.DataFrame] = None
 
     def load_monthly_kbr(self) -> Optional[pd.DataFrame]:
-        """
-        Загрузка месячных данных ИПЦ КБР из infl_kbr.csv.
-
-        Returns:
-            DataFrame с колонками: 'Все товары и услуги', 'Продовольственные товары',
-            'Непродовольственные товары', 'Услуги'. Индекс - datetime.
-        """
-        path = self.data_dir / "infl_kbr.csv"
-
-        if not path.exists():
-            logger.error(f"Файл не найден: {path}")
-            return None
-
-        try:
-            df_raw = pd.read_csv(path, sep=';', decimal='.')
-
-            # Парсинг даты (поддержка разных форматов)
-            if 'Day' in df_raw.columns:
-                try:
-                    df_raw['Date'] = pd.to_datetime(df_raw['Day'], format='%d.%m.%Y')
-                except ValueError:
-                    df_raw['Date'] = pd.to_datetime(df_raw['Day'], format='%Y-%m-%d', errors='coerce')
-                    if df_raw['Date'].isna().all():
-                        df_raw['Date'] = pd.to_datetime(df_raw['Day'])
-
-            # Pivot если нужно
-            if 'Товар' in df_raw.columns and 'MoM' in df_raw.columns:
-                df = df_raw.pivot_table(index='Date', columns='Товар', values='MoM', aggfunc='first')
-            else:
-                df = df_raw.set_index('Date')
-
-            # Оставляем нужные колонки
-            required_cols = ['Все товары и услуги', 'Продовольственные товары',
-                           'Непродовольственные товары', 'Услуги']
-            df = df[required_cols].copy()
-            df = df.sort_index()
-
-            self._monthly_data = df
-            logger.info(f"Загружено {len(df)} месяцев данных КБР")
-            return df
-
-        except Exception as e:
-            logger.error(f"Ошибка загрузки infl_kbr.csv: {e}")
-            return None
+        """Load the latest canonical unadjusted monthly indices; fail on gaps."""
+        self._monthly_data = load_model_data('raw', data_dir=self.data_dir)
+        return self._monthly_data
 
     def load_weekly_prices(self) -> Optional[pd.DataFrame]:
         """
@@ -160,8 +119,7 @@ class DataLoader:
     @property
     def monthly_data(self) -> Optional[pd.DataFrame]:
         """Месячные данные (lazy load)."""
-        if self._monthly_data is None:
-            self.load_monthly_kbr()
+        self.load_monthly_kbr()
         return self._monthly_data
 
     @property
@@ -195,3 +153,111 @@ def get_data_loader() -> DataLoader:
     if _loader is None:
         _loader = DataLoader()
     return _loader
+
+
+# Shared input contract for live forecasts, backtests and public loaders.
+MONTHLY_COLUMNS = {
+    'mom': 'Все товары и услуги',
+    'Prod': 'Продовольственные товары',
+    'Nonprod': 'Непродовольственные товары',
+    'Serv': 'Услуги',
+}
+DEFAULT_DATA_DIR = Path(__file__).resolve().parents[1] / 'data'
+
+
+class DataFreshnessError(ValueError):
+    """A required observation/representation is unavailable at the forecast origin."""
+
+
+def require_observations(frame, columns, through, source, trailing_months=1):
+    """Reject stale/partial/non-finite data, including gaps inside a lag window."""
+    through = pd.Timestamp(through).to_period('M').to_timestamp()
+    dates = pd.date_range(end=through, periods=trailing_months, freq='MS')
+    missing = []
+    for col in columns:
+        values = (pd.to_numeric(frame[col], errors='coerce').reindex(dates)
+                  if col in frame else pd.Series(index=dates, dtype=float))
+        bad = values.index[~np.isfinite(values)]
+        if len(bad):
+            last = frame[col].last_valid_index() if col in frame else None
+            missing.append(f'{col}: missing {bad[0]:%Y-%m}, last valid {last}')
+    if missing:
+        raise DataFreshnessError(f'{source}: required through {through:%Y-%m}; ' + '; '.join(missing[:5]) + (f'; and {len(missing)-5} more series' if len(missing)>5 else ''))
+
+
+def load_model_data(representation, data_dir=None, cutoff=None, include_macro=False):
+    """Return a homogeneous raw or SA vintage, never splice representations.
+
+    Cutoff is an observation-month boundary. Current revised files are NOT historical
+    publication vintages; backtests using them remain pseudo-out-of-sample.
+    """
+    import hashlib
+    data_dir = Path(data_dir) if data_dir is not None else DEFAULT_DATA_DIR
+    if representation not in ('raw', 'sa'):
+        raise ValueError('representation must be explicitly raw or sa')
+    raw_path = data_dir / 'inflation_data.csv'
+    raw = pd.read_csv(raw_path, sep=';', decimal=',', encoding='utf-8-sig')
+    raw['Date'] = pd.to_datetime(raw['Date'], format='%d.%m.%Y', errors='raise').dt.to_period('M').dt.to_timestamp()
+    raw = raw.set_index('Date').sort_index()
+    if raw.index.has_duplicates:
+        raise DataFreshnessError(f'{raw_path}: duplicate observation months')
+    for col in raw:
+        raw[col] = pd.to_numeric(raw[col].astype(str).str.replace(',', '.', regex=False), errors='coerce')
+    raw = raw.loc[raw[list(MONTHLY_COLUMNS)].notna().any(axis=1)]
+    if cutoff is not None:
+        cutoff = pd.Timestamp(cutoff).to_period('M').to_timestamp()
+        raw = raw.loc[:cutoff]
+    if raw.empty:
+        raise DataFreshnessError(f'{raw_path}: no monthly observations')
+    required = cutoff if cutoff is not None else raw.index.max()
+    require_observations(raw, MONTHLY_COLUMNS, required, raw_path)
+    path = raw_path
+    if representation == 'raw':
+        frame = raw[list(MONTHLY_COLUMNS)].rename(columns=MONTHLY_COLUMNS)
+    else:
+        path = data_dir / 'sa_fl.csv'
+        sa = pd.read_csv(path, sep=';', decimal=',', encoding='utf-8-sig')
+        sa['Дата'] = pd.to_datetime(sa['Дата'], format='%d.%m.%Y', errors='raise').dt.to_period('M').dt.to_timestamp()
+        sa['Значение'] = pd.to_numeric(sa['Значение'].astype(str).str.replace(',', '.', regex=False), errors='coerce')
+        if sa.duplicated(['Дата', 'Товар']).any():
+            raise DataFreshnessError(f'{path}: duplicate series/month')
+        frame = sa.pivot(index='Дата', columns='Товар', values='Значение').sort_index()
+        frame = frame.loc[:required, list(MONTHLY_COLUMNS.values())]
+    require_observations(frame, MONTHLY_COLUMNS.values(), required, path,
+                         trailing_months=min(12, len(frame)))
+    if include_macro:
+        for col in ('usd_nom_i', 'Ki', 'Ruonia', 'Ki_i'):
+            require_observations(raw, [col], required, raw_path,
+                                 trailing_months=min(12, len(raw)))
+            frame[col] = raw[col]
+    frame.index.name = 'Date'
+    frame.attrs['input_contract'] = {
+        'representation': representation, 'units': 'mom_index_100',
+        'source': str(path), 'source_sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
+        'last_observation': frame.index.max().strftime('%Y-%m-%d'),
+        'required_through': required.strftime('%Y-%m-%d'),
+        'macro_included': include_macro,
+    }
+    return frame
+
+
+def forecast_source_manifest(data_dir=None):
+    """Content fingerprints invalidate a forecast after any registered input changes."""
+    import hashlib
+    data_dir = Path(data_dir) if data_dir is not None else DEFAULT_DATA_DIR
+    names = ['inflation_data.csv', 'sa_fl.csv', 'kbr_weekly_prices_2008_2026.csv',
+             'kbr_micro_full.csv', 'micro_sprav.csv', 'raw/infostat.csv',
+             'external/micro_cpi_region_export/micro_test_statsmodels.csv',
+             'nowcast_policy.json', 'Сравнение еженедельных цен_01.csv',
+             'weekly_accounting_month_overrides.csv', 'sa_hor.csv', 'mom_sa_kbr.csv',
+             'raw/subcomp.csv', 'raw/sub_mom.csv', 'sa_source_manifest.json']
+    return {name: hashlib.sha256((data_dir / name).read_bytes()).hexdigest()
+            if (data_dir / name).exists() else None for name in names}
+
+
+def validate_forecast_cache(payload, data_dir=None):
+    expected = forecast_source_manifest(data_dir)
+    actual = payload.get('source_manifest', {})
+    changed = [name for name in expected if name not in actual or actual[name] != expected[name]]
+    if changed:
+        raise DataFreshnessError('Forecast cache is stale; rerun scripts/precompute_forecasts.py. Changed/missing inputs: ' + ', '.join(changed))

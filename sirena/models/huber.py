@@ -36,6 +36,7 @@ class HuberForecaster(BaseForecaster):
     """
 
     name = "huber"
+    input_representation = "raw"
     MIN_TRAIN_SIZE = 36
     # НЕ исключаем годы — Huber сам справится с выбросами
     OUTLIER_YEARS = []

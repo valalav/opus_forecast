@@ -49,6 +49,7 @@ class EBMForecaster(BaseForecaster):
     """
 
     name = "ebm"
+    input_representation = "raw"
     MIN_TRAIN_SIZE = 24
 
     # Годы-выбросы (как в Ridge)

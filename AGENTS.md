@@ -106,6 +106,14 @@ If a similar implementation already exists, extend it or mirror its pattern inst
 - `sirena/macro_features.py` — reusable macro and related feature engineering
 - `sirena/data/weekly_loader.py` — weekly data loading for nowcasting
 
+## Data Freshness — mandatory (user decision 2026-09-08)
+
+- Every live calculation must use the latest verified source release for each required input. Check publication/source availability, region, measure, units and last valid observation; file modification time is insufficient.
+- RAW models consume homogeneous RAW; SA models consume homogeneous SA. Never append raw monthly rows to an SA history. Replace the full SA vintage, retaining the original source/hash.
+- Use the shared `sirena.data_loader.load_model_data` contract. Validate internal micro/proxy/forecast-matrix origins too. If a required observation is unavailable, fail visibly with model/source/date; never relabel stale output or fill it with zero.
+- In backtests truncate at the forecast origin and distinguish revised data from real-time publication vintages. Cache metadata and file hashes must match current inputs.
+- Procedure and exact limitations: [docs/DATA_FRESHNESS.md](docs/DATA_FRESHNESS.md).
+
 ## Model Work Rules
 
 ### When modifying or adding models

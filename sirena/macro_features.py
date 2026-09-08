@@ -408,3 +408,14 @@ def get_production_features() -> List[str]:
 
 
 PRODUCTION_FEATURES = get_production_features()
+
+
+def validate_production_origin(cutoff, data_dir='data/raw'):
+    """Validate the exact observed lag windows needed for the next h=1 row."""
+    from sirena.data_loader import require_observations
+    cutoff = pd.Timestamp(cutoff).to_period('M').to_timestamp()
+    production = load_production_proxies(data_dir).loc[:cutoff]
+    # torg_ma3 through cutoff, lag6 at cutoff-5; pp diff lag3 at cutoff-2/-3.
+    require_observations(production, ['Torg'], cutoff, str(data_dir) + '/infostat.csv', 6)
+    require_observations(production, ['pp'], cutoff - pd.DateOffset(months=2),
+                         str(data_dir) + '/infostat.csv', 4)

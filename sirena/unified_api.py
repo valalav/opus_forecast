@@ -171,8 +171,15 @@ class SIRENA:
         Returns:
             self
         """
-        if self._df is not None and not reload:
+        from sirena.data_loader import forecast_source_manifest, load_model_data
+        fingerprint = forecast_source_manifest(self.data_dir)
+        if self._df is not None and not reload and getattr(self, '_source_fingerprint', None) == fingerprint:
             return self
+        load_model_data('raw', data_dir=self.data_dir, include_macro=True)
+        self._is_fitted = False
+        self._models = {}
+        self._sa_df = None
+        self._source_fingerprint = fingerprint
 
         # Загрузка macro данных
         infl_file = self.data_dir / 'inflation_data.csv'
@@ -185,6 +192,7 @@ class SIRENA:
                 df[col] = df[col].astype(str).str.replace(',', '.')
                 df[col] = pd.to_numeric(df[col], errors='coerce')
         df['Date'] = pd.to_datetime(df['Date'], format='%d.%m.%Y', errors='coerce')
+        df['Date'] = df['Date'].dt.to_period('M').dt.to_timestamp()
         df = df.set_index('Date').sort_index()
         self._df = df
 
@@ -192,8 +200,9 @@ class SIRENA:
         sa_file = self.data_dir / 'sa_fl.csv'
         if sa_file.exists():
             try:
+                load_model_data('sa', data_dir=self.data_dir)
                 sa_df = pd.read_csv(sa_file, sep=';', decimal=',')
-                sa_df['Дата'] = pd.to_datetime(sa_df['Дата'])
+                sa_df['Дата'] = pd.to_datetime(sa_df['Дата'], format='%d.%m.%Y')
                 sa_df = sa_df.pivot(index='Дата', columns='Код', values='Значение')
                 sa_df.columns = [str(c) for c in sa_df.columns]
                 for col in sa_df.columns:
@@ -267,6 +276,7 @@ class SIRENA:
         Returns:
             self
         """
+        self.load_data()
         if self._is_fitted and not force:
             return self
 
@@ -312,8 +322,7 @@ class SIRENA:
         Returns:
             ForecastResult
         """
-        if not self._is_fitted:
-            self.fit()
+        self.fit()
 
         # Даты прогноза
         dates = pd.date_range(

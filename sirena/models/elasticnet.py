@@ -35,6 +35,7 @@ class ElasticNetForecaster(BaseForecaster):
     """
 
     name = "elasticnet"
+    input_representation = "raw"
     MIN_TRAIN_SIZE = 36
     OUTLIER_YEARS = [2010]  # Только 2010 исключаем
     SAMPLE_WEIGHT_2022 = 0.25

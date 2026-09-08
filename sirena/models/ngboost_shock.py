@@ -28,6 +28,7 @@ class NGBoostShockForecaster(BaseForecaster):
     """NGBoost с shock dummies."""
 
     name = "ngboost_shock"
+    input_representation = "raw"
     MIN_TRAIN_SIZE = 36
 
     # НЕ исключаем 2022 — используем shock dummies

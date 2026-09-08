@@ -81,7 +81,10 @@ class MicroStatsmodelsExternalForecaster(BaseForecaster):
         if not cutoff_dates:
             return np.full(horizon, np.nan)
 
-        cutoff = max(cutoff_dates)
+        cutoff = self._last_train_date or max(cutoff_dates)
+        if cutoff not in cutoff_dates:
+            from sirena.data_loader import DataFreshnessError
+            raise DataFreshnessError(f'{self.file_path}: required cutoff {cutoff:%Y-%m}; latest available {max(cutoff_dates):%Y-%m}')
         values = []
         for step in range(1, horizon + 1):
             target_date = cutoff + pd.DateOffset(months=step)

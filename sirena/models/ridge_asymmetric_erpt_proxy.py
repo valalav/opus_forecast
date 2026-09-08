@@ -21,6 +21,7 @@ from .ridge_shock_dummies import RidgeShockDummiesForecaster
 class RidgeAsymmetricERPTProxyForecaster(RidgeShockDummiesForecaster):
     """RidgeShockDummies с proxy asymmetric FX pass-through features."""
 
+    input_representation = "raw"
     name = "ridge_asymmetric_erpt_proxy"
     BASE_FEATURES = [
         "y_lag1",

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nowcast | СИРЕНА-КБР</title>
+<style>
+body {font:16px/1.6 Arial,sans-serif;color:#243447;background:#f4f6f8;
+max-width:1050px;margin:30px auto;padding:0 20px}
+section {background:white;border:1px solid #dde3e8;border-radius:10px;
+padding:24px;margin:24px 0;overflow-x:auto}
+a {color:#116681} h1,h2 {line-height:1.25}
+.value {font-size:28px;font-weight:bold;color:#116681}
+table {border-collapse:collapse;width:100%} th,td {padding:10px;
+border-bottom:1px solid #dde3e8;text-align:right} th {background:#eef5f7}
+</style></head><body>
+<nav><a href="index.html">Главная</a> ·
+<a href="forecast_table.html">Все прогнозы</a></nav>
+<h1>Оперативный nowcast инфляции КБР</h1>
+<p>Расчет обновлен: 2026-09-08T16:07:33.892865.
+Месячные данные в кэше: 2026-07-01.</p>
+<p>Недельная выборка дает диагностическую оценку и не является официальным
+месячным ИПЦ. Nowcast не входит в модельный Ensemble.</p>
+
+        <section id="month-2026-08">
+          <h2>Nowcast 2026-08</h2>
+          <p class="value">+0.233% м/м · индекс 100.23</p>
+          <p>Недельные отсечки: 4 из 4;
+          последняя: 2026-08-24.</p>
+          <p>Предварительный операционный якорь: <b>100.50</b> (+0.50% м/м). Это отдельная оценка; она не заменяется техническим nowcast.</p>
+          <table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Дата отсечки</th>
+      <th>Недельное изменение, %</th>
+      <th>Накопленное изменение, %</th>
+      <th>Позиций</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>2026-08-03</td>
+      <td>+0.0706</td>
+      <td>+0.0706</td>
+      <td>107</td>
+    </tr>
+    <tr>
+      <td>2026-08-10</td>
+      <td>+0.1567</td>
+      <td>+0.2274</td>
+      <td>107</td>
+    </tr>
+    <tr>
+      <td>2026-08-17</td>
+      <td>+0.1177</td>
+      <td>+0.3453</td>
+      <td>107</td>
+    </tr>
+    <tr>
+      <td>2026-08-24</td>
+      <td>-0.1114</td>
+      <td>+0.2336</td>
+      <td>107</td>
+    </tr>
+  </tbody>
+</table>
+          <p>Недельная цепочка: +0.2336%;
+          сигнал с учетом оставшихся 0 отсечек:
+          +0.2336%.
+          Сопоставление уровней цен: +0.4050%.</p>
+          <p>Расчет: 90% ×
+          +0.2336% +
+          10% × +0.2254% =
+          +0.2328%. Модельная часть — среднее прогнозов,
+          использованных в расчете nowcast.</p>
+        </section>
+        <section id="month-2026-09">
+          <h2>Nowcast 2026-09</h2>
+          <p class="value">+0.464% м/м · индекс 100.46</p>
+          <p>Недельные отсечки: 1 из 5;
+          последняя: 2026-08-31.</p>
+          <p>Рабочая точка отправочной траектории: <b>100.50</b> (+0.50% м/м). Это отдельная оценка; она не заменяется техническим nowcast.</p>
+          <table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Дата отсечки</th>
+      <th>Недельное изменение, %</th>
+      <th>Накопленное изменение, %</th>
+      <th>Позиций</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>2026-08-31</td>
+      <td>+0.1112</td>
+      <td>+0.1112</td>
+      <td>107</td>
+    </tr>
+  </tbody>
+</table>
+          <p>Недельная цепочка: +0.1112%;
+          сигнал с учетом оставшихся 4 отсечек:
+          +0.3781%.
+          Сопоставление уровней цен: +0.0980%.</p>
+          <p>Расчет: 60% ×
+          +0.3781% +
+          40% × +0.5928% =
+          +0.4640%. Модельная часть — среднее прогнозов,
+          использованных в расчете nowcast.</p>
+        </section>
+<h2>Модели с недоступным расчетом</h2><ul><li>Ridge_ProdProxy: data/raw/infostat.csv: required through 2026-07; Torg: missing 2026-02, last valid 2025-09-01 00:00:00</li><li>Micro: data/kbr_micro_full.csv: required through 2026-07; 101: missing 2026-07, last valid 2026-06-01 00:00:00; 103: missing 2026-07, last valid 2026-06-01 00:00:00; 104: missing 2026-07, last valid 2026-06-01 00:00:00; 106: missing 2026-07, last valid 2026-06-01 00:00:00; 107: missing 2026-07, last valid 2026-06-01 00:00:00; and 532 more series</li><li>Micro_SM: data/external/micro_cpi_region_export/micro_test_statsmodels.csv: required cutoff 2026-07; latest available 2026-05</li></ul>
+<p>Источники: data/precomputed_forecasts.json,
+data/Сравнение еженедельных цен_01.csv,
+data/weekly_accounting_month_overrides.csv,
+data/send_ready_policy_trajectory.json.
+Дата наблюдения учитывается по операционному месяцу из календаря overrides.</p>
+</body></html>

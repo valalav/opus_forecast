@@ -265,6 +265,10 @@ class MicrocomponentForecaster:
         """
         data_dir = Path(__file__).parent.parent.parent / "data"
         micro_data = self._load_data(data_dir)
+        from sirena.data_loader import require_observations
+        cutoff = pd.Timestamp(df.index.max()).to_period('M').to_timestamp()
+        micro_data = micro_data.loc[:cutoff]
+        require_observations(micro_data, micro_data.columns, cutoff, 'data/kbr_micro_full.csv')
         self.macro_df = df.copy()
 
         fitted_count = 0

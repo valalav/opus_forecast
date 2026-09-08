@@ -83,69 +83,9 @@ class CachedDataLoader:
 
     @measure_time
     def load_monthly_kbr(self, force_refresh: bool = False) -> Optional[pd.DataFrame]:
-        """
-        Load monthly KBR inflation data with caching.
-
-        Args:
-            force_refresh: Force refresh from disk
-
-        Returns:
-            DataFrame with monthly inflation data
-        """
-        filepath = self.data_dir / "infl_kbr.csv"
-        cache_key = f"monthly_kbr_{self._get_file_hash(filepath)}"
-
-        if self.use_cache and not force_refresh:
-            cached = self._cache.get(cache_key)
-            if cached is not None:
-                logger.info("Monthly KBR data loaded from cache")
-                self._monthly_data = cached
-                return cached
-
-        if not filepath.exists():
-            logger.error(f"File not found: {filepath}")
-            return None
-
-        try:
-            df_raw = pd.read_csv(filepath, sep=";", decimal=".")
-
-            if "Day" in df_raw.columns:
-                try:
-                    df_raw["Date"] = pd.to_datetime(df_raw["Day"], format="%d.%m.%Y")
-                except ValueError:
-                    df_raw["Date"] = pd.to_datetime(
-                        df_raw["Day"], format="%Y-%m-%d", errors="coerce"
-                    )
-                    if df_raw["Date"].isna().all():
-                        df_raw["Date"] = pd.to_datetime(df_raw["Day"])
-
-            if "Товар" in df_raw.columns and "MoM" in df_raw.columns:
-                df = df_raw.pivot_table(
-                    index="Date", columns="Товар", values="MoM", aggfunc="first"
-                )
-            else:
-                df = df_raw.set_index("Date")
-
-            required_cols = [
-                "Все товары и услуги",
-                "Продовольственные товары",
-                "Непродовольственные товары",
-                "Услуги",
-            ]
-            df = df[required_cols].copy()
-            df = df.sort_index()
-
-            self._monthly_data = df
-
-            if self.use_cache:
-                self._cache.set(cache_key, df)
-
-            logger.info(f"Loaded {len(df)} months of KBR data")
-            return df
-
-        except Exception as e:
-            logger.error(f"Error loading infl_kbr.csv: {e}")
-            return None
+        from sirena.data_loader import load_model_data
+        self._monthly_data = load_model_data('raw', data_dir=self.data_dir)
+        return self._monthly_data
 
     @measure_time
     def load_weekly_prices(self, force_refresh: bool = False) -> Optional[pd.DataFrame]:
@@ -271,8 +211,7 @@ class CachedDataLoader:
     @property
     def monthly_data(self) -> Optional[pd.DataFrame]:
         """Monthly data (lazy load)."""
-        if self._monthly_data is None:
-            self.load_monthly_kbr()
+        self.load_monthly_kbr()
         return self._monthly_data
 
     @property

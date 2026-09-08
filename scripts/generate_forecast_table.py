@@ -1,5 +1,8 @@
 
 import json
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import pandas as pd
 import os
 
@@ -19,6 +22,10 @@ MODEL_WEIGHTS = {
 def load_forecasts(filepath):
     with open(filepath, 'r') as f:
         data = json.load(f)
+    from sirena.data_loader import validate_forecast_cache
+    from pathlib import Path
+    if Path(filepath).name == 'precomputed_forecasts.json':
+        validate_forecast_cache(data)
     return data
 
 def generate_html_table(data, output_path):
@@ -164,6 +171,10 @@ def generate_nowcast_html(data, output_path, policy=None):
         </section>""")
     if not sections:
         sections.append("<p>Недельных данных для прогнозных месяцев пока нет.</p>")
+    unavailable = [f"<li>{escape(name)}: {escape(str(status.get('reason', 'нет актуальных данных')))}</li>"
+                   for name, status in data.get('model_status', {}).items()
+                   if status.get('status') == 'unavailable']
+    unavailable_html = ('<h2>Модели с недоступным расчетом</h2><ul>' + ''.join(unavailable) + '</ul>') if unavailable else ''
     html = f"""<!doctype html>
 <html lang="ru"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -186,6 +197,7 @@ border-bottom:1px solid #dde3e8;text-align:right}} th {{background:#eef5f7}}
 <p>Недельная выборка дает диагностическую оценку и не является официальным
 месячным ИПЦ. Nowcast не входит в модельный Ensemble.</p>
 {''.join(sections)}
+{unavailable_html}
 <p>Источники: data/precomputed_forecasts.json,
 data/Сравнение еженедельных цен_01.csv,
 data/weekly_accounting_month_overrides.csv,

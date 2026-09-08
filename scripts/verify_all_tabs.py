@@ -46,6 +46,8 @@ def check_precomputed_forecasts():
         with open('data/precomputed_forecasts.json', 'r') as f:
             data = json.load(f)
 
+        from sirena.data_loader import validate_forecast_cache
+        validate_forecast_cache(data)
         models_in_file = list(data.get('forecasts', {}).keys())
         print(f"Моделей в файле: {len(models_in_file)}")
         print(f"Модели: {models_in_file}")

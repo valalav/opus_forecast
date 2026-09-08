@@ -1,0 +1,118 @@
+============================================================
+PRECOMPUTING FORECASTS
+============================================================
+
+[1/6] Loading data...
+  Last data point: 2026-07
+
+[2/10] Computing Ridge forecast...
+  Done in 0.0s
+  Trajectory: 0.24% → 0.54%
+
+[3/10] Computing Huber forecast...
+  Done in 0.1s
+  Trajectory: 0.23% → 0.65%
+
+[4/10] Computing RidgeShockDummies forecast...
+  Done in 0.0s
+  Trajectory: 0.23% → 0.67%
+
+[4/13] Computing Ridge_Shock_Roll24 forecast...
+  Done in 0.0s
+  Trajectory: 0.18% → 0.69%
+
+[5/13] Computing Ridge_ProdProxy forecast...
+  ERROR: data/raw/infostat.csv: required through 2026-07; Torg: missing 2026-02, last valid 2025-09-01 00:00:00
+
+[6/13] Computing Ridge_AsymERPT forecast...
+  Done in 0.1s
+  Trajectory: 0.27% → 0.51%
+
+[7/13] Computing ElasticNet forecast...
+  Done in 0.1s
+  Trajectory: 0.19% → 0.62%
+
+[8/13] Computing NGBoostShock forecast...
+  Done in 0.6s
+  Trajectory: 0.22% → 0.89%
+
+[9/13] Computing NGBoost forecast...
+  Done in 0.6s
+  Trajectory: 0.23% → 0.82%
+
+[10/13] Computing RidgeExtended forecast...
+  Done in 0.1s
+  Trajectory: 0.23% → 0.54%
+
+[11/13] Computing EBM forecast...
+16:07:36 - cmdstanpy - INFO - Chain [1] start processing
+16:07:36 - cmdstanpy - INFO - Chain [1] done processing
+  Done in 0.7s
+  Trajectory: -0.04% → 0.36%
+
+[12/13] Computing Prophet forecast...
+  Done in 0.1s
+  Trajectory: -0.13% → 0.55%
+
+[13/14] Computing VARPolicy forecast...
+  Done in 0.0s
+  Regime/policy: h1:shock_huber_var;h2plus:seasonal_var
+  Trajectory: 0.88% → 0.25%
+
+[14/15] Computing FactorPolicy forecast...
+  Done in 0.0s
+  Factors/explained variance: 2 / 55.85%
+  Trajectory: 0.21% → 0.19%
+
+[15/15] Computing Nowcast (Weekly Bridge)...
+  Weekly bridge source: /home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv (16865 deduped rows)
+  Target 2026-08 (h=1)
+    Weekly bridge signal: +0.234%
+    Model proxy: +0.225%
+    Weights: 90% weekly / 10% model
+    NOWCAST: +0.233%
+  Target 2026-09 (h=2)
+    Weekly bridge signal: +0.378%
+    Model proxy: +0.593%
+    Weights: 60% weekly / 40% model
+    NOWCAST: +0.464%
+
+Computing Micro forecast (Auxiliary)...
+  ERROR: data/kbr_micro_full.csv: required through 2026-07; 101: missing 2026-07, last valid 2026-06-01 00:00:00; 103: missing 2026-07, last valid 2026-06-01 00:00:00; 104: missing 2026-07, last valid 2026-06-01 00:00:00; 106: missing 2026-07, last valid 2026-06-01 00:00:00; 107: missing 2026-07, last valid 2026-06-01 00:00:00; and 532 more series
+
+Computing Micro_SM forecast (External statsmodels)...
+  ERROR: data/external/micro_cpi_region_export/micro_test_statsmodels.csv: required cutoff 2026-07; latest available 2026-05
+
+Computing weighted Ensemble (v5.2)...
+  Ensemble trajectory: [0.2185953791966737, 0.5596549123812342, 0.6061146545122297, 0.9047985035976024, 1.0543170149432797, 1.0589025280392454, 1.1193518169873962, 0.9125454401534233, 0.9326417846276766, 0.495946607858108, 0.3463575716243434, 0.6538918267087643]
+
+Saved to: /home/valalav/_projects/sirena-kbr/data/precomputed_forecasts.json
+
+============================================================
+SUMMARY
+============================================================
+Generated: 2026-09-08T16:07:33.892865
+Data up to: 2026-07-01
+Horizon: 12 months
+Models: 18
+
+Trajectories (h=1 → h=12):
+  Ridge       : +0.24% → +0.54%
+  Huber       : +0.23% → +0.65%
+  RidgeShockDummies: +0.23% → +0.67%
+  Ridge_Shock_Roll24: +0.18% → +0.69%
+  Ridge_AsymERPT: +0.27% → +0.51%
+  ElasticNet  : +0.19% → +0.62%
+  NGBoostShock: +0.22% → +0.89%
+  NGBoost     : +0.23% → +0.82%
+  RidgeExtended: +0.23% → +0.54%
+  EBM         : -0.04% → +0.36%
+  Prophet     : -0.13% → +0.55%
+  VARPolicy   : +0.88% → +0.25%
+  FactorPolicy: +0.21% → +0.19%
+  Nowcast     : +0.23% (h=1 only)
+  Ensemble    : +0.22% → +0.65%
+
+============================================================
+Done! Dashboard will use precomputed_forecasts.json
+============================================================

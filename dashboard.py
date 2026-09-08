@@ -48,36 +48,11 @@ warnings.filterwarnings("ignore")
 # =============================================================================
 # DATA LOADING
 # =============================================================================
-@st.cache_data
 def load_data():
-    """Load main inflation data."""
+    """Read the current canonical data on every dashboard rerun."""
+    from sirena.data_loader import load_model_data
     try:
-        df_raw = pd.read_csv("data/inflation_data.csv", sep=";", decimal=",")
-        df_raw["Date"] = pd.to_datetime(
-            df_raw["Date"], format="%d.%m.%Y", errors="coerce"
-        ).dt.to_period("M").dt.to_timestamp()
-
-        source_columns = {
-            "mom": "Все товары и услуги",
-            "Prod": "Продовольственные товары",
-            "Nonprod": "Непродовольственные товары",
-            "Serv": "Услуги",
-        }
-        missing = [column for column in source_columns if column not in df_raw]
-        if missing:
-            raise KeyError(
-                "Missing canonical inflation columns: " + ", ".join(missing)
-            )
-
-        df = df_raw.set_index("Date")[list(source_columns)].rename(
-            columns=source_columns
-        )
-        for column in df.columns:
-            df[column] = pd.to_numeric(
-                df[column].astype(str).str.replace(",", ".", regex=False),
-                errors="coerce",
-            )
-        return df.dropna(how="all").sort_index()
+        return load_model_data('raw')
     except Exception as e:
         st.error(f"Ошибка загрузки данных: {e}")
         return None

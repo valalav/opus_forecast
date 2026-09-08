@@ -36,6 +36,7 @@ class RidgeShockDummiesForecaster(BaseForecaster):
     """
 
     name = "ridge_shock_dummies"
+    input_representation = "raw"
     MIN_TRAIN_SIZE = 36
 
     # НЕ исключаем годы - используем dummy вместо этого

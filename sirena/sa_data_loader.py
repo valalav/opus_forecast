@@ -47,6 +47,10 @@ def load_sa_data(file_path: Optional[str] = None) -> pd.DataFrame:
 
     pivot.index.name = 'Date'
 
+    if file_path == DATA_DIR / 'sa_fl.csv':
+        from sirena.data_loader import load_model_data
+        checked = load_model_data('sa', data_dir=DATA_DIR)
+        pivot.attrs.update(checked.attrs)
     return pivot
 
 
@@ -161,18 +165,8 @@ def get_sa_with_total() -> pd.DataFrame:
         - 'Непродовольственные товары'
         - 'Услуги'
     """
-    sa_data = load_sa_data()
-
-    cols = [
-        'Все товары и услуги',
-        'Продовольственные товары',
-        'Непродовольственные товары',
-        'Услуги'
-    ]
-
-    available = [c for c in cols if c in sa_data.columns]
-
-    return sa_data[available]
+    from sirena.data_loader import load_model_data
+    return load_model_data('sa', data_dir=DATA_DIR)
 
 
 # Константы для быстрого доступа

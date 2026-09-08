@@ -38,6 +38,7 @@ class RidgeExtendedForecaster(BaseForecaster):
     """
 
     name = "ridge_extended"
+    input_representation = "raw"
     MIN_TRAIN_SIZE = 36
     # v4.3: Исключаем выбросные годы (sample weighting ухудшал результаты)
     OUTLIER_YEARS = [2010, 2022]

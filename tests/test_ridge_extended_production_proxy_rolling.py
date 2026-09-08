@@ -55,7 +55,7 @@ def temp_data_dir(tmp_path: Path) -> str:
     raw_dir = tmp_path / "raw"
     raw_dir.mkdir(parents=True, exist_ok=True)
 
-    infostat_dates = pd.date_range("2017-01-01", periods=96, freq="MS")
+    infostat_dates = pd.date_range("2017-01-01", end="2025-12-01", freq="MS")
     infostat_df = pd.DataFrame(
         {
             "Date": infostat_dates.strftime("%d.%m.%Y"),
