@@ -179,13 +179,27 @@ def extract_all_regions_micro():
 
 
 def main():
-    fix_inflation_data()
-    extract_full_kbr()
-    update_micro_sprav()
-    extract_all_regions_micro()
-    print("\n" + "="*60)
-    print("ALL UPDATES COMPLETE")
-    print("="*60)
+    import argparse
+    import json
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--release', help='Verified source_updates directory with database, manifest and extracts')
+    parser.add_argument('--download', action='store_true', help='Fetch latest public archive and extract it')
+    parser.add_argument('--extract', action='store_true', help='Re-extract tables and bind hashes to verified database')
+    parser.add_argument('--apply', action='store_true', help='Publish after validation; default is read-only')
+    parser.add_argument('--proxy', help='Verified homogeneous RAW infostat CSV')
+    parser.add_argument('--proxy-manifest', help='Proxy identity/source manifest')
+    args = parser.parse_args()
+    if args.release:
+        from pathlib import Path
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+        from sirena.data.access_refresh import refresh_access, prepare_release
+        if args.download or args.extract:
+            prepare_release(args.release, download=args.download)
+        result = refresh_access(args.release, 'data', apply=args.apply,
+                                proxy=args.proxy, proxy_manifest=args.proxy_manifest)
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return
+    parser.error('Use --release with a verified current vintage; legacy partial updates are disabled')
 
 
 if __name__ == "__main__":

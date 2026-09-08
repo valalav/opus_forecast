@@ -1,0 +1,35 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /home/valalav/_projects/sirena-kbr
+configfile: pytest.ini
+plugins: anyio-4.11.0, langsmith-0.6.2, dash-2.18.2
+collected 67 items
+
+tests/test_access_refresh.py ...........                                 [ 16%]
+tests/test_data_freshness.py ................                            [ 40%]
+tests/test_forecast.py .............                                     [ 59%]
+tests/test_weekly_bridge.py ..........                                   [ 74%]
+tests/test_huber_production_proxy.py ....                                [ 80%]
+tests/test_ridge_extended_production_proxy.py .....                      [ 88%]
+tests/test_ridge_extended_production_proxy_rolling.py ....               [ 94%]
+tests/test_ridge_production_proxy_rolling.py ....                        [100%]
+
+=============================== warnings summary ===============================
+tests/test_huber_production_proxy.py::test_fit_predict_backtest
+tests/test_huber_production_proxy.py::test_fit_predict_backtest
+tests/test_huber_production_proxy.py::test_fit_predict_backtest
+tests/test_huber_production_proxy.py::test_fit_predict_backtest
+tests/test_huber_production_proxy.py::test_fit_predict_backtest
+tests/test_huber_production_proxy.py::test_fit_predict_backtest
+tests/test_huber_production_proxy.py::test_fit_predict_backtest
+  /usr/local/lib/python3.12/dist-packages/sklearn/linear_model/_huber.py:348: ConvergenceWarning:
+
+  lbfgs failed to converge after 500 iteration(s) (status=1):
+  STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+  Increase the number of iterations to improve the convergence (max_iter=500).
+  You might also want to scale the data as shown in:
+      https://scikit-learn.org/stable/modules/preprocessing.html
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 67 passed, 7 warnings in 3.26s ========================

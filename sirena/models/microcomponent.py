@@ -143,7 +143,9 @@ class MicrocomponentForecaster:
                 "No overlapping item codes between data/kbr_micro_full.csv "
                 "and data/micro_sprav.csv"
             )
-        micro_pivot = micro_pivot[valid_cols]
+        micro_pivot = micro_pivot.reindex(columns=list(self.weights))
+        # Keep required basket items even when the source has no observations;
+        # fit freshness checks must see these missing columns too.
 
         # Convert MoM to changes
         micro_pivot = micro_pivot - 100

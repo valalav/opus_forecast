@@ -41,7 +41,7 @@
 - Production Proxy Features (demand indicators):
   * torg_lag3, torg_lag6 - торговый оборот (demand proxy)
   * torg_diff_lag3, torg_ma3 - momentum торговли
-  * pp_lag3, pp_lag6 - платные услуги (services demand)
+  * pp_lag3, pp_lag6 - индекс промышленного производства (RAW MoM)
   * pp_diff_lag3 - momentum услуг
 - Субкомпонент-специфичные demand-признаки:
   * Продовольственные товары: torg_lag3, torg_lag6
@@ -253,7 +253,7 @@ class SubcomponentMultiForecaster:
 
     def _load_data(self, data_dir):
         """Load subcomponent data."""
-        # Try newer subcomp.csv first (до октября 2025), fallback to sub_mom.csv
+        # Use the shared current Access subcomponent extract; retain legacy-format fallback
         subcomp_file = data_dir / "raw" / "subcomp.csv"
         sub_mom_file = data_dir / "raw" / "sub_mom.csv"
 
@@ -424,7 +424,7 @@ class SubcomponentMultiForecaster:
 
         # =====================================================================
         # v2.4: Production Proxy Features (demand indicators)
-        # Torg = торговый оборот, pp = платные услуги
+        # Torg = реальный оборот розничной торговли, pp = индекс промышленного производства
         # v2.5 FIX: Normalize production index to first day of month
         # =====================================================================
         if hasattr(self, "production_df") and self.production_df is not None:

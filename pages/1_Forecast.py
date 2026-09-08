@@ -58,72 +58,13 @@ def get_best_model_for_horizon(horizon):
     return best_models.get(horizon, "Ridge")
 
 
-def forecast_with_model(df, target_date, model_name):
-    """Get forecast from specific model."""
-    try:
-        if model_name == "Huber":
-            from sirena.models.huber import HuberForecaster
-
-            model = HuberForecaster()
-            model.fit(df)
-            df_ext = df.copy()
-            df_ext.loc[target_date] = np.nan
-            return model.predict(df_ext, target_date)["prediction"] - 100
-
-        elif model_name == "NGBoost_Shock":
-            from sirena.models.ngboost_shock import NGBoostShockForecaster
-
-            model = NGBoostShockForecaster()
-            model.fit(df, "Все товары и услуги")
-            df_ext = df.copy()
-            df_ext.loc[target_date] = np.nan
-            return model.predict(df_ext, target_date)["prediction"] - 100
-
-        elif model_name == "Micro":
-            from sirena.models.microcomponent import MicrocomponentForecaster
-
-            model = MicrocomponentForecaster(horizon=1, use_seasonal_adj=True)
-            model.fit(df, "Все товары и услуги")
-            result = model.predict(df, target_date)
-            if result and "prediction" in result:
-                month = target_date.month
-                seasonal_adj = model.SEASONAL_ADJ.get(month, 0)
-                return result["prediction"] - 100 + seasonal_adj
-            return np.nan
-
-        elif model_name == "Micro_SM":
-            from sirena.models.micro_statsmodels_external import (
-                MicroStatsmodelsExternalForecaster,
-            )
-
-            model = MicroStatsmodelsExternalForecaster(horizon=1)
-            model.fit(df, "Все товары и услуги")
-            result = model.predict(df, target_date)
-            if result and "prediction" in result and not np.isnan(result["prediction"]):
-                return result["prediction"] - 100
-            return np.nan
-
-        elif model_name == "Prophet":
-            from sirena.models.prophet import ProphetForecaster
-
-            model = ProphetForecaster()
-            model.fit(df, "Все товары и услуги")
-            fc = model.forecast(horizon=1)
-            return fc[0] if len(fc) > 0 else np.nan
-
-        elif model_name == "Ridge":
-            from sirena.models.ridge_extended import RidgeExtendedForecaster
-
-            model = RidgeExtendedForecaster()
-            model.fit(df)
-            df_ext = df.copy()
-            df_ext.loc[target_date] = np.nan
-            return model.predict(df_ext, target_date)["prediction"] - 100
-
-        return np.nan
-    except Exception as e:
-        st.warning(f"Ошибка модели {model_name}: {e}")
-        return np.nan
+def forecast_with_model(df, target_date, model_name, snapshot=None):
+    """Use the same dated production trajectory as the twelve-month tab."""
+    from sirena.data_loader import validate_forecast_cache, cached_forecast_point
+    if snapshot is None:
+        snapshot = json.loads(Path('data/precomputed_forecasts.json').read_text())
+        validate_forecast_cache(snapshot)
+    return cached_forecast_point(snapshot, model_name, target_date, df.index.max())
 
 
 def calculate_kpi_corrections(bt_data, model_name):
@@ -180,21 +121,29 @@ def render_forecast_tab(
         )
         return
 
-    best_model = get_best_model_for_horizon(horizon)
-
-    if best_model not in bt_data.columns:
-        st.error(f"Модель {best_model} отсутствует в данных бэктеста")
+    try:
+        from sirena.data_loader import validate_forecast_cache
+        snapshot = json.loads(Path('data/precomputed_forecasts.json').read_text())
+        validate_forecast_cache(snapshot)
+        predictions = {m: forecast_with_model(df, target_date, m, snapshot) for m in ALL_MODELS}
+        best_model = get_best_model_for_horizon(horizon)
+        base_pred = forecast_with_model(df, target_date, best_model, snapshot)
+        if not np.isfinite(base_pred):
+            st.info(f'{best_model}: расчет недоступен. Показан модельный Ensemble.')
+            best_model = 'Ensemble'
+            base_pred = forecast_with_model(df, target_date, best_model, snapshot)
+        if not np.isfinite(base_pred):
+            raise ValueError('Нет конечного прогноза Ensemble')
+    except Exception as exc:
+        st.error(f'Текущий расчет недоступен: {exc}')
         return
-
-    # Get corrections
-    monthly_shifts, bias = calculate_kpi_corrections(bt_data, best_model)
-
-    # Get base forecast
-    base_pred = forecast_with_model(df, target_date, best_model)
-
-    if np.isnan(base_pred):
-        st.error(f"Не удалось получить прогноз от модели {best_model}")
-        return
+    st.caption(f"Данные: {snapshot['last_data_date']}; общий расчет для всех горизонтов. "
+               'MAE и поправки ниже относятся к сохраненному бэктесту, а не к новой оценке качества.')
+    for name, status in snapshot.get('model_status', {}).items():
+        if status.get('status') != 'available':
+            st.warning(f"{name}: {status.get('reason', 'расчет недоступен')}")
+    monthly_shifts, bias = (calculate_kpi_corrections(bt_data, best_model)
+                           if best_model in bt_data.columns else ({}, {}))
 
     # Apply corrections
     seasonal_shift = monthly_shifts.get(target_month, 0)
@@ -210,7 +159,7 @@ def render_forecast_tab(
     col3.metric("📊 Bias", f"{bias_pred:.2f}%", f"{-bias_correction:+.2f}")
 
     # Calculate top-5 models by MAE
-    models_available = [m for m in ALL_MODELS if m in bt_data.columns]
+    models_available = [m for m in ALL_MODELS if m in bt_data.columns and np.isfinite(predictions[m])]
     model_mae = {}
     for m in models_available:
         errors = (bt_data["Actual"] - bt_data[m]).abs()
@@ -218,12 +167,6 @@ def render_forecast_tab(
     top5_models = sorted(model_mae.keys(), key=lambda x: model_mae[x])[:5]
 
     st.markdown("#### 📊 Сравнение моделей")
-
-    # Get predictions from top-5 models
-    predictions = {}
-    for model in top5_models:
-        pred = forecast_with_model(df, target_date, model)
-        predictions[model] = pred
 
     # Create comparison table
     comp_df = pd.DataFrame(

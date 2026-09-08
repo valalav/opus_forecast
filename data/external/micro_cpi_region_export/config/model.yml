@@ -1,0 +1,26 @@
+input:
+  date_column: date
+  item_column: item_code
+  value_column: mom_index
+  min_history_months: 36
+
+forecast:
+  horizon_months: 12
+  frequency: MS
+
+jws_compat:
+  sheets:
+    - name: t-6
+      trim_last_months: 6
+    - name: t-2
+      trim_last_months: 2
+    - name: t0
+      trim_last_months: 0
+  output_workbook: output/data.xlsx
+
+statsmodels:
+  model_name: ets_additive_trend
+  fallback_model_name: seasonal_naive_12
+  seasonal_periods: 12
+  damped_trend: true
+  prediction_interval_z: 1.96

@@ -1,0 +1,55 @@
+/home/valalav/.local/lib/python3.12/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/usr/lib/python3/dist-packages/_plotly_utils/basevalidators.py:105: FutureWarning:
+
+The behavior of DatetimeProperties.to_pydatetime is deprecated, in a future version this will return a Series containing python datetime objects instead of an ndarray. To retain the old behavior, call `np.array` on the result
+
+/usr/lib/python3/dist-packages/_plotly_utils/basevalidators.py:105: FutureWarning:
+
+The behavior of DatetimeProperties.to_pydatetime is deprecated, in a future version this will return a Series containing python datetime objects instead of an ndarray. To retain the old behavior, call `np.array` on the result
+
+/usr/lib/python3/dist-packages/_plotly_utils/basevalidators.py:105: FutureWarning:
+
+The behavior of DatetimeProperties.to_pydatetime is deprecated, in a future version this will return a Series containing python datetime objects instead of an ndarray. To retain the old behavior, call `np.array` on the result
+
+/usr/lib/python3/dist-packages/_plotly_utils/basevalidators.py:105: FutureWarning:
+
+The behavior of DatetimeProperties.to_pydatetime is deprecated, in a future version this will return a Series containing python datetime objects instead of an ndarray. To retain the old behavior, call `np.array` on the result
+
+/usr/lib/python3/dist-packages/_plotly_utils/basevalidators.py:105: FutureWarning:
+
+The behavior of DatetimeProperties.to_pydatetime is deprecated, in a future version this will return a Series containing python datetime objects instead of an ndarray. To retain the old behavior, call `np.array` on the result
+
+/usr/lib/python3/dist-packages/_plotly_utils/basevalidators.py:105: FutureWarning:
+
+The behavior of DatetimeProperties.to_pydatetime is deprecated, in a future version this will return a Series containing python datetime objects instead of an ndarray. To retain the old behavior, call `np.array` on the result
+
+/home/valalav/.local/lib/python3.12/site-packages/numpy/lib/function_base.py:2897: RuntimeWarning:
+
+invalid value encountered in divide
+
+/home/valalav/.local/lib/python3.12/site-packages/numpy/lib/function_base.py:2898: RuntimeWarning:
+
+invalid value encountered in divide
+
+Генерация графиков...
+  ✓ backtest_h1_predictions.html
+  ✓ backtest_h1_errors.html
+  ✓ backtest_h2_predictions.html
+  ✓ backtest_h2_errors.html
+  ✓ backtest_h12_predictions.html
+  ✓ backtest_h12_errors.html
+  ✓ metrics_comparison.html
+  ✓ ranking_heatmap.html
+  ✓ rolling_corr.png saved (188 windows)
+  ✓ rolling_corr.png
+  ✓ last_month_errors.html
+
+[8/8] Generating Forecast Table...
+Table saved to /home/valalav/_projects/sirena-kbr/assets/charts/forecast_table.html
+  ✓ forecast_table.html
+  ✓ nowcast.html
+  ✓ forecasts.html
+
+Создано 13 графиков в /home/valalav/_projects/sirena-kbr/assets/charts/
+  ✓ index.html (главная страница)

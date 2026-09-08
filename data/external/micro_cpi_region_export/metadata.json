@@ -1,0 +1,13 @@
+{
+  "source_file": "https://disk.yandex.ru/d/i6czrcdNO0I7BQ",
+  "database_sha256": "323a539d6225cd8221b5302b4916abeaac88ec0254184cdc2bc18640b1a39302",
+  "extracted_at": "2026-09-08T13:41:51.886363+00:00",
+  "region_name": "Кабардино-Балкарская Республика",
+  "region_code": "7",
+  "latest_month": "2026-07-01",
+  "row_count": 139749,
+  "item_count": 958,
+  "representation": "raw",
+  "units": "index_previous_month_100",
+  "extractor_version": "access_refresh_v1"
+}

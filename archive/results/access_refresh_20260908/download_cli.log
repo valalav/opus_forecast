@@ -1,0 +1,75 @@
+{
+  "updated_at": "2026-09-08T13:45:31.297648+00:00",
+  "source": {
+    "public_url": "https://disk.yandex.ru/d/i6czrcdNO0I7BQ",
+    "name": "db_cpi_store.zip",
+    "modified": "2026-08-13T13:26:04+00:00",
+    "archive_sha256": "629fbf66665ad7a40737523432ffbcd7482c5cf8940fd8369e7949d3ad9c4c41",
+    "database_sha256": "323a539d6225cd8221b5302b4916abeaac88ec0254184cdc2bc18640b1a39302",
+    "database_bytes": 1284550656,
+    "z_max_day": "Max-Day\n\"07/01/26 00:00:00\"\n"
+  },
+  "raw_last_observation": "2026-07-01",
+  "access_sa_last_observation": "2026-06-01",
+  "sa_action": "RAW-only refresh; retain separately verified SA workbook vintage without splicing",
+  "aggregate_crosscheck": {
+    "1": {
+      "months": 199,
+      "max_abs_difference": 4.0000000041118255e-06
+    },
+    "2": {
+      "months": 199,
+      "max_abs_difference": 4.0000000041118255e-06
+    },
+    "3": {
+      "months": 199,
+      "max_abs_difference": 4.0000000041118255e-06
+    },
+    "4": {
+      "months": 199,
+      "max_abs_difference": 3.000000006636583e-06
+    }
+  },
+  "basket_items": 540,
+  "basket_observed_items": 538,
+  "basket_observed_weight": 0.99391,
+  "missing_items": [
+    {
+      "item_code": 1011,
+      "name": "Поездка на отдых в ОАЭ, поездка",
+      "weight": 0.0004,
+      "primary": 1,
+      "last_observation": "2026-02-01"
+    },
+    {
+      "item_code": 1105,
+      "name": "Воздушный и железнодорожный транспорт",
+      "weight": 0.00569,
+      "primary": 0,
+      "last_observation": "2025-05-01"
+    }
+  ],
+  "short_histories_lt36": 39,
+  "extract_hashes": {
+    "data_indices": "80c73fda2b81edc9956b7c1eefe0e63c19dda90b5eee4948b33783b47d8f3322",
+    "data_seasonalised": "885d7b76ad3a903322a394c1bf47c004cce10d6fd959b9648a25bcf3755ec978",
+    "weights": "0c288a3605572964edf720f7fefc7b674c1688de407e331209ae840c699483a0",
+    "items_names": "a83bbd72aca5db6ee601d73ed62b322d8b144f67fbc79ee4911fbb4c20b98018",
+    "items_structure": "43bb029bf74de9a5fd4f75c6519578da63a2e236b22e68fffb66165c0d0f0b34",
+    "weights_all": "ef546fab2da649d4f8dfe79dac417583c66fe232af02572f79d55f1ef227aa9a"
+  },
+  "outputs": {
+    "kbr_indices.csv": "9a10b988911aa909d73c8d5e577bf7ec7f5060d21d6abb98ac89490d40b0289b",
+    "kbr_micro_full.csv": "226a61826f18788fe05b159f5cef18709dda776a67fbdc70a1e0f3d1a9cbdc5a",
+    "micro_sprav.csv": "2f7ec58b6d6a684e559eaa5adf750e5356e9b6d4f697243259225234acaf61fc",
+    "access_weights.csv": "190e0e787d736396ce899511cc85562d0c63dde30debbad485d37af3a0b84c7e",
+    "items_names.csv": "571d0ba21241ef715ebbe97532faddea07b94d893ee8e413b8323bc9ce94f29a",
+    "items_structure.csv": "c8f5426f9664c4ac7c11a897eef6fda513f964c99f024e39d51d81d56e07091c",
+    "raw/subcomp.csv": "b87c863fee08a6d1c65d524f0650231193653b3dd8a2eeded5caf9335c200dda",
+    "raw/sub_mom.csv": "4f3c6d4a93facc19b8b8eb4b3c896f8455eb47b2a5c648369c5962776b570756",
+    "external/micro_cpi_region_export/region_cpi_long.csv": "0b05ec2bbfb60dd6792da1ed91002cbec9494f337b5487cbaebc29f51d8c9bb7",
+    "external/micro_cpi_region_export/metadata.json": "20cfd0cd6bc8b29e485f106a06eb81d5ac7528cdec821d9f19345bee387b48b5",
+    "raw/infostat.csv": "9e7991e013d2649acb77bb196741846c778ad034ba36a641e60414237eccd9d9",
+    "raw/infostat_source_manifest.json": "45120bcdd606db478aacd82223b068a414060ca0d163476d39ee88d06a23866f"
+  }
+}

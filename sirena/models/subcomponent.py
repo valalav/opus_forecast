@@ -158,7 +158,7 @@ class SubcomponentForecaster:
 
     def _load_data(self, data_dir):
         """Load subcomponent data."""
-        # Try newer subcomp.csv first (до октября 2025), fallback to sub_mom.csv
+        # Use the shared current Access subcomponent extract; retain legacy-format fallback
         subcomp_file = data_dir / "raw" / "subcomp.csv"
         sub_mom_file = data_dir / "raw" / "sub_mom.csv"
 

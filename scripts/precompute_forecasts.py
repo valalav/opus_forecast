@@ -69,7 +69,8 @@ def compute_all_forecasts(horizon: int = 12) -> Dict[str, Any]:
         'forecasts': {},
         'input_contract': df.attrs['input_contract'],
         'source_manifest': forecast_source_manifest(),
-        'model_status': {}
+        'model_status': {},
+        'auxiliary_methods': {'Micro_SM': 'ETS on headline CPI (item_code=1); not a bottom-up micro aggregate'}
     }
 
     # Generate forecast dates

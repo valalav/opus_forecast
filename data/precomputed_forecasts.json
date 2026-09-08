@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-08T16:07:33.892865",
+  "generated_at": "2026-09-08T16:41:59.014642",
   "last_data_date": "2026-07-01",
   "horizon": 12,
   "forecasts": {
@@ -59,7 +59,20 @@
       0.4617344597525346,
       0.6852285720291178
     ],
-    "Ridge_ProdProxy": null,
+    "Ridge_ProdProxy": [
+      0.23185125088889436,
+      0.6146666666666647,
+      0.5873333333333335,
+      0.6513333333333264,
+      0.789999999999992,
+      1.0693749999999937,
+      0.910624999999996,
+      0.714375000000004,
+      0.6993750000000034,
+      0.45374999999999943,
+      0.23375000000000057,
+      0.3100000000000023
+    ],
     "Ridge_AsymERPT": [
       0.2709943770828147,
       0.6058457430068955,
@@ -89,32 +102,32 @@
       0.6179585418248905
     ],
     "NGBoostShock": [
-      0.21544462617524118,
-      0.6470886585330362,
-      0.6122549814933222,
-      1.1055991969573142,
-      1.1147643716832363,
-      1.0596369298920933,
-      0.9160239603917546,
-      0.904273115848369,
-      0.9524204127819615,
-      0.5262401685486537,
-      0.3723118111623194,
-      0.8854679254383626
+      0.23503308138295154,
+      0.6419342800403456,
+      0.601087004504592,
+      0.9939844518913503,
+      1.1392987234461316,
+      1.0554093268318638,
+      0.9348258091887658,
+      0.8856064898220666,
+      0.8621923528855575,
+      0.5208535686036981,
+      0.3223109889722622,
+      0.7210181705075485
     ],
     "NGBoost": [
-      0.23100519668089703,
-      0.5274750441445946,
-      0.6305135566340994,
-      1.2078945746407044,
-      1.1804921703917444,
-      1.0363280534612187,
-      1.2709410501077798,
-      0.9072138346336942,
-      0.9123576169534147,
-      0.5037751315873464,
-      0.30966343284293885,
-      0.8196002262974389
+      0.30675789636956097,
+      0.5375660723520923,
+      0.6179495632692209,
+      1.150406360191539,
+      1.261619434852662,
+      1.0581533149433255,
+      1.1052115307893189,
+      0.8551719151602697,
+      0.8937423912568363,
+      0.5142784617715392,
+      0.33453415025482514,
+      0.8578657645254992
     ],
     "RidgeExtended": [
       0.22964719961849767,
@@ -187,8 +200,8 @@
       0.18550158238610412
     ],
     "Nowcast": [
-      0.23275938930499251,
-      0.4639988964771097,
+      0.23348621439595926,
+      0.46476425576821534,
       null,
       null,
       null,
@@ -201,20 +214,33 @@
       null
     ],
     "Micro": null,
-    "Micro_SM": null,
+    "Micro_SM": [
+      0.006776582412797438,
+      0.6439904092817841,
+      0.6399404150836574,
+      0.6758279894449544,
+      0.8260359959056842,
+      1.1137883107166004,
+      0.9491471623684333,
+      1.0368150301694357,
+      0.8903105649695959,
+      0.5072665655418973,
+      0.2212853983419194,
+      0.28875438998781533
+    ],
     "Ensemble": [
-      0.2185953791966737,
-      0.5596549123812342,
-      0.6061146545122297,
-      0.9047985035976024,
-      1.0543170149432797,
-      1.0589025280392454,
-      1.1193518169873962,
-      0.9125454401534233,
-      0.9326417846276766,
-      0.495946607858108,
-      0.3463575716243434,
-      0.6538918267087643
+      0.23012790447579945,
+      0.5600192735379033,
+      0.6030065832650765,
+      0.8814428951594382,
+      1.067204531940802,
+      1.0607351835941665,
+      1.1034279995244778,
+      0.9038362981713297,
+      0.9169150707908708,
+      0.49632259241557053,
+      0.3416258306234163,
+      0.633401169914837
     ]
   },
   "input_contract": {
@@ -230,31 +256,25 @@
     "inflation_data.csv": "fb58a27c1ab60175de109f352bde24b256f4deb4ca43954aa6647bc493796998",
     "sa_fl.csv": "cb84032ffd37f19d7c701b89e317094f7c6f59dd8ecb6d7cf9ecfb9e10ac51ec",
     "kbr_weekly_prices_2008_2026.csv": "9d5e62d8298f31a2d1a2d6ee6d6d2add869aed48706a749359165d3232de733a",
-    "kbr_micro_full.csv": "6e9ad204c1e872e54c1f0c2a987b1d143b9d587d473cd637ae0f23f7c804d766",
-    "micro_sprav.csv": "402b0fb5b2b58c5f978b18a4e413252efc73fd8825066f4ffdc0ff847fe2e6f3",
-    "raw/infostat.csv": "ea5b560561fa186e34109213163fc68cef7250c85d1e02e146a904d2e978fb5e",
-    "external/micro_cpi_region_export/micro_test_statsmodels.csv": "f1e11fa284887aac877e1890031bacfea082b77c95c7315b1c5c9d29a07731c1",
+    "kbr_micro_full.csv": "226a61826f18788fe05b159f5cef18709dda776a67fbdc70a1e0f3d1a9cbdc5a",
+    "micro_sprav.csv": "2f7ec58b6d6a684e559eaa5adf750e5356e9b6d4f697243259225234acaf61fc",
+    "raw/infostat.csv": "9e7991e013d2649acb77bb196741846c778ad034ba36a641e60414237eccd9d9",
+    "external/micro_cpi_region_export/micro_test_statsmodels.csv": "04917865f5a0bbc3c69934f092d77667980b01b4d47de0350fe44c5192724606",
     "nowcast_policy.json": null,
     "Сравнение еженедельных цен_01.csv": "f99d6bea824aecd9526879e63662da58faabc3348c4bd9e5815ed422ef485b0a",
     "weekly_accounting_month_overrides.csv": "0e9a46b6f68db8c4de9b9b80ba74dffaaeb237a9c084b9f71b3d4841e2e84b73",
     "sa_hor.csv": "34bc68771dcc24dbc6b9a0c92c9abf0cde7d0dc9809a79e1311c1f68f50e3927",
     "mom_sa_kbr.csv": "5807824c50b398686491a7cd85b31132602ba5a415ecdf7b5a38de05e2fd6362",
-    "raw/subcomp.csv": "c775aa5931c8540a2b1dcf753408de666bb0ba5a3e8f3adbdad5ff2bac611b08",
-    "raw/sub_mom.csv": "0b08d96d1c92764e64d4c1c81bcc883ce630f0425260ed1de32d0f78a2603929",
-    "sa_source_manifest.json": "702f92682700a4981a231c691107f2d0332b6e7e67136a9c9f60507219a85b86"
+    "raw/subcomp.csv": "b87c863fee08a6d1c65d524f0650231193653b3dd8a2eeded5caf9335c200dda",
+    "raw/sub_mom.csv": "4f3c6d4a93facc19b8b8eb4b3c896f8455eb47b2a5c648369c5962776b570756",
+    "sa_source_manifest.json": "702f92682700a4981a231c691107f2d0332b6e7e67136a9c9f60507219a85b86",
+    "access_source_manifest.json": "0f7bf04b2a639339ecf5d995219b7d29bf806bb6ce255b2eb17723fdcd781289",
+    "raw/infostat_source_manifest.json": "45120bcdd606db478aacd82223b068a414060ca0d163476d39ee88d06a23866f"
   },
   "model_status": {
-    "Ridge_ProdProxy": {
-      "status": "unavailable",
-      "reason": "data/raw/infostat.csv: required through 2026-07; Torg: missing 2026-02, last valid 2025-09-01 00:00:00"
-    },
     "Micro": {
       "status": "unavailable",
-      "reason": "data/kbr_micro_full.csv: required through 2026-07; 101: missing 2026-07, last valid 2026-06-01 00:00:00; 103: missing 2026-07, last valid 2026-06-01 00:00:00; 104: missing 2026-07, last valid 2026-06-01 00:00:00; 106: missing 2026-07, last valid 2026-06-01 00:00:00; 107: missing 2026-07, last valid 2026-06-01 00:00:00; and 532 more series"
-    },
-    "Micro_SM": {
-      "status": "unavailable",
-      "reason": "data/external/micro_cpi_region_export/micro_test_statsmodels.csv: required cutoff 2026-07; latest available 2026-05"
+      "reason": "data/kbr_micro_full.csv: required through 2026-07; 1011: missing 2026-07, last valid 2026-02-01 00:00:00; 1105: missing 2026-07, last valid 2025-05-01 00:00:00"
     },
     "Ridge": {
       "status": "available",
@@ -272,6 +292,11 @@
       "last_observation": "2026-07-01"
     },
     "Ridge_Shock_Roll24": {
+      "status": "available",
+      "input_representation": "raw",
+      "last_observation": "2026-07-01"
+    },
+    "Ridge_ProdProxy": {
       "status": "available",
       "input_representation": "raw",
       "last_observation": "2026-07-01"
@@ -326,11 +351,19 @@
       "input_representation": "raw",
       "last_observation": "2026-07-01"
     },
+    "Micro_SM": {
+      "status": "available",
+      "input_representation": "raw",
+      "last_observation": "2026-07-01"
+    },
     "Ensemble": {
       "status": "available",
       "input_representation": "raw",
       "last_observation": "2026-07-01"
     }
+  },
+  "auxiliary_methods": {
+    "Micro_SM": "ETS on headline CPI (item_code=1); not a bottom-up micro aggregate"
   },
   "forecast_dates": [
     "2026-08-01",
@@ -1245,10 +1278,10 @@
             ]
           },
           "nowcast_blend": {
-            "model_proxy": 0.2254368930499252,
+            "model_proxy": 0.2327051439595926,
             "weekly_weight": 0.9,
             "model_weight": 0.1,
-            "nowcast_mom": 0.23275938930499251
+            "nowcast_mom": 0.23348621439595926
           }
         },
         "2026-09": {
@@ -1547,10 +1580,10 @@
             ]
           },
           "nowcast_blend": {
-            "model_proxy": 0.5928157411927742,
+            "model_proxy": 0.5947291394205383,
             "weekly_weight": 0.6,
             "model_weight": 0.4,
-            "nowcast_mom": 0.4639988964771097
+            "nowcast_mom": 0.46476425576821534
           }
         },
         "2026-10": {

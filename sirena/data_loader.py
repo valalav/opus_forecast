@@ -250,7 +250,8 @@ def forecast_source_manifest(data_dir=None):
              'external/micro_cpi_region_export/micro_test_statsmodels.csv',
              'nowcast_policy.json', 'Сравнение еженедельных цен_01.csv',
              'weekly_accounting_month_overrides.csv', 'sa_hor.csv', 'mom_sa_kbr.csv',
-             'raw/subcomp.csv', 'raw/sub_mom.csv', 'sa_source_manifest.json']
+             'raw/subcomp.csv', 'raw/sub_mom.csv', 'sa_source_manifest.json',
+             'access_source_manifest.json', 'raw/infostat_source_manifest.json']
     return {name: hashlib.sha256((data_dir / name).read_bytes()).hexdigest()
             if (data_dir / name).exists() else None for name in names}
 
@@ -261,3 +262,32 @@ def validate_forecast_cache(payload, data_dir=None):
     changed = [name for name in expected if name not in actual or actual[name] != expected[name]]
     if changed:
         raise DataFreshnessError('Forecast cache is stale; rerun scripts/precompute_forecasts.py. Changed/missing inputs: ' + ', '.join(changed))
+
+
+FORECAST_CACHE_ALIASES = {
+    'NGBoost_Shock': 'NGBoostShock', 'Ridge_Shock': 'RidgeShockDummies',
+    'Ridge_Ext': 'RidgeExtended',
+}
+
+
+def cached_forecast_point(payload, model_name, target_date, cutoff):
+    """Select the actual dated horizon; never refit or relabel a one-step value."""
+    cutoff = pd.Timestamp(cutoff).to_period('M').to_timestamp()
+    if pd.Timestamp(payload['last_data_date']).to_period('M').to_timestamp() != cutoff:
+        raise DataFreshnessError('Forecast cache cutoff differs from dashboard observations')
+    dates = pd.DatetimeIndex(pd.to_datetime(payload['forecast_dates']))
+    if dates.has_duplicates:
+        raise DataFreshnessError('Duplicate forecast target dates')
+    target = pd.Timestamp(target_date).to_period('M').to_timestamp()
+    positions = (dates == target).nonzero()[0]
+    if len(positions) != 1 or target <= cutoff:
+        raise DataFreshnessError(f'No forecast for requested target {target:%Y-%m}')
+    name = FORECAST_CACHE_ALIASES.get(model_name, model_name)
+    values = payload['forecasts'].get(name)
+    step = int(positions[0])
+    if values is None or len(values) <= step or values[step] is None:
+        return float('nan')
+    value = float(values[step])
+    if not np.isfinite(value):
+        raise DataFreshnessError(f'Non-finite cached forecast: {name}')
+    return value
