@@ -108,6 +108,7 @@ If a similar implementation already exists, extend it or mirror its pattern inst
 
 ## Data Freshness — mandatory (user decision 2026-09-08)
 
+- CPI Access releases: https://disk.yandex.ru/d/i6czrcdNO0I7BQ (provided by user 2026-09-08; July release available according to the user). Check this source before treating the installed database as the latest release; see `docs/DB_CPI_STORE_GUIDE.md`.
 - On detecting stale inputs, first inspect the latest available primary source and rebuild dependent extracts. Blocking is temporary protection, not task completion when refreshable data exists (user clarification 2026-09-08).
 - Every live calculation must use the latest verified source release for each required input. Check publication/source availability, region, measure, units and last valid observation; file modification time is insufficient.
 - RAW models consume homogeneous RAW; SA models consume homogeneous SA. Never append raw monthly rows to an SA history. Replace the full SA vintage, retaining the original source/hash.
