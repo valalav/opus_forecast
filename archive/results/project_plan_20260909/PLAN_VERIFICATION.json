@@ -1,0 +1,100 @@
+{
+  "baseline": "0cf496ebae590eb88be4d6f0ae1f96b8165cefce",
+  "checks": {
+    "clean_baseline": true,
+    "runtime_inputs_unchanged": true,
+    "frozen_draft_sha256": true,
+    "full_opus_sha256": true,
+    "request_sha256": true,
+    "complete_confirmed_opus": true,
+    "plan_review_relative_links": true,
+    "unique_phase_cards": true,
+    "separate_admission_gates": true,
+    "no_gain_continuation": true,
+    "ridge_mae": true,
+    "micro_mae": true,
+    "aggregation_diagnostic": true,
+    "service_item_month_denominator": true,
+    "documentation_only": true
+  },
+  "all_checks_pass": true,
+  "relative_links_checked": 15,
+  "missing_links": [],
+  "metric_evidence": {
+    "h1_validation": [
+      {
+        "horizon": "1",
+        "period": "validation",
+        "model": "Ridge",
+        "N_planned": "12",
+        "N_valid": "12",
+        "N_common": "12",
+        "success_rate": "1.0",
+        "MAE_common": "0.3967346135865763",
+        "RMSE_common": "0.49661633553246487",
+        "hit_within_0_5pp": "0.6666666666666666"
+      },
+      {
+        "horizon": "1",
+        "period": "validation",
+        "model": "Huber",
+        "N_planned": "12",
+        "N_valid": "12",
+        "N_common": "12",
+        "success_rate": "1.0",
+        "MAE_common": "0.4071775709676224",
+        "RMSE_common": "0.5034097936538483",
+        "hit_within_0_5pp": "0.6666666666666666"
+      },
+      {
+        "horizon": "1",
+        "period": "validation",
+        "model": "Ridge_ProdProxy",
+        "N_planned": "12",
+        "N_valid": "12",
+        "N_common": "12",
+        "success_rate": "1.0",
+        "MAE_common": "0.40407166481728396",
+        "RMSE_common": "0.48759302485501693",
+        "hit_within_0_5pp": "0.75"
+      },
+      {
+        "horizon": "1",
+        "period": "validation",
+        "model": "MicroParentRidge",
+        "N_planned": "12",
+        "N_valid": "12",
+        "N_common": "12",
+        "success_rate": "1.0",
+        "MAE_common": "0.5015139930523188",
+        "RMSE_common": "0.559473686093511",
+        "hit_within_0_5pp": "0.5"
+      },
+      {
+        "horizon": "1",
+        "period": "validation",
+        "model": "MicroParentSeasonal",
+        "N_planned": "12",
+        "N_valid": "12",
+        "N_common": "12",
+        "success_rate": "1.0",
+        "MAE_common": "0.5051487932412827",
+        "RMSE_common": "0.5602039969320118",
+        "hit_within_0_5pp": "0.5"
+      }
+    ],
+    "aggregation_fixed": 0.04332139005599948,
+    "aggregation_updated": 0.01723017704164888,
+    "services": {
+      "component": "services",
+      "items": 119,
+      "observed_item_months": 4126,
+      "near_zero_item_months": 2899,
+      "near_zero_share": 0.70261754726127
+    }
+  },
+  "model_tests": "not run: documentation-only task",
+  "note": "Frozen review files intentionally preserve original bytes; external reviewers did not see final revised plan.",
+  "verification_correction": "Initial expected-hash literal had one extra d. Original draft bytes were unchanged; corrected decision-log literal and compared directly to preserved hashes.json.",
+  "archive_line_endings": "Exact frozen CRLF bytes retained using archive-local .gitattributes (-text, cr-at-eol); normal plan/docs use LF."
+}

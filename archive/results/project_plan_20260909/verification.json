@@ -1,0 +1,35 @@
+{
+  "verified_at": "2026-09-09T06:16:30.844726+00:00",
+  "checks": {
+    "inputs/PROJECT_PLAN_DRAFT.md": true,
+    "prompt.md": true,
+    "request.md": true,
+    "original_draft_unchanged": true,
+    "claude_request_same": true,
+    "local_vllm_request_same": true,
+    "gemini_request_same": true,
+    "claude_retry_request_same": true,
+    "all_checks_pass": true
+  },
+  "review_outputs": {
+    "claude": "c57f346c6b083465f13c30a88957ead5dfabcd9f5d3f01bfbd2d1dbf777f3507",
+    "claude_retry": "e21fb0c36e8d1dcf747cc0ff7a6311cbde8533aef0abbaa2385773ca6264b706",
+    "gemini": "61100e1c5f68c2eae9c28fa8630bf67dbb20c3a96ac6c4153efafd5c9c3571e7",
+    "local_vllm": "91ba3a633385cdf6c4cc3a776f29f37c6fcdb06f25511d9fb194841c05c49729"
+  },
+  "scores": {
+    "claude_retry": {
+      "quality": 71,
+      "verdict": "PARTIAL"
+    },
+    "gemini": {
+      "quality": 60,
+      "verdict": "PARTIAL"
+    },
+    "local_vllm": {
+      "quality": 17,
+      "verdict": "FAIL"
+    }
+  },
+  "scope": "No remote project, final plan, register, worklog or global scorecard changes by worker"
+}

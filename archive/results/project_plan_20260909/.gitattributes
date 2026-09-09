@@ -1,0 +1,2 @@
+# Preserve exact review bytes for SHA256 evidence, including original Windows CRLF.
+* -text whitespace=trailing-space,space-before-tab,cr-at-eol
