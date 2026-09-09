@@ -1,0 +1,29 @@
+{
+  "period": "2023-08--2026-07",
+  "basket": "2026-01 vintage; descriptive current-basket only, not a backtest",
+  "near_zero_definition": "abs(index-100)<=0.005 percentage point",
+  "data": "data/kbr_indices.csv",
+  "groups": [
+    {
+      "component": "food",
+      "items": 137,
+      "observed_item_months": 4753,
+      "near_zero_item_months": 207,
+      "near_zero_share": 0.043551441195034714
+    },
+    {
+      "component": "nonfood",
+      "items": 284,
+      "observed_item_months": 9539,
+      "near_zero_item_months": 1336,
+      "near_zero_share": 0.14005660970751652
+    },
+    {
+      "component": "services",
+      "items": 119,
+      "observed_item_months": 4126,
+      "near_zero_item_months": 2899,
+      "near_zero_share": 0.70261754726127
+    }
+  ]
+}

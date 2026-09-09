@@ -1,0 +1,55 @@
+{
+  "checked_on": "2026-09-09",
+  "repo_commit": "562e4e3",
+  "public_download_note": "Web opener502; localdownloads TLS certificate verification bypassed per request due untrusted environmental root, no credentials, no system setting change. Official indexed titles/dates cross-checked.",
+  "sources": {
+    "Prikaz_915_15122021.pdf": {
+      "url": "https://rosstat.gov.ru/storage/mediabank/Prikaz_915_15122021.pdf",
+      "sha256": "5e546f8b446643fd7c54df40f3f4d5c4b406929c6b9c48bf47acc73e76aff4b3"
+    },
+    "Prikaz_777_241117.pdf": {
+      "url": "https://rosstat.gov.ru/storage/mediabank/Prikaz_777_241117.pdf",
+      "sha256": "4b8e792c0ef49547af776ff9be0b343a5850850c8e19b46b681936b3d12dd51b"
+    },
+    "Prikaz_727_18122025.pdf": {
+      "url": "https://rosstat.gov.ru/storage/mediabank/Prikaz_727_18122025.pdf",
+      "sha256": "66ed7e0c6e901b2f3d0132adf86fa94b96c78339db5867679a0ba97064d81261"
+    },
+    "Prikaz_149_27032026.pdf": {
+      "url": "https://rosstat.gov.ru/storage/mediabank/Prikaz_149_27032026.pdf",
+      "sha256": "e3e136d96902afefde3142c4a05f25e7aa4f07eb0e8c628f76c143f37348be93"
+    },
+    "Prikaz_512_22072022.pdf": {
+      "url": "https://rosstat.gov.ru/storage/mediabank/Prikaz_512_22072022.pdf",
+      "sha256": "496ccf506f85ca37b941f624d4c529ff73bcd5f16b87453efa302912d7af72c3"
+    },
+    "method2026.pdf": {
+      "url": "https://24.rosstat.gov.ru/storage/mediabank/%D0%9F%D1%80%D0%B8%D0%BA%D0%B0%D0%B7%20764_29122025_1076906.pdf",
+      "sha256": "28347e99d77cbd823ca531782f04984223d498a5a8fe1fff1ff5083843faba60"
+    },
+    "methodology.html": {
+      "url": "https://rosstat.gov.ru/statistics/price/methodology",
+      "sha256": "6f745c9aa63e96abf8d31930387f605408296fe3976a53aacb1ee96f38dd8ef6"
+    },
+    "kbr_prices.html": {
+      "url": "https://26.rosstat.gov.ru/folder/29800?print=1",
+      "sha256": "89255d3c1a08ef75c91f7a5bee535f301453903a4151dd74e6faa44186ef63a8"
+    }
+  },
+  "diagnostics": {
+    "aggregation_diagnostic.py": "1b67e1a38d71cf9f3489b757f58cafc1f0b583df4eeb98efe3926099c77440d8",
+    "sirena_aggregation_diagnostic.csv": "a572e3119f82b68c825b8fc4da575e1a02c868d202abacf77015db40cb793fcb",
+    "zero_diagnostic.py": "86ffd6ef3118892dd2abcf0d016980db40e90bccddf3b464dca23194d768640f",
+    "sirena_zero_diagnostic.json": "a412c90af75db0624f7a9d71b3558d0b25377a2b2eb286d1b79e8f67f22c2be0"
+  },
+  "scout": {
+    "launcher": "pi-scout stdin",
+    "transport": "native HTTP; no Pi subprocess, no read-tools, no CLI transport flag",
+    "requested_route": "local-vllm",
+    "actual_model": "not exposed",
+    "seconds": 37.402,
+    "output": "native_scout_method.json",
+    "verification": "effective dates independently match source PDF; rest of truncated answer not accepted"
+  },
+  "diagnostic_hash_note": "Hashes refer to LF-normalized committed artifacts; source PDF hashes refer to original downloaded bytes."
+}
