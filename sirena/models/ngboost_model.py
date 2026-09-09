@@ -11,6 +11,7 @@ Gradient Boosting с параметрическим распределением
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import RobustScaler
+from sklearn.base import clone
 from typing import Dict, Optional, Any, List
 import warnings
 
@@ -21,6 +22,7 @@ from .registry import ModelRegistry
 try:
     from ngboost import NGBRegressor
     from ngboost.distns import Normal
+    from ngboost.learners import default_tree_learner
 
     NGBOOST_AVAILABLE = True
 except ImportError:
@@ -98,12 +100,17 @@ class NGBoostForecaster(BaseForecaster):
         n_estimators: int = None,
         learning_rate: float = None,
         minibatch_frac: float = None,
+        random_state: int = 42,
         **kwargs,
     ):
         super().__init__(**kwargs)
 
         if not NGBOOST_AVAILABLE:
             raise ImportError("NGBoost не установлен. Выполните: pip install ngboost")
+
+        if not isinstance(random_state, (int, np.integer)) or not 0 <= random_state < 2**32:
+            raise ValueError("random_state must be an integer in [0, 2**32)")
+        self.random_state = int(random_state)
 
         self.n_estimators = n_estimators or self.N_ESTIMATORS
         self.learning_rate = learning_rate or self.LEARNING_RATE
@@ -215,6 +222,9 @@ class NGBoostForecaster(BaseForecaster):
             warnings.simplefilter("ignore")
             self.model = NGBRegressor(
                 Dist=Normal,
+                # Seed both minibatch sampling and cloned tree split tie-breaking.
+                Base=clone(default_tree_learner).set_params(random_state=self.random_state),
+                random_state=self.random_state,
                 n_estimators=self.n_estimators,
                 learning_rate=self.learning_rate,
                 minibatch_frac=self.minibatch_frac,

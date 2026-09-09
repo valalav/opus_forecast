@@ -1,0 +1,120 @@
+{
+  "snapshots": [
+    "archive/results/forecast_journal/20260909T072144029399Z_8cd757658c994549833ceb55bab04798/forecast.json",
+    "archive/results/forecast_journal/20260909T072150382330Z_019ad61eab234f9caa889b365ea3d608/forecast.json"
+  ],
+  "snapshot_sha256": [
+    "478eea46f8abdd7561a6295c27716e59e0c0874927843e0a950337475bcaddef",
+    "04127ce4d05d5aa024fec6c7f6526d73f984190589e7f962521b4828028606d9"
+  ],
+  "checks": [
+    {
+      "model": "EBM",
+      "status": "identical",
+      "horizon": 12,
+      "h1": -0.03857142857143003
+    },
+    {
+      "model": "ElasticNet",
+      "status": "identical",
+      "horizon": 12,
+      "h1": 0.18910696123876392
+    },
+    {
+      "model": "Ensemble",
+      "status": "identical",
+      "horizon": 12,
+      "h1": 0.24516142440343752
+    },
+    {
+      "model": "FactorPolicy",
+      "status": "identical",
+      "horizon": 12,
+      "h1": 0.20658365528757125
+    },
+    {
+      "model": "Huber",
+      "status": "identical",
+      "horizon": 12,
+      "h1": 0.2271116266443869
+    },
+    {
+      "model": "Micro",
+      "status": "identical",
+      "horizon": 12,
+      "h1": 0.2951907116850043
+    },
+    {
+      "model": "Micro_SM",
+      "status": "identical",
+      "horizon": 12,
+      "h1": 0.006776582412797438
+    },
+    {
+      "model": "NGBoost",
+      "status": "identical",
+      "horizon": 12,
+      "h1": 0.38551662250232255
+    },
+    {
+      "model": "NGBoostShock",
+      "status": "identical",
+      "horizon": 12,
+      "h1": 0.27556110630398223
+    },
+    {
+      "model": "Nowcast",
+      "status": "identical",
+      "horizon": 12,
+      "h1": 0.23433826261777208
+    },
+    {
+      "model": "Prophet",
+      "status": "identical",
+      "horizon": 12,
+      "h1": -0.13381405991559348
+    },
+    {
+      "model": "Ridge",
+      "status": "identical",
+      "horizon": 12,
+      "h1": 0.24455140830951905
+    },
+    {
+      "model": "RidgeExtended",
+      "status": "identical",
+      "horizon": 12,
+      "h1": 0.22964719961849767
+    },
+    {
+      "model": "RidgeShockDummies",
+      "status": "identical",
+      "horizon": 12,
+      "h1": 0.2315892242294808
+    },
+    {
+      "model": "Ridge_AsymERPT",
+      "status": "identical",
+      "horizon": 12,
+      "h1": 0.2709943770828147
+    },
+    {
+      "model": "Ridge_ProdProxy",
+      "status": "identical",
+      "horizon": 12,
+      "h1": 0.23185125088889436
+    },
+    {
+      "model": "Ridge_Shock_Roll24",
+      "status": "identical",
+      "horizon": 12,
+      "h1": 0.17747693011588694
+    },
+    {
+      "model": "VARPolicy",
+      "status": "identical",
+      "horizon": 12,
+      "h1": 0.8795538927529918
+    }
+  ]
+}

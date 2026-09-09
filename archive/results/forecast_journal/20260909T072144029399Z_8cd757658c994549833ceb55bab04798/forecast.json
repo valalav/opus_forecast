@@ -1,291 +1,6 @@
 {
-  "generated_at": "2026-09-09T10:21:45.521098",
-  "last_data_date": "2026-07-01",
-  "horizon": 12,
-  "forecasts": {
-    "Ridge": [
-      0.24455140830951905,
-      0.5091324652406257,
-      0.6063447874727217,
-      0.8560135209775126,
-      1.0897487298672388,
-      1.078269143159801,
-      1.2435713901994347,
-      0.9617586155243885,
-      1.0165963446546016,
-      0.48794907836121126,
-      0.3586694542099167,
-      0.5370837508711759
-    ],
-    "Huber": [
-      0.2271116266443869,
-      0.4968437553080207,
-      0.6027168121323427,
-      0.8578570749574368,
-      1.2032382766866618,
-      1.0766061866533363,
-      1.2698115872184275,
-      0.9519811116618229,
-      1.0271853810038465,
-      0.48248798423604455,
-      0.38590403017477115,
-      0.6519609493163045
-    ],
-    "RidgeShockDummies": [
-      0.2315892242294808,
-      0.6192321859026464,
-      0.5990571862568714,
-      0.8458282049724914,
-      1.0139447793071525,
-      1.090638148142446,
-      1.1756476960171227,
-      0.896479748986053,
-      0.9129899636012908,
-      0.4862695938759458,
-      0.3809142549076654,
-      0.6738242283281863
-    ],
-    "Ridge_Shock_Roll24": [
-      0.17747693011588694,
-      0.7794941213707318,
-      0.7743708447919886,
-      0.9906875559078543,
-      1.1574052980245426,
-      1.2230278295639891,
-      1.329499123751603,
-      0.9661069778267688,
-      0.7328897908138856,
-      0.0854883899661587,
-      0.4617344597525346,
-      0.6852285720291178
-    ],
-    "Ridge_ProdProxy": [
-      0.23185125088889436,
-      0.6146666666666647,
-      0.5873333333333335,
-      0.6513333333333264,
-      0.789999999999992,
-      1.0693749999999937,
-      0.910624999999996,
-      0.714375000000004,
-      0.6993750000000034,
-      0.45374999999999943,
-      0.23375000000000057,
-      0.3100000000000023
-    ],
-    "Ridge_AsymERPT": [
-      0.2709943770828147,
-      0.6058457430068955,
-      0.609310374561403,
-      1.046543498211193,
-      1.2743964128667642,
-      1.0983614198923277,
-      1.0451787282861602,
-      0.7986986378644474,
-      0.7925099163826843,
-      0.4721632924390633,
-      0.30620734008705597,
-      0.5115932429774688
-    ],
-    "ElasticNet": [
-      0.18910696123876392,
-      0.5072910584395203,
-      0.6111223859639097,
-      0.894488845156701,
-      1.0161467456962612,
-      1.0651495048758193,
-      1.1209063008660678,
-      0.8579336091206358,
-      0.894668724155423,
-      0.47497776529837665,
-      0.37987481673189905,
-      0.6179585418248905
-    ],
-    "NGBoostShock": [
-      0.27556110630398223,
-      0.6258560153828228,
-      0.6039536906028928,
-      1.0857408375025273,
-      1.2516904618920535,
-      1.0621018621653633,
-      0.9201306236889621,
-      0.873092937539198,
-      0.9388048420195361,
-      0.5125995731282842,
-      0.39569735796078476,
-      0.7541602288371507
-    ],
-    "NGBoost": [
-      0.38551662250232255,
-      0.5225845671510854,
-      0.6299629185679976,
-      1.3902784624987277,
-      1.1255100508613651,
-      1.029274190393096,
-      1.072957104307676,
-      0.8571059772763192,
-      1.0199418645156868,
-      0.5198398532168937,
-      0.3226821351021272,
-      0.8521425704847729
-    ],
-    "RidgeExtended": [
-      0.22964719961849767,
-      0.4898864620053871,
-      0.5995319772148662,
-      0.8341916609245317,
-      1.0834394647092154,
-      1.070860169214214,
-      1.242022542475837,
-      0.9742852306616641,
-      1.002824530521309,
-      0.481810844957522,
-      0.28500999867299015,
-      0.5425032706558852
-    ],
-    "EBM": [
-      -0.03857142857143003,
-      0.49500000000000455,
-      0.5935714285714226,
-      0.6321428571428527,
-      0.7342857142857184,
-      1.041333333333327,
-      0.8913333333333355,
-      0.7006666666666632,
-      0.7066666666666634,
-      0.4413333333333327,
-      0.20066666666666322,
-      0.36333333333332973
-    ],
-    "Prophet": [
-      -0.13381405991559348,
-      0.45078144017015953,
-      0.46206487478748964,
-      0.4801138376638257,
-      0.6605033917804898,
-      0.8428827729055585,
-      0.6716265991273671,
-      0.9782230539572976,
-      0.810681152006802,
-      0.7011195512329513,
-      0.3372723361981359,
-      0.5500214245338066
-    ],
-    "VARPolicy": [
-      0.8795538927529918,
-      0.9102967692909876,
-      0.7480778728413983,
-      0.7066350986252076,
-      0.8185917147703757,
-      1.102191198347537,
-      0.9272556747172732,
-      1.0092632045664802,
-      0.8594144759148165,
-      0.4742103196125755,
-      0.18661519867056828,
-      0.25282104090260327
-    ],
-    "FactorPolicy": [
-      0.20658365528757125,
-      0.668236932093456,
-      0.5807766864713371,
-      0.5805488141693329,
-      0.7165965567209255,
-      1.0145601044223598,
-      0.8482109538402255,
-      0.9353389274420223,
-      0.7885383890109905,
-      0.4051504398245743,
-      0.11864169686700957,
-      0.18550158238610412
-    ],
-    "Nowcast": [
-      0.23433826261777208,
-      0.4638768337722573,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    "Micro": [
-      0.2951907116850043,
-      0.2446744800222933,
-      0.35245269961491865,
-      0.6184009427065622,
-      0.7760190739663176,
-      0.7057182726943888,
-      0.6234528535825299,
-      0.7125521651047882,
-      0.6249524387418643,
-      0.5500480922534404,
-      0.503714041828878,
-      0.38833392623420365
-    ],
-    "Micro_SM": [
-      0.006776582412797438,
-      0.6439904092817841,
-      0.6399404150836574,
-      0.6758279894449544,
-      0.8260359959056842,
-      1.1137883107166004,
-      0.9491471623684333,
-      1.0368150301694357,
-      0.8903105649695959,
-      0.5072665655418973,
-      0.2212853983419194,
-      0.28875438998781533
-    ],
-    "Ensemble": [
-      0.24516142440343752,
-      0.5558963462083518,
-      0.604799293087323,
-      0.9224482479657127,
-      1.0687607131411714,
-      1.0584760427520272,
-      1.0975584138096044,
-      0.9021664105191286,
-      0.9427659529158695,
-      0.49570629779045383,
-      0.35136128083081236,
-      0.6377558359977136
-    ]
-  },
-  "input_contract": {
-    "representation": "raw",
-    "units": "mom_index_100",
-    "source": "/home/valalav/_projects/sirena-kbr/data/inflation_data.csv",
-    "source_sha256": "fb58a27c1ab60175de109f352bde24b256f4deb4ca43954aa6647bc493796998",
-    "last_observation": "2026-07-01",
-    "required_through": "2026-07-01",
-    "macro_included": true
-  },
-  "source_manifest": {
-    "inflation_data.csv": "fb58a27c1ab60175de109f352bde24b256f4deb4ca43954aa6647bc493796998",
-    "sa_fl.csv": "cb84032ffd37f19d7c701b89e317094f7c6f59dd8ecb6d7cf9ecfb9e10ac51ec",
-    "kbr_weekly_prices_2008_2026.csv": "1c72848a5ebc310f37eb7fcd9f66e427d15bd28ca432e551d21a8d6e51fdff9d",
-    "kbr_micro_full.csv": "226a61826f18788fe05b159f5cef18709dda776a67fbdc70a1e0f3d1a9cbdc5a",
-    "micro_sprav.csv": "2f7ec58b6d6a684e559eaa5adf750e5356e9b6d4f697243259225234acaf61fc",
-    "raw/infostat.csv": "9e7991e013d2649acb77bb196741846c778ad034ba36a641e60414237eccd9d9",
-    "external/micro_cpi_region_export/micro_test_statsmodels.csv": "04917865f5a0bbc3c69934f092d77667980b01b4d47de0350fe44c5192724606",
-    "nowcast_policy.json": null,
-    "Сравнение еженедельных цен_01.csv": "f99d6bea824aecd9526879e63662da58faabc3348c4bd9e5815ed422ef485b0a",
-    "weekly_accounting_month_overrides.csv": "0e9a46b6f68db8c4de9b9b80ba74dffaaeb237a9c084b9f71b3d4841e2e84b73",
-    "sa_hor.csv": "34bc68771dcc24dbc6b9a0c92c9abf0cde7d0dc9809a79e1311c1f68f50e3927",
-    "mom_sa_kbr.csv": "5807824c50b398686491a7cd85b31132602ba5a415ecdf7b5a38de05e2fd6362",
-    "raw/subcomp.csv": "b87c863fee08a6d1c65d524f0650231193653b3dd8a2eeded5caf9335c200dda",
-    "raw/sub_mom.csv": "4f3c6d4a93facc19b8b8eb4b3c896f8455eb47b2a5c648369c5962776b570756",
-    "sa_source_manifest.json": "702f92682700a4981a231c691107f2d0332b6e7e67136a9c9f60507219a85b86",
-    "access_source_manifest.json": "0f7bf04b2a639339ecf5d995219b7d29bf806bb6ce255b2eb17723fdcd781289",
-    "raw/infostat_source_manifest.json": "45120bcdd606db478aacd82223b068a414060ca0d163476d39ee88d06a23866f",
-    "kbr_indices.csv": "9a10b988911aa909d73c8d5e577bf7ec7f5060d21d6abb98ac89490d40b0289b",
-    "access_weights.csv": "190e0e787d736396ce899511cc85562d0c63dde30debbad485d37af3a0b84c7e",
-    "items_structure.csv": "c8f5426f9664c4ac7c11a897eef6fda513f964c99f024e39d51d81d56e07091c"
+  "auxiliary_methods": {
+    "Micro_SM": "ETS on headline CPI (item_code=1); not a bottom-up micro aggregate"
   },
   "calculation_code_manifest": {
     "requirements.txt": "2fde3c1e764a11895dda6889c1553dd7e25586b4d88e6409832bf09d46963184",
@@ -541,130 +256,8 @@
     "sirena/utils/alert_history.py": "d92d61bf6fb3918975a826a6e56a3c1dbc3d8a5b0dbb5fdf4240b2610e335a27",
     "sirena/utils/yoy.py": "8dfc131cb6f6de68ed867d4159fde9957fcba205d71a8e6da840e984554c28ff"
   },
-  "model_status": {
-    "Ridge": {
-      "status": "available",
-      "input_representation": "raw",
-      "last_observation": "2026-07-01"
-    },
-    "Huber": {
-      "status": "available",
-      "input_representation": "raw",
-      "last_observation": "2026-07-01"
-    },
-    "RidgeShockDummies": {
-      "status": "available",
-      "input_representation": "raw",
-      "last_observation": "2026-07-01"
-    },
-    "Ridge_Shock_Roll24": {
-      "status": "available",
-      "input_representation": "raw",
-      "last_observation": "2026-07-01"
-    },
-    "Ridge_ProdProxy": {
-      "status": "available",
-      "input_representation": "raw",
-      "last_observation": "2026-07-01"
-    },
-    "Ridge_AsymERPT": {
-      "status": "available",
-      "input_representation": "raw",
-      "last_observation": "2026-07-01"
-    },
-    "ElasticNet": {
-      "status": "available",
-      "input_representation": "raw",
-      "last_observation": "2026-07-01"
-    },
-    "NGBoostShock": {
-      "status": "available",
-      "input_representation": "raw",
-      "last_observation": "2026-07-01"
-    },
-    "NGBoost": {
-      "status": "available",
-      "input_representation": "raw",
-      "last_observation": "2026-07-01"
-    },
-    "RidgeExtended": {
-      "status": "available",
-      "input_representation": "raw",
-      "last_observation": "2026-07-01"
-    },
-    "EBM": {
-      "status": "available",
-      "input_representation": "raw",
-      "last_observation": "2026-07-01"
-    },
-    "Prophet": {
-      "status": "available",
-      "input_representation": "raw",
-      "last_observation": "2026-07-01"
-    },
-    "VARPolicy": {
-      "status": "available",
-      "input_representation": "raw",
-      "last_observation": "2026-07-01"
-    },
-    "FactorPolicy": {
-      "status": "available",
-      "input_representation": "raw",
-      "last_observation": "2026-07-01"
-    },
-    "Nowcast": {
-      "status": "available",
-      "input_representation": "raw",
-      "last_observation": "2026-07-01"
-    },
-    "Micro": {
-      "status": "available",
-      "input_representation": "raw",
-      "last_observation": "2026-07-01"
-    },
-    "Micro_SM": {
-      "status": "available",
-      "input_representation": "raw",
-      "last_observation": "2026-07-01"
-    },
-    "Ensemble": {
-      "status": "available",
-      "input_representation": "raw",
-      "last_observation": "2026-07-01"
-    }
-  },
-  "auxiliary_methods": {
-    "Micro_SM": "ETS on headline CPI (item_code=1); not a bottom-up micro aggregate"
-  },
-  "forecast_dates": [
-    "2026-08-01",
-    "2026-09-01",
-    "2026-10-01",
-    "2026-11-01",
-    "2026-12-01",
-    "2027-01-01",
-    "2027-02-01",
-    "2027-03-01",
-    "2027-04-01",
-    "2027-05-01",
-    "2027-06-01",
-    "2027-07-01"
-  ],
   "diagnostics": {
-    "VARPolicy": {
-      "model": "var_policy",
-      "last_train_date": "2026-07-01",
-      "last_regime": "h1:shock_huber_var;h2plus:seasonal_var",
-      "policy": "h1 RegimeMacroVARX; h2+ SeasonalVAR trajectory",
-      "no_random_noise": true
-    },
     "FactorPolicy": {
-      "model": "factor_policy",
-      "kind": "Robust seasonal FAVAR",
-      "n_factors": 2,
-      "lags": 1,
-      "seasonal": true,
-      "robust": true,
       "info_cols": [
         "Food",
         "NonFood",
@@ -673,50 +266,40 @@
         "Ki_i",
         "Ruonia"
       ],
+      "kind": "Robust seasonal FAVAR",
+      "lags": 1,
+      "last_train_date": "2026-07-01",
+      "model": "factor_policy",
+      "n_factors": 2,
       "pca_explained_variance_ratio": [
         0.35366459753365376,
         0.2047903916787671
       ],
       "pca_explained_variance_sum": 0.5584549892124209,
-      "last_train_date": "2026-07-01"
+      "robust": true,
+      "seasonal": true
+    },
+    "VARPolicy": {
+      "last_regime": "h1:shock_huber_var;h2plus:seasonal_var",
+      "last_train_date": "2026-07-01",
+      "model": "var_policy",
+      "no_random_noise": true,
+      "policy": "h1 RegimeMacroVARX; h2+ SeasonalVAR trajectory"
     },
     "weekly_bridge": {
-      "method": "weekly_bridge_v1",
-      "description": "Diagnostic weekly bridge from fresh semicolon Rosstat rows; not a production model and not included in Ensemble.",
-      "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
-      "raw_rows": 17029,
-      "deduped_rows": 16865,
-      "invalid_rows_removed": 164,
-      "duplicates_removed": 0,
-      "data_date_range": {
-        "start": "2023-07-10",
-        "end": "2026-08-31"
-      },
       "by_month": {
         "2026-08": {
-          "target_month": "2026-08",
-          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
-          "raw_rows": 17029,
-          "deduped_rows": 16865,
-          "invalid_rows_removed": 164,
-          "duplicates_removed": 0,
-          "accounting_overrides_file": "/home/valalav/_projects/sirena-kbr/data/weekly_accounting_month_overrides.csv",
           "accounting_overrides_applied": 1,
-          "weights": {
-            "food": 0.3948,
-            "nonfood": 0.3653,
-            "services": 0.2399
-          },
-          "status": "ok",
+          "accounting_overrides_file": "/home/valalav/_projects/sirena-kbr/data/weekly_accounting_month_overrides.csv",
           "chain": {
-            "weeks_count": 4,
+            "avg_weekly_mom": 0.058395,
+            "decay_factor": 0.6,
+            "extrapolated_mom": 0.233573,
+            "index": 100.233573,
+            "mom": 0.233573,
+            "remaining_weeks": 0,
             "weeks": [
               {
-                "date": "2026-08-03",
-                "index": 100.070591,
-                "mom": 0.070591,
-                "cumulative_mom": 0.070591,
-                "n_items": 107,
                 "components": {
                   "food": {
                     "index": 100.12204545454546,
@@ -733,14 +316,14 @@
                     "mom": 0.1490000000000009,
                     "n_items": 20
                   }
-                }
+                },
+                "cumulative_mom": 0.070591,
+                "date": "2026-08-03",
+                "index": 100.070591,
+                "mom": 0.070591,
+                "n_items": 107
               },
               {
-                "date": "2026-08-10",
-                "index": 100.156658,
-                "mom": 0.156658,
-                "cumulative_mom": 0.227359,
-                "n_items": 107,
                 "components": {
                   "food": {
                     "index": 100.2065909090909,
@@ -757,14 +340,14 @@
                     "mom": 0.21600000000000819,
                     "n_items": 20
                   }
-                }
+                },
+                "cumulative_mom": 0.227359,
+                "date": "2026-08-10",
+                "index": 100.156658,
+                "mom": 0.156658,
+                "n_items": 107
               },
               {
-                "date": "2026-08-17",
-                "index": 100.11768,
-                "mom": 0.11768,
-                "cumulative_mom": 0.345307,
-                "n_items": 107,
                 "components": {
                   "food": {
                     "index": 100.35227272727273,
@@ -781,14 +364,14 @@
                     "mom": -0.4549999999999983,
                     "n_items": 20
                   }
-                }
+                },
+                "cumulative_mom": 0.345307,
+                "date": "2026-08-17",
+                "index": 100.11768,
+                "mom": 0.11768,
+                "n_items": 107
               },
               {
-                "date": "2026-08-24",
-                "index": 99.88865,
-                "mom": -0.11135,
-                "cumulative_mom": 0.233573,
-                "n_items": 107,
                 "components": {
                   "food": {
                     "index": 99.58477272727274,
@@ -805,267 +388,21 @@
                     "mom": 0.1905000000000001,
                     "n_items": 20
                   }
-                }
+                },
+                "cumulative_mom": 0.233573,
+                "date": "2026-08-24",
+                "index": 99.88865,
+                "mom": -0.11135,
+                "n_items": 107
               }
             ],
-            "index": 100.233573,
-            "mom": 0.233573,
-            "avg_weekly_mom": 0.058395,
-            "weeks_expected": 4,
-            "remaining_weeks": 0,
-            "decay_factor": 0.6,
-            "extrapolated_mom": 0.233573
+            "weeks_count": 4,
+            "weeks_expected": 4
           },
-          "month_end": {
-            "base_date": "2026-07-27",
-            "end_date": "2026-08-24",
-            "index": 100.405048,
-            "mom": 0.405048,
-            "matched_items": 107,
-            "components": {
-              "food": {
-                "index": 100.44754284682223,
-                "mom": 0.44754284682223044,
-                "n_items": 44
-              },
-              "nonfood": {
-                "index": 100.5863647081224,
-                "mom": 0.586364708122403,
-                "n_items": 43
-              },
-              "services": {
-                "index": 100.05902106530556,
-                "mom": 0.05902106530555784,
-                "n_items": 20
-              }
-            },
-            "top_decreases": [
-              {
-                "product_name": "Картофель, кг",
-                "component": "food",
-                "index": 80.6325,
-                "mom": -19.3675,
-                "price_base": 63.87,
-                "price_end": 51.5,
-                "approx_contribution_pp": -0.173779
-              },
-              {
-                "product_name": "Морковь, кг",
-                "component": "food",
-                "index": 83.4979,
-                "mom": -16.5021,
-                "price_base": 59.75,
-                "price_end": 49.89,
-                "approx_contribution_pp": -0.148069
-              },
-              {
-                "product_name": "Капуста белокочанная свежая, кг",
-                "component": "food",
-                "index": 87.5273,
-                "mom": -12.4727,
-                "price_base": 45.86,
-                "price_end": 40.14,
-                "approx_contribution_pp": -0.111915
-              },
-              {
-                "product_name": "Лук репчатый, кг",
-                "component": "food",
-                "index": 89.3766,
-                "mom": -10.6234,
-                "price_base": 55.82,
-                "price_end": 49.89,
-                "approx_contribution_pp": -0.095321
-              },
-              {
-                "product_name": "Свёкла столовая, кг",
-                "component": "food",
-                "index": 89.8453,
-                "mom": -10.1547,
-                "price_base": 44.61,
-                "price_end": 40.08,
-                "approx_contribution_pp": -0.091115
-              },
-              {
-                "product_name": "Валидол, 60 мг, 10 таблеток",
-                "component": "nonfood",
-                "index": 91.766,
-                "mom": -8.234,
-                "price_base": 47.0,
-                "price_end": 43.13,
-                "approx_contribution_pp": -0.069951
-              },
-              {
-                "product_name": "Бензин автомобильный марки АИ-92, л",
-                "component": "nonfood",
-                "index": 94.2472,
-                "mom": -5.7528,
-                "price_base": 98.04,
-                "price_end": 92.4,
-                "approx_contribution_pp": -0.048872
-              },
-              {
-                "product_name": "Проживание в гостинице 3*, сутки с человека",
-                "component": "services",
-                "index": 94.9415,
-                "mom": -5.0585,
-                "price_base": 2819.62,
-                "price_end": 2676.99,
-                "approx_contribution_pp": -0.060677
-              },
-              {
-                "product_name": "Бензин автомобильный",
-                "component": "nonfood",
-                "index": 95.0373,
-                "mom": -4.9627,
-                "price_base": 103.17,
-                "price_end": 98.05,
-                "approx_contribution_pp": -0.04216
-              },
-              {
-                "product_name": "Бензин автомобильный марки АИ-95, л",
-                "component": "nonfood",
-                "index": 95.1003,
-                "mom": -4.8997,
-                "price_base": 105.72,
-                "price_end": 100.54,
-                "approx_contribution_pp": -0.041625
-              },
-              {
-                "product_name": "Яблоки, кг",
-                "component": "food",
-                "index": 95.5332,
-                "mom": -4.4668,
-                "price_base": 153.8,
-                "price_end": 146.93,
-                "approx_contribution_pp": -0.04008
-              },
-              {
-                "product_name": "Сосиски, сардельки, кг",
-                "component": "food",
-                "index": 95.794,
-                "mom": -4.206,
-                "price_base": 534.95,
-                "price_end": 512.45,
-                "approx_contribution_pp": -0.037739
-              }
-            ],
-            "top_increases": [
-              {
-                "product_name": "Смартфон, шт.",
-                "component": "nonfood",
-                "index": 113.0604,
-                "mom": 13.0604,
-                "price_base": 17437.39,
-                "price_end": 19714.79,
-                "approx_contribution_pp": 0.110953
-              },
-              {
-                "product_name": "Помидоры свежие, кг",
-                "component": "food",
-                "index": 112.944,
-                "mom": 12.944,
-                "price_base": 110.09,
-                "price_end": 124.34,
-                "approx_contribution_pp": 0.116143
-              },
-              {
-                "product_name": "Куры охлажденные и мороженые, кг",
-                "component": "food",
-                "index": 112.3276,
-                "mom": 12.3276,
-                "price_base": 248.63,
-                "price_end": 279.28,
-                "approx_contribution_pp": 0.110612
-              },
-              {
-                "product_name": "Крупа гречневая-ядрица, кг",
-                "component": "food",
-                "index": 111.0442,
-                "mom": 11.0442,
-                "price_base": 88.01,
-                "price_end": 97.73,
-                "approx_contribution_pp": 0.099097
-              },
-              {
-                "product_name": "Огурцы свежие, кг",
-                "component": "food",
-                "index": 110.506,
-                "mom": 10.506,
-                "price_base": 118.98,
-                "price_end": 131.48,
-                "approx_contribution_pp": 0.094267
-              },
-              {
-                "product_name": "Телевизор, шт.",
-                "component": "nonfood",
-                "index": 109.9241,
-                "mom": 9.9241,
-                "price_base": 26430.92,
-                "price_end": 29053.94,
-                "approx_contribution_pp": 0.084308
-              },
-              {
-                "product_name": "Бананы, кг",
-                "component": "food",
-                "index": 107.226,
-                "mom": 7.226,
-                "price_base": 146.0,
-                "price_end": 156.55,
-                "approx_contribution_pp": 0.064837
-              },
-              {
-                "product_name": "Пшено, кг",
-                "component": "food",
-                "index": 106.9001,
-                "mom": 6.9001,
-                "price_base": 67.97,
-                "price_end": 72.66,
-                "approx_contribution_pp": 0.061913
-              },
-              {
-                "product_name": "Яйца куриные, 10 шт.",
-                "component": "food",
-                "index": 106.5091,
-                "mom": 6.5091,
-                "price_base": 70.67,
-                "price_end": 75.27,
-                "approx_contribution_pp": 0.058405
-              },
-              {
-                "product_name": "Подгузники детские бумажные, 10 шт.",
-                "component": "nonfood",
-                "index": 105.6948,
-                "mom": 5.6948,
-                "price_base": 231.44,
-                "price_end": 244.62,
-                "approx_contribution_pp": 0.048379
-              },
-              {
-                "product_name": "Консервы овощные для детского питания, кг",
-                "component": "food",
-                "index": 105.5546,
-                "mom": 5.5546,
-                "price_base": 793.03,
-                "price_end": 837.08,
-                "approx_contribution_pp": 0.04984
-              },
-              {
-                "product_name": "Сахар-песок, кг",
-                "component": "food",
-                "index": 105.4321,
-                "mom": 5.4321,
-                "price_base": 84.13,
-                "price_end": 88.7,
-                "approx_contribution_pp": 0.04874
-              }
-            ]
-          },
+          "deduped_rows": 16865,
+          "duplicates_removed": 0,
           "first_next_week_vs_month_end": {
             "base_date": "2026-08-24",
-            "end_date": "2026-08-31",
-            "index": 100.097994,
-            "mom": 0.097994,
-            "matched_items": 107,
             "components": {
               "food": {
                 "index": 99.9566681353373,
@@ -1083,233 +420,233 @@
                 "n_items": 20
               }
             },
+            "end_date": "2026-08-31",
+            "index": 100.097994,
+            "matched_items": 107,
+            "mom": 0.097994,
             "top_decreases": [
               {
-                "product_name": "Яблоки, кг",
+                "approx_contribution_pp": -0.081709,
                 "component": "food",
                 "index": 90.8936,
                 "mom": -9.1064,
                 "price_base": 146.93,
                 "price_end": 133.55,
-                "approx_contribution_pp": -0.081709
+                "product_name": "Яблоки, кг"
               },
               {
-                "product_name": "Капуста белокочанная свежая, кг",
+                "approx_contribution_pp": -0.040013,
                 "component": "food",
                 "index": 95.5406,
                 "mom": -4.4594,
                 "price_base": 40.14,
                 "price_end": 38.35,
-                "approx_contribution_pp": -0.040013
+                "product_name": "Капуста белокочанная свежая, кг"
               },
               {
-                "product_name": "Электропылесос напольный, шт.",
+                "approx_contribution_pp": -0.0331,
                 "component": "nonfood",
                 "index": 96.1038,
                 "mom": -3.8962,
                 "price_base": 7959.23,
                 "price_end": 7649.12,
-                "approx_contribution_pp": -0.0331
+                "product_name": "Электропылесос напольный, шт."
               },
               {
-                "product_name": "Шампунь, 250 мл",
+                "approx_contribution_pp": -0.029787,
                 "component": "nonfood",
                 "index": 96.4938,
                 "mom": -3.5062,
                 "price_base": 199.36,
                 "price_end": 192.37,
-                "approx_contribution_pp": -0.029787
+                "product_name": "Шампунь, 250 мл"
               },
               {
-                "product_name": "Сыры твердые, полутвердые и мягкие, кг",
+                "approx_contribution_pp": -0.027287,
                 "component": "food",
                 "index": 96.9589,
                 "mom": -3.0411,
                 "price_base": 859.23,
                 "price_end": 833.1,
-                "approx_contribution_pp": -0.027287
+                "product_name": "Сыры твердые, полутвердые и мягкие, кг"
               },
               {
-                "product_name": "Маргарин, кг",
+                "approx_contribution_pp": -0.021838,
                 "component": "food",
                 "index": 97.5662,
                 "mom": -2.4338,
                 "price_base": 295.42,
                 "price_end": 288.23,
-                "approx_contribution_pp": -0.021838
+                "product_name": "Маргарин, кг"
               },
               {
-                "product_name": "Консервы фруктово-ягодные для детского питания, кг",
+                "approx_contribution_pp": -0.021755,
                 "component": "food",
                 "index": 97.5755,
                 "mom": -2.4245,
                 "price_base": 725.09,
                 "price_end": 707.51,
-                "approx_contribution_pp": -0.021755
+                "product_name": "Консервы фруктово-ягодные для детского питания, кг"
               },
               {
-                "product_name": "Кроссовые туфли для детей, пара",
+                "approx_contribution_pp": -0.01971,
                 "component": "nonfood",
                 "index": 97.6799,
                 "mom": -2.3201,
                 "price_base": 2518.91,
                 "price_end": 2460.47,
-                "approx_contribution_pp": -0.01971
+                "product_name": "Кроссовые туфли для детей, пара"
               },
               {
-                "product_name": "Лук репчатый, кг",
+                "approx_contribution_pp": -0.020323,
                 "component": "food",
                 "index": 97.735,
                 "mom": -2.265,
                 "price_base": 49.89,
                 "price_end": 48.76,
-                "approx_contribution_pp": -0.020323
+                "product_name": "Лук репчатый, кг"
               },
               {
-                "product_name": "Огурцы свежие, кг",
+                "approx_contribution_pp": -0.016925,
                 "component": "food",
                 "index": 98.1138,
                 "mom": -1.8862,
                 "price_base": 131.48,
                 "price_end": 129.0,
-                "approx_contribution_pp": -0.016925
+                "product_name": "Огурцы свежие, кг"
               },
               {
-                "product_name": "Свёкла столовая, кг",
+                "approx_contribution_pp": -0.015671,
                 "component": "food",
                 "index": 98.2535,
                 "mom": -1.7465,
                 "price_base": 40.08,
                 "price_end": 39.38,
-                "approx_contribution_pp": -0.015671
+                "product_name": "Свёкла столовая, кг"
               },
               {
-                "product_name": "Сахар-песок, кг",
+                "approx_contribution_pp": -0.013454,
                 "component": "food",
                 "index": 98.5006,
                 "mom": -1.4994,
                 "price_base": 88.7,
                 "price_end": 87.37,
-                "approx_contribution_pp": -0.013454
+                "product_name": "Сахар-песок, кг"
               }
             ],
             "top_increases": [
               {
-                "product_name": "Сосиски, сардельки, кг",
+                "approx_contribution_pp": 0.058517,
                 "component": "food",
                 "index": 106.5216,
                 "mom": 6.5216,
                 "price_base": 512.45,
                 "price_end": 545.87,
-                "approx_contribution_pp": 0.058517
+                "product_name": "Сосиски, сардельки, кг"
               },
               {
-                "product_name": "Бензин автомобильный марки АИ-98 и выше, л",
+                "approx_contribution_pp": 0.05153,
                 "component": "nonfood",
                 "index": 106.0656,
                 "mom": 6.0656,
                 "price_base": 114.58,
                 "price_end": 121.53,
-                "approx_contribution_pp": 0.05153
+                "product_name": "Бензин автомобильный марки АИ-98 и выше, л"
               },
               {
-                "product_name": "Колбаса вареная, кг",
+                "approx_contribution_pp": 0.05399,
                 "component": "food",
                 "index": 106.0171,
                 "mom": 6.0171,
                 "price_base": 563.56,
                 "price_end": 597.47,
-                "approx_contribution_pp": 0.05399
+                "product_name": "Колбаса вареная, кг"
               },
               {
-                "product_name": "Бензин автомобильный",
+                "approx_contribution_pp": 0.032924,
                 "component": "nonfood",
                 "index": 103.8756,
                 "mom": 3.8756,
                 "price_base": 98.05,
                 "price_end": 101.85,
-                "approx_contribution_pp": 0.032924
+                "product_name": "Бензин автомобильный"
               },
               {
-                "product_name": "Пенталгин, 24 таблетки",
+                "approx_contribution_pp": 0.032895,
                 "component": "nonfood",
                 "index": 103.8721,
                 "mom": 3.8721,
                 "price_base": 305.0,
                 "price_end": 316.81,
-                "approx_contribution_pp": 0.032895
+                "product_name": "Пенталгин, 24 таблетки"
               },
               {
-                "product_name": "Бензин автомобильный марки АИ-95, л",
+                "approx_contribution_pp": 0.032616,
                 "component": "nonfood",
                 "index": 103.8393,
                 "mom": 3.8393,
                 "price_base": 100.54,
                 "price_end": 104.4,
-                "approx_contribution_pp": 0.032616
+                "product_name": "Бензин автомобильный марки АИ-95, л"
               },
               {
-                "product_name": "Бензин автомобильный марки АИ-92, л",
+                "approx_contribution_pp": 0.030708,
                 "component": "nonfood",
                 "index": 103.6147,
                 "mom": 3.6147,
                 "price_base": 92.4,
                 "price_end": 95.74,
-                "approx_contribution_pp": 0.030708
+                "product_name": "Бензин автомобильный марки АИ-92, л"
               },
               {
-                "product_name": "Крупа гречневая-ядрица, кг",
+                "approx_contribution_pp": 0.028829,
                 "component": "food",
                 "index": 103.2129,
                 "mom": 3.2129,
                 "price_base": 97.73,
                 "price_end": 100.87,
-                "approx_contribution_pp": 0.028829
+                "product_name": "Крупа гречневая-ядрица, кг"
               },
               {
-                "product_name": "Яйца куриные, 10 шт.",
+                "approx_contribution_pp": 0.026464,
                 "component": "food",
                 "index": 102.9494,
                 "mom": 2.9494,
                 "price_base": 75.27,
                 "price_end": 77.49,
-                "approx_contribution_pp": 0.026464
+                "product_name": "Яйца куриные, 10 шт."
               },
               {
-                "product_name": "Рис шлифованный, кг",
+                "approx_contribution_pp": 0.025225,
                 "component": "food",
                 "index": 102.8113,
                 "mom": 2.8113,
                 "price_base": 116.67,
                 "price_end": 119.95,
-                "approx_contribution_pp": 0.025225
+                "product_name": "Рис шлифованный, кг"
               },
               {
-                "product_name": "Кроссовые туфли для взрослых, пара",
+                "approx_contribution_pp": 0.023562,
                 "component": "nonfood",
                 "index": 102.7735,
                 "mom": 2.7735,
                 "price_base": 4303.61,
                 "price_end": 4422.97,
-                "approx_contribution_pp": 0.023562
+                "product_name": "Кроссовые туфли для взрослых, пара"
               },
               {
-                "product_name": "Соль поваренная пищевая, кг",
+                "approx_contribution_pp": 0.024665,
                 "component": "food",
                 "index": 102.7489,
                 "mom": 2.7489,
                 "price_base": 26.92,
                 "price_end": 27.66,
-                "approx_contribution_pp": 0.024665
+                "product_name": "Соль поваренная пищевая, кг"
               }
             ]
           },
           "first_next_week_vs_prev_month_end": {
             "base_date": "2026-07-27",
-            "end_date": "2026-08-31",
-            "index": 100.511366,
-            "mom": 0.511366,
-            "matched_items": 107,
             "components": {
               "food": {
                 "index": 100.4417852035991,
@@ -1327,258 +664,504 @@
                 "n_items": 20
               }
             },
+            "end_date": "2026-08-31",
+            "index": 100.511366,
+            "matched_items": 107,
+            "mom": 0.511366,
             "top_decreases": [
               {
-                "product_name": "Картофель, кг",
+                "approx_contribution_pp": -0.184596,
                 "component": "food",
                 "index": 79.427,
                 "mom": -20.573,
                 "price_base": 63.87,
                 "price_end": 50.73,
-                "approx_contribution_pp": -0.184596
+                "product_name": "Картофель, кг"
               },
               {
-                "product_name": "Морковь, кг",
+                "approx_contribution_pp": -0.152574,
                 "component": "food",
                 "index": 82.9958,
                 "mom": -17.0042,
                 "price_base": 59.75,
                 "price_end": 49.59,
-                "approx_contribution_pp": -0.152574
+                "product_name": "Морковь, кг"
               },
               {
-                "product_name": "Капуста белокочанная свежая, кг",
+                "approx_contribution_pp": -0.146937,
                 "component": "food",
                 "index": 83.6241,
                 "mom": -16.3759,
                 "price_base": 45.86,
                 "price_end": 38.35,
-                "approx_contribution_pp": -0.146937
+                "product_name": "Капуста белокочанная свежая, кг"
               },
               {
-                "product_name": "Яблоки, кг",
+                "approx_contribution_pp": -0.118139,
                 "component": "food",
                 "index": 86.8336,
                 "mom": -13.1664,
                 "price_base": 153.8,
                 "price_end": 133.55,
-                "approx_contribution_pp": -0.118139
+                "product_name": "Яблоки, кг"
               },
               {
-                "product_name": "Лук репчатый, кг",
+                "approx_contribution_pp": -0.113485,
                 "component": "food",
                 "index": 87.3522,
                 "mom": -12.6478,
                 "price_base": 55.82,
                 "price_end": 48.76,
-                "approx_contribution_pp": -0.113485
+                "product_name": "Лук репчатый, кг"
               },
               {
-                "product_name": "Свёкла столовая, кг",
+                "approx_contribution_pp": -0.105195,
                 "component": "food",
                 "index": 88.2762,
                 "mom": -11.7238,
                 "price_base": 44.61,
                 "price_end": 39.38,
-                "approx_contribution_pp": -0.105195
+                "product_name": "Свёкла столовая, кг"
               },
               {
-                "product_name": "Валидол, 60 мг, 10 таблеток",
+                "approx_contribution_pp": -0.076097,
                 "component": "nonfood",
                 "index": 91.0426,
                 "mom": -8.9574,
                 "price_base": 47.0,
                 "price_end": 42.79,
-                "approx_contribution_pp": -0.076097
+                "product_name": "Валидол, 60 мг, 10 таблеток"
               },
               {
-                "product_name": "Проживание в гостинице 3*, сутки с человека",
+                "approx_contribution_pp": -0.060677,
                 "component": "services",
                 "index": 94.9415,
                 "mom": -5.0585,
                 "price_base": 2819.62,
                 "price_end": 2676.99,
-                "approx_contribution_pp": -0.060677
+                "product_name": "Проживание в гостинице 3*, сутки с человека"
               },
               {
-                "product_name": "Электропылесос напольный, шт.",
+                "approx_contribution_pp": -0.042462,
                 "component": "nonfood",
                 "index": 95.0017,
                 "mom": -4.9983,
                 "price_base": 8051.56,
                 "price_end": 7649.12,
-                "approx_contribution_pp": -0.042462
+                "product_name": "Электропылесос напольный, шт."
               },
               {
-                "product_name": "Дизельное топливо, л",
+                "approx_contribution_pp": -0.041943,
                 "component": "nonfood",
                 "index": 95.0629,
                 "mom": -4.9371,
                 "price_base": 97.83,
                 "price_end": 93.0,
-                "approx_contribution_pp": -0.041943
+                "product_name": "Дизельное топливо, л"
               },
               {
-                "product_name": "Сметана, кг",
+                "approx_contribution_pp": -0.040918,
                 "component": "food",
                 "index": 95.4397,
                 "mom": -4.5603,
                 "price_base": 408.09,
                 "price_end": 389.48,
-                "approx_contribution_pp": -0.040918
+                "product_name": "Сметана, кг"
               },
               {
-                "product_name": "Маргарин, кг",
+                "approx_contribution_pp": -0.034426,
                 "component": "food",
                 "index": 96.1632,
                 "mom": -3.8368,
                 "price_base": 299.73,
                 "price_end": 288.23,
-                "approx_contribution_pp": -0.034426
+                "product_name": "Маргарин, кг"
               }
             ],
             "top_increases": [
               {
-                "product_name": "Крупа гречневая-ядрица, кг",
+                "approx_contribution_pp": 0.131109,
                 "component": "food",
                 "index": 114.612,
                 "mom": 14.612,
                 "price_base": 88.01,
                 "price_end": 100.87,
-                "approx_contribution_pp": 0.131109
+                "product_name": "Крупа гречневая-ядрица, кг"
               },
               {
-                "product_name": "Куры охлажденные и мороженые, кг",
+                "approx_contribution_pp": 0.109277,
                 "component": "food",
                 "index": 112.1787,
                 "mom": 12.1787,
                 "price_base": 248.63,
                 "price_end": 278.91,
-                "approx_contribution_pp": 0.109277
+                "product_name": "Куры охлажденные и мороженые, кг"
               },
               {
-                "product_name": "Помидоры свежие, кг",
+                "approx_contribution_pp": 0.108807,
                 "component": "food",
                 "index": 112.1264,
                 "mom": 12.1264,
                 "price_base": 110.09,
                 "price_end": 123.44,
-                "approx_contribution_pp": 0.108807
+                "product_name": "Помидоры свежие, кг"
               },
               {
-                "product_name": "Смартфон, шт.",
+                "approx_contribution_pp": 0.10301,
                 "component": "nonfood",
                 "index": 112.1255,
                 "mom": 12.1255,
                 "price_base": 17437.39,
                 "price_end": 19551.76,
-                "approx_contribution_pp": 0.10301
+                "product_name": "Смартфон, шт."
               },
               {
-                "product_name": "Яйца куриные, 10 шт.",
+                "approx_contribution_pp": 0.086591,
                 "component": "food",
                 "index": 109.6505,
                 "mom": 9.6505,
                 "price_base": 70.67,
                 "price_end": 77.49,
-                "approx_contribution_pp": 0.086591
+                "product_name": "Яйца куриные, 10 шт."
               },
               {
-                "product_name": "Телевизор, шт.",
+                "approx_contribution_pp": 0.08061,
                 "component": "nonfood",
                 "index": 109.4887,
                 "mom": 9.4887,
                 "price_base": 26430.92,
                 "price_end": 28938.88,
-                "approx_contribution_pp": 0.08061
+                "product_name": "Телевизор, шт."
               },
               {
-                "product_name": "Огурцы свежие, кг",
+                "approx_contribution_pp": 0.075565,
                 "component": "food",
                 "index": 108.4216,
                 "mom": 8.4216,
                 "price_base": 118.98,
                 "price_end": 129.0,
-                "approx_contribution_pp": 0.075565
+                "product_name": "Огурцы свежие, кг"
               },
               {
-                "product_name": "Консервы овощные для детского питания, кг",
+                "approx_contribution_pp": 0.064357,
                 "component": "food",
                 "index": 107.1725,
                 "mom": 7.1725,
                 "price_base": 793.03,
                 "price_end": 849.91,
-                "approx_contribution_pp": 0.064357
+                "product_name": "Консервы овощные для детского питания, кг"
               },
               {
-                "product_name": "Соль поваренная пищевая, кг",
+                "approx_contribution_pp": 0.062455,
                 "component": "food",
                 "index": 106.9606,
                 "mom": 6.9606,
                 "price_base": 25.86,
                 "price_end": 27.66,
-                "approx_contribution_pp": 0.062455
+                "product_name": "Соль поваренная пищевая, кг"
               },
               {
-                "product_name": "Бананы, кг",
+                "approx_contribution_pp": 0.060781,
                 "component": "food",
                 "index": 106.774,
                 "mom": 6.774,
                 "price_base": 146.0,
                 "price_end": 155.89,
-                "approx_contribution_pp": 0.060781
+                "product_name": "Бананы, кг"
               },
               {
-                "product_name": "Бензин автомобильный марки АИ-98 и выше, л",
+                "approx_contribution_pp": 0.053026,
                 "component": "nonfood",
                 "index": 106.2418,
                 "mom": 6.2418,
                 "price_base": 114.39,
                 "price_end": 121.53,
-                "approx_contribution_pp": 0.053026
+                "product_name": "Бензин автомобильный марки АИ-98 и выше, л"
               },
               {
-                "product_name": "Пшено, кг",
+                "approx_contribution_pp": 0.05254,
                 "component": "food",
                 "index": 105.8555,
                 "mom": 5.8555,
                 "price_base": 67.97,
                 "price_end": 71.95,
-                "approx_contribution_pp": 0.05254
+                "product_name": "Пшено, кг"
+              }
+            ]
+          },
+          "invalid_rows_removed": 164,
+          "month_end": {
+            "base_date": "2026-07-27",
+            "components": {
+              "food": {
+                "index": 100.44754284682223,
+                "mom": 0.44754284682223044,
+                "n_items": 44
+              },
+              "nonfood": {
+                "index": 100.5863647081224,
+                "mom": 0.586364708122403,
+                "n_items": 43
+              },
+              "services": {
+                "index": 100.05902106530556,
+                "mom": 0.05902106530555784,
+                "n_items": 20
+              }
+            },
+            "end_date": "2026-08-24",
+            "index": 100.405048,
+            "matched_items": 107,
+            "mom": 0.405048,
+            "top_decreases": [
+              {
+                "approx_contribution_pp": -0.173779,
+                "component": "food",
+                "index": 80.6325,
+                "mom": -19.3675,
+                "price_base": 63.87,
+                "price_end": 51.5,
+                "product_name": "Картофель, кг"
+              },
+              {
+                "approx_contribution_pp": -0.148069,
+                "component": "food",
+                "index": 83.4979,
+                "mom": -16.5021,
+                "price_base": 59.75,
+                "price_end": 49.89,
+                "product_name": "Морковь, кг"
+              },
+              {
+                "approx_contribution_pp": -0.111915,
+                "component": "food",
+                "index": 87.5273,
+                "mom": -12.4727,
+                "price_base": 45.86,
+                "price_end": 40.14,
+                "product_name": "Капуста белокочанная свежая, кг"
+              },
+              {
+                "approx_contribution_pp": -0.095321,
+                "component": "food",
+                "index": 89.3766,
+                "mom": -10.6234,
+                "price_base": 55.82,
+                "price_end": 49.89,
+                "product_name": "Лук репчатый, кг"
+              },
+              {
+                "approx_contribution_pp": -0.091115,
+                "component": "food",
+                "index": 89.8453,
+                "mom": -10.1547,
+                "price_base": 44.61,
+                "price_end": 40.08,
+                "product_name": "Свёкла столовая, кг"
+              },
+              {
+                "approx_contribution_pp": -0.069951,
+                "component": "nonfood",
+                "index": 91.766,
+                "mom": -8.234,
+                "price_base": 47.0,
+                "price_end": 43.13,
+                "product_name": "Валидол, 60 мг, 10 таблеток"
+              },
+              {
+                "approx_contribution_pp": -0.048872,
+                "component": "nonfood",
+                "index": 94.2472,
+                "mom": -5.7528,
+                "price_base": 98.04,
+                "price_end": 92.4,
+                "product_name": "Бензин автомобильный марки АИ-92, л"
+              },
+              {
+                "approx_contribution_pp": -0.060677,
+                "component": "services",
+                "index": 94.9415,
+                "mom": -5.0585,
+                "price_base": 2819.62,
+                "price_end": 2676.99,
+                "product_name": "Проживание в гостинице 3*, сутки с человека"
+              },
+              {
+                "approx_contribution_pp": -0.04216,
+                "component": "nonfood",
+                "index": 95.0373,
+                "mom": -4.9627,
+                "price_base": 103.17,
+                "price_end": 98.05,
+                "product_name": "Бензин автомобильный"
+              },
+              {
+                "approx_contribution_pp": -0.041625,
+                "component": "nonfood",
+                "index": 95.1003,
+                "mom": -4.8997,
+                "price_base": 105.72,
+                "price_end": 100.54,
+                "product_name": "Бензин автомобильный марки АИ-95, л"
+              },
+              {
+                "approx_contribution_pp": -0.04008,
+                "component": "food",
+                "index": 95.5332,
+                "mom": -4.4668,
+                "price_base": 153.8,
+                "price_end": 146.93,
+                "product_name": "Яблоки, кг"
+              },
+              {
+                "approx_contribution_pp": -0.037739,
+                "component": "food",
+                "index": 95.794,
+                "mom": -4.206,
+                "price_base": 534.95,
+                "price_end": 512.45,
+                "product_name": "Сосиски, сардельки, кг"
+              }
+            ],
+            "top_increases": [
+              {
+                "approx_contribution_pp": 0.110953,
+                "component": "nonfood",
+                "index": 113.0604,
+                "mom": 13.0604,
+                "price_base": 17437.39,
+                "price_end": 19714.79,
+                "product_name": "Смартфон, шт."
+              },
+              {
+                "approx_contribution_pp": 0.116143,
+                "component": "food",
+                "index": 112.944,
+                "mom": 12.944,
+                "price_base": 110.09,
+                "price_end": 124.34,
+                "product_name": "Помидоры свежие, кг"
+              },
+              {
+                "approx_contribution_pp": 0.110612,
+                "component": "food",
+                "index": 112.3276,
+                "mom": 12.3276,
+                "price_base": 248.63,
+                "price_end": 279.28,
+                "product_name": "Куры охлажденные и мороженые, кг"
+              },
+              {
+                "approx_contribution_pp": 0.099097,
+                "component": "food",
+                "index": 111.0442,
+                "mom": 11.0442,
+                "price_base": 88.01,
+                "price_end": 97.73,
+                "product_name": "Крупа гречневая-ядрица, кг"
+              },
+              {
+                "approx_contribution_pp": 0.094267,
+                "component": "food",
+                "index": 110.506,
+                "mom": 10.506,
+                "price_base": 118.98,
+                "price_end": 131.48,
+                "product_name": "Огурцы свежие, кг"
+              },
+              {
+                "approx_contribution_pp": 0.084308,
+                "component": "nonfood",
+                "index": 109.9241,
+                "mom": 9.9241,
+                "price_base": 26430.92,
+                "price_end": 29053.94,
+                "product_name": "Телевизор, шт."
+              },
+              {
+                "approx_contribution_pp": 0.064837,
+                "component": "food",
+                "index": 107.226,
+                "mom": 7.226,
+                "price_base": 146.0,
+                "price_end": 156.55,
+                "product_name": "Бананы, кг"
+              },
+              {
+                "approx_contribution_pp": 0.061913,
+                "component": "food",
+                "index": 106.9001,
+                "mom": 6.9001,
+                "price_base": 67.97,
+                "price_end": 72.66,
+                "product_name": "Пшено, кг"
+              },
+              {
+                "approx_contribution_pp": 0.058405,
+                "component": "food",
+                "index": 106.5091,
+                "mom": 6.5091,
+                "price_base": 70.67,
+                "price_end": 75.27,
+                "product_name": "Яйца куриные, 10 шт."
+              },
+              {
+                "approx_contribution_pp": 0.048379,
+                "component": "nonfood",
+                "index": 105.6948,
+                "mom": 5.6948,
+                "price_base": 231.44,
+                "price_end": 244.62,
+                "product_name": "Подгузники детские бумажные, 10 шт."
+              },
+              {
+                "approx_contribution_pp": 0.04984,
+                "component": "food",
+                "index": 105.5546,
+                "mom": 5.5546,
+                "price_base": 793.03,
+                "price_end": 837.08,
+                "product_name": "Консервы овощные для детского питания, кг"
+              },
+              {
+                "approx_contribution_pp": 0.04874,
+                "component": "food",
+                "index": 105.4321,
+                "mom": 5.4321,
+                "price_base": 84.13,
+                "price_end": 88.7,
+                "product_name": "Сахар-песок, кг"
               }
             ]
           },
           "nowcast_blend": {
             "model_proxy": 0.24122562617772061,
-            "weekly_weight": 0.9,
             "model_weight": 0.1,
-            "nowcast_mom": 0.23433826261777208
-          }
-        },
-        "2026-09": {
-          "target_month": "2026-09",
-          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
+            "nowcast_mom": 0.23433826261777208,
+            "weekly_weight": 0.9
+          },
           "raw_rows": 17029,
-          "deduped_rows": 16865,
-          "invalid_rows_removed": 164,
-          "duplicates_removed": 0,
-          "accounting_overrides_file": "/home/valalav/_projects/sirena-kbr/data/weekly_accounting_month_overrides.csv",
-          "accounting_overrides_applied": 1,
+          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
+          "status": "ok",
+          "target_month": "2026-08",
           "weights": {
             "food": 0.3948,
             "nonfood": 0.3653,
             "services": 0.2399
-          },
-          "status": "ok",
+          }
+        },
+        "2026-09": {
+          "accounting_overrides_applied": 1,
+          "accounting_overrides_file": "/home/valalav/_projects/sirena-kbr/data/weekly_accounting_month_overrides.csv",
           "chain": {
-            "weeks_count": 1,
+            "avg_weekly_mom": 0.111212,
+            "decay_factor": 0.6,
+            "extrapolated_mom": 0.378121,
+            "index": 100.111212,
+            "mom": 0.111212,
+            "remaining_weeks": 4,
             "weeks": [
               {
-                "date": "2026-08-31",
-                "index": 100.111212,
-                "mom": 0.111212,
-                "cumulative_mom": 0.111212,
-                "n_items": 107,
                 "components": {
                   "food": {
                     "index": 99.99886363636364,
@@ -1595,23 +1178,22 @@
                     "mom": 0.05750000000000455,
                     "n_items": 20
                   }
-                }
+                },
+                "cumulative_mom": 0.111212,
+                "date": "2026-08-31",
+                "index": 100.111212,
+                "mom": 0.111212,
+                "n_items": 107
               }
             ],
-            "index": 100.111212,
-            "mom": 0.111212,
-            "avg_weekly_mom": 0.111212,
-            "weeks_expected": 5,
-            "remaining_weeks": 4,
-            "decay_factor": 0.6,
-            "extrapolated_mom": 0.378121
+            "weeks_count": 1,
+            "weeks_expected": 5
           },
+          "deduped_rows": 16865,
+          "duplicates_removed": 0,
+          "invalid_rows_removed": 164,
           "month_end": {
             "base_date": "2026-08-24",
-            "end_date": "2026-08-31",
-            "index": 100.097994,
-            "mom": 0.097994,
-            "matched_items": 107,
             "components": {
               "food": {
                 "index": 99.9566681353373,
@@ -1629,889 +1211,1307 @@
                 "n_items": 20
               }
             },
+            "end_date": "2026-08-31",
+            "index": 100.097994,
+            "matched_items": 107,
+            "mom": 0.097994,
             "top_decreases": [
               {
-                "product_name": "Яблоки, кг",
+                "approx_contribution_pp": -0.081709,
                 "component": "food",
                 "index": 90.8936,
                 "mom": -9.1064,
                 "price_base": 146.93,
                 "price_end": 133.55,
-                "approx_contribution_pp": -0.081709
+                "product_name": "Яблоки, кг"
               },
               {
-                "product_name": "Капуста белокочанная свежая, кг",
+                "approx_contribution_pp": -0.040013,
                 "component": "food",
                 "index": 95.5406,
                 "mom": -4.4594,
                 "price_base": 40.14,
                 "price_end": 38.35,
-                "approx_contribution_pp": -0.040013
+                "product_name": "Капуста белокочанная свежая, кг"
               },
               {
-                "product_name": "Электропылесос напольный, шт.",
+                "approx_contribution_pp": -0.0331,
                 "component": "nonfood",
                 "index": 96.1038,
                 "mom": -3.8962,
                 "price_base": 7959.23,
                 "price_end": 7649.12,
-                "approx_contribution_pp": -0.0331
+                "product_name": "Электропылесос напольный, шт."
               },
               {
-                "product_name": "Шампунь, 250 мл",
+                "approx_contribution_pp": -0.029787,
                 "component": "nonfood",
                 "index": 96.4938,
                 "mom": -3.5062,
                 "price_base": 199.36,
                 "price_end": 192.37,
-                "approx_contribution_pp": -0.029787
+                "product_name": "Шампунь, 250 мл"
               },
               {
-                "product_name": "Сыры твердые, полутвердые и мягкие, кг",
+                "approx_contribution_pp": -0.027287,
                 "component": "food",
                 "index": 96.9589,
                 "mom": -3.0411,
                 "price_base": 859.23,
                 "price_end": 833.1,
-                "approx_contribution_pp": -0.027287
+                "product_name": "Сыры твердые, полутвердые и мягкие, кг"
               },
               {
-                "product_name": "Маргарин, кг",
+                "approx_contribution_pp": -0.021838,
                 "component": "food",
                 "index": 97.5662,
                 "mom": -2.4338,
                 "price_base": 295.42,
                 "price_end": 288.23,
-                "approx_contribution_pp": -0.021838
+                "product_name": "Маргарин, кг"
               },
               {
-                "product_name": "Консервы фруктово-ягодные для детского питания, кг",
+                "approx_contribution_pp": -0.021755,
                 "component": "food",
                 "index": 97.5755,
                 "mom": -2.4245,
                 "price_base": 725.09,
                 "price_end": 707.51,
-                "approx_contribution_pp": -0.021755
+                "product_name": "Консервы фруктово-ягодные для детского питания, кг"
               },
               {
-                "product_name": "Кроссовые туфли для детей, пара",
+                "approx_contribution_pp": -0.01971,
                 "component": "nonfood",
                 "index": 97.6799,
                 "mom": -2.3201,
                 "price_base": 2518.91,
                 "price_end": 2460.47,
-                "approx_contribution_pp": -0.01971
+                "product_name": "Кроссовые туфли для детей, пара"
               },
               {
-                "product_name": "Лук репчатый, кг",
+                "approx_contribution_pp": -0.020323,
                 "component": "food",
                 "index": 97.735,
                 "mom": -2.265,
                 "price_base": 49.89,
                 "price_end": 48.76,
-                "approx_contribution_pp": -0.020323
+                "product_name": "Лук репчатый, кг"
               },
               {
-                "product_name": "Огурцы свежие, кг",
+                "approx_contribution_pp": -0.016925,
                 "component": "food",
                 "index": 98.1138,
                 "mom": -1.8862,
                 "price_base": 131.48,
                 "price_end": 129.0,
-                "approx_contribution_pp": -0.016925
+                "product_name": "Огурцы свежие, кг"
               },
               {
-                "product_name": "Свёкла столовая, кг",
+                "approx_contribution_pp": -0.015671,
                 "component": "food",
                 "index": 98.2535,
                 "mom": -1.7465,
                 "price_base": 40.08,
                 "price_end": 39.38,
-                "approx_contribution_pp": -0.015671
+                "product_name": "Свёкла столовая, кг"
               },
               {
-                "product_name": "Сахар-песок, кг",
+                "approx_contribution_pp": -0.013454,
                 "component": "food",
                 "index": 98.5006,
                 "mom": -1.4994,
                 "price_base": 88.7,
                 "price_end": 87.37,
-                "approx_contribution_pp": -0.013454
+                "product_name": "Сахар-песок, кг"
               }
             ],
             "top_increases": [
               {
-                "product_name": "Сосиски, сардельки, кг",
+                "approx_contribution_pp": 0.058517,
                 "component": "food",
                 "index": 106.5216,
                 "mom": 6.5216,
                 "price_base": 512.45,
                 "price_end": 545.87,
-                "approx_contribution_pp": 0.058517
+                "product_name": "Сосиски, сардельки, кг"
               },
               {
-                "product_name": "Бензин автомобильный марки АИ-98 и выше, л",
+                "approx_contribution_pp": 0.05153,
                 "component": "nonfood",
                 "index": 106.0656,
                 "mom": 6.0656,
                 "price_base": 114.58,
                 "price_end": 121.53,
-                "approx_contribution_pp": 0.05153
+                "product_name": "Бензин автомобильный марки АИ-98 и выше, л"
               },
               {
-                "product_name": "Колбаса вареная, кг",
+                "approx_contribution_pp": 0.05399,
                 "component": "food",
                 "index": 106.0171,
                 "mom": 6.0171,
                 "price_base": 563.56,
                 "price_end": 597.47,
-                "approx_contribution_pp": 0.05399
+                "product_name": "Колбаса вареная, кг"
               },
               {
-                "product_name": "Бензин автомобильный",
+                "approx_contribution_pp": 0.032924,
                 "component": "nonfood",
                 "index": 103.8756,
                 "mom": 3.8756,
                 "price_base": 98.05,
                 "price_end": 101.85,
-                "approx_contribution_pp": 0.032924
+                "product_name": "Бензин автомобильный"
               },
               {
-                "product_name": "Пенталгин, 24 таблетки",
+                "approx_contribution_pp": 0.032895,
                 "component": "nonfood",
                 "index": 103.8721,
                 "mom": 3.8721,
                 "price_base": 305.0,
                 "price_end": 316.81,
-                "approx_contribution_pp": 0.032895
+                "product_name": "Пенталгин, 24 таблетки"
               },
               {
-                "product_name": "Бензин автомобильный марки АИ-95, л",
+                "approx_contribution_pp": 0.032616,
                 "component": "nonfood",
                 "index": 103.8393,
                 "mom": 3.8393,
                 "price_base": 100.54,
                 "price_end": 104.4,
-                "approx_contribution_pp": 0.032616
+                "product_name": "Бензин автомобильный марки АИ-95, л"
               },
               {
-                "product_name": "Бензин автомобильный марки АИ-92, л",
+                "approx_contribution_pp": 0.030708,
                 "component": "nonfood",
                 "index": 103.6147,
                 "mom": 3.6147,
                 "price_base": 92.4,
                 "price_end": 95.74,
-                "approx_contribution_pp": 0.030708
+                "product_name": "Бензин автомобильный марки АИ-92, л"
               },
               {
-                "product_name": "Крупа гречневая-ядрица, кг",
+                "approx_contribution_pp": 0.028829,
                 "component": "food",
                 "index": 103.2129,
                 "mom": 3.2129,
                 "price_base": 97.73,
                 "price_end": 100.87,
-                "approx_contribution_pp": 0.028829
+                "product_name": "Крупа гречневая-ядрица, кг"
               },
               {
-                "product_name": "Яйца куриные, 10 шт.",
+                "approx_contribution_pp": 0.026464,
                 "component": "food",
                 "index": 102.9494,
                 "mom": 2.9494,
                 "price_base": 75.27,
                 "price_end": 77.49,
-                "approx_contribution_pp": 0.026464
+                "product_name": "Яйца куриные, 10 шт."
               },
               {
-                "product_name": "Рис шлифованный, кг",
+                "approx_contribution_pp": 0.025225,
                 "component": "food",
                 "index": 102.8113,
                 "mom": 2.8113,
                 "price_base": 116.67,
                 "price_end": 119.95,
-                "approx_contribution_pp": 0.025225
+                "product_name": "Рис шлифованный, кг"
               },
               {
-                "product_name": "Кроссовые туфли для взрослых, пара",
+                "approx_contribution_pp": 0.023562,
                 "component": "nonfood",
                 "index": 102.7735,
                 "mom": 2.7735,
                 "price_base": 4303.61,
                 "price_end": 4422.97,
-                "approx_contribution_pp": 0.023562
+                "product_name": "Кроссовые туфли для взрослых, пара"
               },
               {
-                "product_name": "Соль поваренная пищевая, кг",
+                "approx_contribution_pp": 0.024665,
                 "component": "food",
                 "index": 102.7489,
                 "mom": 2.7489,
                 "price_base": 26.92,
                 "price_end": 27.66,
-                "approx_contribution_pp": 0.024665
+                "product_name": "Соль поваренная пищевая, кг"
               }
             ]
           },
           "nowcast_blend": {
             "model_proxy": 0.5925105844306433,
-            "weekly_weight": 0.6,
             "model_weight": 0.4,
-            "nowcast_mom": 0.4638768337722573
+            "nowcast_mom": 0.4638768337722573,
+            "weekly_weight": 0.6
+          },
+          "raw_rows": 17029,
+          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
+          "status": "ok",
+          "target_month": "2026-09",
+          "weights": {
+            "food": 0.3948,
+            "nonfood": 0.3653,
+            "services": 0.2399
           }
         },
         "2026-10": {
-          "target_month": "2026-10",
-          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
-          "raw_rows": 17029,
-          "deduped_rows": 16865,
-          "invalid_rows_removed": 164,
-          "duplicates_removed": 0,
-          "accounting_overrides_file": "/home/valalav/_projects/sirena-kbr/data/weekly_accounting_month_overrides.csv",
           "accounting_overrides_applied": 1,
+          "accounting_overrides_file": "/home/valalav/_projects/sirena-kbr/data/weekly_accounting_month_overrides.csv",
+          "deduped_rows": 16865,
+          "duplicates_removed": 0,
+          "invalid_rows_removed": 164,
+          "raw_rows": 17029,
+          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
+          "status": "no_weekly_data_for_month",
+          "target_month": "2026-10",
           "weights": {
             "food": 0.3948,
             "nonfood": 0.3653,
             "services": 0.2399
-          },
-          "status": "no_weekly_data_for_month"
+          }
         },
         "2026-11": {
-          "target_month": "2026-11",
-          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
-          "raw_rows": 17029,
-          "deduped_rows": 16865,
-          "invalid_rows_removed": 164,
-          "duplicates_removed": 0,
-          "accounting_overrides_file": "/home/valalav/_projects/sirena-kbr/data/weekly_accounting_month_overrides.csv",
           "accounting_overrides_applied": 1,
+          "accounting_overrides_file": "/home/valalav/_projects/sirena-kbr/data/weekly_accounting_month_overrides.csv",
+          "deduped_rows": 16865,
+          "duplicates_removed": 0,
+          "invalid_rows_removed": 164,
+          "raw_rows": 17029,
+          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
+          "status": "no_weekly_data_for_month",
+          "target_month": "2026-11",
           "weights": {
             "food": 0.3948,
             "nonfood": 0.3653,
             "services": 0.2399
-          },
-          "status": "no_weekly_data_for_month"
+          }
         },
         "2026-12": {
-          "target_month": "2026-12",
-          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
-          "raw_rows": 17029,
-          "deduped_rows": 16865,
-          "invalid_rows_removed": 164,
-          "duplicates_removed": 0,
-          "accounting_overrides_file": "/home/valalav/_projects/sirena-kbr/data/weekly_accounting_month_overrides.csv",
           "accounting_overrides_applied": 1,
+          "accounting_overrides_file": "/home/valalav/_projects/sirena-kbr/data/weekly_accounting_month_overrides.csv",
+          "deduped_rows": 16865,
+          "duplicates_removed": 0,
+          "invalid_rows_removed": 164,
+          "raw_rows": 17029,
+          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
+          "status": "no_weekly_data_for_month",
+          "target_month": "2026-12",
           "weights": {
             "food": 0.3948,
             "nonfood": 0.3653,
             "services": 0.2399
-          },
-          "status": "no_weekly_data_for_month"
+          }
         },
         "2027-01": {
-          "target_month": "2027-01",
-          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
-          "raw_rows": 17029,
-          "deduped_rows": 16865,
-          "invalid_rows_removed": 164,
-          "duplicates_removed": 0,
-          "accounting_overrides_file": "/home/valalav/_projects/sirena-kbr/data/weekly_accounting_month_overrides.csv",
           "accounting_overrides_applied": 1,
+          "accounting_overrides_file": "/home/valalav/_projects/sirena-kbr/data/weekly_accounting_month_overrides.csv",
+          "deduped_rows": 16865,
+          "duplicates_removed": 0,
+          "invalid_rows_removed": 164,
+          "raw_rows": 17029,
+          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
+          "status": "no_weekly_data_for_month",
+          "target_month": "2027-01",
           "weights": {
             "food": 0.3948,
             "nonfood": 0.3653,
             "services": 0.2399
-          },
-          "status": "no_weekly_data_for_month"
+          }
         },
         "2027-02": {
-          "target_month": "2027-02",
-          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
-          "raw_rows": 17029,
-          "deduped_rows": 16865,
-          "invalid_rows_removed": 164,
-          "duplicates_removed": 0,
-          "accounting_overrides_file": "/home/valalav/_projects/sirena-kbr/data/weekly_accounting_month_overrides.csv",
           "accounting_overrides_applied": 1,
+          "accounting_overrides_file": "/home/valalav/_projects/sirena-kbr/data/weekly_accounting_month_overrides.csv",
+          "deduped_rows": 16865,
+          "duplicates_removed": 0,
+          "invalid_rows_removed": 164,
+          "raw_rows": 17029,
+          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
+          "status": "no_weekly_data_for_month",
+          "target_month": "2027-02",
           "weights": {
             "food": 0.3948,
             "nonfood": 0.3653,
             "services": 0.2399
-          },
-          "status": "no_weekly_data_for_month"
+          }
         },
         "2027-03": {
-          "target_month": "2027-03",
-          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
-          "raw_rows": 17029,
-          "deduped_rows": 16865,
-          "invalid_rows_removed": 164,
-          "duplicates_removed": 0,
-          "accounting_overrides_file": "/home/valalav/_projects/sirena-kbr/data/weekly_accounting_month_overrides.csv",
           "accounting_overrides_applied": 1,
+          "accounting_overrides_file": "/home/valalav/_projects/sirena-kbr/data/weekly_accounting_month_overrides.csv",
+          "deduped_rows": 16865,
+          "duplicates_removed": 0,
+          "invalid_rows_removed": 164,
+          "raw_rows": 17029,
+          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
+          "status": "no_weekly_data_for_month",
+          "target_month": "2027-03",
           "weights": {
             "food": 0.3948,
             "nonfood": 0.3653,
             "services": 0.2399
-          },
-          "status": "no_weekly_data_for_month"
+          }
         },
         "2027-04": {
-          "target_month": "2027-04",
-          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
-          "raw_rows": 17029,
-          "deduped_rows": 16865,
-          "invalid_rows_removed": 164,
-          "duplicates_removed": 0,
-          "accounting_overrides_file": "/home/valalav/_projects/sirena-kbr/data/weekly_accounting_month_overrides.csv",
           "accounting_overrides_applied": 1,
+          "accounting_overrides_file": "/home/valalav/_projects/sirena-kbr/data/weekly_accounting_month_overrides.csv",
+          "deduped_rows": 16865,
+          "duplicates_removed": 0,
+          "invalid_rows_removed": 164,
+          "raw_rows": 17029,
+          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
+          "status": "no_weekly_data_for_month",
+          "target_month": "2027-04",
           "weights": {
             "food": 0.3948,
             "nonfood": 0.3653,
             "services": 0.2399
-          },
-          "status": "no_weekly_data_for_month"
+          }
         },
         "2027-05": {
-          "target_month": "2027-05",
-          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
-          "raw_rows": 17029,
-          "deduped_rows": 16865,
-          "invalid_rows_removed": 164,
-          "duplicates_removed": 0,
-          "accounting_overrides_file": "/home/valalav/_projects/sirena-kbr/data/weekly_accounting_month_overrides.csv",
           "accounting_overrides_applied": 1,
+          "accounting_overrides_file": "/home/valalav/_projects/sirena-kbr/data/weekly_accounting_month_overrides.csv",
+          "deduped_rows": 16865,
+          "duplicates_removed": 0,
+          "invalid_rows_removed": 164,
+          "raw_rows": 17029,
+          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
+          "status": "no_weekly_data_for_month",
+          "target_month": "2027-05",
           "weights": {
             "food": 0.3948,
             "nonfood": 0.3653,
             "services": 0.2399
-          },
-          "status": "no_weekly_data_for_month"
+          }
         },
         "2027-06": {
-          "target_month": "2027-06",
-          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
-          "raw_rows": 17029,
-          "deduped_rows": 16865,
-          "invalid_rows_removed": 164,
-          "duplicates_removed": 0,
-          "accounting_overrides_file": "/home/valalav/_projects/sirena-kbr/data/weekly_accounting_month_overrides.csv",
           "accounting_overrides_applied": 1,
+          "accounting_overrides_file": "/home/valalav/_projects/sirena-kbr/data/weekly_accounting_month_overrides.csv",
+          "deduped_rows": 16865,
+          "duplicates_removed": 0,
+          "invalid_rows_removed": 164,
+          "raw_rows": 17029,
+          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
+          "status": "no_weekly_data_for_month",
+          "target_month": "2027-06",
           "weights": {
             "food": 0.3948,
             "nonfood": 0.3653,
             "services": 0.2399
-          },
-          "status": "no_weekly_data_for_month"
+          }
         },
         "2027-07": {
-          "target_month": "2027-07",
-          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
-          "raw_rows": 17029,
-          "deduped_rows": 16865,
-          "invalid_rows_removed": 164,
-          "duplicates_removed": 0,
-          "accounting_overrides_file": "/home/valalav/_projects/sirena-kbr/data/weekly_accounting_month_overrides.csv",
           "accounting_overrides_applied": 1,
+          "accounting_overrides_file": "/home/valalav/_projects/sirena-kbr/data/weekly_accounting_month_overrides.csv",
+          "deduped_rows": 16865,
+          "duplicates_removed": 0,
+          "invalid_rows_removed": 164,
+          "raw_rows": 17029,
+          "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv",
+          "status": "no_weekly_data_for_month",
+          "target_month": "2027-07",
           "weights": {
             "food": 0.3948,
             "nonfood": 0.3653,
             "services": 0.2399
-          },
-          "status": "no_weekly_data_for_month"
+          }
         }
-      }
+      },
+      "data_date_range": {
+        "end": "2026-08-31",
+        "start": "2023-07-10"
+      },
+      "deduped_rows": 16865,
+      "description": "Diagnostic weekly bridge from fresh semicolon Rosstat rows; not a production model and not included in Ensemble.",
+      "duplicates_removed": 0,
+      "invalid_rows_removed": 164,
+      "method": "weekly_bridge_v1",
+      "raw_rows": 17029,
+      "source_file": "/home/valalav/_projects/sirena-kbr/data/Сравнение еженедельных цен_01.csv"
     }
   },
+  "forecast_dates": [
+    "2026-08-01",
+    "2026-09-01",
+    "2026-10-01",
+    "2026-11-01",
+    "2026-12-01",
+    "2027-01-01",
+    "2027-02-01",
+    "2027-03-01",
+    "2027-04-01",
+    "2027-05-01",
+    "2027-06-01",
+    "2027-07-01"
+  ],
+  "forecasts": {
+    "EBM": [
+      -0.03857142857143003,
+      0.49500000000000455,
+      0.5935714285714226,
+      0.6321428571428527,
+      0.7342857142857184,
+      1.041333333333327,
+      0.8913333333333355,
+      0.7006666666666632,
+      0.7066666666666634,
+      0.4413333333333327,
+      0.20066666666666322,
+      0.36333333333332973
+    ],
+    "ElasticNet": [
+      0.18910696123876392,
+      0.5072910584395203,
+      0.6111223859639097,
+      0.894488845156701,
+      1.0161467456962612,
+      1.0651495048758193,
+      1.1209063008660678,
+      0.8579336091206358,
+      0.894668724155423,
+      0.47497776529837665,
+      0.37987481673189905,
+      0.6179585418248905
+    ],
+    "Ensemble": [
+      0.24516142440343752,
+      0.5558963462083518,
+      0.604799293087323,
+      0.9224482479657127,
+      1.0687607131411714,
+      1.0584760427520272,
+      1.0975584138096044,
+      0.9021664105191286,
+      0.9427659529158695,
+      0.49570629779045383,
+      0.35136128083081236,
+      0.6377558359977136
+    ],
+    "FactorPolicy": [
+      0.20658365528757125,
+      0.668236932093456,
+      0.5807766864713371,
+      0.5805488141693329,
+      0.7165965567209255,
+      1.0145601044223598,
+      0.8482109538402255,
+      0.9353389274420223,
+      0.7885383890109905,
+      0.4051504398245743,
+      0.11864169686700957,
+      0.18550158238610412
+    ],
+    "Huber": [
+      0.2271116266443869,
+      0.4968437553080207,
+      0.6027168121323427,
+      0.8578570749574368,
+      1.2032382766866618,
+      1.0766061866533363,
+      1.2698115872184275,
+      0.9519811116618229,
+      1.0271853810038465,
+      0.48248798423604455,
+      0.38590403017477115,
+      0.6519609493163045
+    ],
+    "Micro": [
+      0.2951907116850043,
+      0.2446744800222933,
+      0.35245269961491865,
+      0.6184009427065622,
+      0.7760190739663176,
+      0.7057182726943888,
+      0.6234528535825299,
+      0.7125521651047882,
+      0.6249524387418643,
+      0.5500480922534404,
+      0.503714041828878,
+      0.38833392623420365
+    ],
+    "Micro_SM": [
+      0.006776582412797438,
+      0.6439904092817841,
+      0.6399404150836574,
+      0.6758279894449544,
+      0.8260359959056842,
+      1.1137883107166004,
+      0.9491471623684333,
+      1.0368150301694357,
+      0.8903105649695959,
+      0.5072665655418973,
+      0.2212853983419194,
+      0.28875438998781533
+    ],
+    "NGBoost": [
+      0.38551662250232255,
+      0.5225845671510854,
+      0.6299629185679976,
+      1.3902784624987277,
+      1.1255100508613651,
+      1.029274190393096,
+      1.072957104307676,
+      0.8571059772763192,
+      1.0199418645156868,
+      0.5198398532168937,
+      0.3226821351021272,
+      0.8521425704847729
+    ],
+    "NGBoostShock": [
+      0.27556110630398223,
+      0.6258560153828228,
+      0.6039536906028928,
+      1.0857408375025273,
+      1.2516904618920535,
+      1.0621018621653633,
+      0.9201306236889621,
+      0.873092937539198,
+      0.9388048420195361,
+      0.5125995731282842,
+      0.39569735796078476,
+      0.7541602288371507
+    ],
+    "Nowcast": [
+      0.23433826261777208,
+      0.4638768337722573,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "Prophet": [
+      -0.13381405991559348,
+      0.45078144017015953,
+      0.46206487478748964,
+      0.4801138376638257,
+      0.6605033917804898,
+      0.8428827729055585,
+      0.6716265991273671,
+      0.9782230539572976,
+      0.810681152006802,
+      0.7011195512329513,
+      0.3372723361981359,
+      0.5500214245338066
+    ],
+    "Ridge": [
+      0.24455140830951905,
+      0.5091324652406257,
+      0.6063447874727217,
+      0.8560135209775126,
+      1.0897487298672388,
+      1.078269143159801,
+      1.2435713901994347,
+      0.9617586155243885,
+      1.0165963446546016,
+      0.48794907836121126,
+      0.3586694542099167,
+      0.5370837508711759
+    ],
+    "RidgeExtended": [
+      0.22964719961849767,
+      0.4898864620053871,
+      0.5995319772148662,
+      0.8341916609245317,
+      1.0834394647092154,
+      1.070860169214214,
+      1.242022542475837,
+      0.9742852306616641,
+      1.002824530521309,
+      0.481810844957522,
+      0.28500999867299015,
+      0.5425032706558852
+    ],
+    "RidgeShockDummies": [
+      0.2315892242294808,
+      0.6192321859026464,
+      0.5990571862568714,
+      0.8458282049724914,
+      1.0139447793071525,
+      1.090638148142446,
+      1.1756476960171227,
+      0.896479748986053,
+      0.9129899636012908,
+      0.4862695938759458,
+      0.3809142549076654,
+      0.6738242283281863
+    ],
+    "Ridge_AsymERPT": [
+      0.2709943770828147,
+      0.6058457430068955,
+      0.609310374561403,
+      1.046543498211193,
+      1.2743964128667642,
+      1.0983614198923277,
+      1.0451787282861602,
+      0.7986986378644474,
+      0.7925099163826843,
+      0.4721632924390633,
+      0.30620734008705597,
+      0.5115932429774688
+    ],
+    "Ridge_ProdProxy": [
+      0.23185125088889436,
+      0.6146666666666647,
+      0.5873333333333335,
+      0.6513333333333264,
+      0.789999999999992,
+      1.0693749999999937,
+      0.910624999999996,
+      0.714375000000004,
+      0.6993750000000034,
+      0.45374999999999943,
+      0.23375000000000057,
+      0.3100000000000023
+    ],
+    "Ridge_Shock_Roll24": [
+      0.17747693011588694,
+      0.7794941213707318,
+      0.7743708447919886,
+      0.9906875559078543,
+      1.1574052980245426,
+      1.2230278295639891,
+      1.329499123751603,
+      0.9661069778267688,
+      0.7328897908138856,
+      0.0854883899661587,
+      0.4617344597525346,
+      0.6852285720291178
+    ],
+    "VARPolicy": [
+      0.8795538927529918,
+      0.9102967692909876,
+      0.7480778728413983,
+      0.7066350986252076,
+      0.8185917147703757,
+      1.102191198347537,
+      0.9272556747172732,
+      1.0092632045664802,
+      0.8594144759148165,
+      0.4742103196125755,
+      0.18661519867056828,
+      0.25282104090260327
+    ]
+  },
+  "generated_at": "2026-09-09T10:21:39.187878",
+  "horizon": 12,
+  "input_contract": {
+    "last_observation": "2026-07-01",
+    "macro_included": true,
+    "representation": "raw",
+    "required_through": "2026-07-01",
+    "source": "/home/valalav/_projects/sirena-kbr/data/inflation_data.csv",
+    "source_sha256": "fb58a27c1ab60175de109f352bde24b256f4deb4ca43954aa6647bc493796998",
+    "units": "mom_index_100"
+  },
+  "last_data_date": "2026-07-01",
   "model_details": {
     "Micro": {
-      "cutoff": "2026-07-01",
-      "weight_vintage": "2026-01-01",
-      "weight_policy": "latest vintage at cutoff, frozen through forecast horizon",
-      "representation": "raw",
-      "parent_method": "parent_seasonal",
       "basket_items": 540,
-      "observed_weight": 0.9939099999999996,
-      "native_model_weight": 0.9542599999999996,
+      "cutoff": "2026-07-01",
+      "evaluation": "archive/results/micro_policy_20260909/common_metrics.csv",
       "fallback_item_weight": 0.04574,
-      "residual_parent_weight": 2.0643209364124004e-16,
-      "forecast_weight": 0.9999999999999998,
       "fallback_items": [
         {
           "item_code": 210,
+          "last_observation": "2026-07-01",
           "name": "Дом отдыха, пансионат, день",
-          "weight": 0.00177,
+          "offset": -0.01111111111111127,
           "parent": 35,
           "reason": "short_history",
-          "offset": -0.01111111111111127,
-          "last_observation": "2026-07-01"
+          "weight": 0.00177
         },
         {
           "item_code": 244,
+          "last_observation": "2026-07-01",
           "name": "Индапамид, 2,5 мг, 10 таблеток",
-          "weight": 0.00035,
+          "offset": -0.5483337222222215,
           "parent": 21,
           "reason": "calendar_gap_in_required_features",
-          "offset": -0.5483337222222215,
-          "last_observation": "2026-07-01"
+          "weight": 0.00035
         },
         {
           "item_code": 339,
+          "last_observation": "2026-07-01",
           "name": "Легковой автомобиль иностранной марки новый, шт.",
-          "weight": 0.00959,
+          "offset": 0.10833311111111105,
           "parent": 17,
           "reason": "insufficient_training_rows",
-          "offset": 0.10833311111111105,
-          "last_observation": "2026-07-01"
+          "weight": 0.00959
         },
         {
           "item_code": 992,
+          "last_observation": "2026-07-01",
           "name": "Амлодипин, 10 мг, 10 таблеток",
-          "weight": 0.00035,
+          "offset": 0.4122220555555553,
           "parent": 21,
           "reason": "calendar_gap_in_required_features",
-          "offset": 0.4122220555555553,
-          "last_observation": "2026-07-01"
+          "weight": 0.00035
         },
         {
           "item_code": 994,
+          "last_observation": "2026-07-01",
           "name": "Хлоргексидин, 100 мл",
-          "weight": 0.00033,
+          "offset": -0.011111277777778305,
           "parent": 21,
           "reason": "short_history",
-          "offset": -0.011111277777778305,
-          "last_observation": "2026-07-01"
+          "weight": 0.00033
         },
         {
           "item_code": 1011,
+          "last_observation": "2026-02-01",
           "name": "Поездка на отдых в ОАЭ, поездка",
-          "weight": 0.0004,
+          "offset": 0.0,
           "parent": 67,
           "reason": "missing_current_observation",
-          "offset": 0.0,
-          "last_observation": "2026-02-01"
+          "weight": 0.0004
         },
         {
           "item_code": 1063,
+          "last_observation": "2026-07-01",
           "name": "Поездки в отдельные страны Средней Азии, поездка",
-          "weight": 4e-05,
+          "offset": 1.3566671111111102,
           "parent": 67,
           "reason": "short_history",
-          "offset": 1.3566671111111102,
-          "last_observation": "2026-07-01"
+          "weight": 4e-05
         },
         {
           "item_code": 1064,
+          "last_observation": "2026-07-01",
           "name": "Поездка в Беларусь, поездка",
-          "weight": 0.0001,
+          "offset": -1.0133337222222225,
           "parent": 67,
           "reason": "short_history",
-          "offset": -1.0133337222222225,
-          "last_observation": "2026-07-01"
+          "weight": 0.0001
         },
         {
           "item_code": 1086,
+          "last_observation": "2026-07-01",
           "name": "Горошек зеленый консервированный, кг",
-          "weight": 0.00081,
+          "offset": -0.02283461111111191,
           "parent": 53,
           "reason": "short_history",
-          "offset": -0.02283461111111191,
-          "last_observation": "2026-07-01"
+          "weight": 0.00081
         },
         {
           "item_code": 1087,
+          "last_observation": "2026-07-01",
           "name": "Перец сладкий свежий, кг",
-          "weight": 0.00266,
+          "offset": -0.9322223333333324,
           "parent": 33,
           "reason": "short_history",
-          "offset": -0.9322223333333324,
-          "last_observation": "2026-07-01"
+          "weight": 0.00266
         },
         {
           "item_code": 1088,
+          "last_observation": "2026-07-01",
           "name": "Робот-пылесос, шт.",
-          "weight": 0.00116,
+          "offset": -0.3977777777777792,
           "parent": 51,
           "reason": "short_history",
-          "offset": -0.3977777777777792,
-          "last_observation": "2026-07-01"
+          "weight": 0.00116
         },
         {
           "item_code": 1091,
+          "last_observation": "2026-07-01",
           "name": "Валосердин, 25 мл",
-          "weight": 0.00033,
+          "offset": 0.35888894444444475,
           "parent": 21,
           "reason": "short_history",
-          "offset": 0.35888894444444475,
-          "last_observation": "2026-07-01"
+          "weight": 0.00033
         },
         {
           "item_code": 1094,
+          "last_observation": "2026-07-01",
           "name": "Диклофенак, 15 мл",
-          "weight": 0.00038,
+          "offset": 0.19722216666666745,
           "parent": 21,
           "reason": "short_history",
-          "offset": 0.19722216666666745,
-          "last_observation": "2026-07-01"
+          "weight": 0.00038
         },
         {
           "item_code": 1095,
+          "last_observation": "2026-07-01",
           "name": "Кардиомагнил, 100 таблеток",
-          "weight": 0.0004,
+          "offset": 0.031111222222222068,
           "parent": 21,
           "reason": "short_history",
-          "offset": 0.031111222222222068,
-          "last_observation": "2026-07-01"
+          "weight": 0.0004
         },
         {
           "item_code": 1097,
+          "last_observation": "2026-07-01",
           "name": "Меновазин, 40 мл",
-          "weight": 0.00034,
+          "offset": -0.09333349999999996,
           "parent": 21,
           "reason": "short_history",
-          "offset": -0.09333349999999996,
-          "last_observation": "2026-07-01"
+          "weight": 0.00034
         },
         {
           "item_code": 1099,
+          "last_observation": "2026-07-01",
           "name": "Пенталгин, 24 таблетки",
-          "weight": 0.00035,
+          "offset": -0.03166627777777759,
           "parent": 21,
           "reason": "short_history",
-          "offset": -0.03166627777777759,
-          "last_observation": "2026-07-01"
+          "weight": 0.00035
         },
         {
           "item_code": 1100,
+          "last_observation": "2026-07-01",
           "name": "Салициловая кислота, 40 мл",
-          "weight": 0.00031,
+          "offset": 0.24222200000000052,
           "parent": 21,
           "reason": "short_history",
-          "offset": 0.24222200000000052,
-          "last_observation": "2026-07-01"
+          "weight": 0.00031
         },
         {
           "item_code": 1101,
+          "last_observation": "2026-07-01",
           "name": "Спазмалгон, 10 таблеток",
-          "weight": 0.0004,
+          "offset": 0.04666650000000061,
           "parent": 21,
           "reason": "short_history",
-          "offset": 0.04666650000000061,
-          "last_observation": "2026-07-01"
+          "weight": 0.0004
         },
         {
           "item_code": 1105,
+          "last_observation": "2025-05-01",
           "name": "Воздушный и железнодорожный транспорт",
-          "weight": 0.00569,
+          "offset": 0.0,
           "parent": 47,
           "reason": "missing_current_observation",
-          "offset": 0.0,
-          "last_observation": "2025-05-01"
+          "weight": 0.00569
         },
         {
           "item_code": 1107,
+          "last_observation": "2026-07-01",
           "name": "Печень птицы, кг",
-          "weight": 0.00225,
+          "offset": 0.25055566666666745,
           "parent": 26,
           "reason": "short_history",
-          "offset": 0.25055566666666745,
-          "last_observation": "2026-07-01"
+          "weight": 0.00225
         },
         {
           "item_code": 1108,
+          "last_observation": "2026-07-01",
           "name": "Кефир, кг",
-          "weight": 0.00427,
+          "offset": -0.1344447222222232,
           "parent": 24,
           "reason": "short_history",
-          "offset": -0.1344447222222232,
-          "last_observation": "2026-07-01"
+          "weight": 0.00427
         },
         {
           "item_code": 1109,
+          "last_observation": "2026-07-01",
           "name": "Сырки творожные, глазированные, кг",
-          "weight": 0.00124,
+          "offset": 0.3549998888888876,
           "parent": 24,
           "reason": "short_history",
-          "offset": 0.3549998888888876,
-          "last_observation": "2026-07-01"
+          "weight": 0.00124
         },
         {
           "item_code": 1110,
+          "last_observation": "2026-07-01",
           "name": "Вода питьевая, л",
-          "weight": 0.00157,
+          "offset": 0.2782764999999993,
           "parent": 53,
           "reason": "short_history",
-          "offset": 0.2782764999999993,
-          "last_observation": "2026-07-01"
+          "weight": 0.00157
         },
         {
           "item_code": 1111,
+          "last_observation": "2026-07-01",
           "name": "Жидкие средства для стирки, л",
-          "weight": 0.00146,
+          "offset": -0.17888911111111205,
           "parent": 25,
           "reason": "short_history",
-          "offset": -0.17888911111111205,
-          "last_observation": "2026-07-01"
+          "weight": 0.00146
         },
         {
           "item_code": 1112,
+          "last_observation": "2026-07-01",
           "name": "Помада, шт.",
-          "weight": 0.00092,
+          "offset": -0.02222233333333179,
           "parent": 30,
           "reason": "short_history",
-          "offset": -0.02222233333333179,
-          "last_observation": "2026-07-01"
+          "weight": 0.00092
         },
         {
           "item_code": 1113,
+          "last_observation": "2026-07-01",
           "name": "Блоки строительные, 1000 шт.",
-          "weight": 0.00028,
+          "offset": -0.12333294444444458,
           "parent": 38,
           "reason": "short_history",
-          "offset": -0.12333294444444458,
-          "last_observation": "2026-07-01"
+          "weight": 0.00028
         },
         {
           "item_code": 1114,
+          "last_observation": "2026-07-01",
           "name": "Компримированный природный газ, м3",
-          "weight": 0.00189,
+          "offset": -1.901111111111111,
           "parent": 42,
           "reason": "short_history",
-          "offset": -1.901111111111111,
-          "last_observation": "2026-07-01"
+          "weight": 0.00189
         },
         {
           "item_code": 1115,
+          "last_observation": "2026-07-01",
           "name": "Хлоропирамин, 10 таблеток",
-          "weight": 0.00036,
+          "offset": -0.4072219444444435,
           "parent": 21,
           "reason": "short_history",
-          "offset": -0.4072219444444435,
-          "last_observation": "2026-07-01"
+          "weight": 0.00036
         },
         {
           "item_code": 1116,
+          "last_observation": "2026-07-01",
           "name": "Цетиризин, 10 таблеток",
-          "weight": 0.00037,
+          "offset": -0.07333322222222212,
           "parent": 21,
           "reason": "short_history",
-          "offset": -0.07333322222222212,
-          "last_observation": "2026-07-01"
+          "weight": 0.00037
         },
         {
           "item_code": 1117,
+          "last_observation": "2026-07-01",
           "name": "Интерферон альфа-2В, 10 мл",
-          "weight": 0.00039,
+          "offset": -0.40777766666666715,
           "parent": 21,
           "reason": "short_history",
-          "offset": -0.40777766666666715,
-          "last_observation": "2026-07-01"
+          "weight": 0.00039
         },
         {
           "item_code": 1118,
+          "last_observation": "2026-07-01",
           "name": "Метопролол, 10 таблеток",
-          "weight": 0.00046,
+          "offset": -0.3011113888888883,
           "parent": 21,
           "reason": "short_history",
-          "offset": -0.3011113888888883,
-          "last_observation": "2026-07-01"
+          "weight": 0.00046
         },
         {
           "item_code": 1119,
+          "last_observation": "2026-07-01",
           "name": "Спиронолактон, 10 таблеток",
-          "weight": 0.00035,
+          "offset": -0.19222238888888812,
           "parent": 21,
           "reason": "short_history",
-          "offset": -0.19222238888888812,
-          "last_observation": "2026-07-01"
+          "weight": 0.00035
         },
         {
           "item_code": 1120,
+          "last_observation": "2026-07-01",
           "name": "Лозартан, 10 таблеток",
-          "weight": 0.0004,
+          "offset": -0.031666944444443366,
           "parent": 21,
           "reason": "short_history",
-          "offset": -0.031666944444443366,
-          "last_observation": "2026-07-01"
+          "weight": 0.0004
         },
         {
           "item_code": 1121,
+          "last_observation": "2026-07-01",
           "name": "Аторвастатин, 10 таблеток",
-          "weight": 0.0004,
+          "offset": -0.026111111111111047,
           "parent": 21,
           "reason": "short_history",
-          "offset": -0.026111111111111047,
-          "last_observation": "2026-07-01"
+          "weight": 0.0004
         },
         {
           "item_code": 1122,
+          "last_observation": "2026-07-01",
           "name": "Мелоксикам, 10 таблеток",
-          "weight": 0.00038,
+          "offset": 0.8144441111111118,
           "parent": 21,
           "reason": "short_history",
-          "offset": 0.8144441111111118,
-          "last_observation": "2026-07-01"
+          "weight": 0.00038
         },
         {
           "item_code": 1123,
+          "last_observation": "2026-07-01",
           "name": "Кеторолак, 10 таблеток",
-          "weight": 0.00042,
+          "offset": 0.45722216666666626,
           "parent": 21,
           "reason": "short_history",
-          "offset": 0.45722216666666626,
-          "last_observation": "2026-07-01"
+          "weight": 0.00042
         },
         {
           "item_code": 1124,
+          "last_observation": "2026-07-01",
           "name": "Розувастатин, 10 таблеток",
-          "weight": 0.00034,
+          "offset": -0.1633333888888894,
           "parent": 21,
           "reason": "short_history",
-          "offset": -0.1633333888888894,
-          "last_observation": "2026-07-01"
+          "weight": 0.00034
         },
         {
           "item_code": 1125,
+          "last_observation": "2026-07-01",
           "name": "Алтея лекарственного травы экстракт, 10 таблеток",
-          "weight": 0.00041,
+          "offset": -0.17944422222222142,
           "parent": 21,
           "reason": "short_history",
-          "offset": -0.17944422222222142,
-          "last_observation": "2026-07-01"
+          "weight": 0.00041
         },
         {
           "item_code": 1126,
+          "last_observation": "2026-07-01",
           "name": "Римантадин, 10 таблеток",
-          "weight": 0.00032,
+          "offset": -0.4005559999999993,
           "parent": 21,
           "reason": "short_history",
-          "offset": -0.4005559999999993,
-          "last_observation": "2026-07-01"
+          "weight": 0.00032
         },
         {
           "item_code": 1127,
+          "last_observation": "2026-07-01",
           "name": "Погребение, услуга",
-          "weight": 0.00034,
+          "offset": -0.25944444444444376,
           "parent": 12,
           "reason": "short_history",
-          "offset": -0.25944444444444376,
-          "last_observation": "2026-07-01"
+          "weight": 0.00034
         },
         {
           "item_code": 1128,
+          "last_observation": "2026-07-01",
           "name": "Курьерская доставка, услуга",
-          "weight": 0.00012,
+          "offset": -1.4346496666666677,
           "parent": 55,
           "reason": "short_history",
-          "offset": -1.4346496666666677,
-          "last_observation": "2026-07-01"
+          "weight": 0.00012
         },
         {
           "item_code": 1129,
+          "last_observation": "2026-07-01",
           "name": "Междугородная телефонная связь, минута",
-          "weight": 0.00019,
+          "offset": 0.3505557222222219,
           "parent": 48,
           "reason": "short_history",
-          "offset": 0.3505557222222219,
-          "last_observation": "2026-07-01"
+          "weight": 0.00019
         },
         {
           "item_code": 1131,
+          "last_observation": "2026-07-01",
           "name": "Вода минеральная, л",
-          "weight": 0.00085,
+          "offset": 0.46494316666666674,
           "parent": 53,
           "reason": "short_history",
-          "offset": 0.46494316666666674,
-          "last_observation": "2026-07-01"
+          "weight": 0.00085
         }
       ],
-      "residual_buckets": {},
-      "historical_classification": "revised source hierarchy, not real-time publication vintages",
       "forecast_details": [
         {
           "date": "2026-08-01",
-          "native_weight": 0.9542599999999997,
-          "parent_weight": 0.045740000000000336,
           "dynamic_fallbacks": [],
-          "parent_model_fallbacks": []
+          "native_weight": 0.9542599999999997,
+          "parent_model_fallbacks": [],
+          "parent_weight": 0.045740000000000336
         },
         {
           "date": "2026-09-01",
-          "native_weight": 0.9542599999999997,
-          "parent_weight": 0.045740000000000336,
           "dynamic_fallbacks": [],
-          "parent_model_fallbacks": []
+          "native_weight": 0.9542599999999997,
+          "parent_model_fallbacks": [],
+          "parent_weight": 0.045740000000000336
         },
         {
           "date": "2026-10-01",
-          "native_weight": 0.9542599999999997,
-          "parent_weight": 0.045740000000000336,
           "dynamic_fallbacks": [],
-          "parent_model_fallbacks": []
+          "native_weight": 0.9542599999999997,
+          "parent_model_fallbacks": [],
+          "parent_weight": 0.045740000000000336
         },
         {
           "date": "2026-11-01",
-          "native_weight": 0.9542599999999997,
-          "parent_weight": 0.045740000000000336,
           "dynamic_fallbacks": [],
-          "parent_model_fallbacks": []
+          "native_weight": 0.9542599999999997,
+          "parent_model_fallbacks": [],
+          "parent_weight": 0.045740000000000336
         },
         {
           "date": "2026-12-01",
-          "native_weight": 0.9542599999999997,
-          "parent_weight": 0.045740000000000336,
           "dynamic_fallbacks": [],
-          "parent_model_fallbacks": []
+          "native_weight": 0.9542599999999997,
+          "parent_model_fallbacks": [],
+          "parent_weight": 0.045740000000000336
         },
         {
           "date": "2027-01-01",
-          "native_weight": 0.9542599999999997,
-          "parent_weight": 0.045740000000000336,
           "dynamic_fallbacks": [],
-          "parent_model_fallbacks": []
+          "native_weight": 0.9542599999999997,
+          "parent_model_fallbacks": [],
+          "parent_weight": 0.045740000000000336
         },
         {
           "date": "2027-02-01",
-          "native_weight": 0.9542599999999997,
-          "parent_weight": 0.045740000000000336,
           "dynamic_fallbacks": [],
-          "parent_model_fallbacks": []
+          "native_weight": 0.9542599999999997,
+          "parent_model_fallbacks": [],
+          "parent_weight": 0.045740000000000336
         },
         {
           "date": "2027-03-01",
-          "native_weight": 0.9542599999999997,
-          "parent_weight": 0.045740000000000336,
           "dynamic_fallbacks": [],
-          "parent_model_fallbacks": []
+          "native_weight": 0.9542599999999997,
+          "parent_model_fallbacks": [],
+          "parent_weight": 0.045740000000000336
         },
         {
           "date": "2027-04-01",
-          "native_weight": 0.9542599999999997,
-          "parent_weight": 0.045740000000000336,
           "dynamic_fallbacks": [],
-          "parent_model_fallbacks": []
+          "native_weight": 0.9542599999999997,
+          "parent_model_fallbacks": [],
+          "parent_weight": 0.045740000000000336
         },
         {
           "date": "2027-05-01",
-          "native_weight": 0.9542599999999997,
-          "parent_weight": 0.045740000000000336,
           "dynamic_fallbacks": [],
-          "parent_model_fallbacks": []
+          "native_weight": 0.9542599999999997,
+          "parent_model_fallbacks": [],
+          "parent_weight": 0.045740000000000336
         },
         {
           "date": "2027-06-01",
-          "native_weight": 0.9542599999999997,
-          "parent_weight": 0.045740000000000336,
           "dynamic_fallbacks": [],
-          "parent_model_fallbacks": []
+          "native_weight": 0.9542599999999997,
+          "parent_model_fallbacks": [],
+          "parent_weight": 0.045740000000000336
         },
         {
           "date": "2027-07-01",
-          "native_weight": 0.9542599999999997,
-          "parent_weight": 0.045740000000000336,
           "dynamic_fallbacks": [],
-          "parent_model_fallbacks": []
+          "native_weight": 0.9542599999999997,
+          "parent_model_fallbacks": [],
+          "parent_weight": 0.045740000000000336
         }
       ],
+      "forecast_weight": 0.9999999999999998,
+      "historical_classification": "revised source hierarchy, not real-time publication vintages",
+      "native_model_weight": 0.9542599999999996,
+      "observed_weight": 0.9939099999999996,
+      "parent_method": "parent_seasonal",
+      "representation": "raw",
+      "residual_buckets": {},
+      "residual_parent_weight": 2.0643209364124004e-16,
       "role": "auxiliary; not promoted into Ensemble",
-      "evaluation": "archive/results/micro_policy_20260909/common_metrics.csv"
+      "weight_policy": "latest vintage at cutoff, frozen through forecast horizon",
+      "weight_vintage": "2026-01-01"
     }
+  },
+  "model_status": {
+    "EBM": {
+      "input_representation": "raw",
+      "last_observation": "2026-07-01",
+      "status": "available"
+    },
+    "ElasticNet": {
+      "input_representation": "raw",
+      "last_observation": "2026-07-01",
+      "status": "available"
+    },
+    "Ensemble": {
+      "input_representation": "raw",
+      "last_observation": "2026-07-01",
+      "status": "available"
+    },
+    "FactorPolicy": {
+      "input_representation": "raw",
+      "last_observation": "2026-07-01",
+      "status": "available"
+    },
+    "Huber": {
+      "input_representation": "raw",
+      "last_observation": "2026-07-01",
+      "status": "available"
+    },
+    "Micro": {
+      "input_representation": "raw",
+      "last_observation": "2026-07-01",
+      "status": "available"
+    },
+    "Micro_SM": {
+      "input_representation": "raw",
+      "last_observation": "2026-07-01",
+      "status": "available"
+    },
+    "NGBoost": {
+      "input_representation": "raw",
+      "last_observation": "2026-07-01",
+      "status": "available"
+    },
+    "NGBoostShock": {
+      "input_representation": "raw",
+      "last_observation": "2026-07-01",
+      "status": "available"
+    },
+    "Nowcast": {
+      "input_representation": "raw",
+      "last_observation": "2026-07-01",
+      "status": "available"
+    },
+    "Prophet": {
+      "input_representation": "raw",
+      "last_observation": "2026-07-01",
+      "status": "available"
+    },
+    "Ridge": {
+      "input_representation": "raw",
+      "last_observation": "2026-07-01",
+      "status": "available"
+    },
+    "RidgeExtended": {
+      "input_representation": "raw",
+      "last_observation": "2026-07-01",
+      "status": "available"
+    },
+    "RidgeShockDummies": {
+      "input_representation": "raw",
+      "last_observation": "2026-07-01",
+      "status": "available"
+    },
+    "Ridge_AsymERPT": {
+      "input_representation": "raw",
+      "last_observation": "2026-07-01",
+      "status": "available"
+    },
+    "Ridge_ProdProxy": {
+      "input_representation": "raw",
+      "last_observation": "2026-07-01",
+      "status": "available"
+    },
+    "Ridge_Shock_Roll24": {
+      "input_representation": "raw",
+      "last_observation": "2026-07-01",
+      "status": "available"
+    },
+    "VARPolicy": {
+      "input_representation": "raw",
+      "last_observation": "2026-07-01",
+      "status": "available"
+    }
+  },
+  "source_manifest": {
+    "access_source_manifest.json": "0f7bf04b2a639339ecf5d995219b7d29bf806bb6ce255b2eb17723fdcd781289",
+    "access_weights.csv": "190e0e787d736396ce899511cc85562d0c63dde30debbad485d37af3a0b84c7e",
+    "external/micro_cpi_region_export/micro_test_statsmodels.csv": "04917865f5a0bbc3c69934f092d77667980b01b4d47de0350fe44c5192724606",
+    "inflation_data.csv": "fb58a27c1ab60175de109f352bde24b256f4deb4ca43954aa6647bc493796998",
+    "items_structure.csv": "c8f5426f9664c4ac7c11a897eef6fda513f964c99f024e39d51d81d56e07091c",
+    "kbr_indices.csv": "9a10b988911aa909d73c8d5e577bf7ec7f5060d21d6abb98ac89490d40b0289b",
+    "kbr_micro_full.csv": "226a61826f18788fe05b159f5cef18709dda776a67fbdc70a1e0f3d1a9cbdc5a",
+    "kbr_weekly_prices_2008_2026.csv": "1c72848a5ebc310f37eb7fcd9f66e427d15bd28ca432e551d21a8d6e51fdff9d",
+    "micro_sprav.csv": "2f7ec58b6d6a684e559eaa5adf750e5356e9b6d4f697243259225234acaf61fc",
+    "mom_sa_kbr.csv": "5807824c50b398686491a7cd85b31132602ba5a415ecdf7b5a38de05e2fd6362",
+    "nowcast_policy.json": null,
+    "raw/infostat.csv": "9e7991e013d2649acb77bb196741846c778ad034ba36a641e60414237eccd9d9",
+    "raw/infostat_source_manifest.json": "45120bcdd606db478aacd82223b068a414060ca0d163476d39ee88d06a23866f",
+    "raw/sub_mom.csv": "4f3c6d4a93facc19b8b8eb4b3c896f8455eb47b2a5c648369c5962776b570756",
+    "raw/subcomp.csv": "b87c863fee08a6d1c65d524f0650231193653b3dd8a2eeded5caf9335c200dda",
+    "sa_fl.csv": "cb84032ffd37f19d7c701b89e317094f7c6f59dd8ecb6d7cf9ecfb9e10ac51ec",
+    "sa_hor.csv": "34bc68771dcc24dbc6b9a0c92c9abf0cde7d0dc9809a79e1311c1f68f50e3927",
+    "sa_source_manifest.json": "702f92682700a4981a231c691107f2d0332b6e7e67136a9c9f60507219a85b86",
+    "weekly_accounting_month_overrides.csv": "0e9a46b6f68db8c4de9b9b80ba74dffaaeb237a9c084b9f71b3d4841e2e84b73",
+    "Сравнение еженедельных цен_01.csv": "f99d6bea824aecd9526879e63662da58faabc3348c4bd9e5815ed422ef485b0a"
   }
 }
