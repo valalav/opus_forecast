@@ -5,6 +5,7 @@ first and link to the primary report, note, or artifact.
 
 | Date | Task | Brief description | Link |
 |---|---|---|---|
+| 2026-09-09 | Состязательный аудит дефектов кодовой базы (Codex + Ревизор) | Автономный поиск дефектов через Codex CLI (gpt-5.3-codex-spark) без правок кода. Независимая состязательная верификация подтвердила все 6 пунктов; код проекта не изменялся. | [Аудит дефектов](CODEBASE_DEFECTS_AUDIT.md) |
 | 2026-09-09 | Внедрение RTK и Strict Token Protection Protocol | Настроен rtk init для Codex CLI, отключена интерактивная телеметрия, внедрен жесткий протокол защиты токенов с запретом на нелимитированный вывод и прямой дамп логов, подключен pi-scout. | [AGENTS.md](../AGENTS.md) |
 | 2026-09-09 | Повторяемость NGBoost и Ensemble | Зафиксированы minibatch и tree seeds после воспроизведения дрейфа; два полных расчета совпали по всем 18 путям. 10 тестов и 17 вкладок прошли. | [Проверка](../archive/results/model_development/20260909_rng_reproducibility/REPORT.md) |
 | 2026-09-09 | P0–P2: актуальные источники, журнал и общая оценка | Weekly обновлён до 31 августа без изменения истории; immutable journal, 432 matched прогноза и независимый аудит. Датированные веса: NO_GAIN. 87 тестов, 17 вкладок, native Opus review. | [M1_02](../archive/results/model_development/20260909_m1_02/REPORT.md) |
