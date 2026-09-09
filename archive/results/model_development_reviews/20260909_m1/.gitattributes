@@ -1,0 +1,2 @@
+# Preserve exact external evidence bytes, including CRLF.
+* -text whitespace=trailing-space,space-before-tab,cr-at-eol

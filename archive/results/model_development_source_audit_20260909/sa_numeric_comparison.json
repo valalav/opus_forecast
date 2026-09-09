@@ -1,0 +1,41 @@
+{
+  "checked_at": "2026-09-09T06:40:56.136964+00:00",
+  "header_public": {
+    "A1": "Day",
+    "B1": "item",
+    "C1": "region",
+    "D1": "mom",
+    "E1": "mom_sa"
+  },
+  "header_local": {
+    "A1": "Day",
+    "B1": "item",
+    "C1": "region",
+    "D1": "mom",
+    "E1": "mom_sa"
+  },
+  "public_kbr_rows": 8215,
+  "local_kbr_rows": 8215,
+  "exact_kbr_rows_equal": true,
+  "public_kbr_sha256": "d76046f77486b0f0053d451ad51e09c9d7bc721076097dfd86a38c073dbcc2c4",
+  "local_kbr_sha256": "d76046f77486b0f0053d451ad51e09c9d7bc721076097dfd86a38c073dbcc2c4",
+  "differences_first20": [],
+  "public_selected_region": {
+    "A1": "Сезонное сглаживание ИПЦ для регионов",
+    "F1": "Регион",
+    "G1": "Россия",
+    "H1": null,
+    "I1": null,
+    "J1": null,
+    "K1": 0.0
+  },
+  "local_selected_region": {
+    "A1": "Сезонное сглаживание ИПЦ для регионов",
+    "F1": "Регион",
+    "G1": "Кабардино-Балкарская Республика",
+    "H1": null,
+    "I1": null,
+    "J1": null,
+    "K1": 7.0
+  }
+}

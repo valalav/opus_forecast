@@ -1,0 +1,37 @@
+{
+  "files": {
+    "sirena/experiment_models.py": {
+      "sha256": "68157200bcde62793f8f696488b882d9e22072b832cfa3958721676cdd48d836",
+      "bytes": 4635,
+      "file": "inputs/sirena__experiment_models.py"
+    },
+    "experiments/model_development/m1_protocol.json": {
+      "sha256": "6ec6fff33b84a4d1f33fbe127c0b96bc62714f13dcf01039310a9b41fd8811e3",
+      "bytes": 2791,
+      "file": "inputs/experiments__model_development__m1_protocol.json"
+    },
+    "sirena/evaluation.py": {
+      "sha256": "1d89e3c7140326c07e58e3d11f57f652ba5b952092cd4a1121ce9044937423d2",
+      "bytes": 11278,
+      "file": "inputs/sirena__evaluation.py"
+    },
+    "sirena/forecast_journal.py": {
+      "sha256": "5a960a79ccb048f78ef0bf06e188652a931f780ccba40a79fa7c23afd8e46466",
+      "bytes": 14172,
+      "file": "inputs/sirena__forecast_journal.py"
+    },
+    "sirena/data/aggregation.py": {
+      "sha256": "f2c1dbfdeaf0b646fe7aa66046c316b58803f127945a6b4f6819a80e897856c0",
+      "bytes": 7477,
+      "file": "inputs/sirena__data__aggregation.py"
+    },
+    "adapter.diff": {
+      "sha256": "dd3406a2d1e5c3f4b1f944ad329b0acec6205123785efb7fa45980601679b9af",
+      "bytes": 2439,
+      "file": "inputs/adapter.diff"
+    }
+  },
+  "captured_at": "2026-09-09T09:48:15.2500482+03:00",
+  "head": "b72e9226d8c23fcc9a6ad9438fb88137d5ad7ffb",
+  "repository": "/home/valalav/_projects/sirena-kbr"
+}

@@ -26,6 +26,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from sirena.data_loader import load_model_data, forecast_source_manifest, DataFreshnessError
+from sirena.forecast_journal import publish_forecast_snapshot, forecast_code_manifest
 
 
 def _to_float_array(forecast_values: Any) -> np.ndarray:
@@ -57,7 +58,11 @@ def compute_all_forecasts(horizon: int = 12) -> Dict[str, Any]:
 
     # Load data
     print("\n[1/6] Loading data...")
+    calculation_sources = forecast_source_manifest()
+    calculation_code = forecast_code_manifest(Path(__file__).resolve().parent.parent)
     df = _load_forecast_input_data()
+    if calculation_sources != forecast_source_manifest():
+        raise DataFreshnessError('Inputs changed while loading forecast data')
     datetime_index = cast(pd.DatetimeIndex, pd.to_datetime(pd.Index(df.index)))
     last_date = cast(pd.Timestamp, datetime_index.max())
     print(f"  Last data point: {last_date.strftime('%Y-%m')}")
@@ -68,7 +73,8 @@ def compute_all_forecasts(horizon: int = 12) -> Dict[str, Any]:
         'horizon': horizon,
         'forecasts': {},
         'input_contract': df.attrs['input_contract'],
-        'source_manifest': forecast_source_manifest(),
+        'source_manifest': calculation_sources,
+        'calculation_code_manifest': calculation_code,
         'model_status': {},
         'auxiliary_methods': {'Micro_SM': 'ETS on headline CPI (item_code=1); not a bottom-up micro aggregate'}
     }
@@ -496,9 +502,17 @@ def compute_all_forecasts(horizon: int = 12) -> Dict[str, Any]:
 def save_results(results, output_path):
     """Save results to JSON."""
     output_path = Path(output_path)
+    root = Path(__file__).resolve().parent.parent
+    # Journal publication is required before replacing the working cache.
+    # A failure leaves the previous cache untouched, with no invented success.
+    snapshot = publish_forecast_snapshot(results, root/'archive/results/forecast_journal', root)
+    print(f'Immutable forecast snapshot: {snapshot}')
     temporary = output_path.with_suffix('.json.tmp')
     with open(temporary, 'w', encoding='utf-8') as f:
         json.dump(results, f, indent=2, ensure_ascii=False, allow_nan=False)
+    if results['source_manifest'] != forecast_source_manifest():
+        temporary.unlink(missing_ok=True)
+        raise DataFreshnessError('Inputs changed before cache publication')
     temporary.replace(output_path)
     print(f"\nSaved to: {output_path}")
 

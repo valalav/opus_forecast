@@ -1,0 +1,45 @@
+{
+  "run_id": "2026-09-09_sirena_m1_implementation",
+  "task_class": "CPI M1 implementation read-only review",
+  "launcher": "native Python urllib SSE HTTP; no Pi process",
+  "provider": "omniroute",
+  "requested_model": "cc/claude-opus-5",
+  "confirmed_model": [
+    "claude-opus-5"
+  ],
+  "started_at": "2026-09-09T06:51:18.977883+00:00",
+  "attempts": 1,
+  "fallback": false,
+  "tools": "forbidden",
+  "request_sha256": "37ff90cd03382b220fbd728454615df4d9b65a8ccb78c9d1d38da1762a228373",
+  "endpoint": "http://192.168.10.136:3000/v1/chat/completions",
+  "stream": true,
+  "transport_reason": "Earlier non-stream requests hit HTTP 504 at 122 seconds; SSE preserves response activity without changing route.",
+  "max_tokens": 16000,
+  "attempt_reason": "Initial request on frozen implementation; no route substitution",
+  "http_status": 200,
+  "exit_code": 0,
+  "status": "COMPLETED_REVIEW",
+  "finished_at": "2026-09-09T06:55:01.665397+00:00",
+  "latency_seconds": 222.68783000000985,
+  "response_models": [
+    "claude-opus-5",
+    "keepalive"
+  ],
+  "finish_reasons": [
+    "stop"
+  ],
+  "done_received": true,
+  "prompt_sha256": "8117373253eadb05d72b04f542e7ce5c93d87f09b0646b222f0f5df6a5c01867",
+  "input_set_sha256": "77bbc9f2056e315b0def98d3ddf9cbc5edbaab889f1e1ef6347e12ce9c43a93c",
+  "quality_score": 82,
+  "quality_status": "PARTIAL",
+  "quality_components": [
+    37,
+    19,
+    14,
+    10,
+    12
+  ],
+  "command": "python run_native_stream.py claude 16000"
+}

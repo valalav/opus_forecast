@@ -1,0 +1,13 @@
+{
+  "status": "COMPLETED",
+  "min_common_sample": 24,
+  "budget_exhausted": false,
+  "complete_common_sample": true,
+  "screening_eligible": true,
+  "rows": 432,
+  "origins": 35,
+  "failures": 0,
+  "seconds": 63.490990607999265,
+  "evidence_level": "C",
+  "promotion": "not decided; historical diagnostic only"
+}

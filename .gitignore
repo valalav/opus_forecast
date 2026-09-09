@@ -161,3 +161,8 @@ Thumbs.db
 sync/
 
 kbr_weekly_prices_2008_2026.csv.before_rebuild
+
+# Immutable journal keeps deduplicated source objects on the host, not in Git.
+archive/results/forecast_journal/objects/
+archive/results/forecast_journal/.staging-*/
+archive/results/model_development_source_audit_20260909/weekly_before.csv

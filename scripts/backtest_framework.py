@@ -772,6 +772,11 @@ class BacktestRunner:
         except Exception as e:
             return np.nan
 
+    def run_registered_experiment(self, protocol, forecasters):
+        """Versioned matched-origin evaluation; legacy reports stay immutable."""
+        from sirena.evaluation import run_registered_experiment
+        return run_registered_experiment(self, protocol, forecasters)
+
     def run_common_origins(self, horizons=(1, 2, 12)):
         """Matched rolling targets with production fit/forecast paths, including h=12.
 

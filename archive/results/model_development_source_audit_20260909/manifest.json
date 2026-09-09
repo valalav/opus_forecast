@@ -1,0 +1,98 @@
+{
+  "completed_at": "2026-09-09T06:51:31.142318+00:00",
+  "status": "DONE",
+  "production_mutated": false,
+  "staged_weekly": {
+    "source_start": "2026-01-01",
+    "source_sha256": "f99d6bea824aecd9526879e63662da58faabc3348c4bd9e5815ed422ef485b0a",
+    "last_observation": "2026-08-31",
+    "last_publication": "2026-09-03T15:00:00+03:00",
+    "release_evidence": "https://26.rosstat.gov.ru/news/document/289725",
+    "historical_conflicts_outside_window": 245,
+    "added_rows": 321,
+    "added_dates": [
+      "2026-08-17",
+      "2026-08-24",
+      "2026-08-31"
+    ],
+    "tests_passed": 6
+  },
+  "files": {
+    "all_regions_four_aggregates.csv": {
+      "sha256": "3cb95349a3a97a6ea9f27cd58ec40b0d90e48c91e96f829a1ae56b9fc46bf29a",
+      "bytes": 1899704
+    },
+    "audit_local.py": {
+      "sha256": "f15682abf0c3cd8b42be4e1b1ed97b4445f2159ae23a7dce0a79d4750aaaea2b",
+      "bytes": 3039
+    },
+    "audit_remote.py": {
+      "sha256": "7ff9318919acc8e84225c79e05861b1a011bccb4f6a85c2c6e4a76c409eef33f",
+      "bytes": 2993
+    },
+    "infostat_candidates_cells.json": {
+      "sha256": "deade108624269d7cdaa6f384bb776e04f612d85a2364079e9fa5c5937e4f8c8",
+      "bytes": 46701
+    },
+    "kbr_weekly_prices_2008_2026.csv": {
+      "sha256": "a17b0308bb9a1e6a55259ffe249988b0ca0895782515cc9df774233649c61041",
+      "bytes": 13248223
+    },
+    "local_candidates.json": {
+      "sha256": "72c4570a39635716d5c92cd2b2aa7348111fa66632435ee52205ebb728dd0f9b",
+      "bytes": 3682
+    },
+    "public_sa_2026-07.xlsx": {
+      "sha256": "51842e450aa3e4ca32b7e336153413193e80b51a3aadac1f6525c7aa7a89850e",
+      "bytes": 29437613
+    },
+    "rebuild_weekly_canonical.py": {
+      "sha256": "e0df325c3a41d395b4387a1dc6bf75cb05cfceb8ae6747d8d64c46de60a338db",
+      "bytes": 5988
+    },
+    "remote_inventory.json": {
+      "sha256": "05d652f1023b21dcf107c45aba6376533f6d15999bd58770e3f5222b9337564e",
+      "bytes": 66815
+    },
+    "remote_source_dates_panel.json": {
+      "sha256": "fe13ed90be5b41ddec41b24de093d3233d86a4ad6be32fbfc5d218af3cdd29aa",
+      "bytes": 121553
+    },
+    "REPORT.md": {
+      "sha256": "a432bad8d3e707438e55c75af60382015be063f8415d823a98174f8636fd36d4",
+      "bytes": 14278
+    },
+    "sa_numeric_comparison.json": {
+      "sha256": "329791b67d230cd482f69d9918ea13831116590c7d5b0814d6ccf3a2332edc86",
+      "bytes": 1135
+    },
+    "sa_package_comparison.json": {
+      "sha256": "82b699b8cc9e9d1952f85728ad3095dd74ac74a6018e31893dab2db16aadd98e",
+      "bytes": 19527
+    },
+    "test_weekly_refresh.py": {
+      "sha256": "9dfd07dc12cfe8da2f09a04ca09fcb24b5d68b32fe3e50970c5668bd39c066a6",
+      "bytes": 2368
+    },
+    "weekly_conflicts.json": {
+      "sha256": "8a7084f58ddc1bba95eef2a7af87ed8919684ab27277cdbb096037baf6d31b83",
+      "bytes": 24232
+    },
+    "weekly_overlap.json": {
+      "sha256": "765c2c294498114582392888b917fe389253938664b3c6b8dd08b9f1b0130b13",
+      "bytes": 5517
+    },
+    "weekly_validation.txt": {
+      "sha256": "847037d9768984ef80f572e55a405ab8ba04052e686fd37b8c917af084b2fdec",
+      "bytes": 933
+    },
+    "yandex_public_metadata.json": {
+      "sha256": "add4c6cd289f8c3de1c108d4ebc4a88478769496456d513000718410dc8f712a",
+      "bytes": 90443
+    },
+    "yandex_source_manifest.json": {
+      "sha256": "8b2947aedc7ba70cbff077b5796751d80c441699c3b0c109dc82b24758fabdd2",
+      "bytes": 5086
+    }
+  }
+}
