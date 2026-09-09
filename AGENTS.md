@@ -9,6 +9,16 @@ This file provides compact operational guidance for AI agents working with the Ð
 - If visual verification is impossible, say so plainly and name the exact file, tab, chart, or artifact the user should check.
 - If the user says something is broken, read the existing code first. Do not invent replacement workflows before understanding the current one.
 
+## Strict Token Protection Protocol (MANDATORY)
+
+- **PROHIBITED:**
+  - Raw `cat`, `head`, `tail`, `rg`, `grep`, `find`, `ls -R` without output limits or without `rtk`.
+  - Directly dumping or reading log files, session files (`.codex/sessions/**.jsonl`), or large databases into the prompt context.
+  - Running open-ended scans across directories without `--max-count` or piping to compact parsers.
+- **MANDATORY TOOLS:**
+  - **`rtk` (Rust Token Killer):** Prefix shell commands with `rtk` (`rtk rg`, `rtk read`, `rtk log`, `rtk git status`, `rtk pytest`).
+  - **`pi-scout` (Local vLLM / 0 external tokens):** For files >100 lines, logs, diffs, code search, or architecture reconnaissance, ALWAYS use `pi-scout` (`pi-scout -f <path> -m locate -q "<query>"` or `cmd | pi-scout --stdin -m summarize -q "<query>"`). It runs on local-vLLM at zero external token cost.
+
 ## Start Here
 
 When entering a new task:
@@ -288,3 +298,5 @@ Avoid cluttering the project root with new scratch files.
 ---
 
 Updated to align agent guidance with `GEMINI.md` and `CLAUDE.md`, with stronger emphasis on skill usage, model/data-source reuse, and verification discipline.
+
+@RTK.md
