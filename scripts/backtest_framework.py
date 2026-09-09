@@ -700,23 +700,14 @@ class BacktestRunner:
         except Exception as e:
             return np.nan
 
-    def _forecast_micro(
-        self, train_ridge: pd.DataFrame, target_date: pd.Timestamp
-    ) -> float:
-        """Прогноз Micro ARIMA из micro_test.csv (внешняя модель пользователя)"""
-        if not MICRO_ARIMA_AVAILABLE:
-            return np.nan
+    def _forecast_micro(self, train_ridge, target_date):
+        """Same current Micro implementation and dated horizon as production."""
+        model = MicrocomponentForecaster(horizon=1, use_seasonal_adj=False)
         try:
-            # Используем загрузчик прогнозов из файла
-            model = MicroARIMAForecaster(
-                horizon=self.horizon, file_path="micro_test.csv"
-            )
-            model.fit()
-            result = model.predict(train_ridge, target_date)
-            if result and "prediction" in result and not np.isnan(result["prediction"]):
-                return result["prediction"] - 100
-            return np.nan
-        except Exception as e:
+            model.fit(train_ridge)
+            return model.predict(train_ridge, target_date)['prediction'] - 100
+        except Exception as exc:
+            print(f'Micro unavailable at {train_ridge.index.max()}: {exc}')
             return np.nan
 
     def _forecast_micro_sm(
@@ -780,6 +771,116 @@ class BacktestRunner:
                 return np.nan
         except Exception as e:
             return np.nan
+
+    def run_common_origins(self, horizons=(1, 2, 12)):
+        """Matched rolling targets with production fit/forecast paths, including h=12.
+
+        A revised-vintage comparison, not a reconstruction of publication vintages.
+        The first half of target months selects parent policy; the second half
+        is reported separately and never used for that selection.
+        """
+        import copy
+        import hashlib
+        import json
+        import time
+        from sirena.data_loader import forecast_source_manifest
+        self._prepare_data()
+        fingerprint = forecast_source_manifest()
+        targets = self.df_ridge.index[-self.test_months:]
+        if len(targets) < self.test_months or self.test_months < 4:
+            raise ValueError('Insufficient common target months')
+        schedule = {}
+        for horizon in horizons:
+            for target in targets:
+                cutoff = target - pd.DateOffset(months=horizon)
+                schedule.setdefault(cutoff, []).append((horizon, target))
+        names = ['Ridge','Huber','Ridge_ProdProxy','MicroParentRidge','MicroParentSeasonal']
+        rows, coverage, failures, reconstruction = [], [], [], []
+        factories = {'Ridge':RidgeForecaster, 'Huber':HuberForecaster,
+                     'Ridge_ProdProxy':lambda: RidgeProductionProxyForecaster(use_2022_dummy=False)}
+        for pos, (cutoff, requests) in enumerate(sorted(schedule.items()), 1):
+            train = self.df_ridge.loc[:cutoff].copy()
+            if train.index.max() != cutoff:
+                raise ValueError(f'No observations at origin {cutoff}')
+            maximum = max(h for h,t in requests)
+            paths = {}
+            started = time.monotonic()
+            for name, factory in factories.items():
+                try:
+                    model = factory()
+                    model.fit(train)
+                    paths[name] = np.asarray(model.forecast(horizon=maximum),dtype=float)
+                except Exception as exc:
+                    failures.append({'cutoff':str(cutoff.date()),'model':name,'reason':str(exc)})
+            try:
+                micro = MicrocomponentForecaster(horizon=1,use_seasonal_adj=False,fallback_policy='parent_ridge')
+                micro.fit(train)
+                for name, policy in [('MicroParentRidge','parent_ridge'),('MicroParentSeasonal','parent_seasonal')]:
+                    candidate = copy.copy(micro)
+                    candidate.fallback_policy = policy
+                    paths[name] = candidate.forecast(maximum)
+                    coverage.append({'model':name, **micro.coverage, 'parent_method':policy})
+                # Contemporaneous reconstruction is ONLY a diagnostic of the
+                # annual-weight approximation; never an input to the forecasts.
+                hist = micro.basket['history']
+                reconstructed = 0.
+                for code, weight in micro.weights.items():
+                    actual_leaf = hist.at[cutoff,code] if code in hist else np.nan
+                    actual_parent = hist.at[cutoff,micro.item_subcomp[code]]
+                    reconstructed += weight * (actual_leaf if np.isfinite(actual_leaf) else actual_parent)
+                reconstructed += sum(w*hist.at[cutoff,c] for c,w in micro.basket['residual'].items())
+                reconstruction.append({'cutoff':str(cutoff.date()),'reconstructed_mom':float(reconstructed),
+                    'actual_mom':float(train['Все товары и услуги'].iloc[-1]-100),
+                    'weight_vintage':micro.coverage['weight_vintage']})
+            except Exception as exc:
+                for name in names[3:]:
+                    failures.append({'cutoff':str(cutoff.date()),'model':name,'reason':str(exc)})
+            for horizon,target in requests:
+                row = {'Date':target,'cutoff':cutoff,'horizon':horizon,
+                       'Actual':float(self.df_ridge.at[target,'Все товары и услуги']-100)}
+                for name in names:
+                    path = paths.get(name,[])
+                    row[name] = float(path[horizon-1]) if len(path)>=horizon else np.nan
+                rows.append(row)
+            print(f'Common origin {pos}/{len(schedule)} {cutoff:%Y-%m}: {time.monotonic()-started:.2f}s',flush=True)
+        if forecast_source_manifest() != fingerprint:
+            raise ValueError('Sources changed during common-origin comparison')
+        predictions = pd.DataFrame(rows).sort_values(['horizon','Date'])
+        metrics = []
+        split = targets[len(targets)//2]
+        for horizon in horizons:
+            all_rows = predictions[predictions.horizon.eq(horizon)]
+            for period in ['all','development','validation']:
+                part = (all_rows if period=='all' else all_rows[all_rows.Date.lt(split)]
+                        if period=='development' else all_rows[all_rows.Date.ge(split)])
+                common = np.isfinite(part[names]).all(axis=1)
+                for name in names:
+                    available = np.isfinite(part[name])
+                    errors = part.loc[common,name]-part.loc[common,'Actual']
+                    metrics.append({'horizon':horizon,'period':period,'model':name,
+                        'N_planned':len(part),'N_valid':int(available.sum()),'N_common':int(common.sum()),
+                        'success_rate':float(available.mean()),'MAE_common':float(errors.abs().mean()),
+                        'RMSE_common':float(np.sqrt(np.mean(errors**2))),
+                        'hit_within_0_5pp':float((errors.abs()<=.5).mean()) if len(errors) else np.nan})
+        metrics = pd.DataFrame(metrics)
+        development = metrics[(metrics.horizon==1)&(metrics.period=='development')&metrics.model.isin(names[3:])]
+        if len(development)!=2 or (development.N_common!=development.N_planned).any():
+            raise ValueError('Cannot select a policy without complete matched development predictions')
+        selected = development.sort_values(['MAE_common','RMSE_common','model']).iloc[0].model
+        self.output_dir.mkdir(parents=True,exist_ok=True)
+        predictions.to_csv(self.output_dir/'common_predictions.csv',index=False)
+        metrics.to_csv(self.output_dir/'common_metrics.csv',index=False)
+        pd.DataFrame(reconstruction).to_csv(self.output_dir/'reconstruction_diagnostic.csv',index=False)
+        summary = {'code_sha256':{str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in [Path(__file__), Path('sirena/models/microcomponent.py'), Path('sirena/data/micro_basket.py')]}, 'source_manifest':fingerprint,'targets':[str(d.date()) for d in targets],
+            'validation_start':str(split.date()),'horizons':list(horizons),'origins':len(schedule),
+            'models':names,'selected_on_development_h1':selected,
+            'selection_rule':'lowest development h1 common MAE; ties RMSE then name; validation not used',
+            'failures':failures,'coverage':coverage,
+            'interpretation':'revised-vintage pseudo-out-of-sample; same production forecast paths; no future weights'}
+        (self.output_dir/'common_summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2,allow_nan=False))
+        self.results = predictions
+        return predictions,metrics,summary
+
 
     def run(self):
         """Главный цикл бэктеста"""

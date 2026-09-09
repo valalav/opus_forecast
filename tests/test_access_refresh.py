@@ -59,10 +59,11 @@ def test_apply_preserves_sa_all_regions_and_required_empty_item(release):
     refresh_access(stage,data,apply=True)
     assert (data/'sa_fl.csv').read_bytes()==b'newer independent SA fixture'
     assert set(pd.read_csv(data/'access_weights.csv').Region_code)=={7,8}
-    model=MicrocomponentForecaster()
-    loaded=model._load_data(data)
-    assert set(loaded.columns)=={100,101}
-    assert loaded[101].isna().all()
+    basket=pd.read_csv(data/'micro_sprav.csv',sep=';')
+    observations=pd.read_csv(data/'kbr_micro_full.csv')
+    assert set(basket.Item_code)=={100,101}
+    assert 101 not in set(observations.Item_code)
+
 
 
 def test_wrong_aggregate_mapping_fails_before_writes(release):

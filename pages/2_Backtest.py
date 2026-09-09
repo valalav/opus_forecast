@@ -9,10 +9,17 @@ import plotly.graph_objects as go
 @st.cache_data
 def load_backtest_data(horizon):
     """Load backtest predictions for given horizon."""
+    from sirena.data_loader import load_common_backtest
+    common = load_common_backtest(horizon)
+    if common is not None:
+        return common
     filepath = f"archive/results/backtest_h{horizon}_predictions.csv"
     try:
         df = pd.read_csv(filepath)
         df["Date"] = pd.to_datetime(df["Date"])
+        # Archived Micro was an external ARIMA series, not this implementation.
+        df = df.drop(columns=['Micro'], errors='ignore')
+        df.attrs['evaluation'] = 'Архивная оценка: состав и число прогнозов различаются. Прежняя колонка Micro исключена: она относилась к другой модели.'
         return df
     except Exception as e:
         return None
@@ -33,6 +40,8 @@ def render_backtest_tab(horizon, ALL_MODELS):
         st.error(f"Данные бэктеста не найдены.")
         st.info(f"Запустите: `python3 scripts/run_backtest_h{horizon}.py`")
         return
+
+    st.caption(bt_data.attrs.get("evaluation", ""))
 
     # Calculate metrics for each model
     models = [m for m in ALL_MODELS if m in bt_data.columns]

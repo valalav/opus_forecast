@@ -43,11 +43,11 @@
 | **SubcomponentScenario** | `subcomponent_scenario.py` | Интеграция baseline + scenario | — |
 | **UnifiedSubcomponent** | `unified_subcomp.py` | Единый интерфейс для subcomponent | — |
 
-### Microcomponent Models (537 микрокомпонентов)
+### Microcomponent Models (датированная корзина)
 
 | Модель | Файл | Описание |
 |--------|------|----------|
-| **Microcomponent** | `microcomponent.py` | Bottom-up по 537 микрокомпонентам (индивидуальные Ridge/Voting) |
+| **Microcomponent** | `microcomponent.py` | Датированная RAW-корзина, Ridge/Voting и явный групповой прогноз; 540 позиций на июль 2026. Вспомогательная, вне Ensemble; [оценка 09.09](../archive/results/micro_policy_20260909/REPORT.md) |
 | **MicroOptimized** | `micro_optimized.py` | Оптимизированный: Huber для stable, Ridge для volatile |
 | **HierarchicalMicro** | `hierarchical_micro.py` | Полная иерархия: micro → subcomp → comp → total |
 | **MicroPlodovoshchi** | `micro_plodovoshchi.py` | Специализированная для плодоовощей |

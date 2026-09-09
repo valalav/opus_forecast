@@ -1,19 +1,5 @@
 #!/usr/bin/env python3
-"""
-МИКРОКОМПОНЕНТНАЯ МОДЕЛЬ (Bottom-Up, Level 5)
-=============================================
-Прогнозирование 537 микрокомпонентов с агрегацией по весам.
-
-Архитектура:
-- Топ-100 по весу: индивидуальные Ridge модели (56% веса)
-- Остальные: VotingRegressor (Ridge + Lasso) как baseline
-- Волатильные товары (плодоовощи): расширенные признаки
-
-Результаты:
-- Охват: 99.4% весов ИПЦ
-- 537 микрокомпонентов
-- Агрегация: sum(weight_i * prediction_i) / total_weight
-"""
+"""Dated bottom-up RAW CPI forecasts with explicit parent treatment of missing mass."""
 
 import pandas as pd
 import numpy as np
@@ -29,14 +15,10 @@ from sklearn.preprocessing import StandardScaler
 
 
 class MicrocomponentForecaster:
-    """
-    Bottom-up forecaster using 537 microcomponents.
+    """Dated leaf Ridge/Voting models with explicit weighted parent forecasts.
 
-    Each microcomponent is forecasted individually with:
-    - Ridge regression for top-100 by weight
-    - VotingRegressor (Ridge+Lasso) for others
-    - Extended features for volatile items (vegetables)
-    - Seasonal adjustment based on historical aggregate patterns
+    The parent policy is selected on the development h=1 window. Observed
+    coverage and modeled coverage are distinct. No official data are imputed.
     """
 
     name = "microcomponent"
@@ -77,7 +59,9 @@ class MicrocomponentForecaster:
         random_state=42,
         top_n=100,
         use_extended_for_volatile=True,
-        use_seasonal_adj=True,
+        use_seasonal_adj=False,
+        fallback_policy="parent_seasonal",
+        data_dir=None,
     ):
         """
         Parameters
@@ -93,7 +77,7 @@ class MicrocomponentForecaster:
         use_extended_for_volatile : bool
             Use extended features for volatile items
         use_seasonal_adj : bool
-            Apply seasonal adjustment to aggregate forecast (default True)
+            Apply legacy manual adjustment (default False; not used in production)
         """
         self.horizon = horizon
         self.train_start = train_start
@@ -102,55 +86,14 @@ class MicrocomponentForecaster:
         self.use_extended_for_volatile = use_extended_for_volatile
         self.use_seasonal_adj = use_seasonal_adj
 
+        if fallback_policy not in {"parent_ridge", "parent_seasonal"}:
+            raise ValueError("Unknown parent forecast policy")
+        self.fallback_policy = fallback_policy
+        self.data_dir = Path(data_dir) if data_dir else None
         self._is_fitted = False
         self.micro_models = {}  # {item_code: {'model': model, 'scaler': scaler, ...}}
         self.weights = {}
         self.top_items = set()
-
-    def _load_data(self, data_dir):
-        """Load microcomponent data and справочник."""
-        # Historical MoM data
-        micro_df = pd.read_csv(data_dir / "kbr_micro_full.csv", sep=",", decimal=".")
-        # Day column has format MM/DD/YY HH:MM:SS
-        micro_df["DateParsed"] = pd.to_datetime(
-            micro_df["Day"].str.split(" ").str[0], format="%m/%d/%y", errors="coerce"
-        )
-        micro_df["Period"] = micro_df["DateParsed"].dt.to_period("M").dt.to_timestamp()
-        micro_pivot = micro_df.pivot_table(
-            index="Period", columns="Item_code", values="MoM", aggfunc="first"
-        )
-        micro_pivot = micro_pivot[~micro_pivot.index.duplicated(keep="last")]
-
-        # Справочник with weights
-        sprav = pd.read_csv(
-            data_dir / "micro_sprav.csv",
-            sep=";",
-            decimal=".",
-            encoding="utf-8-sig",
-        )
-        self.weights = dict(zip(sprav["Item_code"], sprav["Weight"]))
-        self.item_names = dict(zip(sprav["Item_code"], sprav["Товар"]))
-        self.item_subcomp = dict(zip(sprav["Item_code"], sprav["Субкомпонент"]))
-
-        # Determine top-N by weight
-        sorted_items = sorted(self.weights.items(), key=lambda x: -x[1])
-        self.top_items = set([item for item, _ in sorted_items[: self.top_n]])
-
-        # Filter to items in справочник with valid data
-        valid_cols = [c for c in micro_pivot.columns if c in self.weights]
-        if not valid_cols:
-            raise ValueError(
-                "No overlapping item codes between data/kbr_micro_full.csv "
-                "and data/micro_sprav.csv"
-            )
-        micro_pivot = micro_pivot.reindex(columns=list(self.weights))
-        # Keep required basket items even when the source has no observations;
-        # fit freshness checks must see these missing columns too.
-
-        # Convert MoM to changes
-        micro_pivot = micro_pivot - 100
-
-        return micro_pivot
 
     def _create_features(self, series, extended=False):
         """Create features for ML models."""
@@ -183,7 +126,7 @@ class MicrocomponentForecaster:
         """Fit Ridge model for top items."""
         extended = self.use_extended_for_volatile and item_code in self.VOLATILE_ITEMS
         df = self._create_features(series, extended=extended)
-        df["target"] = df["y"].shift(-self.horizon)
+        df["target"] = df["y"].shift(-1)
         df = df.dropna()
 
         if self.train_start:
@@ -216,7 +159,7 @@ class MicrocomponentForecaster:
     def _fit_voting(self, series, item_code):
         """Fit VotingRegressor for other items."""
         df = self._create_features(series, extended=False)
-        df["target"] = df["y"].shift(-self.horizon)
+        df["target"] = df["y"].shift(-1)
         df = df.dropna()
 
         if self.train_start:
@@ -252,243 +195,191 @@ class MicrocomponentForecaster:
             "last_data": series.copy(),
         }
 
-    def fit(
-        self, df: pd.DataFrame, target_col: str = "Все товары и услуги"
-    ) -> "MicrocomponentForecaster":
-        """
-        Fit models for all microcomponents.
+    def _load_data(self, data_dir):
+        from sirena.data.micro_basket import load_micro_basket
+        self.basket = load_micro_basket(data_dir, self.cutoff)
+        self.weights = self.basket['leaves'].Weight_vertical.to_dict()
+        self.item_names = self.basket['names']
+        self.item_subcomp = self.basket['leaves'].Subcomponent.astype(int).to_dict()
+        self.top_items = set(sorted(self.weights, key=self.weights.get, reverse=True)[:self.top_n])
+        return self.basket['history'].reindex(columns=list(self.weights))
 
-        Parameters
-        ----------
-        df : pd.DataFrame
-            Main inflation DataFrame (used for macro context)
-        target_col : str
-            Target column (ignored, using micro data)
-        """
-        data_dir = Path(__file__).parent.parent.parent / "data"
-        micro_data = self._load_data(data_dir)
-        from sirena.data_loader import require_observations
-        cutoff = pd.Timestamp(df.index.max()).to_period('M').to_timestamp()
-        micro_data = micro_data.loc[:cutoff]
-        require_observations(micro_data, micro_data.columns, cutoff, 'data/kbr_micro_full.csv')
-        self.macro_df = df.copy()
-
-        fitted_count = 0
-        top_count = 0
-
-        for item_code in micro_data.columns:
-            series = micro_data[item_code].dropna()
-
-            if len(series) < 36:  # Need at least 3 years
-                continue
-
-            # Use Ridge for top items, Voting for others
-            if item_code in self.top_items:
-                result = self._fit_ridge(series, item_code)
-                if result:
-                    top_count += 1
+    def fit(self, df, target_col='Все товары и услуги'):
+        from sirena.data_loader import DataFreshnessError
+        if df.attrs.get('input_contract', {}).get('representation') == 'sa':
+            raise DataFreshnessError('Micro requires homogeneous RAW inputs')
+        self._is_fitted = False
+        self.micro_models, self.parent_models, self.fallbacks = {}, {}, {}
+        self.cutoff = pd.Timestamp(df.index.max()).to_period('M').to_timestamp()
+        self.macro_df = df.loc[:self.cutoff].copy()
+        data_dir = self.data_dir or Path(__file__).parent.parent.parent / 'data'
+        self.basket = None
+        micro = self._load_data(data_dir)
+        if self.basket is None:
+            raise DataFreshnessError(f'Micro requires a validated basket and parent history through {self.cutoff:%Y-%m}')
+        history = self.basket['history']
+        for parent in self.basket['groups'].index:
+            series = history[parent].loc[:self.cutoff]
+            series = series.loc[series.first_valid_index():]
+            result = self._fit_ridge(series, int(parent))
+            self.parent_models[int(parent)] = {'fit':result, 'history':series.copy()}
+        for code in self.weights:
+            series = micro[code].loc[:self.cutoff]
+            first = series.first_valid_index()
+            reason = None
+            if first is None:
+                reason = 'no_item_history'
+            elif not np.isfinite(series.iloc[-1]):
+                reason = 'missing_current_observation'
+            elif series.notna().sum() < 36:
+                reason = 'short_history'
+            elif not np.isfinite(series.tail(13)).all():
+                reason = 'calendar_gap_in_required_features'
+            result = None
+            if reason is None:
+                # Trim leading absence, preserving the complete monthly calendar.
+                series = series.loc[first:]
+                result = (self._fit_ridge(series, code) if code in self.top_items
+                          else self._fit_voting(series, code))
+                if result is None:
+                    reason = 'insufficient_training_rows'
+            if result is not None:
+                self.micro_models[code] = result
             else:
-                result = self._fit_voting(series, item_code)
-
-            if result:
-                self.micro_models[item_code] = result
-                fitted_count += 1
-
-        if fitted_count == 0:
-            raise ValueError(
-                "No microcomponent models fitted from data/kbr_micro_full.csv; "
-                f"matched item codes: {len(micro_data.columns)}"
-            )
+                parent = self.item_subcomp[code]
+                # Short CURRENT series retain their recent relative signal.
+                # Missing-current series use only the parent's current trajectory.
+                offset = 0.
+                if np.isfinite(series.iloc[-1]):
+                    residual = (series - history[parent]).tail(6).dropna()
+                    offset = float(residual.mean() * len(residual)/(len(residual)+12)) if len(residual) else 0.
+                last = series.last_valid_index()
+                self.fallbacks[code] = {'parent':parent, 'reason':reason, 'offset':offset,
+                    'last_observation':str(last.date()) if last is not None else None}
+        self.coverage = {
+            'cutoff':str(self.cutoff.date()),
+            'weight_vintage':str(self.basket['weight_vintage'].date()),
+            'weight_policy':'latest vintage at cutoff, frozen through forecast horizon',
+            'representation':'raw', 'parent_method':self.fallback_policy,
+            'basket_items':len(self.weights),
+            'observed_weight':float(sum(w for c,w in self.weights.items() if np.isfinite(micro[c].iloc[-1]))),
+            'native_model_weight':float(sum(self.weights[c] for c in self.micro_models)),
+            'fallback_item_weight':float(sum(self.weights[c] for c in self.fallbacks)),
+            'residual_parent_weight':float(self.basket['residual'].sum()),
+            'forecast_weight':float(sum(self.weights.values())+self.basket['residual'].sum()),
+            'fallback_items':[{'item_code':int(c), 'name':self.item_names.get(c,str(c)),
+                'weight':float(self.weights[c]), **v} for c,v in self.fallbacks.items()],
+            'residual_buckets':{str(c):float(w) for c,w in self.basket['residual'].items() if w>1e-10},
+            'historical_classification':'revised source hierarchy, not real-time publication vintages',
+        }
+        if not np.isclose(self.coverage['forecast_weight'],1.,atol=1e-8,rtol=0):
+            raise DataFreshnessError('Micro forecast weight is not one')
         self._is_fitted = True
-        print(
-            f"MicrocomponentForecaster: fitted {fitted_count} models "
-            f"({top_count} top Ridge, {fitted_count - top_count} Voting)"
-        )
-
         return self
 
-    def _predict_single(self, model_data, target_date):
-        """Predict for a single microcomponent."""
-        series = model_data["last_data"]
-        extended = model_data["extended"]
-        df = self._create_features(series, extended=extended)
+    @staticmethod
+    def _feature_row(values, date, columns):
+        """Exact equivalent of the last _create_features row, without rebuilding a frame."""
+        a = np.asarray(values,dtype=float)
+        if len(a)<13:
+            raise ValueError('At least 13 calendar months required for a native forecast')
+        row = {f'L{lag}':a[-lag-1] for lag in [1,2,3,6,12]}
+        row.update(D1=a[-1]-a[-2], MA3=np.mean(a[-3:]),
+                   month_sin=np.sin(2*np.pi*date.month/12), month_cos=np.cos(2*np.pi*date.month/12),
+                   MA6=np.mean(a[-6:]), STD3=np.std(a[-3:],ddof=1), STD6=np.std(a[-6:],ddof=1),
+                   MAX3=np.max(a[-3:]), MIN3=np.min(a[-3:]), RANGE3=np.ptp(a[-3:]))
+        out=np.array([[row[c] for c in columns]])
+        if not np.isfinite(out).all():
+            raise ValueError('Non-finite native features; cannot replace them by zero')
+        return out
 
-        # Get last valid row for prediction
-        pred_date = target_date - pd.DateOffset(months=self.horizon)
-        if pred_date not in df.index:
-            pred_date = df.index[-1]
+    def _model_step(self, fitted, values, date):
+        features=self._feature_row(values,date,fitted['feature_cols'])
+        pred=float(fitted['model'].predict(fitted['scaler'].transform(features))[0])
+        if not np.isfinite(pred):
+            raise ValueError('Non-finite native forecast')
+        return pred
 
-        feature_cols = model_data["feature_cols"]
-        X = df.loc[[pred_date], feature_cols].values
-
-        if np.any(np.isnan(X)):
-            X = np.nan_to_num(X, nan=0)
-
-        X_scaled = model_data["scaler"].transform(X)
-        return model_data["model"].predict(X_scaled)[0]
-
-    def predict(self, df: pd.DataFrame, target_date: pd.Timestamp) -> Dict[str, Any]:
-        """
-        Predict aggregated MoM for target date.
-
-        Returns
-        -------
-        dict
-            {'prediction': value} where value is MoM index (e.g., 100.5)
-        """
+    def forecast(self, horizon=None):
         if not self._is_fitted:
-            raise ValueError("Model not fitted")
-
-        predictions = {}
-
-        for item_code, model_data in self.micro_models.items():
-            try:
-                pred = self._predict_single(model_data, target_date)
-                predictions[item_code] = pred
-            except Exception:
-                continue
-
-        if not predictions:
-            return {"prediction": 100.0}
-
-        # Weighted aggregation
-        total_weight = sum(self.weights.get(c, 0) for c in predictions.keys())
-        if total_weight == 0:
-            return {"prediction": 100.0}
-
-        agg_pred = sum(
-            self.weights.get(c, 0) / total_weight * predictions[c]
-            for c in predictions.keys()
-        )
-
-        return {"prediction": 100 + agg_pred}
-
-    def forecast(self, horizon: Optional[int] = None) -> np.ndarray:
-        """
-        Generate forecast trajectory using iterative prediction.
-
-        Each step updates the feature data with previous predictions
-        to create a dynamic trajectory.
-
-        Returns
-        -------
-        np.array
-            Array of MoM changes (e.g., [0.3, 0.4, ...])
-        """
-        if not self._is_fitted:
-            raise ValueError("Model not fitted")
-
-        h = horizon or self.horizon
-        forecasts = []
-        last_date = self.macro_df.index[-1]
-
-        # Create copies of model data for iterative updates
-        updated_data = {}
-        for item_code, model_data in self.micro_models.items():
-            updated_data[item_code] = model_data["last_data"].copy()
-
-        for i in range(h):
-            target_date = last_date + pd.DateOffset(months=i + 1)
-            predictions = {}
-
-            for item_code, model_data in self.micro_models.items():
-                try:
-                    # Use updated series with previous predictions
-                    series = updated_data[item_code]
-                    extended = model_data["extended"]
-                    df = self._create_features(series, extended=extended)
-
-                    # Get last available row
-                    pred_row = df.iloc[[-1]]
-                    feature_cols = model_data["feature_cols"]
-                    X = pred_row[feature_cols].values
-
-                    if np.any(np.isnan(X)):
-                        X = np.nan_to_num(X, nan=0)
-
-                    X_scaled = model_data["scaler"].transform(X)
-                    pred = model_data["model"].predict(X_scaled)[0]
-                    predictions[item_code] = pred
-
-                    # Update series with prediction for next iteration
-                    updated_data[item_code] = pd.concat(
-                        [series, pd.Series([pred], index=[target_date])]
-                    )
-                except Exception:
-                    continue
-
-            if not predictions:
-                forecasts.append(0.0)
-                continue
-
-            # Weighted aggregation
-            total_weight = sum(self.weights.get(c, 0) for c in predictions.keys())
-            if total_weight == 0:
-                forecasts.append(0.0)
-                continue
-
-            agg_pred = sum(
-                self.weights.get(c, 0) / total_weight * predictions[c]
-                for c in predictions.keys()
-            )
-
-            # Apply seasonal adjustment
+            raise ValueError('Model not fitted')
+        h=int(horizon if horizon is not None else self.horizon)
+        if h<1:
+            raise ValueError('Positive forecast horizon required')
+        histories={c:list(v['last_data'].tail(13).to_numpy()) for c,v in self.micro_models.items()}
+        parent_histories={c:list(v['history'].tail(13).to_numpy()) for c,v in self.parent_models.items()}
+        output, details, rows = [], [], []
+        for step in range(1,h+1):
+            target=self.cutoff+pd.DateOffset(months=step)
+            origin=target-pd.DateOffset(months=1)
+            parents, parent_fallbacks = {}, []
+            for c,v in self.parent_models.items():
+                if self.fallback_policy=='parent_ridge' and v['fit'] is not None:
+                    try:
+                        pred=self._model_step(v['fit'],parent_histories[c],origin)
+                    except ValueError as exc:
+                        pred=float(parent_histories[c][-12])
+                        parent_fallbacks.append({'parent':c,'reason':str(exc)})
+                else:
+                    pred=float(parent_histories[c][-12])
+                if not np.isfinite(pred):
+                    raise ValueError(f'No valid parent forecast: {c}')
+                parents[c]=pred
+                parent_histories[c].append(pred)
+            total, native_weight, dynamic_fallbacks = 0., 0., []
+            for c,w in self.weights.items():
+                parent=self.item_subcomp[c]
+                reason=None
+                if c in self.micro_models:
+                    try:
+                        pred=self._model_step(self.micro_models[c],histories[c],origin)
+                        native_weight+=w
+                    except ValueError as exc:
+                        pred=parents[parent]
+                        reason=str(exc)
+                        dynamic_fallbacks.append({'item_code':int(c),'weight':float(w),'reason':reason})
+                    histories[c].append(pred)
+                else:
+                    fallback=self.fallbacks[c]
+                    pred=parents[parent]+fallback['offset']
+                    reason=fallback['reason']
+                total+=w*pred
+                rows.append({'date':str(target.date()),'Item_code':int(c),
+                             'Name':self.item_names.get(c,str(c)),'Weight':float(w),
+                             'Prediction':float(pred),'Contribution':float(w*pred),
+                             'Method':reason or 'native','Parent':parent})
+            for c,w in self.basket['residual'].items():
+                if w>1e-10:
+                    total+=w*parents[int(c)]
+                    rows.append({'date':str(target.date()),'Item_code':f'residual:{c}',
+                                 'Name':self.item_names.get(c,str(c)),'Weight':float(w),
+                                 'Prediction':float(parents[int(c)]),'Contribution':float(w*parents[int(c)]),
+                                 'Method':'residual_parent_weight','Parent':int(c)})
             if self.use_seasonal_adj:
-                month = target_date.month
-                seasonal_adj = self.SEASONAL_ADJ.get(month, 0)
-                agg_pred += seasonal_adj
+                # Explicit legacy experiment only; disabled in production/comparison.
+                total+=self.SEASONAL_ADJ.get(target.month,0.)
+            output.append(float(total))
+            details.append({'date':str(target.date()),'native_weight':float(native_weight),
+                            'parent_weight':float(1-native_weight),'dynamic_fallbacks':dynamic_fallbacks,
+                            'parent_model_fallbacks':parent_fallbacks})
+        self.forecast_details=details
+        self.last_item_forecasts=pd.DataFrame(rows)
+        return np.asarray(output)
 
-            forecasts.append(agg_pred)
-
-        return np.array(forecasts)
+    def predict(self, df, target_date):
+        target=pd.Timestamp(target_date).to_period('M').to_timestamp()
+        if pd.Timestamp(df.index.max()).to_period('M').to_timestamp()<self.cutoff:
+            raise ValueError('Prediction context predates fitted cutoff')
+        h=(target.year-self.cutoff.year)*12+target.month-self.cutoff.month
+        if h<1:
+            raise ValueError('Forecast target must follow fitted cutoff')
+        value=float(self.forecast(h)[h-1])
+        return {'prediction':100+value,'model':self.name,'coverage':self.coverage}
 
     def get_stats(self):
-        """Get model statistics."""
-        if not self._is_fitted:
-            return {}
+        return {'n_models':len(self.micro_models),'n_top_models':len(set(self.micro_models)&self.top_items),
+                'total_weight':self.coverage['forecast_weight']*100, **self.coverage}
 
-        stats = {
-            "total_models": len(self.micro_models),
-            "top_models": sum(
-                1 for m in self.micro_models.values() if m["type"] == "ridge"
-            ),
-            "voting_models": sum(
-                1 for m in self.micro_models.values() if m["type"] == "voting"
-            ),
-            "volatile_models": sum(
-                1
-                for k, m in self.micro_models.items()
-                if k in self.VOLATILE_ITEMS and m["extended"]
-            ),
-            "total_weight": sum(
-                self.weights.get(k, 0) for k in self.micro_models.keys()
-            )
-            * 100,
-        }
-        return stats
-
-    def get_top_predictions(self, target_date, n=20):
-        """Get predictions for top-N microcomponents by weight."""
-        if not self._is_fitted:
-            return pd.DataFrame()
-
-        predictions = []
-        for item_code in self.top_items:
-            if item_code not in self.micro_models:
-                continue
-
-            try:
-                pred = self._predict_single(self.micro_models[item_code], target_date)
-                predictions.append(
-                    {
-                        "Item_code": item_code,
-                        "Name": self.item_names.get(item_code, str(item_code))[:40],
-                        "Weight": self.weights.get(item_code, 0) * 100,
-                        "Prediction": pred,
-                    }
-                )
-            except Exception:
-                continue
-
-        df = pd.DataFrame(predictions)
-        return df.sort_values("Weight", ascending=False).head(n)
+    def get_top_predictions(self,target_date,n=20):
+        self.predict(self.macro_df,target_date)
+        return self.last_item_forecasts[self.last_item_forecasts.date.eq(str(pd.Timestamp(target_date).date()))].nlargest(n,'Weight')

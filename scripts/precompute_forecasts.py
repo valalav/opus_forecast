@@ -416,6 +416,13 @@ def compute_all_forecasts(horizon: int = 12) -> Dict[str, Any]:
         model.fit(df)
         fc = model.forecast(horizon=horizon)
         fc = _store_forecast(results, 'Micro', fc)
+        results.setdefault('model_details', {})['Micro'] = {
+            **model.coverage, 'forecast_details': model.forecast_details,
+            'role': 'auxiliary; not promoted into Ensemble',
+            'evaluation': 'archive/results/micro_policy_20260909/common_metrics.csv',
+        }
+        model.last_item_forecasts.to_csv('data/micro_forecast_components.csv', index=False)
+
         print(f"  Done in {time.time()-start:.1f}s")
         print(f"  Trajectory: {fc[0]:.2f}% → {fc[-1]:.2f}%")
     except Exception as e:

@@ -47,15 +47,27 @@ def load_send_ready_policy_trajectory(path, expected_dates):
 
 
 def get_best_model_for_horizon(horizon):
-    """Return best model name for each horizon based on backtests."""
+    """Return configured reference; this is not a new model ranking."""
     best_models = {
         1: "Huber",
         2: "NGBoost_Shock",
-        3: "Micro",  # Based on h=3 backtest
-        6: "Micro",  # Based on h=6 backtest
+        3: "Ensemble",  # Legacy Micro backtest described a different model
+        6: "Ensemble",  # New Micro has not passed a matched h=6 comparison
         12: "Prophet",
     }
     return best_models.get(horizon, "Ridge")
+
+
+
+def render_micro_coverage(snapshot):
+    detail = snapshot.get('model_details', {}).get('Micro')
+    if detail:
+        st.caption(f"Micro: собственные модели — {100 * detail['native_model_weight']:.3f}% веса; "
+                   f"групповые оценки — {100 * (detail['fallback_item_weight'] + detail['residual_parent_weight']):.3f}%. "
+                   "Вспомогательная модель; в Ensemble не включена.")
+        with st.expander('Micro: позиции с групповой оценкой'):
+            st.write(f"Отсечка: {detail['cutoff']}; веса: {detail['weight_vintage']}")
+            st.dataframe(pd.DataFrame(detail['fallback_items']), hide_index=True)
 
 
 def forecast_with_model(df, target_date, model_name, snapshot=None):
@@ -138,25 +150,17 @@ def render_forecast_tab(
         st.error(f'Текущий расчет недоступен: {exc}')
         return
     st.caption(f"Данные: {snapshot['last_data_date']}; общий расчет для всех горизонтов. "
-               'MAE и поправки ниже относятся к сохраненному бэктесту, а не к новой оценке качества.')
+               'Период и состав оценки качества указаны ниже.')
     for name, status in snapshot.get('model_status', {}).items():
         if status.get('status') != 'available':
             st.warning(f"{name}: {status.get('reason', 'расчет недоступен')}")
-    monthly_shifts, bias = (calculate_kpi_corrections(bt_data, best_model)
-                           if best_model in bt_data.columns else ({}, {}))
-
-    # Apply corrections
-    seasonal_shift = monthly_shifts.get(target_month, 0)
-    bias_correction = bias.get(target_month, 0)
-
-    seasonal_pred = base_pred + seasonal_shift
-    bias_pred = base_pred - bias_correction
-
-    # Display forecasts
+    render_micro_coverage(snapshot)
+    st.caption(bt_data.attrs.get("evaluation", ""))
     col1, col2, col3 = st.columns(3)
-    col1.metric(f"{best_model.replace('_', ' ')}", f"{base_pred:.2f}%")
-    col2.metric("🎯 Seasonal", f"{seasonal_pred:.2f}%", f"{seasonal_shift:+.2f}")
-    col3.metric("📊 Bias", f"{bias_pred:.2f}%", f"{-bias_correction:+.2f}")
+    col1.metric(f"Базовый {best_model.replace('_', ' ')}", f"{base_pred:.2f}%")
+    for column, name in [(col2, 'Micro'), (col3, 'Ensemble')]:
+        value = forecast_with_model(df, target_date, name, snapshot)
+        column.metric(name, f"{value:.2f}%" if np.isfinite(value) else 'Недоступен')
 
     # Calculate top-5 models by MAE
     models_available = [m for m in ALL_MODELS if m in bt_data.columns and np.isfinite(predictions[m])]
@@ -175,8 +179,6 @@ def render_forecast_tab(
                 "Model": m,
                 "MAE": model_mae[m],
                 "Prediction": predictions[m],
-                "Seasonal Adj": predictions[m] + monthly_shifts.get(target_month, 0),
-                "Bias Adj": predictions[m] - bias.get(target_month, 0),
             }
             for m in top5_models
         ]
@@ -188,13 +190,14 @@ def render_forecast_tab(
             {
                 "MAE": "{:.3f}",
                 "Prediction": "{:.2f}%",
-                "Seasonal Adj": "{:.2f}%",
-                "Bias Adj": "{:.2f}%",
             }
         ),
         use_container_width=True,
         hide_index=True,
     )
+
+    if bt_data.attrs.get("common_origins"):
+        st.caption("Поправки по проверочному периоду не подбирались; показан исходный прогноз.")
 
     # Download button
     csv = comp_df.to_csv(index=False).encode("utf-8")
@@ -267,6 +270,7 @@ def render_forecast_h12_tab(
         if "Ensemble" not in production_forecasts:
             raise ValueError("forecast cache has no finite production Ensemble")
         forecast_df = pd.DataFrame({"Date": cached_dates, **production_forecasts})
+        render_micro_coverage(cached)
         contract = cached.get('input_contract', {})
         st.caption(f"Данные: {contract.get('last_observation')}; ряд: {contract.get('representation')}")
         for model_name, status in cached.get('model_status', {}).items():

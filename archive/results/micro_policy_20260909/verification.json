@@ -1,0 +1,20 @@
+{
+  "checked_at": "2026-09-09T07:21:49.166169",
+  "forecast_paths": "17 complete 12-month paths; Nowcast has 2 valid months, then explicit nulls",
+  "source_manifest_matches": true,
+  "common_prediction_rows": 72,
+  "common_origins": 35,
+  "independent_metric_recalculation": "all 45 rows agree, including success counts and 0.5pp hit rates",
+  "forecast_weight_every_month": 1,
+  "component_contributions_match_cache": true,
+  "code_sha256_at_final_verification": {
+    "scripts/backtest_framework.py": "40576d75687320f607887191cd2b1a10c7fc9d18ad482dfd37122e333595db6e",
+    "sirena/models/microcomponent.py": "61ec4fd8bd05938fb96da46bb4c9aa7cf5cd12d74b6c21ffe83d508fc891fcf4",
+    "sirena/data/micro_basket.py": "d874c9c66e1f62a60f4180c73278fd653b7403a4fbe281e21b31cb331fe939d7",
+    "sirena/data_loader.py": "8e886fb11b020abae93eefdcdac6cd693902f3ef27e0dddb1ee331eae8799648"
+  },
+  "code_hash_timing_note": "Comparison ran before adding code_sha256 output and choosing constructor default; its two candidate policies were explicit and unchanged. These are final-verification hashes, not launch-time hashes.",
+  "pytest": "76 passed; 7 existing Huber convergence warnings",
+  "final_ui_test": "13 passed after card cleanup",
+  "dashboard": "17 tabs passed; current h1/h3/h12/backtest screenshots inspected"
+}

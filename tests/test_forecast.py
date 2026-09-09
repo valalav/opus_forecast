@@ -188,11 +188,18 @@ class TestForecastH12ProductionCache:
             def columns(self, count):
                 return [FakeColumn() for _ in range(count)]
 
+            def expander(self, *args, **kwargs):
+                from contextlib import nullcontext
+                return nullcontext()
+
+            def write(self, *args, **kwargs):
+                pass
+
             def caption(self, *args, **kwargs):
                 pass
 
             def dataframe(self, styled, **kwargs):
-                self.table = styled.data.copy()
+                self.table = (styled if isinstance(styled, pd.DataFrame) else styled.data).copy()
 
             def download_button(self, *args, **kwargs):
                 pass

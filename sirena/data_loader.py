@@ -251,7 +251,8 @@ def forecast_source_manifest(data_dir=None):
              'nowcast_policy.json', 'Сравнение еженедельных цен_01.csv',
              'weekly_accounting_month_overrides.csv', 'sa_hor.csv', 'mom_sa_kbr.csv',
              'raw/subcomp.csv', 'raw/sub_mom.csv', 'sa_source_manifest.json',
-             'access_source_manifest.json', 'raw/infostat_source_manifest.json']
+             'access_source_manifest.json', 'raw/infostat_source_manifest.json',
+             'kbr_indices.csv', 'access_weights.csv', 'items_structure.csv']
     return {name: hashlib.sha256((data_dir / name).read_bytes()).hexdigest()
             if (data_dir / name).exists() else None for name in names}
 
@@ -291,3 +292,27 @@ def cached_forecast_point(payload, model_name, target_date, cutoff):
     if not np.isfinite(value):
         raise DataFreshnessError(f'Non-finite cached forecast: {name}')
     return value
+
+
+def load_common_backtest(horizon, report_dir=None, data_dir=None):
+    """Held-out, matched-origin scores for the explicitly selected Micro policy.
+
+    A revised source invalidates this comparison; legacy files remain separate.
+    """
+    import json
+    report_dir = Path(report_dir) if report_dir is not None else DEFAULT_DATA_DIR.parent / 'archive/results/micro_policy_20260909'
+    summary_path = report_dir / 'common_summary.json'
+    if not summary_path.exists():
+        return None
+    summary = json.loads(summary_path.read_text())
+    if horizon not in summary['horizons'] or summary['source_manifest'] != forecast_source_manifest(data_dir):
+        return None
+    frame = pd.read_csv(report_dir / 'common_predictions.csv', parse_dates=['Date', 'cutoff'])
+    frame = frame.loc[(frame.horizon == horizon) & (frame.Date >= pd.Timestamp(summary['validation_start']))].copy()
+    selected = summary['selected_on_development_h1']
+    candidates = summary['models']
+    valid = np.isfinite(frame[['Actual', *candidates]].to_numpy(dtype=float)).all(axis=1)
+    frame = frame.loc[valid, ['Date', 'Actual', 'Ridge', 'Huber', 'Ridge_ProdProxy', selected]].rename(columns={selected: 'Micro'})
+    frame.attrs['evaluation'] = 'Общие целевые месяцы: август 2025 — июль 2026. Политика Micro выбрана на предшествующих 12 месяцах. Последовательная проверка на пересмотренных данных; публикационные vintages не восстановлены.'
+    frame.attrs['common_origins'] = True
+    return frame.reset_index(drop=True)
