@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "forecast_months": 16,
+  "opr_rows_checked": 72,
+  "independent_yoy_checks": 48,
+  "historical_model_forecasts": 17,
+  "opr_changed_zip_parts": [
+    "xl/worksheets/sheet1.xml"
+  ],
+  "source_hashes_checked": 6,
+  "max_central_mom": 1.33,
+  "largest_monthly_change_pp": 0.86,
+  "negative_months": [
+    "2027-08"
+  ]
+}

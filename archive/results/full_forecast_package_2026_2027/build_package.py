@@ -165,6 +165,18 @@ def build_zip() -> None:
 
 
 def main() -> None:
+    import argparse
+    parser = argparse.ArgumentParser(description="Build the historical or a dated verified forecast package")
+    parser.add_argument('--update-dir', type=Path, help='Dated folder with REPORT.md, full_path_2026_2027.csv and verification_report.md')
+    parser.add_argument('--historical', action='store_true', help='Explicitly rebuild the original historical hardcoded package')
+    args = parser.parse_args()
+    pointer = OUT / 'current_update.json'
+    if not args.update_dir and not args.historical and pointer.exists():
+        import json
+        args.update_dir = ROOT / json.loads(pointer.read_text())['update_dir']
+    if args.update_dir:
+        build_updated_package(args.update_dir.resolve())
+        return
     OUT.mkdir(parents=True, exist_ok=True)
     write_csv()
     write_docx()
@@ -172,6 +184,81 @@ def main() -> None:
     print(CSV_PATH)
     print(DOCX_PATH)
     print(ZIP_PATH)
+
+
+def build_updated_package(source: Path) -> None:
+    """Publish a dated scenario without reusing the historical hardcoded narrative."""
+    import re
+    import shutil
+    import pandas as pd
+    from docx.shared import Inches
+    required = ['REPORT.md', 'full_path_2026_2027.csv', 'forecast_2026_2027.csv',
+                'forecast_calculations.xlsx', 'forecast.png', 'verification_report.md']
+    for name in required:
+        if not (source / name).is_file():
+            raise FileNotFoundError(source / name)
+    doc = Document()
+    doc.styles['Normal'].font.name = 'Arial'
+    doc.styles['Normal'].font.size = Pt(10)
+    def clean(text):
+        return re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'\1 (\2)', text).replace('**', '').replace('`', '')
+    for block in (source / 'REPORT.md').read_text().split('\n\n'):
+        lines = block.strip().splitlines()
+        if not lines:
+            continue
+        if lines[0].startswith('#'):
+            level = min(len(lines[0])-len(lines[0].lstrip('#')), 3)
+            doc.add_heading(clean(lines[0]).lstrip('# '), level=level)
+        elif lines[0].startswith('|'):
+            rows = [[clean(c.strip()) for c in line.strip('|').split('|')]
+                    for line in lines if not re.fullmatch(r'[| :\-]+', line)]
+            table = doc.add_table(rows=0, cols=len(rows[0]))
+            table.style = 'Table Grid'
+            for values in rows:
+                for cell, value in zip(table.add_row().cells, values):
+                    cell.text = value
+        else:
+            paragraphs = re.split(r'\n(?=\d+\. )', '\n'.join(lines))
+            for paragraph in paragraphs:
+                doc.add_paragraph(clean(' '.join(s.strip() for s in paragraph.splitlines())))
+    doc.add_heading('Помесячная траектория', level=1)
+    frame = pd.read_csv(source / 'full_path_2026_2027.csv')
+    table = doc.add_table(rows=1, cols=4)
+    table.style = 'Table Grid'
+    for cell, label in zip(table.rows[0].cells, ['Месяц', 'Статус', 'ИПЦ м/м, индекс', 'Прирост г/г, %']):
+        cell.text = label
+    for row in frame.itertuples():
+        cells = table.add_row().cells
+        for cell, value in zip(cells, [str(row.date)[:7], 'Факт' if row.status == 'fact' else 'Прогноз', f'{row.mom_index:.2f}', f'{row.yoy_pct:.2f}']):
+            cell.text = value
+    doc.add_picture(str(source / 'forecast.png'), width=Inches(6.3))
+    docx = source / 'forecast_explanation.docx'
+    doc.save(docx)
+    files = required + ['forecast_explanation.docx', 'forecast.html', 'calculation_manifest.json',
+                        'forecast_explanation.pdf', 'verification.json', 'diagnostics.csv',
+                        'august_model_comparison.csv', 'prior_forecast_audit.md', 'tariff_sensitivity.csv',
+                        'build_update.py', 'refresh_models.py', 'update_opr.py', 'verify_update.py']
+    with zipfile.ZipFile(source / 'forecast_package_20260928.zip', 'w', compression=zipfile.ZIP_DEFLATED) as zf:
+        for name in files:
+            if (source / name).exists():
+                zf.write(source / name, arcname=name)
+        zf.write(ROOT / 'assets/06_2026_02_Прогноз.xlsx', arcname='06_2026_02_Прогноз.xlsx')
+    # Stable publication paths consumed by the project; preserve the previous package.
+    previous = source / 'previous_full_package'
+    previous.mkdir(exist_ok=True)
+    for src, dest in [(docx, DOCX_PATH), (source / 'forecast_package_20260928.zip', ZIP_PATH),
+                      (source / 'verification_report.md', OUT / 'verification_report.md')]:
+        if dest.exists() and not (previous / dest.name).exists():
+            shutil.copy2(dest, previous / dest.name)
+        shutil.copy2(src, dest)
+    if CSV_PATH.exists() and not (previous / CSV_PATH.name).exists():
+        shutil.copy2(CSV_PATH, previous / CSV_PATH.name)
+    export = pd.DataFrame({'Date': pd.to_datetime(frame.date).dt.strftime('%d.%m.%Y'),
+                           'MoM': frame.mom_index, 'YoY': frame.yoy_pct + 100})
+    export.to_csv(CSV_PATH, sep=';', decimal=',', index=False, float_format='%.2f', encoding='utf-8-sig')
+    import json
+    (OUT / 'current_update.json').write_text(json.dumps({'update_dir': str(source.relative_to(ROOT))}, indent=2) + '\n')
+    print(source / 'forecast_package_20260928.zip')
 
 
 if __name__ == "__main__":

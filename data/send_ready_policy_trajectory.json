@@ -1,13 +1,7 @@
 {
-  "generated_at": "2026-09-08T19:00:00+03:00",
-  "latest_official_month": "2026-07-01",
-  "preliminary_month": "2026-08-01",
-  "preliminary_source": "User correction on 2026-09-08: preliminary Rosstat August CPI approximately 100.5; not an official published monthly fact",
-  "operational_anchor_month": "2026-08-01",
-  "operational_anchor_mom_pp": 0.5,
-  "weekly_accounting_note": "The week dated 2026-08-31 counts toward the September 2026 live nowcast",
+  "generated_at": "2026-09-28T11:49:58.921922",
+  "latest_official_month": "2026-08-01",
   "forecast_dates": [
-    "2026-08-01",
     "2026-09-01",
     "2026-10-01",
     "2026-11-01",
@@ -18,23 +12,32 @@
     "2027-04-01",
     "2027-05-01",
     "2027-06-01",
-    "2027-07-01"
+    "2027-07-01",
+    "2027-08-01",
+    "2027-09-01",
+    "2027-10-01",
+    "2027-11-01",
+    "2027-12-01"
   ],
   "mom_pp": [
-    0.5,
-    0.5,
-    1.3,
-    0.45,
-    0.5,
-    0.9,
-    0.65,
-    0.5,
-    0.45,
-    0.2,
+    0.6,
+    1.33,
+    0.87,
+    0.96,
+    0.99,
+    0.97,
+    0.78,
+    0.75,
+    0.35,
     0.15,
-    0.05
+    0.83,
+    -0.03,
+    0.37,
+    0.41,
+    0.55,
+    0.63
   ],
-  "scenario": "august_anchor_september_live_nowcast",
-  "source_artifact": "archive/results/analysis_notes/2026-09-01_september_live_nowcast_protocol.md",
-  "description": "Preliminary August 2026 anchor corrected by the user to approximately +0.50% MoM (index 100.5). Other policy points are preserved; 2026-08-31 is assigned to September."
+  "scenario": "august_actual_october_tariffs_cost_pass_through_20260928",
+  "source_artifact": "archive/results/forecast_update_20260928/REPORT.md",
+  "description": "August actual; 10% utility tariff in October 2026; incremental cost pass-through; conditional easing and July 2027 tariff scenario. See report for limits."
 }

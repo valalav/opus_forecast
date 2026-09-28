@@ -253,6 +253,7 @@ class TestForecastH12ProductionCache:
         )
         assert not fake_st.errors
         assert fake_st.table is not None
+        assert len(fake_st.table) == 12
         assert "BVAR" not in fake_st.table.columns
         assert "VARPolicy" in fake_st.table.columns
         assert fake_st.table.loc[0, "Ensemble"] == pytest.approx(
@@ -316,3 +317,16 @@ class TestForecastH12ProductionCache:
                 malformed,
                 pd.to_datetime(["2026-07-01", "2026-08-01"]),
             )
+
+    def test_long_policy_serves_matching_window_but_rejects_shift(self, tmp_path):
+        page_path = Path(__file__).parent.parent / "pages" / "1_Forecast.py"
+        spec = importlib.util.spec_from_file_location("forecast_page_long", page_path)
+        page = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(page)
+        dates = pd.date_range('2026-09-01', periods=16, freq='MS')
+        path = tmp_path / 'policy.json'
+        path.write_text(json.dumps({'forecast_dates': dates.strftime('%Y-%m-%d').tolist(),
+                                    'mom_pp': list(range(16))}))
+        np.testing.assert_array_equal(page.load_send_ready_policy_trajectory(path, dates[:12]), np.arange(12))
+        with pytest.raises(ValueError, match='does not match'):
+            page.load_send_ready_policy_trajectory(path, dates[1:13])

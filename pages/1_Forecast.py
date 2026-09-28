@@ -32,15 +32,15 @@ def load_send_ready_policy_trajectory(path, expected_dates):
 
     if (
         policy_values.ndim != 1
-        or len(policy_values) != len(expected_dates)
-        or len(policy_dates) != len(expected_dates)
-        or not np.array_equal(policy_dates.to_numpy(), expected_dates.to_numpy())
+        or len(policy_values) != len(policy_dates)
+        or len(policy_dates) < len(expected_dates)
+        or not np.array_equal(policy_dates[:len(expected_dates)].to_numpy(), expected_dates.to_numpy())
         or not np.isfinite(policy_values).all()
     ):
         raise ValueError(
             "send-ready policy trajectory does not match the production horizon"
         )
-    return policy_values
+    return policy_values[:len(expected_dates)]
 
 
 # =============================================================================
@@ -246,8 +246,8 @@ def render_forecast_h12_tab(
         cached_dates = pd.to_datetime(cached["forecast_dates"])
         cached_forecasts = cached["forecasts"]
         if (
-            len(cached_dates) != horizon
-            or not np.array_equal(cached_dates.to_numpy(), expected_dates.to_numpy())
+            len(cached_dates) < horizon
+            or not np.array_equal(cached_dates[:horizon].to_numpy(), expected_dates.to_numpy())
         ):
             raise ValueError(
                 "cache dates do not match the latest official observation; "
@@ -264,11 +264,12 @@ def render_forecast_h12_tab(
                 path = np.asarray(values, dtype=float)
             except (TypeError, ValueError):
                 continue
-            if len(path) == horizon and np.isfinite(path).all():
-                production_forecasts[name] = path
+            if len(path) >= horizon and np.isfinite(path[:horizon]).all():
+                production_forecasts[name] = path[:horizon]
 
         if "Ensemble" not in production_forecasts:
             raise ValueError("forecast cache has no finite production Ensemble")
+        cached_dates = cached_dates[:horizon]
         forecast_df = pd.DataFrame({"Date": cached_dates, **production_forecasts})
         render_micro_coverage(cached)
         contract = cached.get('input_contract', {})

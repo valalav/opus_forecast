@@ -1,13 +1,13 @@
 {
-  "source": "C:\\ЦБ_Работа\\02_ИАМ\\2026\\072026\\2026-07 ИПЦ с исключением сезонности (регионы).xlsx",
-  "sha256": "098a301350762f43ecdde08c1772f136a5ba377dfeb39017060b94cb2a736362",
+  "source": "/home/valalav/_projects/sirena-kbr/data/raw/2026-08 ИПЦ с исключением сезонности (регионы).xlsx",
+  "sha256": "5865d018aed8e9768e7285c370d2159a2ac39e302da8ea6474ad737622cdfe7b",
   "region": "Кабардино-Балкарская Республика",
   "region_code": 7,
   "sheet": "mom_sa",
   "units": "SA MoM index, previous month=100",
   "first": "2016-01",
-  "last": "2026-07",
-  "db_cross_check_count": 8215,
+  "last": "2026-08",
+  "db_cross_check_count": 8278,
   "db_cross_check_mismatches": [],
   "observation_months": [
     "2016-01",
@@ -136,17 +136,18 @@
     "2026-04",
     "2026-05",
     "2026-06",
-    "2026-07"
+    "2026-07",
+    "2026-08"
   ],
   "outputs": {
     "sa_fl.csv": {
-      "sha256": "cb84032ffd37f19d7c701b89e317094f7c6f59dd8ecb6d7cf9ecfb9e10ac51ec"
+      "sha256": "267b34514ca0251b975066aacb50692ed5892a2ade9fea936e571efd6a24c1d7"
     },
     "mom_sa_kbr.csv": {
-      "sha256": "5807824c50b398686491a7cd85b31132602ba5a415ecdf7b5a38de05e2fd6362"
+      "sha256": "c4928f6819e05a91a039c43ec7b16fbef5b242fa5767063dec1c29e74b6e7ad7"
     },
     "sa_hor.csv": {
-      "sha256": "34bc68771dcc24dbc6b9a0c92c9abf0cde7d0dc9809a79e1311c1f68f50e3927"
+      "sha256": "bb2d0e09e158759e2fe3f9573f03e803d6dc93c85f1de79e60eb358514d6d119"
     }
   }
 }

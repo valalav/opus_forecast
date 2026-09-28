@@ -121,7 +121,7 @@ def generate_nowcast_html(data, output_path, policy=None):
     policy = policy or {}
     policy_values = dict(zip(policy.get("forecast_dates", []), policy.get("mom_pp", [])))
     sections = []
-    for date, value in zip(data["forecast_dates"], data["forecasts"].get("Nowcast", [])):
+    for date, value in zip(data["forecast_dates"], data["forecasts"].get("Nowcast") or []):
         if value is None:
             continue
         month = date[:7]
