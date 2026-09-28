@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "checks": {
+    "source_hashes": true,
+    "forecast_months": true,
+    "policy_alignment": true,
+    "facts_preserved": true,
+    "central_yoy": true,
+    "low_yoy": true,
+    "high_yoy": true,
+    "annual_target_rounding": true,
+    "reference_target": true,
+    "scenario_ordering": true,
+    "finite_rates": true,
+    "plausible_months": true,
+    "no_december_plug": true,
+    "opr_current_values": true,
+    "opr09_comparison": true,
+    "xlsx_other_parts_preserved": true,
+    "dated_form_matches_canonical": true,
+    "item_adjustments": true,
+    "unique_item_weights": true,
+    "tariff_risk_not_retargeted": true,
+    "official_source_hashes": true,
+    "source_excel_anchor": true
+  },
+  "workbook_changed_parts": [
+    "xl/worksheets/sheet1.xml"
+  ],
+  "scope": "conditional expert scenario; no new forecast model or out-of-sample accuracy claim"
+}

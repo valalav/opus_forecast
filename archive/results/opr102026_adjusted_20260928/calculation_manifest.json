@@ -1,0 +1,136 @@
+{
+  "as_of": "2026-09-28",
+  "cutoff": "2026-08",
+  "weekly_cutoff": "2026-09-21",
+  "prior_opr": "092026",
+  "current_opr": "102026",
+  "prior_git_commit": "ed25ddf663d982795f16458c4418ddb367fcb33a",
+  "utility_weight": 0.05958,
+  "embedded_july_rate": 3.2149999999999963,
+  "embedded_october_rate": 0.0,
+  "tariff_2026_pct": 9.9,
+  "tariff_2027_pct": 11.0,
+  "regional_tariff_status": "national scenario; KBR order not verified",
+  "tariff_2026_date": "2026-10-01",
+  "tariff_2027_date": "2027-07-01",
+  "annual_target_2027": 4.4,
+  "annual_realized_rounded_2027": 4.391781440479736,
+  "annual_anchor_status": "conditional user scenario, not an estimated forecast or guarantee",
+  "reference_tariff_for_calibration_pct": 11.0,
+  "seasonal_weights": {
+    "opr09": 0.3,
+    "normal_year_history": 0.5,
+    "ensemble": 0.2
+  },
+  "seasonal_history_years": [
+    2016,
+    2017,
+    2018,
+    2019,
+    2023,
+    2024,
+    2025
+  ],
+  "model_status": {
+    "Ridge_ProdProxy": {
+      "status": "unavailable",
+      "reason": "data/raw/infostat.csv: required through 2026-08; Torg: missing 2026-08, last valid 2026-07-01 00:00:00"
+    },
+    "Ridge": {
+      "status": "available",
+      "input_representation": "raw",
+      "last_observation": "2026-08-01"
+    },
+    "Huber": {
+      "status": "available",
+      "input_representation": "raw",
+      "last_observation": "2026-08-01"
+    },
+    "RidgeShockDummies": {
+      "status": "available",
+      "input_representation": "raw",
+      "last_observation": "2026-08-01"
+    },
+    "Ridge_Shock_Roll24": {
+      "status": "available",
+      "input_representation": "raw",
+      "last_observation": "2026-08-01"
+    },
+    "Ridge_AsymERPT": {
+      "status": "available",
+      "input_representation": "raw",
+      "last_observation": "2026-08-01"
+    },
+    "ElasticNet": {
+      "status": "available",
+      "input_representation": "raw",
+      "last_observation": "2026-08-01"
+    },
+    "NGBoostShock": {
+      "status": "available",
+      "input_representation": "raw",
+      "last_observation": "2026-08-01"
+    },
+    "NGBoost": {
+      "status": "available",
+      "input_representation": "raw",
+      "last_observation": "2026-08-01"
+    },
+    "RidgeExtended": {
+      "status": "available",
+      "input_representation": "raw",
+      "last_observation": "2026-08-01"
+    },
+    "EBM": {
+      "status": "available",
+      "input_representation": "raw",
+      "last_observation": "2026-08-01"
+    },
+    "Prophet": {
+      "status": "available",
+      "input_representation": "raw",
+      "last_observation": "2026-08-01"
+    },
+    "VARPolicy": {
+      "status": "available",
+      "input_representation": "raw",
+      "last_observation": "2026-08-01"
+    },
+    "FactorPolicy": {
+      "status": "available",
+      "input_representation": "raw",
+      "last_observation": "2026-08-01"
+    },
+    "Nowcast": {
+      "status": "available",
+      "input_representation": "raw",
+      "last_observation": "2026-08-01"
+    },
+    "Micro": {
+      "status": "available",
+      "input_representation": "raw",
+      "last_observation": "2026-08-01"
+    },
+    "Micro_SM": {
+      "status": "available",
+      "input_representation": "raw",
+      "last_observation": "2026-08-01"
+    },
+    "Ensemble": {
+      "status": "available",
+      "input_representation": "raw",
+      "last_observation": "2026-08-01"
+    }
+  },
+  "sources": {
+    "data/inflation_data.csv": "8e6eec3f5cd8248dcbfa99ab728e17e7f287d630e059117408c76032aa171456",
+    "data/kbr_indices.csv": "84e18c5ad606084ab72d43143f6c3311eda1f68f5b50a7acc075d7ed25c0d9a0",
+    "data/access_weights.csv": "fe1a4f4221c7b57ca551bcd9ade1b076f53ea1208b5db5a8272e8512b54f6e4d",
+    "data/precomputed_forecasts.json": "a975491505c7b1e645d8f03746984c8e14db178843333ab3688a7eb25e1c1d11",
+    "data/micro_forecast_components.csv": "079df7f03d68eab5d267da79b594de19f94f10b38905cc86827c0ebfb61acebf",
+    "data/Сравнение еженедельных цен_01.csv": "eee0ce322066f59774c9c78b806b85da4c2e0b0f0c9088929eccdf396252b259",
+    "data/external/med_forecast_2027_2029_20260924/manifest.json": "91557e4d2aa8a7bcafdd0571c40b54ec2e397b8686f7bc4b357c5c6b473a8007",
+    "data/external/med_forecast_2027_2029_20260924/tariff_calendar.csv": "70270436e0e303bd6742c13e4dff929de3a6784359eee4b50743bb8220904d75",
+    "archive/results/opr102026_adjusted_20260928/OPR092026_source.xlsx": "867ffe4e3479183ae9bb050c4f4304e50a46d36fe4474a372b066a310ba523e6"
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-28T11:49:58.921922",
+  "generated_at": "2026-09-28",
   "latest_official_month": "2026-08-01",
   "forecast_dates": [
     "2026-09-01",
@@ -20,24 +20,24 @@
     "2027-12-01"
   ],
   "mom_pp": [
-    0.6,
-    1.33,
-    0.87,
+    0.5,
+    1.37,
+    0.9,
     0.96,
-    0.99,
-    0.97,
-    0.78,
-    0.75,
-    0.35,
-    0.15,
-    0.83,
-    -0.03,
-    0.37,
-    0.41,
-    0.55,
-    0.63
+    0.8,
+    0.63,
+    0.4,
+    0.56,
+    0.19,
+    0.1,
+    0.67,
+    -0.19,
+    0.16,
+    0.33,
+    0.32,
+    0.34
   ],
-  "scenario": "august_actual_october_tariffs_cost_pass_through_20260928",
-  "source_artifact": "archive/results/forecast_update_20260928/REPORT.md",
-  "description": "August actual; 10% utility tariff in October 2026; incremental cost pass-through; conditional easing and July 2027 tariff scenario. See report for limits."
+  "scenario": "opr102026_conditional_target_2027",
+  "source_artifact": "archive/results/opr102026_adjusted_20260928/REPORT.md",
+  "description": "OPR09 comparison; September nowcast; item price scenarios; MED tariff calendar; conditional 2027 anchor 4.4%."
 }

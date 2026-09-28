@@ -1,0 +1,43 @@
+{
+  "generated_at": "2026-09-28T11:49:58.921922",
+  "latest_official_month": "2026-08-01",
+  "forecast_dates": [
+    "2026-09-01",
+    "2026-10-01",
+    "2026-11-01",
+    "2026-12-01",
+    "2027-01-01",
+    "2027-02-01",
+    "2027-03-01",
+    "2027-04-01",
+    "2027-05-01",
+    "2027-06-01",
+    "2027-07-01",
+    "2027-08-01",
+    "2027-09-01",
+    "2027-10-01",
+    "2027-11-01",
+    "2027-12-01"
+  ],
+  "mom_pp": [
+    0.6,
+    1.33,
+    0.87,
+    0.96,
+    0.99,
+    0.97,
+    0.78,
+    0.75,
+    0.35,
+    0.15,
+    0.83,
+    -0.03,
+    0.37,
+    0.41,
+    0.55,
+    0.63
+  ],
+  "scenario": "august_actual_october_tariffs_cost_pass_through_20260928",
+  "source_artifact": "archive/results/forecast_update_20260928/REPORT.md",
+  "description": "August actual; 10% utility tariff in October 2026; incremental cost pass-through; conditional easing and July 2027 tariff scenario. See report for limits."
+}

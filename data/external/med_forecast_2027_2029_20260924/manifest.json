@@ -1,0 +1,37 @@
+{
+  "publication_date": "2026-09-24",
+  "retrieved_at": "2026-09-28T11:54:40.571547+00:00",
+  "page_url": "https://www.economy.gov.ru/material/directions/makroec/prognozy_socialno_ekonomicheskogo_razvitiya/prognoz_socialno_ekonomicheskogo_razvitiya_rossiyskoy_federacii_na_2027_god_i_na_planovyy_period_2028_i_2029_godov.html",
+  "page_sha256": "f7ecef86aa52c81eab1447298140e9732c373b6ef104f060e7b5ebb44d20048b",
+  "files": [
+    {
+      "url": "https://www.economy.gov.ru/material/file/download/bbc9fa327bdab4467abd739502ee77e4/prognoz_socialno_ekonomicheskogo_razvitiya_rf_2027-2029.pdf",
+      "file": "prognoz_socialno_ekonomicheskogo_razvitiya_rf_2027-2029.pdf",
+      "size": 977433,
+      "sha256": "32af5154b5d544818ee749fb06a20be2c7f8171da5bd1a21cf566676aa6cffe3",
+      "label": "Прогноз социально-экономического развития Российской Федерации на 2027 год и на плановый период 2028 и 2029 годов (PDF 955КБ)"
+    },
+    {
+      "url": "https://www.economy.gov.ru/material/file/download/ad013db2c05f65a3b2eb5e181334d1cb/Attachments.7z",
+      "file": "Attachments.7z",
+      "size": 252635,
+      "sha256": "9638ad634159536943134fa7ae7e96a9c799719fe78c576ee3542f77cdcfeae6",
+      "label": "Приложения (7Z 247КБ)"
+    }
+  ],
+  "derived_files": {
+    "national_cpi_anchors.csv": "7908a596859d3af43622014c5813878ea804c99e12815e8bb3e7ffbd40e8b0ef",
+    "forecast_text.txt": "3398ae59d4c1bf25fc9b87ca4c1d5b0c603636f1c9b411210dc7eb22ff78d7ac",
+    "tariff_calendar.csv": "70270436e0e303bd6742c13e4dff929de3a6784359eee4b50743bb8220904d75",
+    "attachments/9. Промышленность_консервативный.xlsx": "a3331f34864fad1d64cf870ecd56ce39cbdcb2f60a6a072afa2b653505e83649",
+    "attachments/1. Condition.xlsx": "2230b2abf3ef2c076da4559227c8eaf8c76eb41a06232f147001144807fd7f47",
+    "attachments/10. Сравнительная_таблица.xlsx": "2e1399cf84ab18e495c0cfbae1a6654c4420ecd89c18d367cd69a344595d456a",
+    "attachments/3. Макро_консервативный.xlsx": "3d7bb08ea7392013ab12732aebeb97af2e7e5d26f7e64355290b4af35a8ac83d",
+    "attachments/7. Дефляторы_консервативный.xlsx": "aefbf46a8c4c93051d3db9407e345ad9777024d69132a6a2693aa8d934b6d0cb",
+    "attachments/2. Макро_базовый.xlsx": "76223a35905cccd6e629187fea2f09edd8c3033909bd780f68f3584b47bfb665",
+    "attachments/4. ИПЦ_базовый.xlsx": "40aa90eec7e8a52889e50104d0ec931f061f75101eb854f5c0d731cf498c8a72",
+    "attachments/5. ИПЦ_консервативный.xlsx": "67f78744dbb97c9008e85feb81031c35916110eb83560f55bfdc5a5f1e825480",
+    "attachments/8. Промышленность_базовый.xlsx": "a1b682677cec7cbbb273e23df7b928131adf319eb47b9d7fa80659ea4ca9ea7e",
+    "attachments/6. Дефляторы_базовый.xlsx": "9a66e9b926885f24ca481c63805dbdc79b71bf95d91f1e202a2f6627c62843a0"
+  }
+}

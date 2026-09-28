@@ -1,0 +1,37 @@
+code,name,year,effective_date,rate_pct,cpi_role,geography,pdf_page
+utilities_total,Совокупный коммунальный платеж,2026,2026-10-01,9.9,direct_parent,Russia forecast; not KBR tariff order,30
+utilities_total,Совокупный коммунальный платеж,2027,2027-07-01,11,direct_parent,Russia forecast; not KBR tariff order,30
+utilities_total,Совокупный коммунальный платеж,2028,2028-07-01,8.6,direct_parent,Russia forecast; not KBR tariff order,30
+utilities_total,Совокупный коммунальный платеж,2029,2029-07-01,7.6,direct_parent,Russia forecast; not KBR tariff order,30
+electricity_households,Электроэнергия для населения,2026,2026-10-01,11.3,included_in_utilities,Russia forecast; not KBR tariff order,29
+electricity_households,Электроэнергия для населения,2027,2027-07-01,14.4,included_in_utilities,Russia forecast; not KBR tariff order,29
+electricity_households,Электроэнергия для населения,2028,2028-07-01,12.1,included_in_utilities,Russia forecast; not KBR tariff order,29
+electricity_households,Электроэнергия для населения,2029,2029-07-01,10.1,included_in_utilities,Russia forecast; not KBR tariff order,29
+gas_wholesale_households,Оптовый газ для населения,2026,2026-10-01,9.6,upstream_not_retail_cpi,Russia forecast; not KBR tariff order,29
+gas_wholesale_households,Оптовый газ для населения,2027,2027-07-01,10.4,upstream_not_retail_cpi,Russia forecast; not KBR tariff order,29
+gas_wholesale_households,Оптовый газ для населения,2028,2028-07-01,7.4,upstream_not_retail_cpi,Russia forecast; not KBR tariff order,29
+gas_wholesale_households,Оптовый газ для населения,2029,2029-07-01,7.0,upstream_not_retail_cpi,Russia forecast; not KBR tariff order,29
+gas_distribution,Транспортировка газа по распределительным сетям,2026,2026-10-01,11.6,upstream_not_retail_cpi,Russia forecast; not KBR tariff order,29
+gas_distribution,Транспортировка газа по распределительным сетям,2027,2027-07-01,12.4,upstream_not_retail_cpi,Russia forecast; not KBR tariff order,29
+gas_distribution,Транспортировка газа по распределительным сетям,2028,2028-07-01,7.4,upstream_not_retail_cpi,Russia forecast; not KBR tariff order,29
+gas_distribution,Транспортировка газа по распределительным сетям,2029,2029-07-01,7.0,upstream_not_retail_cpi,Russia forecast; not KBR tariff order,29
+heat,Тепловая энергия,2026,2026-10-01,9.9,included_in_utilities,Russia forecast; not KBR tariff order,30
+heat,Тепловая энергия,2027,2027-07-01,10.2,included_in_utilities,Russia forecast; not KBR tariff order,30
+heat,Тепловая энергия,2028,2028-07-01,7.7,included_in_utilities,Russia forecast; not KBR tariff order,30
+heat,Тепловая энергия,2029,2029-07-01,7.2,included_in_utilities,Russia forecast; not KBR tariff order,30
+water,Водоснабжение,2026,2026-10-01,9.8,included_in_utilities,Russia forecast; not KBR tariff order,30
+water,Водоснабжение,2027,2027-07-01,9.4,included_in_utilities,Russia forecast; not KBR tariff order,30
+water,Водоснабжение,2028,2028-07-01,7.4,included_in_utilities,Russia forecast; not KBR tariff order,30
+water,Водоснабжение,2029,2029-07-01,6.8,included_in_utilities,Russia forecast; not KBR tariff order,30
+sewerage,Водоотведение,2026,2026-10-01,9.3,included_in_utilities,Russia forecast; not KBR tariff order,30
+sewerage,Водоотведение,2027,2027-07-01,9.0,included_in_utilities,Russia forecast; not KBR tariff order,30
+sewerage,Водоотведение,2028,2028-07-01,7.1,included_in_utilities,Russia forecast; not KBR tariff order,30
+sewerage,Водоотведение,2029,2029-07-01,6.3,included_in_utilities,Russia forecast; not KBR tariff order,30
+rail_freight,Грузовые ж/д перевозки,2026,2026-10-01,8.5,indirect_cost_only,Russia forecast; not KBR tariff order,30
+rail_freight,Грузовые ж/д перевозки,2027,,0,indirect_cost_only,Russia forecast; not KBR tariff order,30
+rail_freight,Грузовые ж/д перевозки,2028,2028-01-01,7.3,indirect_cost_only,Russia forecast; not KBR tariff order,30
+rail_freight,Грузовые ж/д перевозки,2029,2029-01-01,5.6,indirect_cost_only,Russia forecast; not KBR tariff order,30
+rail_passenger,Регулируемые пассажирские ж/д перевозки,2026,2026-10-01,9.2,direct_separate_subset_weight_required,Russia forecast; not KBR tariff order,30
+rail_passenger,Регулируемые пассажирские ж/д перевозки,2027,,0,direct_separate_subset_weight_required,Russia forecast; not KBR tariff order,30
+rail_passenger,Регулируемые пассажирские ж/д перевозки,2028,2028-01-01,9.2,direct_separate_subset_weight_required,Russia forecast; not KBR tariff order,30
+rail_passenger,Регулируемые пассажирские ж/д перевозки,2029,2029-01-01,9.2,direct_separate_subset_weight_required,Russia forecast; not KBR tariff order,30
