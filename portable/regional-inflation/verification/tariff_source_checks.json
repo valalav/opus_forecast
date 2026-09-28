@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "n_records": 60,
+  "checked_source_hashes": [
+    "hash source_kbr_2018_caps.pdf",
+    "hash source_kbr_2019_caps.pdf",
+    "hash source_kbr_2025_caps.pdf",
+    "hash source_kbr_2026_caps.pdf",
+    "hash source_kbr_2020_caps.pdf"
+  ],
+  "calendar_sha256": "773185fc7869b2e13a4f30e8fc1581af129eb4c38bcd82f717bb86daff90d950",
+  "checks": [
+    "independent algebraic cap-ratio calculation",
+    "no invented gap years",
+    "publication dates preserved",
+    "all records plan not observed CPI",
+    "primary source hashes"
+  ],
+  "note": "Nalchik payment cap proxy only; authoritative tables checked separately via pdftotext."
+}

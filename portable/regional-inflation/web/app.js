@@ -10,6 +10,7 @@
   };
   const DEFAULTS = {horizon:12,train_start:'2016-01',alpha:.3,epsilon:1.35,max_iter:500,tol:.00001,use_macro:true,min_train:36,ets_weights12:'[0.9,0,0.5,0.3,0.9,0.5,0,0.5,0.9,0.9,0,0]',excluded_years:'2010, 2022',seasonal_excluded_years:'2010, 2022',tariff_month_by_year:'',cutoff:'',seasonality_mode:'legacy',outlier_mode:'none',outlier_threshold:3.5};
   let dataset = null, activeResult = null, activeComparison = null, activeRequest = null, lastRequest = null, worker = null, workerCancel = null, valueMode = 'mom', lastModel = 'ridge', disabledBeforeBusy = null;
+  let tariffCalendar = null, tariffCalendarOffset = 0;
   let wasmReady = false;
   const sourceParam = new URLSearchParams(location.search).get('source');
   if(sourceParam)$('sourceUrlInput').value=sourceParam;
@@ -89,6 +90,7 @@
     els.package.disabled=false;
     $('saveRates').disabled=!window.CbrRates;
     updateRegions(els.region.value);
+    displayCalendar();
     const now=new Date();if(!$('cbrTo').value)$('cbrTo').value=new Date(Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),0)).toISOString().slice(0,10);
     els.run.disabled=!activeRows().length||!wasmReady;
     if(!wasmReady) status(`Данные загружены (${count} регионов), но вычислительный модуль ещё недоступен.`, 'warning');
@@ -129,6 +131,60 @@
     }
     const td=document.createElement('td'),button=document.createElement('button');button.type='button';button.className='button button-secondary';button.textContent='Удалить';button.addEventListener('click',()=>{row.remove();invalidateResults();});td.append(button);row.append(td);$('tariffRows').append(row);
   }
+  function currentCalendarRegion() { return String(selectedRegion()?.code ?? ''); }
+  function calendarNotice(message, kind='info') { const el=$('tariffCalendarNotice');el.className=`notice notice-${kind}`;el.textContent=message; }
+  function displayCalendar() {
+    const region=currentCalendarRegion();$('tariffCalendarRegion').value=tariffCalendar?.region_code||region;
+    $('tariffSeriesId').value=tariffCalendar?.series_id||$('tariffSeriesId').value||'tariff-calendar';
+    const records=tariffCalendar?.records||[], end=Math.max(0,records.length-tariffCalendarOffset), start=Math.max(0,end-24), shown=records.slice(start,end);
+    const body=$('tariffCalendarRows');body.replaceChildren();
+    for(let n=0;n<shown.length;n++) {
+      const index=start+n,record=shown[n],row=document.createElement('tr');row.dataset.index=String(index);
+      for(const [field,label,type] of [['date','Месяц','month'],['rate','Тарифное изменение, % м/м','number'],['known_at','Дата публикации','date'],['source','Источник','text'],['kind','Вид','select'],['weight','Вес, %','number'],['baseline','База, %','number']]) {
+        const td=document.createElement('td');let input;
+        if(type==='select') {input=document.createElement('select');for(const [value,text] of [['','Выберите…'],['actual','Факт'],['plan','План'],['assumption','Предположение']]){const option=document.createElement('option');option.value=value;option.textContent=text;input.append(option);}}
+        else {input=document.createElement('input');input.type=type;if(type==='number')input.step='any';}
+        input.dataset.field=field;input.setAttribute('aria-label',label);
+        const value=record[field];input.value=field==='date'&&typeof value==='string'?value.slice(0,7):value??'';td.append(input);row.append(td);
+      }
+      const td=document.createElement('td'),remove=document.createElement('button');remove.type='button';remove.className='button button-secondary';remove.textContent='Удалить';remove.addEventListener('click',()=>{syncCalendarFromTable();tariffCalendar.records.splice(index,1);displayCalendar();invalidateResults();});td.append(remove);row.append(td);body.append(row);
+    }
+    $('tariffCalendarOlder').disabled=start===0;$('tariffCalendarNewer').disabled=tariffCalendarOffset===0;
+    $('tariffCalendarPage').textContent=records.length?`Показаны ${start+1}–${end} из ${records.length}`:'Записей нет';
+    $('exportTariffCalendarJson').disabled=!tariffCalendar;$('exportTariffCalendarCsv').disabled=!tariffCalendar;
+    if(!tariffCalendar)calendarNotice('Календарь не загружен. Пустые месяцы остаются пропусками; они не считаются нулевой ставкой.');
+    else if(tariffCalendar.region_code!==region)calendarNotice(`Календарь региона ${tariffCalendar.region_code}; выбран регион ${region}. Выберите исходный регион или создайте новый календарь.`, 'warning');
+    else calendarNotice(`${records.length} записей · ряд ${tariffCalendar.series_id}. История не обрезается; таблица показывает до 24 строк на странице.`, 'success');
+  }
+  function syncCalendarFromTable() {
+    if(!tariffCalendar)return;
+    for(const row of $('tariffCalendarRows').children) {
+      const record=tariffCalendar.records[Number(row.dataset.index)];if(!record)continue;
+      for(const input of row.querySelectorAll('[data-field]')) {
+        const field=input.dataset.field,value=input.value;
+        if(field==='date')record.date=value?`${value}-01`:'';
+        else if(['rate','weight','baseline'].includes(field)) {if(value==='')delete record[field];else record[field]=Number(value);}
+        else record[field]=value;
+      }
+    }
+    tariffCalendar.series_id=$('tariffSeriesId').value;
+  }
+  function calendarForRequest(region) {
+    syncCalendarFromTable();
+    if(!tariffCalendar)throw new Error('Импортируйте или создайте календарь исторических тарифов.');
+    return window.TariffCalendar.validate(tariffCalendar,String(region.code));
+  }
+  window.getTariffCalendar=()=>calendarForRequest(selectedRegion());
+  function newCalendar() {
+    const region=currentCalendarRegion();if(!region)throw new Error('Сначала выберите регион.');
+    tariffCalendar={schema_version:1,region_code:region,series_id:$('tariffSeriesId').value.trim()||'tariff-calendar',records:[]};tariffCalendarOffset=0;displayCalendar();invalidateResults();
+  }
+  function importCalendarText(filename,text) {
+    const region=currentCalendarRegion();let parsed;
+    if(/\.csv$/i.test(filename))parsed=window.TariffCalendar.parseCSV(text,region,$('tariffSeriesId').value.trim()||'tariff-calendar');
+    else {parsed=JSON.parse(text);parsed=window.TariffCalendar.validate(parsed,region);}
+    parsed.records.sort((a,b)=>a.date.localeCompare(b.date)||a.known_at.localeCompare(b.known_at));tariffCalendar=parsed;tariffCalendarOffset=0;displayCalendar();invalidateResults();
+  }
   function scenarioResult(result,request) {
     if(!$('tariffEnabled').checked)return result;
     if(request.backtests){result.warnings=[...(result.warnings||[]),'Тарифный сценарий не применяется к бэктестам.'];return result;}
@@ -151,7 +207,8 @@
       alpha:Number($('alpha').value),epsilon:Number($('epsilon').value),max_iter:Number($('maxIter').value),tol:Number($('tol').value),
       use_macro:$('useMacro').checked,ets_weights12:etsWeights,excluded_years:parseYears('excludedYears'),seasonal_excluded_years:parseYears('seasonalExcludedYears'),min_train:Number($('minTrain').value),
       seasonality_mode:$('seasonalityMode').value,outlier_mode:$('outlierMode').value,outlier_threshold:Number($('outlierThreshold').value),
-      tariff_month_by_year:tariffMonths,future_components:'hold_last',future_rates:'hold_last',allow_nonconverged:false
+      tariff_month_by_year:tariffMonths,future_components:'hold_last',future_rates:'hold_last',allow_nonconverged:false,
+      tariff_features:$('tariffFeatures').value,tariff_as_of:$('tariffAsOf').value||undefined
     };
   }
   function validateConfigInputs() {
@@ -164,8 +221,13 @@
   function makeRequest() {
     const region=selectedRegion(), rows=activeRows(); if(!region||!rows.length)throw new Error('Выберите регион с данными.');
     if(rows.some(r=>String(r.date).length<10))throw new Error('Даты в пакете должны быть в формате YYYY-MM-01.');
-    const request={schema_version:1,model:els.model.value,frequency:els.representation.value,rows,config:getConfig()};
+    const request={schema_version:1,region_code:String(region.code),model:els.model.value,frequency:els.representation.value,rows,config:getConfig()};
+    if(request.config.tariff_features!=='off') {
+      if(request.frequency!=='raw')throw new Error('Исторические тарифные признаки доступны только для RAW.');
+      request.tariff_calendar=calendarForRequest(region);
+    }
     if(els.operation.value==='backtest') {
+      delete request.config.tariff_as_of;
       let targets=rows.slice();
       if($('cutoff').value)targets=targets.filter(r=>r.date<=`${$('cutoff').value}-01`);
       if($('backtestFrom').value)targets=targets.filter(r=>r.date>=`${$('backtestFrom').value}-01`);
@@ -268,7 +330,7 @@
   }
   const escapeAttribute=value=>String(value).replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;').replaceAll('>','&gt;');
   function render(result) {
-    activeResult=result; activeComparison=null;els.comparison.hidden=true;els.comparison.innerHTML='';els.compare.hidden=els.operation.value!=='backtest';els.results.hidden=false; els.resultTitle.textContent=`${selectedRegion()?.name||selectedRegion()?.code} · ${els.model.value==='ridge'?'Ridge':'Huber'} · ${els.representation.value.toUpperCase()}`;
+    activeResult=result; activeComparison=null;els.comparison.hidden=true;els.comparison.innerHTML='';els.compare.hidden=els.operation.value!=='backtest';$('compareTariffs').hidden=els.operation.value!=='backtest';els.results.hidden=false; els.resultTitle.textContent=`${selectedRegion()?.name||selectedRegion()?.code} · ${els.model.value==='ridge'?'Ridge':'Huber'} · ${els.representation.value.toUpperCase()}`;
     renderWarnings(result);renderMetrics(result);renderChart(result);renderTable(result);
   }
   function renderComparison(result) {
@@ -290,6 +352,14 @@
     catch(e){if(e.name!=='AbortError')showError(`Сравнение не завершилось: ${e.message||e}`);}
     finally{activeRequest=null;setBusy(false);els.compare.hidden=els.operation.value!=='backtest';}
   }
+  async function compareTariffs() {
+    if(!lastRequest?.backtests){showError('Сначала рассчитайте бэктест.');return;}
+    let request;try{request=structuredClone(lastRequest);request.region_code=String(selectedRegion().code);request.tariff_calendar=window.getTariffCalendar();request.config.tariff_features=$('tariffFeatures').value==='lags3'?'lags3':'current';}catch(e){showError(e.message);return;}
+    activeRequest=true;setBusy(true);els.comparison.hidden=false;els.comparison.textContent='Сравнение тарифных вариантов…';
+    try{const result=await window.TariffComparison.compare(request,window.computeRegional,p=>{els.comparison.textContent=p.message;});activeComparison=result;window.TariffComparison.render(els.comparison,result);}
+    catch(e){if(e.name!=='AbortError')showError(`Сравнение тарифов не завершилось: ${e.message||e}`);}
+    finally{activeRequest=null;setBusy(false);}
+  }
   function csvDownload() {
     if(!activeResult)return; const back=els.operation.value==='backtest'; let rows=rowsForTable(activeResult);
     const raw=els.representation.value==='raw';
@@ -307,7 +377,7 @@
   }
   function download(content,name,type) { const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000); }
   const safeName=x=>String(x||'regional').replace(/[^\p{L}\p{N}_-]+/gu,'_');
-  function settingsSnapshot() { return {schema_version:1,tariff_scenario:{enabled:$('tariffEnabled').checked,events:tariffEvents()},model:els.model.value,frequency:els.representation.value,operation:els.operation.value,backtest_period:els.period.value,backtest_from: $('backtestFrom').value,backtest_to:$('backtestTo').value,source_url:$('sourceUrlInput').value,source_path:els.sourcePath.value,rates:{from:$('cbrFrom').value,to:$('cbrTo').value,ki_method:$('kiMethod').value,ruonia_method:$('ruoniaMethod').value},config:getConfig()}; }
+  function settingsSnapshot() { syncCalendarFromTable();return {schema_version:1,tariff_calendar:tariffCalendar?structuredClone(tariffCalendar):null,tariff_scenario:{enabled:$('tariffEnabled').checked,events:tariffEvents()},model:els.model.value,frequency:els.representation.value,operation:els.operation.value,backtest_period:els.period.value,backtest_from: $('backtestFrom').value,backtest_to:$('backtestTo').value,source_url:$('sourceUrlInput').value,source_path:els.sourcePath.value,rates:{from:$('cbrFrom').value,to:$('cbrTo').value,ki_method:$('kiMethod').value,ruonia_method:$('ruoniaMethod').value},config:getConfig()}; }
   function saveSettings() { try{clearError();validateConfigInputs();const snapshot=settingsSnapshot();localStorage.setItem('regional-inflation-settings',JSON.stringify(snapshot));download(JSON.stringify(snapshot,null,2),`${safeName(selectedRegion()?.code)}_settings.json`,'application/json');}catch(e){showError(e.message||String(e));} }
   function applySettings(settings) {
     if(!settings||typeof settings!=='object'||!settings.config||typeof settings.config!=='object')throw new Error('Файл настроек должен содержать объект config.');
@@ -315,6 +385,9 @@
     const map={train_start:'trainStart',cutoff:'cutoff',max_iter:'maxIter',use_macro:'useMacro',min_train:'minTrain',ets_weights12:'etsWeights12',excluded_years:'excludedYears',seasonal_excluded_years:'seasonalExcludedYears',tariff_month_by_year:'tariffMonths',seasonality_mode:'seasonalityMode',outlier_mode:'outlierMode',outlier_threshold:'outlierThreshold'};
     for(const [key,value] of Object.entries(settings.config)) {const el=$(map[key]||key);if(!el)continue;if(el.type==='checkbox')el.checked=!!value;else if(key==='excluded_years'||key==='seasonal_excluded_years')el.value=Array.isArray(value)?value.join(', '):value;else if(key==='cutoff'||key==='train_start')el.value=String(value).slice(0,7);else el.value=Array.isArray(value)||typeof value==='object'?JSON.stringify(value):value;}
     $('tariffRows').replaceChildren();$('tariffEnabled').checked=!!settings.tariff_scenario?.enabled;for(const event of settings.tariff_scenario?.events||[])addTariff(event);
+    tariffCalendar=settings.tariff_calendar?window.TariffCalendar.validate(settings.tariff_calendar):null;tariffCalendarOffset=0;
+    $('tariffAsOf').value=settings.config.tariff_as_of||'';
+    $('tariffFeatures').value=['current','lags3'].includes(settings.config.tariff_features)?settings.config.tariff_features:'off';
     if(settings.rates){if(settings.rates.from)$('cbrFrom').value=settings.rates.from;if(settings.rates.to)$('cbrTo').value=settings.rates.to;if(['last','mean'].includes(settings.rates.ki_method))$('kiMethod').value=settings.rates.ki_method;if(['last','mean'].includes(settings.rates.ruonia_method))$('ruoniaMethod').value=settings.rates.ruonia_method;}
     if(settings.model){els.model.value=settings.model;lastModel=settings.model;}
     if(['raw','sa'].includes(settings.frequency))els.representation.value=settings.frequency;
@@ -324,7 +397,7 @@
     if(settings.backtest_to)$('backtestTo').value=String(settings.backtest_to).slice(0,7);
     if(typeof settings.source_url==='string')$('sourceUrlInput').value=settings.source_url;
     if(typeof settings.source_path==='string')els.sourcePath.value=settings.source_path;
-    updateSourceLink();const show=els.operation.value==='backtest';els.periodField.hidden=!show;els.backtestFromField.hidden=!show;els.backtestToField.hidden=!show;
+    updateSourceLink();const show=els.operation.value==='backtest';els.periodField.hidden=!show;els.backtestFromField.hidden=!show;els.backtestToField.hidden=!show;displayCalendar();
     activeResult=null;lastRequest=null;els.results.hidden=true;updateRepresentation();
   }
   async function readFile(file) {
@@ -427,20 +500,47 @@
   }
   function resetSettings() {
     for(const [key,value] of Object.entries(DEFAULTS)) { const id={train_start:'trainStart',max_iter:'maxIter',use_macro:'useMacro',min_train:'minTrain',ets_weights12:'etsWeights12',excluded_years:'excludedYears',seasonal_excluded_years:'seasonalExcludedYears',tariff_month_by_year:'tariffMonths',seasonality_mode:'seasonalityMode',outlier_mode:'outlierMode',outlier_threshold:'outlierThreshold'}[key]||key;const el=$(id);if(!el)continue;if(el.type==='checkbox')el.checked=value;else el.value=value; }
-    $('tariffRows').replaceChildren();$('tariffEnabled').checked=false;
+    $('tariffRows').replaceChildren();$('tariffEnabled').checked=false;$('tariffFeatures').value='off';$('tariffAsOf').value='';tariffCalendar=null;tariffCalendarOffset=0;displayCalendar();
     els.model.value='ridge';lastModel='ridge';$('excludedYears').value=DEFAULTS.excluded_years;els.operation.value='forecast';els.period.value='36';$('backtestFrom').value='';$('backtestTo').value='';els.periodField.hidden=true;els.backtestFromField.hidden=true;els.backtestToField.hidden=true;els.representation.value='raw';els.results.hidden=true;activeResult=null;clearError();updateRepresentation();
+  }
+  async function importTariffCalendar(file) {
+    if(!file)return;
+    try {importCalendarText(file.name,await file.text());calendarNotice(`Календарь импортирован из ${file.name}. Все ${tariffCalendar.records.length} записей сохранены.`, 'success');}
+    catch(e){showError(`Не удалось импортировать календарь тарифов: ${e.message||e}`);}
+    finally {$('tariffCalendarFile').value='';}
+  }
+  function exportTariffCalendar(format) {
+    try {
+      syncCalendarFromTable();if(!tariffCalendar)throw new Error('Сначала создайте или импортируйте календарь.');
+      const valid=window.TariffCalendar.validate(tariffCalendar);
+      if(format==='csv')download(window.TariffCalendar.exportCSV(valid),`${safeName(valid.region_code)}_tariff_calendar.csv`,'text/csv;charset=utf-8');
+      else download(JSON.stringify(valid,null,2),`${safeName(valid.region_code)}_tariff_calendar.json`,'application/json');
+    } catch(e){showError(`Не удалось экспортировать календарь: ${e.message||e}`);}
   }
   els.file.addEventListener('change',e=>{const f=e.target.files?.[0];if(f)readFile(f);e.target.value='';});
   els.loadSource.addEventListener('click',loadSourceData);els.loadLocal.addEventListener('click',()=>loadLocalSourceData());$('chooseLocalFolder').addEventListener('click',chooseLocalFolder);els.compare.addEventListener('click',compareOutliers);els.run.addEventListener('click',calculate);els.cancel.addEventListener('click',()=>{workerCancel?.();activeRequest=null;setBusy(false);setEngine('Расчёт остановлен','offline');});
   $('downloadCbr').addEventListener('click',downloadCbrRates);$('rateFiles').addEventListener('change',e=>importCbrRates(e.target.files));$('saveRates').addEventListener('click',saveCbrRates);
   els.reset.addEventListener('click',resetSettings);els.advancedToggle.addEventListener('click',()=>{const open=els.advanced.hidden;els.advanced.hidden=!open;els.advancedToggle.setAttribute('aria-expanded',String(open));els.advancedToggle.textContent=open?'Скрыть параметры':'Показать параметры';});
   els.operation.addEventListener('change',()=>{const show=els.operation.value==='backtest';els.periodField.hidden=!show;els.backtestFromField.hidden=!show;els.backtestToField.hidden=!show;if(show)valueMode='mom';els.valueMode.hidden=show||els.representation.value==='sa';els.valueMode.textContent=valueMode==='mom'?'Показать г/г':'Показать м/м';});
-  els.representation.addEventListener('change',()=>{activeResult=null;els.results.hidden=true;updateRepresentation();});els.region.addEventListener('change',()=>{activeResult=null;els.results.hidden=true;updateRepresentation();});
+  els.representation.addEventListener('change',()=>{activeResult=null;els.results.hidden=true;updateRepresentation();});els.region.addEventListener('change',()=>{activeResult=null;els.results.hidden=true;updateRepresentation();displayCalendar();});
   els.model.addEventListener('change',()=>{const next=els.model.value;for(const [id,key] of [['excludedYears','excluded_years'],['seasonalExcludedYears','seasonal_excluded_years']]){const fallback=DEFAULTS[key],prevDefault=lastModel==='ridge'?fallback:'';if($(id).value.trim()===prevDefault)$(id).value=next==='ridge'?fallback:'';}lastModel=next;});
   const invalidateResults=()=>{if(activeRequest)return;activeResult=null;activeComparison=null;lastRequest=null;els.results.hidden=true;els.comparison.hidden=true;};
   for(const selector of ['#representation','#regionSelect','#modelSelect','#operation','#backtestPeriod','#backtestFrom','#backtestTo','#advancedConfig input','#advancedConfig select'])for(const el of document.querySelectorAll(selector))for(const event of ['input','change'])el.addEventListener(event,invalidateResults);
   $('addTariff').addEventListener('click',()=>{addTariff();invalidateResults();});
   $('tariffPanel').addEventListener('input',invalidateResults);$('tariffPanel').addEventListener('change',invalidateResults);
+  $('newTariffCalendar').addEventListener('click',()=>{try{newCalendar();}catch(e){showError(e.message||String(e));}});
+  $('addTariffCalendarRow').addEventListener('click',()=>{try{if(!tariffCalendar)newCalendar();syncCalendarFromTable();tariffCalendar.records.push({date:'',rate:'',known_at:'',source:'',kind:'',});tariffCalendarOffset=0;displayCalendar();invalidateResults();}catch(e){showError(e.message||String(e));}});
+  $('tariffCalendarFile').addEventListener('change',e=>importTariffCalendar(e.target.files?.[0]));
+  $('exportTariffCalendarJson').addEventListener('click',()=>exportTariffCalendar('json'));
+  $('exportTariffCalendarCsv').addEventListener('click',()=>exportTariffCalendar('csv'));
+  $('tariffCalendarOlder').addEventListener('click',()=>{tariffCalendarOffset+=24;displayCalendar();});
+  $('tariffCalendarNewer').addEventListener('click',()=>{tariffCalendarOffset=Math.max(0,tariffCalendarOffset-24);displayCalendar();});
+  $('tariffCalendarRows').addEventListener('input',()=>{syncCalendarFromTable();invalidateResults();});
+  $('tariffCalendarRows').addEventListener('change',()=>{syncCalendarFromTable();invalidateResults();});
+  $('tariffSeriesId').addEventListener('input',()=>{if(tariffCalendar)tariffCalendar.series_id=$('tariffSeriesId').value;invalidateResults();});
+  $('tariffAsOf').addEventListener('input',invalidateResults);
+  $('tariffFeatures').addEventListener('change',invalidateResults);
+  $('compareTariffs').addEventListener('click',compareTariffs);
   els.csv.addEventListener('click',csvDownload);els.settings.addEventListener('click',saveSettings);els.package.addEventListener('click',savePackage);$('saveReport').addEventListener('click',saveReport);
   els.valueMode.addEventListener('click',()=>{valueMode=valueMode==='mom'?'yoy':'mom';els.valueMode.textContent=valueMode==='mom'?'Показать г/г':'Показать м/м';if(activeResult)renderChart(activeResult);});
   try {
@@ -458,5 +558,6 @@
     try { installDataset(window.__REGIONAL_DATA__,'Встроенный пакет данных'); }
     catch(e) { showError(`Встроенный пакет данных не прошёл проверку: ${e.message||e}`); }
   }
+  displayCalendar();
   if(window.LOCAL_SOURCES_CONFIG?.baseUrl)void loadLocalSourceData();
 })();

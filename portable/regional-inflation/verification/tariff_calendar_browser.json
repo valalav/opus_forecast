@@ -1,0 +1,92 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "pagination retains entire calendar",
+      "pass": true
+    },
+    {
+      "name": "editing survives pagination",
+      "pass": true
+    },
+    {
+      "name": "CSV preserves full calendar",
+      "pass": true
+    },
+    {
+      "name": "calculation visible",
+      "pass": true
+    },
+    {
+      "name": "calendar attached to request",
+      "pass": true
+    },
+    {
+      "name": "fitted tariff coefficient exposed",
+      "pass": true
+    },
+    {
+      "name": "WASM native calendar parity",
+      "pass": true
+    },
+    {
+      "name": "calculation visible",
+      "pass": true
+    },
+    {
+      "name": "explicit information date reaches core",
+      "pass": true
+    },
+    {
+      "name": "settings restore full calendar",
+      "pass": true
+    },
+    {
+      "name": "calculation visible",
+      "pass": true
+    },
+    {
+      "name": "three variants available",
+      "pass": true
+    },
+    {
+      "name": "same complete horizon pairs",
+      "pass": true
+    },
+    {
+      "name": "group diagnostics rendered",
+      "pass": true
+    },
+    {
+      "name": "p values are not coefficient significance",
+      "pass": true
+    },
+    {
+      "name": "wrong region blocked",
+      "pass": true
+    },
+    {
+      "name": "SA rejected",
+      "pass": true
+    },
+    {
+      "name": "calculation visible",
+      "pass": true
+    },
+    {
+      "name": "mobile no overflow",
+      "pass": true
+    },
+    {
+      "name": "empty settings clear previous calendar",
+      "pass": true
+    },
+    {
+      "name": "no JS errors",
+      "pass": true
+    }
+  ],
+  "html_sha256": "b8efc562854b50fc86b1070d3773404e7571fe480c7a7f68887dfaede155cd03",
+  "fixture": "SYNTHETIC, tests mechanics only",
+  "platform": "Chrome Linux offline"
+}

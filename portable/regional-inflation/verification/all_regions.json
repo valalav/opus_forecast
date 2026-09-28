@@ -34,16 +34,16 @@
   },
   "binary": {
     "file": "regional-inflation-core",
-    "sha256": "51163da2df902356167edacb904134fe58c64dbbe6d1f0f1613f38462cc93bb8"
+    "sha256": "e59a02b96efa563a45955fe019ff47726c4fd4691abdf009b9cdbafa29128052"
   },
   "working_tree_source_hashes": {
-    "portable/regional-inflation/core/src/lib.rs": "903df3cd7ec7f6176988f9247eab8ece203220f8f7b47247c4bb40fb34749ca5",
+    "portable/regional-inflation/core/src/lib.rs": "4a9cecf47f19f624b702c734bafe593ac53686b77624c8632deb669471ba880a",
     "portable/regional-inflation/core/src/main.rs": "7c0ec9da458f9a39d8bc7e22045826e0a1493f1b51ed327d488f04eede25cdeb",
     "portable/regional-inflation/core/Cargo.toml": "319ec18de37bc8d8ad49305e0512d42ca7e9d5caa8a8736c1dead81aaa7a8139",
     "portable/regional-inflation/core/Cargo.lock": "e436667ba455a74019141d390975b1cfde52d4b0f08d2a2f0ff63c0fc7a0e115"
   },
   "provenance_note": "The executable hash identifies the exact tested binary; source hashes identify current working-tree files and do not prove which source revision produced the binary.",
-  "elapsed_seconds": 1.175,
+  "elapsed_seconds": 1.24,
   "counts": {
     "successes": 393,
     "controlled_failures": 11,

@@ -55,6 +55,30 @@ struct Config {
     outlier_mode: Option<String>,
     #[serde(default)]
     outlier_threshold: Option<f64>,
+    #[serde(default)]
+    tariff_features: Option<String>,
+    #[serde(default)]
+    tariff_as_of: Option<String>,
+}
+
+#[derive(Clone, Debug, Deserialize)]
+struct TariffCalendar {
+    schema_version: u32,
+    region_code: String,
+    series_id: String,
+    records: Vec<TariffRecord>,
+}
+#[derive(Clone, Debug, Deserialize)]
+struct TariffRecord {
+    date: String,
+    rate: f64,
+    known_at: String,
+    source: String,
+    kind: String,
+    #[serde(default)]
+    weight: Option<f64>,
+    #[serde(default)]
+    baseline: Option<f64>,
 }
 
 #[derive(Clone, Debug, Deserialize)]
@@ -75,6 +99,10 @@ struct Request {
     config: Config,
     #[serde(default)]
     backtests: Option<Backtests>,
+    #[serde(default)]
+    region_code: Option<String>,
+    #[serde(default)]
+    tariff_calendar: Option<TariffCalendar>,
 }
 fn raw_frequency() -> String {
     "raw".into()
@@ -118,6 +146,33 @@ impl Month {
     fn text(self) -> String {
         format!("{:04}-{:02}-01", self.y, self.m)
     }
+    fn end_date(self) -> String {
+        let last = match self.m {
+            2 if self.y % 4 == 0 && (self.y % 100 != 0 || self.y % 400 == 0) => 29,
+            2 => 28,
+            4 | 6 | 9 | 11 => 30,
+            _ => 31,
+        };
+        format!("{:04}-{:02}-{last:02}", self.y, self.m)
+    }
+}
+
+fn validate_iso_date(value: &str, label: &str) -> Result<(), String> {
+    if value.len() != 10
+        || value.as_bytes().get(4) != Some(&b'-')
+        || value.as_bytes().get(7) != Some(&b'-')
+    {
+        return Err(format!("{label} must be a valid YYYY-MM-DD date: {value}"));
+    }
+    let month = Month::parse(&format!("{}-01", &value[..7]))?;
+    let day = value[8..]
+        .parse::<u32>()
+        .map_err(|_| format!("{label} must be a valid YYYY-MM-DD date: {value}"))?;
+    let last = month.end_date()[8..].parse::<u32>().unwrap();
+    if day == 0 || day > last {
+        return Err(format!("{label} must be a valid YYYY-MM-DD date: {value}"));
+    }
+    Ok(())
 }
 
 #[derive(Clone)]
@@ -128,6 +183,7 @@ struct Prepared {
     seasonal: [f64; 12],
     macro_medians: [f64; 4],
     outlier_diagnostics: Value,
+    tariff_diagnostics: Value,
 }
 #[derive(Clone)]
 struct Fit {
@@ -177,6 +233,92 @@ fn validate(req: &Request) -> Result<Vec<Month>, String> {
         return Err("frequency must be raw or sa".into());
     }
     let c = &req.config;
+    if let Some(as_of) = c.tariff_as_of.as_deref() {
+        validate_iso_date(as_of, "tariff_as_of")?;
+    }
+    let tariff_mode = c.tariff_features.as_deref().unwrap_or("off");
+    if !["off", "current", "lags3"].contains(&tariff_mode) {
+        return Err("tariff_features must be off, current, or lags3".into());
+    }
+    if tariff_mode != "off" {
+        if req.frequency != "raw" {
+            return Err("tariff_features are supported only for RAW frequency".into());
+        }
+        let calendar = req
+            .tariff_calendar
+            .as_ref()
+            .ok_or("tariff_calendar is required when tariff_features are enabled")?;
+        let region = req
+            .region_code
+            .as_deref()
+            .ok_or("region_code is required when tariff_features are enabled")?;
+        if region.is_empty() || calendar.region_code != region {
+            return Err("region_code must exactly match tariff_calendar.region_code".into());
+        }
+        if calendar.schema_version != 1 || calendar.series_id.trim().is_empty() {
+            return Err("tariff_calendar requires schema_version=1 and nonempty series_id".into());
+        }
+        let mut seen = BTreeSet::new();
+        for record in &calendar.records {
+            Month::parse(&record.date)?;
+            let known_month = record
+                .known_at
+                .get(..7)
+                .ok_or("known_at must be YYYY-MM-DD")?;
+            if record.known_at.len() != 10
+                || record.known_at.as_bytes().get(4) != Some(&b'-')
+                || record.known_at.as_bytes().get(7) != Some(&b'-')
+            {
+                return Err(format!(
+                    "known_at must be a valid YYYY-MM-DD date: {}",
+                    record.known_at
+                ));
+            }
+            let km = Month::parse(&format!("{known_month}-01"))?;
+            let day = record.known_at[8..]
+                .parse::<u32>()
+                .map_err(|_| format!("invalid known_at date: {}", record.known_at))?;
+            let max_day = match km.m {
+                2 if km.y % 4 == 0 && (km.y % 100 != 0 || km.y % 400 == 0) => 29,
+                2 => 28,
+                4 | 6 | 9 | 11 => 30,
+                _ => 31,
+            };
+            if day == 0 || day > max_day {
+                return Err(format!("invalid known_at date: {}", record.known_at));
+            }
+            if !record.rate.is_finite() || record.rate <= -100.0 {
+                return Err("tariff rate must be finite and greater than -100".into());
+            }
+            if record.source.trim().is_empty()
+                || !["actual", "plan", "assumption"].contains(&record.kind.as_str())
+            {
+                return Err(
+                    "tariff records require nonempty source and kind actual, plan, or assumption"
+                        .into(),
+                );
+            }
+            if record.weight.is_some_and(|v| !v.is_finite() || v < 0.0)
+                || record.baseline.is_some_and(|v| !v.is_finite())
+            {
+                return Err(
+                    "tariff optional weight/baseline must be finite (weight nonnegative)".into(),
+                );
+            }
+            if !seen.insert((record.date.clone(), record.known_at.clone())) {
+                return Err(format!(
+                    "duplicate tariff date and known_at: {} {}",
+                    record.date, record.known_at
+                ));
+            }
+            if record.kind == "actual" && record.known_at < record.date {
+                return Err(format!(
+                    "actual tariff record known_at must be on or after its effective month: {}",
+                    record.date
+                ));
+            }
+        }
+    }
     if !(1..=24).contains(&c.horizon) {
         return Err("horizon must be between 1 and 24".into());
     }
@@ -363,6 +505,41 @@ fn tariff_month(req: &Request, year: i32) -> u32 {
         .copied()
         .unwrap_or(7)
 }
+fn tariff_lag_count(req: &Request) -> usize {
+    match req.config.tariff_features.as_deref().unwrap_or("off") {
+        "current" => 1,
+        "lags3" => 4,
+        _ => 0,
+    }
+}
+fn tariff_asof(req: &Request, effective: Month, known_by: &str) -> Option<f64> {
+    let calendar = req.tariff_calendar.as_ref()?;
+    calendar
+        .records
+        .iter()
+        .filter(|r| r.date == effective.text() && r.known_at.as_str() <= known_by)
+        .max_by(|a, b| a.known_at.cmp(&b.known_at))
+        .map(|r| r.rate)
+}
+fn tariff_values(
+    req: &Request,
+    target: Month,
+    knowledge_as_of: &str,
+) -> Result<Option<Vec<f64>>, String> {
+    let n = tariff_lag_count(req);
+    if n == 0 {
+        return Ok(Some(Vec::new()));
+    }
+    let mut out = Vec::with_capacity(n);
+    for lag in 0..n {
+        let month = target.previous(lag);
+        match tariff_asof(req, month, knowledge_as_of) {
+            Some(v) => out.push(v),
+            None => return Ok(None),
+        }
+    }
+    Ok(Some(out))
+}
 fn feature_row(
     i: usize,
     rows: &[Row],
@@ -371,6 +548,8 @@ fn feature_row(
     model: &str,
     tariff: u32,
     seasonality_mode: &str,
+    tariff_values: &[f64],
+    tariff_enabled: bool,
 ) -> Option<Vec<f64>> {
     if i < 12 {
         return None;
@@ -416,10 +595,11 @@ fn feature_row(
                 (2.0 * std::f64::consts::PI * quarter / 4.0).sin(),
                 (2.0 * std::f64::consts::PI * quarter / 4.0).cos(),
             ]);
+            f.extend([(month == 1) as u8 as f64, (month == 12) as u8 as f64]);
+            if !tariff_enabled {
+                f.push((month == tariff) as u8 as f64);
+            }
             f.extend([
-                (month == 1) as u8 as f64,
-                (month == 12) as u8 as f64,
-                (month == tariff) as u8 as f64,
                 (quarter == 1.0) as u8 as f64,
                 (month >= 6 && month <= 8) as u8 as f64,
             ]);
@@ -429,6 +609,7 @@ fn feature_row(
             f.extend([s(month), ylag(1) - s(dates[i - 1].m)]);
         }
     }
+    f.extend_from_slice(tariff_values);
     if rows.iter().any(|r| r.ki.is_some() && r.ruonia.is_some()) {
         let ki: Vec<_> = rows.iter().map(|r| r.ki.unwrap_or(f64::NAN)).collect();
         let ru: Vec<_> = rows.iter().map(|r| r.ruonia.unwrap_or(f64::NAN)).collect();
@@ -446,6 +627,17 @@ fn prepare(req: &Request, rows: &[Row], dates: &[Month], model: &str) -> Result<
     let config = &req.config;
     let use_macro = config.use_macro.unwrap_or(true);
     let mut names = features_for(model);
+    let tariff_n = tariff_lag_count(req);
+    if tariff_n > 0 {
+        if model == "huber" {
+            names.retain(|n| n != "is_tariff_month");
+        }
+        let macro_at = names.len().saturating_sub(4);
+        let tariff_names: Vec<String> = (0..tariff_n)
+            .map(|lag| format!("tariff_rate_lag{lag}"))
+            .collect();
+        names.splice(macro_at..macro_at, tariff_names);
+    }
     let seasonality_mode = config.seasonality_mode.as_deref().unwrap_or("legacy");
     if seasonality_mode == "off" {
         names.retain(|name| !is_seasonal_feature(name));
@@ -480,6 +672,15 @@ fn prepare(req: &Request, rows: &[Row], dates: &[Month], model: &str) -> Result<
     let mut y = Vec::new();
     let mut train_dates = Vec::new();
     let mut macro_columns: [Vec<f64>; 4] = Default::default();
+    let mut tariff_missing = Vec::new();
+    let knowledge_origin = *dates
+        .last()
+        .ok_or_else(|| "cannot prepare a fit without dates".to_string())?;
+    let default_knowledge_as_of = knowledge_origin.end_date();
+    let knowledge_as_of = config
+        .tariff_as_of
+        .as_deref()
+        .unwrap_or(&default_knowledge_as_of);
     for i in 12..rows.len() {
         if excluded.contains(&dates[i].y)
             || train_start.is_some_and(|v| dates[i] < v)
@@ -487,6 +688,13 @@ fn prepare(req: &Request, rows: &[Row], dates: &[Month], model: &str) -> Result<
         {
             continue;
         }
+        // Use the fit's information set for every historical row. Callers
+        // truncate history at the forecast origin before preparing the fit.
+        let tv = tariff_values(req, dates[i], knowledge_as_of)?;
+        let Some(tv) = tv else {
+            tariff_missing.push(dates[i].text());
+            continue;
+        };
         let Some(mut f) = feature_row(
             i,
             rows,
@@ -495,6 +703,8 @@ fn prepare(req: &Request, rows: &[Row], dates: &[Month], model: &str) -> Result<
             model,
             tariff_month(req, dates[i].y),
             seasonality_mode,
+            &tv,
+            tariff_n > 0,
         ) else {
             continue;
         };
@@ -599,6 +809,7 @@ fn prepare(req: &Request, rows: &[Row], dates: &[Month], model: &str) -> Result<
         seasonal,
         macro_medians,
         outlier_diagnostics,
+        tariff_diagnostics: json!({"enabled":tariff_n>0,"series_id":req.tariff_calendar.as_ref().map(|c|c.series_id.as_str()),"training_origin":knowledge_origin.text(),"training_vintage_asof":knowledge_as_of,"n_excluded_missing":tariff_missing.len(),"excluded_dates":tariff_missing}),
     })
 }
 
@@ -846,6 +1057,12 @@ fn forecast(
     let mut local = req.clone();
     local.config.cutoff = None;
     let (fit, p) = fit_model(&local, &rows, &dates)?;
+    let default_knowledge_as_of = origin.end_date();
+    let knowledge_as_of = req
+        .config
+        .tariff_as_of
+        .as_deref()
+        .unwrap_or(&default_knowledge_as_of);
     let mut steps = Vec::new();
     for h in 1..=horizon {
         let d = origin.next(h);
@@ -866,6 +1083,17 @@ fn forecast(
             &req.model,
             tariff_month(req, d.y),
             req.config.seasonality_mode.as_deref().unwrap_or("legacy"),
+            &tariff_values(req, d, knowledge_as_of)?.ok_or_else(|| {
+                format!(
+                    "missing tariff record for forecast month {} (calendar {})",
+                    d.text(),
+                    req.tariff_calendar
+                        .as_ref()
+                        .map(|c| c.series_id.as_str())
+                        .unwrap_or("missing")
+                )
+            })?,
+            tariff_lag_count(req) > 0,
         )
         .ok_or_else(|| "unable to build forecast features".to_string())?;
         if req.config.use_macro.unwrap_or(true) {
@@ -899,8 +1127,12 @@ fn forecast(
     Ok((steps, fit))
 }
 
-fn fit_json(f: &Fit) -> Value {
-    json!({"converged":f.fit_converged,"iterations":f.iterations,"objective":f.objective,"scale":if f.huber_scale>0.0 {Value::from(f.huber_scale)} else {Value::Null},"gradient_inf_norm":f.gradient_inf_norm,"features":f.features,"n_train":f.n,"coefficients_intercept_then_features":f.coef,"scaler_center":f.center,"scaler_scale":f.scale,"outlier_diagnostics":f.outlier_diagnostics})
+fn fit_json(f: &Fit, p: &Prepared) -> Value {
+    let mut value = json!({"converged":f.fit_converged,"iterations":f.iterations,"objective":f.objective,"scale":if f.huber_scale>0.0 {Value::from(f.huber_scale)} else {Value::Null},"gradient_inf_norm":f.gradient_inf_norm,"features":f.features,"n_train":f.n,"coefficients_intercept_then_features":f.coef,"scaler_center":f.center,"scaler_scale":f.scale,"outlier_diagnostics":f.outlier_diagnostics});
+    if p.tariff_diagnostics["enabled"] == true {
+        value["tariff_diagnostics"] = p.tariff_diagnostics.clone();
+    }
+    value
 }
 fn run(req: Request) -> Result<Value, String> {
     let dates = validate(&req)?;
@@ -926,10 +1158,54 @@ fn run(req: Request) -> Result<Value, String> {
         .map(Month::parse)
         .transpose()?
         .unwrap_or(default_origin);
-    let (steps, fit) = forecast(&req, &req.rows, &dates, origin, req.config.horizon)?;
+    if tariff_lag_count(&req) > 0 {
+        if let Some(as_of) = req.config.tariff_as_of.as_deref() {
+            if as_of < origin.end_date().as_str() {
+                return Err(format!(
+                    "tariff_as_of {as_of} must be on or after forecast origin month end {}",
+                    origin.end_date()
+                ));
+            }
+        }
+    }
+    let forecast_result = forecast(&req, &req.rows, &dates, origin, req.config.horizon);
     let mut backtest_rows = Vec::new();
     let mut metrics = serde_json::Map::new();
     let mut warnings = Vec::new();
+    if tariff_lag_count(&req) > 0 {
+        let calendar = req.tariff_calendar.as_ref().unwrap();
+        warnings.push(format!("experimental tariff calendar regressors; series_id={} rate is a monthly percent change", calendar.series_id));
+    }
+    let (steps, fit, prepared) = match forecast_result {
+        Ok((steps, fit)) => {
+            let end = dates
+                .iter()
+                .position(|d| *d == origin)
+                .unwrap_or(dates.len() - 1);
+            let (_, p) = fit_model(&req, &req.rows[..=end], &dates[..=end])?;
+            (steps, Some(fit), Some(p))
+        }
+        Err(e) if req.backtests.is_some() && tariff_lag_count(&req) > 0 => {
+            warnings.push(format!("live forecast unavailable: {e}"));
+            let end = dates
+                .iter()
+                .position(|d| *d == origin)
+                .unwrap_or(dates.len() - 1);
+            match fit_model(&req, &req.rows[..=end], &dates[..=end]) {
+                Ok((fit, p)) => (Vec::new(), Some(fit), Some(p)),
+                Err(_) => (Vec::new(), None, None),
+            }
+        }
+        Err(e) => return Err(e),
+    };
+    if let Some(p) = &prepared {
+        let missing = p.tariff_diagnostics["n_excluded_missing"]
+            .as_u64()
+            .unwrap_or(0);
+        if missing > 0 {
+            warnings.push(format!("tariff calendar has limited historical coverage; excluded {missing} training rows with missing required lag records"));
+        }
+    }
     if req
         .config
         .tariff_month_by_year
@@ -967,6 +1243,7 @@ fn run(req: Request) -> Result<Value, String> {
                     if let Some(ti) = dates.iter().position(|d| *d == td) {
                         let mut local = req.clone();
                         local.config.tariff_month_by_year = None;
+                        local.config.tariff_as_of = None;
                         match forecast(&local, &req.rows, &dates, cm, h) {
                             Ok((s, _)) => {
                                 let actual = req.rows[ti].y - 100.0;
@@ -1012,7 +1289,7 @@ fn run(req: Request) -> Result<Value, String> {
         }
     }
     Ok(
-        json!({"schema_version":1,"ok":true,"model":req.model,"frequency":req.frequency,"forecast":{"origin":origin.text(),"steps":steps},"fit":fit_json(&fit),"backtest":{"rows":backtest_rows,"metrics":metrics},"warnings":warnings}),
+        json!({"schema_version":1,"ok":true,"model":req.model,"frequency":req.frequency,"forecast":{"origin":origin.text(),"steps":steps},"fit":fit.as_ref().zip(prepared.as_ref()).map(|(f,p)|fit_json(f,p)),"backtest":{"rows":backtest_rows,"metrics":metrics},"warnings":warnings}),
     )
 }
 
@@ -1050,6 +1327,19 @@ mod tests {
             rows.push(json!({"date":d.text(),"y":y,"food":100.0+0.2*m,"nonfood":100.0+0.1*m,"services":100.0+0.05*m,"ki":10.0,"ruonia":8.0}));
         }
         json!({"schema_version":1,"model":"ridge","frequency":"raw","rows":rows,"config":{"horizon":2,"use_macro":false},"backtests":{"cutoffs":["2022-12-01","2023-12-01"],"horizons":[1,2,12]}}).to_string()
+    }
+    fn with_tariffs(mut req: Value, end: Month, mode: &str) -> Value {
+        let mut records = Vec::new();
+        let mut d = Month { y: 2017, m: 1 };
+        while d <= end {
+            records.push(json!({"date":d.text(),"rate":if d.m==7 {4.0} else {0.0},"known_at":"2017-01-10","source":"official-calendar","kind":"assumption"}));
+            d = d.next(1);
+        }
+        req["region_code"] = json!("RU-KB");
+        req["config"]["tariff_features"] = json!(mode);
+        req["config"]["cutoff"] = json!("2022-12-01");
+        req["tariff_calendar"] = json!({"schema_version":1,"region_code":"RU-KB","series_id":"monthly-tariff-rate","records":records});
+        req
     }
     #[test]
     fn no_macro_mode_is_invariant_to_missing_macro_values() {
@@ -1112,6 +1402,7 @@ mod tests {
             seasonal: [100.0; 12],
             macro_medians: [0.0; 4],
             outlier_diagnostics: Value::Null,
+            tariff_diagnostics: Value::Null,
         };
         let f = ridge_fit(&p, 0.0);
         assert!((pred(&f, &[1.0]) - 5.0).abs() < 1e-10);
@@ -1252,5 +1543,303 @@ mod tests {
             serde_json::from_str::<Value>(&process(&v.to_string())).unwrap()["ok"],
             false
         );
+    }
+
+    #[test]
+    fn tariff_feature_off_preserves_baseline_forecast_exactly() {
+        let mut v: Value = serde_json::from_str(&fixture()).unwrap();
+        v["backtests"] = Value::Null;
+        let baseline: Value = serde_json::from_str(&process(&v.to_string())).unwrap();
+        v["region_code"] = json!("RU-KB");
+        v["config"]["tariff_features"] = json!("off");
+        v["tariff_calendar"] =
+            json!({"schema_version":1,"region_code":"RU-KB","series_id":"x","records":[]});
+        let off: Value = serde_json::from_str(&process(&v.to_string())).unwrap();
+        assert_eq!(baseline["forecast"], off["forecast"]);
+        assert_eq!(baseline["fit"], off["fit"]);
+    }
+
+    #[test]
+    fn tariff_vintage_uses_latest_record_known_by_origin() {
+        let mut req: Value = serde_json::from_str(&fixture()).unwrap();
+        req = with_tariffs(req, Month { y: 2024, m: 1 }, "current");
+        let cal = req["tariff_calendar"]["records"].as_array_mut().unwrap();
+        cal.push(json!({"date":"2022-07-01","rate":9.0,"known_at":"2023-03-04","source":"revision","kind":"actual"}));
+        assert_eq!(
+            tariff_asof(
+                &serde_json::from_value(req).unwrap(),
+                Month { y: 2022, m: 7 },
+                "2022-12-31"
+            ),
+            Some(4.0)
+        );
+    }
+
+    #[test]
+    fn live_tariff_as_of_allows_recent_known_plan_without_changing_cpi_origin() {
+        let mut value: Value = serde_json::from_str(&fixture()).unwrap();
+        value["backtests"] = Value::Null;
+        value["config"]["horizon"] = json!(1);
+        value = with_tariffs(value, Month { y: 2022, m: 12 }, "current");
+        value["tariff_calendar"]["records"]
+            .as_array_mut()
+            .unwrap()
+            .push(json!({"date":"2023-01-01","rate":3.5,"known_at":"2023-01-15","source":"announced-plan","kind":"assumption"}));
+
+        let without_override: Value = serde_json::from_str(&process(&value.to_string())).unwrap();
+        assert_eq!(without_override["ok"], false);
+        assert!(without_override["error"]["message"]
+            .as_str()
+            .unwrap()
+            .contains("2023-01-01"));
+
+        value["config"]["tariff_as_of"] = json!("2023-01-31");
+        let before_later_publication: Value =
+            serde_json::from_str(&process(&value.to_string())).unwrap();
+        assert_eq!(
+            before_later_publication["ok"], true,
+            "{before_later_publication}"
+        );
+        assert_eq!(before_later_publication["forecast"]["origin"], "2022-12-01");
+        value["tariff_calendar"]["records"]
+            .as_array_mut()
+            .unwrap()
+            .push(json!({"date":"2023-01-01","rate":90.0,"known_at":"2023-02-01","source":"later-revision","kind":"assumption"}));
+        let after_mutation: Value = serde_json::from_str(&process(&value.to_string())).unwrap();
+        assert_eq!(
+            before_later_publication["forecast"]["steps"],
+            after_mutation["forecast"]["steps"]
+        );
+    }
+
+    #[test]
+    fn live_tariff_as_of_must_be_valid_and_after_origin_month_end() {
+        let mut value: Value = serde_json::from_str(&fixture()).unwrap();
+        value["backtests"] = Value::Null;
+        value = with_tariffs(value, Month { y: 2024, m: 12 }, "current");
+        value["config"]["tariff_as_of"] = json!("2022-12-30");
+        let before_month_end: Value = serde_json::from_str(&process(&value.to_string())).unwrap();
+        assert_eq!(before_month_end["ok"], false);
+        assert!(before_month_end["error"]["message"]
+            .as_str()
+            .unwrap()
+            .contains("on or after forecast origin month end"));
+        value["config"]["tariff_as_of"] = json!("2023-02-30");
+        let invalid_date: Value = serde_json::from_str(&process(&value.to_string())).unwrap();
+        assert_eq!(invalid_date["ok"], false);
+        assert!(invalid_date["error"]["message"]
+            .as_str()
+            .unwrap()
+            .contains("valid YYYY-MM-DD"));
+    }
+
+    #[test]
+    fn backtests_ignore_live_tariff_as_of_override() {
+        let mut value: Value = serde_json::from_str(&fixture()).unwrap();
+        value["config"]["horizon"] = json!(1);
+        value = with_tariffs(value, Month { y: 2022, m: 12 }, "current");
+        value["tariff_calendar"]["records"]
+            .as_array_mut()
+            .unwrap()
+            .retain(|r| r["date"] != "2022-12-01");
+        value["tariff_calendar"]["records"]
+            .as_array_mut()
+            .unwrap()
+            .push(json!({"date":"2022-12-01","rate":3.0,"known_at":"2022-12-15","source":"plan","kind":"plan"}));
+        value["tariff_calendar"]["records"]
+            .as_array_mut()
+            .unwrap()
+            .push(json!({"date":"2023-01-01","rate":4.0,"known_at":"2023-01-15","source":"plan","kind":"plan"}));
+        value["config"]["tariff_as_of"] = json!("2023-01-31");
+        value["backtests"] = json!({"targets":["2022-12-01"],"horizons":[1]});
+        let result: Value = serde_json::from_str(&process(&value.to_string())).unwrap();
+        assert_eq!(result["ok"], true, "{result}");
+        assert_eq!(result["forecast"]["steps"].as_array().unwrap().len(), 1);
+        assert_eq!(result["backtest"]["rows"][0]["status"], "unavailable");
+        assert!(result["backtest"]["rows"][0]["reason"]
+            .as_str()
+            .unwrap()
+            .contains("missing tariff record for forecast month 2022-12-01"));
+    }
+
+    #[test]
+    fn training_vintage_uses_later_publication_available_at_fit_origin_only() {
+        let mut value: Value = serde_json::from_str(&fixture()).unwrap();
+        value["backtests"] = Value::Null;
+        value = with_tariffs(value, Month { y: 2024, m: 12 }, "current");
+        value["config"]["min_train"] = json!(20);
+        value["tariff_calendar"]["records"]
+            .as_array_mut()
+            .unwrap()
+            .push(json!({"date":"2020-07-01","rate":9.0,"known_at":"2021-04-15","source":"published-revision","kind":"actual"}));
+        let req: Request = serde_json::from_value(value).unwrap();
+        let dates = validate(&req).unwrap();
+        let target = Month { y: 2020, m: 7 };
+        let training_value = |origin: Month| {
+            let end = dates.iter().position(|d| *d == origin).unwrap();
+            let rows = &req.rows[..=end];
+            let ds = &dates[..=end];
+            let prepared = prepare(&req, rows, ds, "ridge").unwrap();
+            let feature = prepared
+                .names
+                .iter()
+                .position(|n| n == "tariff_rate_lag0")
+                .unwrap();
+            let train_row = ds
+                .iter()
+                .enumerate()
+                .filter(|(i, d)| *i >= 12 && **d < target && ![2010, 2022].contains(&d.y))
+                .count();
+            prepared.x[train_row][feature]
+        };
+        assert_eq!(training_value(Month { y: 2021, m: 3 }), 4.0);
+        assert_eq!(training_value(Month { y: 2021, m: 4 }), 9.0);
+        assert_eq!(training_value(Month { y: 2022, m: 12 }), 9.0);
+    }
+
+    #[test]
+    fn tariff_feature_alignment_holds_across_models_macro_and_seasonality_modes() {
+        for model in ["ridge", "huber"] {
+            for mode in ["current", "lags3"] {
+                for use_macro in [false, true] {
+                    for seasonality in ["legacy", "off"] {
+                        let mut value: Value = serde_json::from_str(&fixture()).unwrap();
+                        value["backtests"] = Value::Null;
+                        value["model"] = json!(model);
+                        value["config"]["allow_nonconverged"] = json!(true);
+                        value["config"]["use_macro"] = json!(use_macro);
+                        value["config"]["seasonality_mode"] = json!(seasonality);
+                        value = with_tariffs(value, Month { y: 2024, m: 12 }, mode);
+                        value["config"]["use_macro"] = json!(use_macro);
+                        value["config"]["seasonality_mode"] = json!(seasonality);
+                        let response: Value =
+                            serde_json::from_str(&process(&value.to_string())).unwrap();
+                        assert_eq!(
+                            response["ok"], true,
+                            "{model}/{mode}/{use_macro}/{seasonality}: {response}"
+                        );
+                        let features = response["fit"]["features"].as_array().unwrap();
+                        let coefs = response["fit"]["coefficients_intercept_then_features"]
+                            .as_array()
+                            .unwrap();
+                        assert_eq!(coefs.len(), features.len() + 1);
+                        for lag in 0..if mode == "current" { 1 } else { 4 } {
+                            assert!(features
+                                .iter()
+                                .any(|n| n == &format!("tariff_rate_lag{lag}")));
+                        }
+                        if use_macro {
+                            assert_eq!(features.iter().rev().take(4).count(), 4);
+                            assert_eq!(features[features.len() - 4], "ruonia_diff_lag1");
+                        }
+                        if model == "huber" {
+                            assert!(!features.iter().any(|n| n == "is_tariff_month"));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn future_tariff_vintage_mutation_cannot_change_h1_h2_h12_forecasts() {
+        for h in [1, 2, 12] {
+            let mut req: Value = serde_json::from_str(&fixture()).unwrap();
+            req["backtests"] = Value::Null;
+            req["config"]["horizon"] = json!(h);
+            req = with_tariffs(req, Month { y: 2024, m: 12 }, "lags3");
+            let a: Value = serde_json::from_str(&process(&req.to_string())).unwrap();
+            assert_eq!(a["ok"], true, "{}", a);
+            req["tariff_calendar"]["records"].as_array_mut().unwrap().push(json!({"date":"2023-12-01","rate":55.0,"known_at":"2023-06-01","source":"later-plan","kind":"plan"}));
+            let b: Value = serde_json::from_str(&process(&req.to_string())).unwrap();
+            assert_eq!(a["forecast"]["steps"], b["forecast"]["steps"]);
+        }
+    }
+
+    #[test]
+    fn tariff_features_report_names_and_missing_future_with_backtests() {
+        let mut req: Value = serde_json::from_str(&fixture()).unwrap();
+        req["config"]["horizon"] = json!(1);
+        req = with_tariffs(req, Month { y: 2022, m: 11 }, "lags3");
+        req["config"]["min_train"] = json!(30);
+        req["tariff_calendar"]["records"]
+            .as_array_mut()
+            .unwrap()
+            .retain(|r| r["date"] != "2020-07-01");
+        req["backtests"] = json!({"targets":["2022-12-01"],"horizons":[1,2,12]});
+        let result: Value = serde_json::from_str(&process(&req.to_string())).unwrap();
+        assert_eq!(result["ok"], true, "{}", result);
+        assert_eq!(result["forecast"]["steps"].as_array().unwrap().len(), 0);
+        assert!(!result["fit"].is_null(), "{}", result);
+        assert!(result["warnings"][0]
+            .as_str()
+            .unwrap()
+            .contains("experimental"));
+        for lag in 0..4 {
+            assert!(
+                result["fit"]["features"]
+                    .as_array()
+                    .unwrap()
+                    .iter()
+                    .any(|n| n.as_str() == Some(&format!("tariff_rate_lag{lag}"))),
+                "features={}",
+                result["fit"]["features"]
+            );
+        }
+        assert_eq!(
+            result["fit"]["coefficients_intercept_then_features"]
+                .as_array()
+                .unwrap()
+                .len(),
+            result["fit"]["features"].as_array().unwrap().len() + 1
+        );
+        assert!(
+            result["fit"]["tariff_diagnostics"]["n_excluded_missing"]
+                .as_u64()
+                .unwrap()
+                > 0
+        );
+        assert!(
+            result["backtest"]["rows"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .all(|r| r["status"] == "unavailable"
+                    && r["reason"]
+                        .as_str()
+                        .unwrap_or("")
+                        .contains("missing tariff record")),
+            "{}",
+            result["backtest"]["rows"]
+        );
+    }
+
+    #[test]
+    fn tariff_rejects_region_mismatch_and_sa_mode() {
+        let mut req: Value = serde_json::from_str(&fixture()).unwrap();
+        req = with_tariffs(req, Month { y: 2024, m: 12 }, "current");
+        req["region_code"] = json!("RU-AD");
+        let result: Value = serde_json::from_str(&process(&req.to_string())).unwrap();
+        assert_eq!(result["ok"], false);
+        req["region_code"] = json!("RU-KB");
+        req["frequency"] = json!("sa");
+        let result: Value = serde_json::from_str(&process(&req.to_string())).unwrap();
+        assert_eq!(result["ok"], false);
+    }
+
+    #[test]
+    fn enabled_huber_tariff_regressors_remove_legacy_tariff_month_dummy() {
+        let mut req: Value = serde_json::from_str(&fixture()).unwrap();
+        req["backtests"] = Value::Null;
+        req["model"] = json!("huber");
+        req["config"]["allow_nonconverged"] = json!(true);
+        req = with_tariffs(req, Month { y: 2024, m: 12 }, "current");
+        let result: Value = serde_json::from_str(&process(&req.to_string())).unwrap();
+        assert_eq!(result["ok"], true, "{}", result);
+        assert!(!result["fit"]["features"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|n| n == "is_tariff_month"));
     }
 }

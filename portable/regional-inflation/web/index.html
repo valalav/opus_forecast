@@ -36,6 +36,7 @@
         <label>Регион<select id="regionSelect" disabled><option value="">Сначала импортируйте данные</option></select></label>
         <label>Модель<select id="modelSelect"><option value="ridge">Ridge</option><option value="huber">Huber</option></select></label>
         <label>Режим расчёта<select id="operation"><option value="forecast">Прогноз вперёд</option><option value="backtest">Скользящая проверка</option></select></label>
+        <label>Исторические тарифы<select id="tariffFeatures"><option value="off">Не использовать</option><option value="current">Текущая ставка</option><option value="lags3">Ставка и лаги 1–3 месяца</option></select><small>Признак доступен только для RAW. Значение берётся из версии календаря, опубликованной к дате отсечения.</small></label>
         <label id="periodField" hidden>Целевых месяцев<select id="backtestPeriod"><option value="36">Последние 36</option><option value="60">Последние 60</option><option value="all">Все доступные</option></select><small>На каждом месяце оцениваются h=1, 2 и 12.</small></label>
         <label id="backtestFromField" hidden>Первый целевой месяц<input id="backtestFrom" type="month"></label>
         <label id="backtestToField" hidden>Последний целевой месяц<input id="backtestTo" type="month"></label>
@@ -83,6 +84,25 @@
       <p id="errorMessage" class="error-message" role="alert" hidden></p>
     </section>
 
+    <section class="panel macro-panel" aria-labelledby="tariffCalendarTitle">
+      <div class="section-heading"><div><p class="eyebrow">КАЛЕНДАРЬ ИСТОРИЧЕСКИХ ДАННЫХ</p><h2 id="tariffCalendarTitle">Тарифы региона</h2><p>Вносите месячные изменения тарифов в процентах: факты, планы или явные предположения. Накопленный предел коммунальной платы к декабрю нельзя подставлять как месячную индексацию. Для каждого месяца нужна дата публикации; пропуск не заменяется нулём.</p></div></div>
+      <div class="form-grid compact-grid macro-controls">
+        <label>Идентификатор ряда<input id="tariffSeriesId" type="text" value="tariff-calendar"></label>
+        <label>Регион календаря<input id="tariffCalendarRegion" type="text" readonly></label>
+          <label>Дата информации для прогноза<input id="tariffAsOf" type="date"><small>Пусто — конец месяца отсечения. Укажите сегодняшнюю дату, чтобы учесть новые объявления. В бэктестах всегда используется историческая дата отсечения.</small></label>
+      </div>
+      <div class="data-actions macro-actions">
+        <button id="newTariffCalendar" class="button button-secondary" type="button">Новый календарь выбранного региона</button>
+        <button id="addTariffCalendarRow" class="button button-secondary" type="button">Добавить запись</button>
+        <label class="button button-secondary" for="tariffCalendarFile">Импорт JSON / CSV</label><input id="tariffCalendarFile" type="file" accept=".json,.csv,application/json,text/csv" hidden>
+        <button id="exportTariffCalendarJson" class="button button-secondary" type="button">Экспорт JSON</button>
+        <button id="exportTariffCalendarCsv" class="button button-secondary" type="button">Экспорт CSV</button>
+      </div>
+      <p id="tariffCalendarNotice" class="notice notice-info" role="status">Календарь не загружен. Пустые месяцы остаются пропусками; они не считаются нулевой ставкой.</p>
+      <div class="table-scroll"><table><thead><tr><th>Месяц</th><th>Изменение, % м/м</th><th>Опубликовано</th><th>Источник</th><th>Вид</th><th>Вес, %</th><th>База, %</th><th></th></tr></thead><tbody id="tariffCalendarRows"></tbody></table></div>
+      <div class="data-actions macro-actions"><button id="tariffCalendarOlder" class="button button-secondary" type="button" disabled>Предыдущие 24 записи</button><button id="tariffCalendarNewer" class="button button-secondary" type="button" disabled>Следующие 24 записи</button><span id="tariffCalendarPage" class="row-count"></span></div>
+    </section>
+
     <section class="panel macro-panel" aria-labelledby="macroTitle">
       <div class="section-heading"><div><p class="eyebrow">ИСТОЧНИКИ МАКРОДАННЫХ</p><h2 id="macroTitle">Ставки Банка России</h2><p>Месячные значения Ki и RUONIA используются как макропризнаки. Скачанный пакет можно сохранить и применять офлайн.</p></div></div>
       <div class="form-grid compact-grid macro-controls">
@@ -97,7 +117,7 @@
     <section id="results" class="results-section" aria-live="polite" hidden>
       <div class="section-heading results-heading"><div><p class="eyebrow">02 · РЕЗУЛЬТАТ</p><h2 id="resultTitle">Результаты</h2></div><div class="export-actions"><button id="valueMode" class="button button-secondary" type="button">Показать г/г</button><button id="exportCsv" class="button button-secondary" type="button">Скачать CSV</button><button id="saveReport" class="button button-secondary" type="button">Расчёт JSON</button><button id="saveSettings" class="button button-secondary" type="button">Настройки JSON</button></div></div>
       <div id="resultWarnings"></div>
-      <div class="metrics-heading"><h3>Качество прогноза</h3><p>Основные ошибки в процентных пунктах. Для бэктеста показаны результаты на выбранных целевых месяцах.</p><button id="compareOutliers" class="button button-secondary" type="button" hidden>Сравнить с расчётом без ограничения выбросов</button></div><div id="comparisonResults" class="comparison-results" hidden></div><div id="metrics" class="metric-grid"></div>
+       <div class="metrics-heading"><h3>Качество прогноза</h3><p>Основные ошибки в процентных пунктах. Для бэктеста показаны результаты на выбранных целевых месяцах.</p><button id="compareOutliers" class="button button-secondary" type="button" hidden>Сравнить с расчётом без ограничения выбросов</button><button id="compareTariffs" class="button button-secondary" type="button" hidden>Сравнить календарь и экспертный сценарий</button></div><div id="comparisonResults" class="comparison-results" hidden></div><div id="metrics" class="metric-grid"></div>
       <div class="panel chart-panel"><div class="chart-head"><div><h3 id="chartTitle">Динамика инфляции</h3><p id="chartSubtitle">Фактический ряд и расчёт</p></div><div id="chartLegend" class="legend"></div></div><div id="chart" class="chart" role="img" aria-label="График фактической инфляции и модельного расчёта"></div></div>
       <div class="panel table-panel"><div class="table-head"><div><h3 id="tableTitle">Помесячные значения</h3><p id="tableSubtitle">Единицы измерения и даты указаны в таблице.</p></div><span id="rowCount" class="row-count"></span></div><div class="table-scroll"><table><thead id="tableHead"></thead><tbody id="tableBody"></tbody></table></div></div>
     </section>

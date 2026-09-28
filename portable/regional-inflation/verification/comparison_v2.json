@@ -526,6 +526,6 @@
     }
   ],
   "comparison_sha256": "2a95135852116a3588b44dc70fe68f17b5257a8f01967c53a3fafa24d66dd5a8",
-  "binary_sha256": "51163da2df902356167edacb904134fe58c64dbbe6d1f0f1613f38462cc93bb8",
+  "binary_sha256": "e59a02b96efa563a45955fe019ff47726c4fd4691abdf009b9cdbafa29128052",
   "note": "Exploratory same-window comparison, not model promotion. No automatic hyperparameter selection."
 }

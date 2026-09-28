@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "series_id": "monthly_change_of_nalchik_payment_cap_proxy_pct",
+  "region_code": "7",
+  "municipality": "Urban district Nalchik",
+  "series_class": "derived plan proxy; not actual tariff or CPI",
+  "derivation": "For each calendar year, reset prior_cap_pct to 0 in January. For each month in an explicitly published cap interval, rate_pct = ((1 + cap_pct / 100) / (1 + prior_cap_pct / 100) - 1) * 100; carry the interval's cap_pct forward to the next month. Round to six decimal places. This measures change in the published cumulative legal payment ceiling only.",
+  "sources": [
+    {
+      "coverage": "2018-01 through 2018-12",
+      "publication_date": "2017-12-08",
+      "publication_proof": "Official KBR newspaper issue dated 8 December 2017; the source PDF is the complete issue.",
+      "decree": "KBR municipal maximum-index schedule for 2018",
+      "source_url": "https://smikbr.ru/arhiv/2017/kbp/12/08d.pdf",
+      "local_file": "source_kbr_2018_caps.pdf",
+      "sha256": "0f017e871996b6a618a73ff6bbcae616dd0f993827a48e20994adb92fe96fed6",
+      "table_page": 1,
+      "transcription": [
+        {
+          "start": "2018-01-01",
+          "end": "2018-06-30",
+          "cap_pct": 0.0
+        },
+        {
+          "start": "2018-07-01",
+          "end": "2018-12-31",
+          "cap_pct": 5.3
+        }
+      ],
+      "proof": "Table lists Городской округ Нальчик at 0 and 5.3 under the Jan-Jun and Jul-Dec columns."
+    },
+    {
+      "coverage": "2019-01 through 2019-12",
+      "publication_date": "2018-12-21",
+      "publication_proof": "Official KBR newspaper issue dated 21 December 2018.",
+      "decree": "Head of KBR Decree No. 197-УГ, signed 2018-12-14",
+      "source_url": "https://smikbr.ru/arhiv/2018/kbp/12/21d.pdf",
+      "local_file": "source_kbr_2019_caps.pdf",
+      "sha256": "2252ab046b24420a758210c925de911a10a1a3094c0fd155c60e8427fdd118ae",
+      "table_page": 1,
+      "transcription": [
+        {
+          "start": "2019-01-01",
+          "end": "2019-06-30",
+          "cap_pct": 1.7
+        },
+        {
+          "start": "2019-07-01",
+          "end": "2019-12-31",
+          "cap_pct": 8.0
+        }
+      ],
+      "proof": "Table lists Городской округ Нальчик at 1.7 and 8.0 under the Jan-Jun and Jul-Dec columns. Decree formula compares the maximum monthly payment with December of the prior year."
+    },
+    {
+      "coverage": "2025-01 through 2025-12",
+      "publication_date": "2024-12-21",
+      "publication_proof": "Official KBR newspaper issue dated 21 December 2024.",
+      "decree": "Head of KBR Decree No. 146-УГ, signed 2024-12-13",
+      "source_url": "https://smikbr.ru/arhiv/2024/kbp/12/21d.pdf",
+      "local_file": "source_kbr_2025_caps.pdf",
+      "sha256": "ef769041c5a4164c887476bcaeceaf9aac3ffe2c67b2c0c1b7dcae093332aab0",
+      "table_page": 1,
+      "transcription": [
+        {
+          "start": "2025-01-01",
+          "end": "2025-06-30",
+          "cap_pct": 0.0
+        },
+        {
+          "start": "2025-07-01",
+          "end": "2025-12-31",
+          "cap_pct": 15.8
+        }
+      ],
+      "proof": "Table lists Городской округ Нальчик at 0.0 and 15.8 under the Jan-Jun and Jul-Dec columns."
+    },
+    {
+      "coverage": "2026-01 through 2026-12",
+      "publication_date": "2025-12-20",
+      "publication_proof": "Conservative verified official Gazette issue dated 20 December 2025; decree signing date 15 December alone is not publication proof. The Head website returned 403 during independent verification.",
+      "decree": "Head of KBR Decree No.136-УГ, signed 2025-12-15, verified newspaper publication 2025-12-20",
+      "source_url": "https://smikbr.ru/arhiv/2025/ap/12/uk136.pdf",
+      "metadata_url": "https://glava.kbr.ru/documents/ukazy/-ob-utverzhdenii-znacheniy-predelnykh-maksimalnykh-indeksov-izmeneniya-razmera-vnosimoy-grazhdanami-platy-za-kommunalnye-uslugi-v-munitsipalnykh-obrazovaniyakh-kabardino-balkarskoy-respubliki-na-2026-god.html",
+      "local_file": "source_kbr_2026_caps.pdf",
+      "sha256": "6e12cd43836266534f3e4441c2af3659cd186b5de1019f433ae6b12f704bf152",
+      "table_page": 2,
+      "transcription": [
+        {
+          "start": "2026-01-01",
+          "end": "2026-09-30",
+          "cap_pct": 1.7
+        },
+        {
+          "start": "2026-10-01",
+          "end": "2026-12-31",
+          "cap_pct": 14.4
+        }
+      ],
+      "proof": "Table columns are from 1 Jan 2026 and from 1 Oct 2026; Nalchik row is 1.7 and 14.4. October-December values are a published plan as of the audit date.",
+      "publication_proof_url": "https://smikbr.ru/arhiv/2025/kbp/12/20d.pdf",
+      "publication_proof_file": "source_kbr_2026_publication.pdf",
+      "publication_proof_sha256": "232fc620a10696a9103a9bdc5ac257dc6d1acd94247d9041ef551fb17819cf44"
+    },
+    {
+      "coverage": "2020-01 through 2020-12",
+      "publication_date": "2019-12-20",
+      "publication_proof": "Official KBR newspaper issue dated Friday 20 December 2019; issue PDF contains Decree No. 130-УГ and its cap table.",
+      "decree": "Head of KBR Decree No. 130-УГ, signed 2019-12-13",
+      "source_url": "https://smikbr.ru/arhiv/2019/kbp/12/20d.pdf",
+      "local_file": "source_kbr_2020_caps.pdf",
+      "sha256": "35eabe66ab6b9c7b28123d8e9e7444e0b9b50e164c47e9a076c04aa082ba482f",
+      "table_page": 1,
+      "transcription": [
+        {
+          "start": "2020-01-01",
+          "end": "2020-06-30",
+          "cap_pct": 0.0
+        },
+        {
+          "start": "2020-07-01",
+          "end": "2020-12-31",
+          "cap_pct": 9.4
+        }
+      ],
+      "proof": "Page 1 table lists Городской округ Нальчик at 0.0 for 1 Jan–30 Jun and 9.4 for 1 Jul–31 Dec. Decree obosnovanie states annual tariff growth starts 1 July."
+    }
+  ],
+  "coverage_gaps": [
+    "2016-2017",
+    "2021-2024"
+  ]
+}

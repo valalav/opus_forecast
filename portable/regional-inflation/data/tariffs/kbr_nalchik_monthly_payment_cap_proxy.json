@@ -1,0 +1,427 @@
+{
+  "schema_version": 1,
+  "region_code": "7",
+  "series_id": "monthly_change_of_nalchik_payment_cap_proxy_pct",
+  "records": [
+    {
+      "date": "2018-01-01",
+      "rate": 0.0,
+      "known_at": "2017-12-08",
+      "source": "https://smikbr.ru/arhiv/2017/kbp/12/08d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2018-02-01",
+      "rate": 0.0,
+      "known_at": "2017-12-08",
+      "source": "https://smikbr.ru/arhiv/2017/kbp/12/08d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2018-03-01",
+      "rate": 0.0,
+      "known_at": "2017-12-08",
+      "source": "https://smikbr.ru/arhiv/2017/kbp/12/08d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2018-04-01",
+      "rate": 0.0,
+      "known_at": "2017-12-08",
+      "source": "https://smikbr.ru/arhiv/2017/kbp/12/08d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2018-05-01",
+      "rate": 0.0,
+      "known_at": "2017-12-08",
+      "source": "https://smikbr.ru/arhiv/2017/kbp/12/08d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2018-06-01",
+      "rate": 0.0,
+      "known_at": "2017-12-08",
+      "source": "https://smikbr.ru/arhiv/2017/kbp/12/08d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2018-07-01",
+      "rate": 5.3,
+      "known_at": "2017-12-08",
+      "source": "https://smikbr.ru/arhiv/2017/kbp/12/08d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2018-08-01",
+      "rate": 0.0,
+      "known_at": "2017-12-08",
+      "source": "https://smikbr.ru/arhiv/2017/kbp/12/08d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2018-09-01",
+      "rate": 0.0,
+      "known_at": "2017-12-08",
+      "source": "https://smikbr.ru/arhiv/2017/kbp/12/08d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2018-10-01",
+      "rate": 0.0,
+      "known_at": "2017-12-08",
+      "source": "https://smikbr.ru/arhiv/2017/kbp/12/08d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2018-11-01",
+      "rate": 0.0,
+      "known_at": "2017-12-08",
+      "source": "https://smikbr.ru/arhiv/2017/kbp/12/08d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2018-12-01",
+      "rate": 0.0,
+      "known_at": "2017-12-08",
+      "source": "https://smikbr.ru/arhiv/2017/kbp/12/08d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2019-01-01",
+      "rate": 1.7,
+      "known_at": "2018-12-21",
+      "source": "https://smikbr.ru/arhiv/2018/kbp/12/21d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2019-02-01",
+      "rate": 0.0,
+      "known_at": "2018-12-21",
+      "source": "https://smikbr.ru/arhiv/2018/kbp/12/21d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2019-03-01",
+      "rate": 0.0,
+      "known_at": "2018-12-21",
+      "source": "https://smikbr.ru/arhiv/2018/kbp/12/21d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2019-04-01",
+      "rate": 0.0,
+      "known_at": "2018-12-21",
+      "source": "https://smikbr.ru/arhiv/2018/kbp/12/21d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2019-05-01",
+      "rate": 0.0,
+      "known_at": "2018-12-21",
+      "source": "https://smikbr.ru/arhiv/2018/kbp/12/21d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2019-06-01",
+      "rate": 0.0,
+      "known_at": "2018-12-21",
+      "source": "https://smikbr.ru/arhiv/2018/kbp/12/21d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2019-07-01",
+      "rate": 6.19469,
+      "known_at": "2018-12-21",
+      "source": "https://smikbr.ru/arhiv/2018/kbp/12/21d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2019-08-01",
+      "rate": 0.0,
+      "known_at": "2018-12-21",
+      "source": "https://smikbr.ru/arhiv/2018/kbp/12/21d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2019-09-01",
+      "rate": 0.0,
+      "known_at": "2018-12-21",
+      "source": "https://smikbr.ru/arhiv/2018/kbp/12/21d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2019-10-01",
+      "rate": 0.0,
+      "known_at": "2018-12-21",
+      "source": "https://smikbr.ru/arhiv/2018/kbp/12/21d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2019-11-01",
+      "rate": 0.0,
+      "known_at": "2018-12-21",
+      "source": "https://smikbr.ru/arhiv/2018/kbp/12/21d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2019-12-01",
+      "rate": 0.0,
+      "known_at": "2018-12-21",
+      "source": "https://smikbr.ru/arhiv/2018/kbp/12/21d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2020-01-01",
+      "rate": 0.0,
+      "known_at": "2019-12-20",
+      "source": "https://smikbr.ru/arhiv/2019/kbp/12/20d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2020-02-01",
+      "rate": 0.0,
+      "known_at": "2019-12-20",
+      "source": "https://smikbr.ru/arhiv/2019/kbp/12/20d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2020-03-01",
+      "rate": 0.0,
+      "known_at": "2019-12-20",
+      "source": "https://smikbr.ru/arhiv/2019/kbp/12/20d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2020-04-01",
+      "rate": 0.0,
+      "known_at": "2019-12-20",
+      "source": "https://smikbr.ru/arhiv/2019/kbp/12/20d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2020-05-01",
+      "rate": 0.0,
+      "known_at": "2019-12-20",
+      "source": "https://smikbr.ru/arhiv/2019/kbp/12/20d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2020-06-01",
+      "rate": 0.0,
+      "known_at": "2019-12-20",
+      "source": "https://smikbr.ru/arhiv/2019/kbp/12/20d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2020-07-01",
+      "rate": 9.4,
+      "known_at": "2019-12-20",
+      "source": "https://smikbr.ru/arhiv/2019/kbp/12/20d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2020-08-01",
+      "rate": 0.0,
+      "known_at": "2019-12-20",
+      "source": "https://smikbr.ru/arhiv/2019/kbp/12/20d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2020-09-01",
+      "rate": 0.0,
+      "known_at": "2019-12-20",
+      "source": "https://smikbr.ru/arhiv/2019/kbp/12/20d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2020-10-01",
+      "rate": 0.0,
+      "known_at": "2019-12-20",
+      "source": "https://smikbr.ru/arhiv/2019/kbp/12/20d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2020-11-01",
+      "rate": 0.0,
+      "known_at": "2019-12-20",
+      "source": "https://smikbr.ru/arhiv/2019/kbp/12/20d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2020-12-01",
+      "rate": 0.0,
+      "known_at": "2019-12-20",
+      "source": "https://smikbr.ru/arhiv/2019/kbp/12/20d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2025-01-01",
+      "rate": 0.0,
+      "known_at": "2024-12-21",
+      "source": "https://smikbr.ru/arhiv/2024/kbp/12/21d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2025-02-01",
+      "rate": 0.0,
+      "known_at": "2024-12-21",
+      "source": "https://smikbr.ru/arhiv/2024/kbp/12/21d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2025-03-01",
+      "rate": 0.0,
+      "known_at": "2024-12-21",
+      "source": "https://smikbr.ru/arhiv/2024/kbp/12/21d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2025-04-01",
+      "rate": 0.0,
+      "known_at": "2024-12-21",
+      "source": "https://smikbr.ru/arhiv/2024/kbp/12/21d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2025-05-01",
+      "rate": 0.0,
+      "known_at": "2024-12-21",
+      "source": "https://smikbr.ru/arhiv/2024/kbp/12/21d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2025-06-01",
+      "rate": 0.0,
+      "known_at": "2024-12-21",
+      "source": "https://smikbr.ru/arhiv/2024/kbp/12/21d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2025-07-01",
+      "rate": 15.8,
+      "known_at": "2024-12-21",
+      "source": "https://smikbr.ru/arhiv/2024/kbp/12/21d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2025-08-01",
+      "rate": 0.0,
+      "known_at": "2024-12-21",
+      "source": "https://smikbr.ru/arhiv/2024/kbp/12/21d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2025-09-01",
+      "rate": 0.0,
+      "known_at": "2024-12-21",
+      "source": "https://smikbr.ru/arhiv/2024/kbp/12/21d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2025-10-01",
+      "rate": 0.0,
+      "known_at": "2024-12-21",
+      "source": "https://smikbr.ru/arhiv/2024/kbp/12/21d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2025-11-01",
+      "rate": 0.0,
+      "known_at": "2024-12-21",
+      "source": "https://smikbr.ru/arhiv/2024/kbp/12/21d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2025-12-01",
+      "rate": 0.0,
+      "known_at": "2024-12-21",
+      "source": "https://smikbr.ru/arhiv/2024/kbp/12/21d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2026-01-01",
+      "rate": 1.7,
+      "known_at": "2025-12-20",
+      "source": "https://smikbr.ru/arhiv/2025/kbp/12/20d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2026-02-01",
+      "rate": 0.0,
+      "known_at": "2025-12-20",
+      "source": "https://smikbr.ru/arhiv/2025/kbp/12/20d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2026-03-01",
+      "rate": 0.0,
+      "known_at": "2025-12-20",
+      "source": "https://smikbr.ru/arhiv/2025/kbp/12/20d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2026-04-01",
+      "rate": 0.0,
+      "known_at": "2025-12-20",
+      "source": "https://smikbr.ru/arhiv/2025/kbp/12/20d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2026-05-01",
+      "rate": 0.0,
+      "known_at": "2025-12-20",
+      "source": "https://smikbr.ru/arhiv/2025/kbp/12/20d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2026-06-01",
+      "rate": 0.0,
+      "known_at": "2025-12-20",
+      "source": "https://smikbr.ru/arhiv/2025/kbp/12/20d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2026-07-01",
+      "rate": 0.0,
+      "known_at": "2025-12-20",
+      "source": "https://smikbr.ru/arhiv/2025/kbp/12/20d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2026-08-01",
+      "rate": 0.0,
+      "known_at": "2025-12-20",
+      "source": "https://smikbr.ru/arhiv/2025/kbp/12/20d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2026-09-01",
+      "rate": 0.0,
+      "known_at": "2025-12-20",
+      "source": "https://smikbr.ru/arhiv/2025/kbp/12/20d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2026-10-01",
+      "rate": 12.487709,
+      "known_at": "2025-12-20",
+      "source": "https://smikbr.ru/arhiv/2025/kbp/12/20d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2026-11-01",
+      "rate": 0.0,
+      "known_at": "2025-12-20",
+      "source": "https://smikbr.ru/arhiv/2025/kbp/12/20d.pdf",
+      "kind": "plan"
+    },
+    {
+      "date": "2026-12-01",
+      "rate": 0.0,
+      "known_at": "2025-12-20",
+      "source": "https://smikbr.ru/arhiv/2025/kbp/12/20d.pdf",
+      "kind": "plan"
+    }
+  ]
+}

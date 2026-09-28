@@ -1,0 +1,2637 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "baseline succeeds",
+      "pass": true
+    },
+    {
+      "name": "off preserves exact baseline",
+      "pass": true
+    },
+    {
+      "name": "current unknown next-year plan fails",
+      "pass": true
+    },
+    {
+      "name": "current forecast succeeds",
+      "pass": true
+    },
+    {
+      "name": "current contains tariff features",
+      "pass": true
+    },
+    {
+      "name": "current no leakage from future facts or calendar revisions",
+      "pass": true
+    },
+    {
+      "name": "current horizon 1 finite path",
+      "pass": true
+    },
+    {
+      "name": "current horizon 2 finite path",
+      "pass": true
+    },
+    {
+      "name": "current horizon 12 finite path",
+      "pass": true
+    },
+    {
+      "name": "current backtest survives unavailable live forecast",
+      "pass": true
+    },
+    {
+      "name": "current missing schedules are visible",
+      "pass": true
+    },
+    {
+      "name": "lags3 unknown next-year plan fails",
+      "pass": true
+    },
+    {
+      "name": "lags3 forecast succeeds",
+      "pass": true
+    },
+    {
+      "name": "lags3 contains tariff features",
+      "pass": true
+    },
+    {
+      "name": "lags3 no leakage from future facts or calendar revisions",
+      "pass": true
+    },
+    {
+      "name": "lags3 horizon 1 finite path",
+      "pass": true
+    },
+    {
+      "name": "lags3 horizon 2 finite path",
+      "pass": true
+    },
+    {
+      "name": "lags3 horizon 12 finite path",
+      "pass": true
+    },
+    {
+      "name": "lags3 backtest survives unavailable live forecast",
+      "pass": true
+    },
+    {
+      "name": "lags3 missing schedules are visible",
+      "pass": true
+    },
+    {
+      "name": "later live tariff information allowed",
+      "pass": true
+    },
+    {
+      "name": "exact live information day cutoff",
+      "pass": true
+    },
+    {
+      "name": "live as-of override ignored in historical backtests",
+      "pass": true
+    },
+    {
+      "name": "region mismatch blocked",
+      "pass": true
+    },
+    {
+      "name": "SA blocked",
+      "pass": true
+    }
+  ],
+  "purpose": "SYNTHETIC TARIFF CALENDAR CONTRACT TEST ONLY, not economic performance evidence",
+  "binary_sha256": "e59a02b96efa563a45955fe019ff47726c4fd4691abdf009b9cdbafa29128052",
+  "outputs": {
+    "current": {
+      "backtest": {
+        "metrics": {},
+        "rows": []
+      },
+      "fit": {
+        "coefficients_intercept_then_features": [
+          100.39570251753763,
+          -0.04989140949723857,
+          0.19789258682070965,
+          -0.03253788328113087,
+          -0.25723839360129236,
+          0.19998172767199746,
+          0.0147991927053847,
+          0.06707426169905725,
+          0.048743176724450936,
+          0.008100994868939337,
+          0.28280351369798057,
+          0.08922077108878866,
+          0.010268461504877813,
+          0.12295113176183946,
+          0.0018784310982027153,
+          -0.0044890005021904185,
+          -0.027061020180079998
+        ],
+        "converged": true,
+        "features": [
+          "y_lag1",
+          "y_lag2",
+          "y_lag12",
+          "y_ma3",
+          "month_sin",
+          "month_cos",
+          "food_lag1",
+          "nonfood_lag1",
+          "services_lag1",
+          "seasonal_norm",
+          "deviation_lag1",
+          "tariff_rate_lag0",
+          "ruonia_diff_lag1",
+          "spread_lag4",
+          "ki_diff_lag6",
+          "ki_vol"
+        ],
+        "gradient_inf_norm": 0.0,
+        "iterations": 1,
+        "n_train": 80,
+        "objective": 9.02949052643888,
+        "outlier_diagnostics": {
+          "flagged_dates": [],
+          "mode": "none",
+          "n_flagged": 0,
+          "n_used": 80,
+          "rule": "train-only month-median residual; MAD scale 1.4826; winsorize target response",
+          "threshold": 3.5
+        },
+        "scale": null,
+        "scaler_center": [
+          100.46,
+          100.435,
+          100.39500000000001,
+          100.47333333333333,
+          1.2246467991473532e-16,
+          -1.8369701987210297e-16,
+          100.55000000000001,
+          100.32,
+          100.35,
+          100.46517857142857,
+          -0.04124999999999801,
+          0.0,
+          0.010765550239235644,
+          0.17594047619047704,
+          0.0,
+          0.3415650255319866
+        ],
+        "scaler_scale": [
+          0.605000000000004,
+          0.5849999999999937,
+          0.5724999999999909,
+          0.4625000000000057,
+          1.366025403784439,
+          1.3660254037844388,
+          1.4424999999999955,
+          0.3225000000000051,
+          0.7049999999999983,
+          0.33749999999997726,
+          0.46334821428571615,
+          1.0,
+          0.3597744360902265,
+          0.21914015151515098,
+          0.0625,
+          0.36655806389106405
+        ],
+        "tariff_diagnostics": {
+          "enabled": true,
+          "excluded_dates": [],
+          "n_excluded_missing": 0,
+          "series_id": "SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA",
+          "training_origin": "2024-08-01",
+          "training_vintage_asof": "2024-08-31"
+        }
+      },
+      "forecast": {
+        "origin": "2024-08-01",
+        "steps": [
+          {
+            "all": 0.29694913232027886,
+            "date": "2024-09-01",
+            "ets_level": 100.24571428571429,
+            "ets_weight": 0.9,
+            "model_level": 100.29694913232028
+          },
+          {
+            "all": 0.3963761545095821,
+            "date": "2024-10-01",
+            "ets_level": 100.43285714285716,
+            "ets_weight": 0.9,
+            "model_level": 100.39637615450958
+          },
+          {
+            "all": 0.4265750772910195,
+            "date": "2024-11-01",
+            "ets_level": 100.58714285714287,
+            "ets_weight": 0.0,
+            "model_level": 100.42657507729102
+          },
+          {
+            "all": 0.539486915038438,
+            "date": "2024-12-01",
+            "ets_level": 100.66571428571429,
+            "ets_weight": 0.0,
+            "model_level": 100.53948691503844
+          },
+          {
+            "all": 0.662631307732255,
+            "date": "2025-01-01",
+            "ets_level": 100.68375,
+            "ets_weight": 0.9,
+            "model_level": 100.66263130773225
+          },
+          {
+            "all": 0.6044673788576773,
+            "date": "2025-02-01",
+            "ets_level": 100.58874999999999,
+            "ets_weight": 0.0,
+            "model_level": 100.60446737885768
+          },
+          {
+            "all": 0.5301340538239572,
+            "date": "2025-03-01",
+            "ets_level": 100.49749999999999,
+            "ets_weight": 0.5,
+            "model_level": 100.53013405382396
+          },
+          {
+            "all": 0.7727734401933333,
+            "date": "2025-04-01",
+            "ets_level": 100.77625,
+            "ets_weight": 0.3,
+            "model_level": 100.77277344019333
+          },
+          {
+            "all": 0.30455821294579266,
+            "date": "2025-05-01",
+            "ets_level": 100.31375,
+            "ets_weight": 0.9,
+            "model_level": 100.30455821294579
+          },
+          {
+            "all": 0.30749583048186935,
+            "date": "2025-06-01",
+            "ets_level": 100.27875,
+            "ets_weight": 0.5,
+            "model_level": 100.30749583048187
+          },
+          {
+            "all": 0.14202032158290478,
+            "date": "2025-07-01",
+            "ets_level": 100.22625,
+            "ets_weight": 0.0,
+            "model_level": 100.1420203215829
+          },
+          {
+            "all": -0.04710819295868873,
+            "date": "2025-08-01",
+            "ets_level": 99.95625,
+            "ets_weight": 0.5,
+            "model_level": 99.95289180704131
+          }
+        ]
+      },
+      "frequency": "raw",
+      "model": "ridge",
+      "ok": true,
+      "schema_version": 1,
+      "warnings": [
+        "experimental tariff calendar regressors; series_id=SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA rate is a monthly percent change"
+      ]
+    },
+    "current_backtest": {
+      "backtest": {
+        "metrics": {
+          "1": {
+            "bias": -0.17847878686779872,
+            "hit_within_0_5": 0.6666666666666666,
+            "mae": 0.42612658903231526,
+            "n_planned": 36,
+            "n_valid": 36,
+            "rmse": 0.5627205372292747
+          },
+          "12": {
+            "bias": -0.11178626393929154,
+            "hit_within_0_5": 0.6666666666666666,
+            "mae": 0.46107276381187745,
+            "n_planned": 36,
+            "n_valid": 6,
+            "rmse": 0.5502197597775876
+          },
+          "2": {
+            "bias": -0.21864383559129408,
+            "hit_within_0_5": 0.6111111111111112,
+            "mae": 0.47762396182301753,
+            "n_planned": 36,
+            "n_valid": 36,
+            "rmse": 0.6091099844503759
+          }
+        },
+        "rows": [
+          {
+            "actual": 1.75,
+            "cutoff": "2023-08-01",
+            "error": -1.7231182758556685,
+            "forecast": 0.026881724144331542,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2023-09-01"
+          },
+          {
+            "actual": 0.45999999999999375,
+            "cutoff": "2023-09-01",
+            "error": 0.11886605076033163,
+            "forecast": 0.5788660507603254,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2023-10-01"
+          },
+          {
+            "actual": 0.7399999999999949,
+            "cutoff": "2023-10-01",
+            "error": -0.11711975651377315,
+            "forecast": 0.6228802434862217,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2023-11-01"
+          },
+          {
+            "actual": 0.29000000000000625,
+            "cutoff": "2023-11-01",
+            "error": 0.7413712970369772,
+            "forecast": 1.0313712970369835,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2023-12-01"
+          },
+          {
+            "actual": 0.8700000000000045,
+            "cutoff": "2023-12-01",
+            "error": -0.2701157121377662,
+            "forecast": 0.5998842878622384,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2024-01-01"
+          },
+          {
+            "actual": 0.5300000000000011,
+            "cutoff": "2024-01-01",
+            "error": -0.46969365781131955,
+            "forecast": 0.06030634218868158,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2024-02-01"
+          },
+          {
+            "actual": 0.5300000000000011,
+            "cutoff": "2024-02-01",
+            "error": 0.005195557432472242,
+            "forecast": 0.5351955574324734,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2024-03-01"
+          },
+          {
+            "actual": 0.37999999999999545,
+            "cutoff": "2024-03-01",
+            "error": 0.2111106765274542,
+            "forecast": 0.5911106765274496,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2024-04-01"
+          },
+          {
+            "actual": 0.9399999999999977,
+            "cutoff": "2024-04-01",
+            "error": -0.7107145466712552,
+            "forecast": 0.2292854533287425,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2024-05-01"
+          },
+          {
+            "actual": 0.18000000000000682,
+            "cutoff": "2024-05-01",
+            "error": 0.14830667011970888,
+            "forecast": 0.3283066701197157,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2024-06-01"
+          },
+          {
+            "actual": 1.0699999999999932,
+            "cutoff": "2024-06-01",
+            "error": -1.110003020496947,
+            "forecast": -0.04000302049695392,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2024-07-01"
+          },
+          {
+            "actual": 0.09000000000000341,
+            "cutoff": "2024-07-01",
+            "error": -0.15772386559709162,
+            "forecast": -0.0677238655970882,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2024-08-01"
+          },
+          {
+            "actual": 0.6200000000000045,
+            "cutoff": "2024-08-01",
+            "error": -0.3230508676797257,
+            "forecast": 0.29694913232027886,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2024-09-01"
+          },
+          {
+            "actual": 1.019999999999996,
+            "cutoff": "2024-09-01",
+            "error": -0.5970086652268236,
+            "forecast": 0.4229913347731724,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2024-10-01"
+          },
+          {
+            "actual": 1.5,
+            "cutoff": "2024-10-01",
+            "error": -0.8070785750411886,
+            "forecast": 0.6929214249588114,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2024-11-01"
+          },
+          {
+            "actual": 0.9099999999999966,
+            "cutoff": "2024-11-01",
+            "error": 0.17833621037782166,
+            "forecast": 1.0883362103778182,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2024-12-01"
+          },
+          {
+            "actual": 0.8400000000000034,
+            "cutoff": "2024-12-01",
+            "error": -0.16266426229101683,
+            "forecast": 0.6773357377089866,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2025-01-01"
+          },
+          {
+            "actual": 1.3400000000000034,
+            "cutoff": "2025-01-01",
+            "error": -0.6060373868435676,
+            "forecast": 0.7339626131564359,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2025-02-01"
+          },
+          {
+            "actual": 0.8100000000000023,
+            "cutoff": "2025-02-01",
+            "error": -0.3202116340601293,
+            "forecast": 0.48978836593987296,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2025-03-01"
+          },
+          {
+            "actual": 0.5300000000000011,
+            "cutoff": "2025-03-01",
+            "error": 0.16982274995183388,
+            "forecast": 0.699822749951835,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2025-04-01"
+          },
+          {
+            "actual": -0.06999999999999318,
+            "cutoff": "2025-04-01",
+            "error": 0.360151281158295,
+            "forecast": 0.2901512811583018,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2025-05-01"
+          },
+          {
+            "actual": -0.04000000000000625,
+            "cutoff": "2025-05-01",
+            "error": 0.21064007722203826,
+            "forecast": 0.170640077222032,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2025-06-01"
+          },
+          {
+            "actual": 0.35999999999999943,
+            "cutoff": "2025-06-01",
+            "error": -0.5562116300835527,
+            "forecast": -0.19621163008355325,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2025-07-01"
+          },
+          {
+            "actual": -0.5699999999999932,
+            "cutoff": "2025-07-01",
+            "error": 0.3629177784791011,
+            "forecast": -0.20708222152089206,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2025-08-01"
+          },
+          {
+            "actual": 1.0,
+            "cutoff": "2025-08-01",
+            "error": -0.7367114351254145,
+            "forecast": 0.2632885648745855,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2025-09-01"
+          },
+          {
+            "actual": 0.5300000000000011,
+            "cutoff": "2025-09-01",
+            "error": -0.036212267426606104,
+            "forecast": 0.49378773257339503,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2025-10-01"
+          },
+          {
+            "actual": 0.15000000000000568,
+            "cutoff": "2025-10-01",
+            "error": 0.37914294903715984,
+            "forecast": 0.5291429490371655,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2025-11-01"
+          },
+          {
+            "actual": 0.29000000000000625,
+            "cutoff": "2025-11-01",
+            "error": 0.24075176190285674,
+            "forecast": 0.530751761902863,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2025-12-01"
+          },
+          {
+            "actual": 1.5699999999999932,
+            "cutoff": "2025-12-01",
+            "error": -0.8804046899136466,
+            "forecast": 0.6895953100863466,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2026-01-01"
+          },
+          {
+            "actual": 1.0999999999999943,
+            "cutoff": "2026-01-01",
+            "error": -0.4442421219135184,
+            "forecast": 0.6557578780864759,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2026-02-01"
+          },
+          {
+            "actual": 0.5400000000000063,
+            "cutoff": "2026-02-01",
+            "error": 0.17928180233387536,
+            "forecast": 0.7192818023338816,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2026-03-01"
+          },
+          {
+            "actual": -0.28000000000000114,
+            "cutoff": "2026-03-01",
+            "error": 0.9710327697250136,
+            "forecast": 0.6910327697250125,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2026-04-01"
+          },
+          {
+            "actual": 0.09000000000000341,
+            "cutoff": "2026-04-01",
+            "error": 0.15457474831030993,
+            "forecast": 0.24457474831031334,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2026-05-01"
+          },
+          {
+            "actual": 1.0600000000000023,
+            "cutoff": "2026-05-01",
+            "error": -0.8535753947601137,
+            "forecast": 0.2064246052398886,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2026-06-01"
+          },
+          {
+            "actual": 0.8199999999999932,
+            "cutoff": "2026-06-01",
+            "error": 0.026158058586048583,
+            "forecast": 0.8461580585860418,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2026-07-01"
+          },
+          {
+            "actual": 0.12000000000000455,
+            "cutoff": "2026-07-01",
+            "error": -0.0009990007529268041,
+            "forecast": 0.11900099924707774,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2026-08-01"
+          },
+          {
+            "actual": 1.75,
+            "cutoff": "2023-07-01",
+            "error": -1.7383026259563508,
+            "forecast": 0.011697374043649233,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2023-09-01"
+          },
+          {
+            "actual": 0.45999999999999375,
+            "cutoff": "2023-08-01",
+            "error": -0.02720379738954648,
+            "forecast": 0.43279620261044727,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2023-10-01"
+          },
+          {
+            "actual": 0.7399999999999949,
+            "cutoff": "2023-09-01",
+            "error": 0.42679164984021156,
+            "forecast": 1.1667916498402064,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2023-11-01"
+          },
+          {
+            "actual": 0.29000000000000625,
+            "cutoff": "2023-10-01",
+            "error": -0.009013077644937084,
+            "forecast": 0.28098692235506917,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2023-12-01"
+          },
+          {
+            "actual": 0.8700000000000045,
+            "cutoff": "2023-11-01",
+            "error": -0.26160747589352695,
+            "forecast": 0.6083925241064776,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2024-01-01"
+          },
+          {
+            "actual": 0.5300000000000011,
+            "cutoff": "2023-12-01",
+            "error": -1.2307919596793369,
+            "forecast": -0.7007919596793357,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2024-02-01"
+          },
+          {
+            "actual": 0.5300000000000011,
+            "cutoff": "2024-01-01",
+            "error": -0.0348432270358785,
+            "forecast": 0.49515677296412264,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2024-03-01"
+          },
+          {
+            "actual": 0.37999999999999545,
+            "cutoff": "2024-02-01",
+            "error": 0.28609618873565523,
+            "forecast": 0.6660961887356507,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2024-04-01"
+          },
+          {
+            "actual": 0.9399999999999977,
+            "cutoff": "2024-03-01",
+            "error": -0.7188850117553898,
+            "forecast": 0.22111498824460796,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2024-05-01"
+          },
+          {
+            "actual": 0.18000000000000682,
+            "cutoff": "2024-04-01",
+            "error": 0.10259264397417667,
+            "forecast": 0.2825926439741835,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2024-06-01"
+          },
+          {
+            "actual": 1.0699999999999932,
+            "cutoff": "2024-05-01",
+            "error": -0.8730723928136257,
+            "forecast": 0.19692760718636748,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2024-07-01"
+          },
+          {
+            "actual": 0.09000000000000341,
+            "cutoff": "2024-06-01",
+            "error": -0.22098903115555402,
+            "forecast": -0.1309890311555506,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2024-08-01"
+          },
+          {
+            "actual": 0.6200000000000045,
+            "cutoff": "2024-07-01",
+            "error": -0.3658940689071528,
+            "forecast": 0.25410593109285173,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2024-09-01"
+          },
+          {
+            "actual": 1.019999999999996,
+            "cutoff": "2024-08-01",
+            "error": -0.6236238454904139,
+            "forecast": 0.3963761545095821,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2024-10-01"
+          },
+          {
+            "actual": 1.5,
+            "cutoff": "2024-09-01",
+            "error": -0.9324853785781215,
+            "forecast": 0.5675146214218785,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2024-11-01"
+          },
+          {
+            "actual": 0.9099999999999966,
+            "cutoff": "2024-10-01",
+            "error": -0.2263590959578039,
+            "forecast": 0.6836409040421927,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2024-12-01"
+          },
+          {
+            "actual": 0.8400000000000034,
+            "cutoff": "2024-11-01",
+            "error": -0.1689253704163889,
+            "forecast": 0.6710746295836145,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2025-01-01"
+          },
+          {
+            "actual": 1.3400000000000034,
+            "cutoff": "2024-12-01",
+            "error": -0.45139267913862113,
+            "forecast": 0.8886073208613823,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2025-02-01"
+          },
+          {
+            "actual": 0.8100000000000023,
+            "cutoff": "2025-01-01",
+            "error": -0.3242255786833823,
+            "forecast": 0.48577442131661996,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2025-03-01"
+          },
+          {
+            "actual": 0.5300000000000011,
+            "cutoff": "2025-02-01",
+            "error": 0.1551204890230906,
+            "forecast": 0.6851204890230917,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2025-04-01"
+          },
+          {
+            "actual": -0.06999999999999318,
+            "cutoff": "2025-03-01",
+            "error": 0.3736819487734522,
+            "forecast": 0.303681948773459,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2025-05-01"
+          },
+          {
+            "actual": -0.04000000000000625,
+            "cutoff": "2025-04-01",
+            "error": 0.301077745925582,
+            "forecast": 0.26107774592557575,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2025-06-01"
+          },
+          {
+            "actual": 0.35999999999999943,
+            "cutoff": "2025-05-01",
+            "error": -0.5428074866266712,
+            "forecast": -0.1828074866266718,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2025-07-01"
+          },
+          {
+            "actual": -0.5699999999999932,
+            "cutoff": "2025-06-01",
+            "error": 0.4588030990794749,
+            "forecast": -0.11119690092051826,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2025-08-01"
+          },
+          {
+            "actual": 1.0,
+            "cutoff": "2025-07-01",
+            "error": -0.7112738758206945,
+            "forecast": 0.28872612417930554,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2025-09-01"
+          },
+          {
+            "actual": 0.5300000000000011,
+            "cutoff": "2025-08-01",
+            "error": -0.07299888917673059,
+            "forecast": 0.45700111082327055,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2025-10-01"
+          },
+          {
+            "actual": 0.15000000000000568,
+            "cutoff": "2025-09-01",
+            "error": 0.557258513058926,
+            "forecast": 0.7072585130589317,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2025-11-01"
+          },
+          {
+            "actual": 0.29000000000000625,
+            "cutoff": "2025-10-01",
+            "error": 0.49535397453448127,
+            "forecast": 0.7853539745344875,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2025-12-01"
+          },
+          {
+            "actual": 1.5699999999999932,
+            "cutoff": "2025-11-01",
+            "error": -0.8817672472656852,
+            "forecast": 0.688232752734308,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2026-01-01"
+          },
+          {
+            "actual": 1.0999999999999943,
+            "cutoff": "2025-12-01",
+            "error": -0.6948634677466146,
+            "forecast": 0.40513653225337976,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2026-02-01"
+          },
+          {
+            "actual": 0.5400000000000063,
+            "cutoff": "2026-01-01",
+            "error": 0.23602921212959416,
+            "forecast": 0.7760292121296004,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2026-03-01"
+          },
+          {
+            "actual": -0.28000000000000114,
+            "cutoff": "2026-02-01",
+            "error": 1.0627950338055001,
+            "forecast": 0.782795033805499,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2026-04-01"
+          },
+          {
+            "actual": 0.09000000000000341,
+            "cutoff": "2026-03-01",
+            "error": 0.17000871142231233,
+            "forecast": 0.26000871142231574,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2026-05-01"
+          },
+          {
+            "actual": 1.0600000000000023,
+            "cutoff": "2026-04-01",
+            "error": -0.8741217726353625,
+            "forecast": 0.18587822736463977,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2026-06-01"
+          },
+          {
+            "actual": 0.8199999999999932,
+            "cutoff": "2026-05-01",
+            "error": -0.5473729976898198,
+            "forecast": 0.27262700231017334,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2026-07-01"
+          },
+          {
+            "actual": 0.12000000000000455,
+            "cutoff": "2026-06-01",
+            "error": 0.03603306186856514,
+            "forecast": 0.1560330618685697,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2026-08-01"
+          },
+          {
+            "cutoff": "2022-09-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2023-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2023-09-01"
+          },
+          {
+            "cutoff": "2022-10-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2023-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2023-10-01"
+          },
+          {
+            "actual": 0.7399999999999949,
+            "cutoff": "2022-11-01",
+            "error": -0.29815798257125437,
+            "forecast": 0.4418420174287405,
+            "horizon": 12,
+            "status": "ok",
+            "target_date": "2023-11-01"
+          },
+          {
+            "actual": 0.29000000000000625,
+            "cutoff": "2022-12-01",
+            "error": 0.0801032700001798,
+            "forecast": 0.37010327000018606,
+            "horizon": 12,
+            "status": "ok",
+            "target_date": "2023-12-01"
+          },
+          {
+            "cutoff": "2023-01-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2024-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2024-01-01"
+          },
+          {
+            "cutoff": "2023-02-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2024-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2024-02-01"
+          },
+          {
+            "cutoff": "2023-03-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2024-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2024-03-01"
+          },
+          {
+            "cutoff": "2023-04-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2024-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2024-04-01"
+          },
+          {
+            "cutoff": "2023-05-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2024-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2024-05-01"
+          },
+          {
+            "cutoff": "2023-06-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2024-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2024-06-01"
+          },
+          {
+            "cutoff": "2023-07-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2024-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2024-07-01"
+          },
+          {
+            "cutoff": "2023-08-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2024-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2024-08-01"
+          },
+          {
+            "cutoff": "2023-09-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2024-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2024-09-01"
+          },
+          {
+            "cutoff": "2023-10-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2024-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2024-10-01"
+          },
+          {
+            "actual": 1.5,
+            "cutoff": "2023-11-01",
+            "error": -1.0297344969129938,
+            "forecast": 0.4702655030870062,
+            "horizon": 12,
+            "status": "ok",
+            "target_date": "2024-11-01"
+          },
+          {
+            "actual": 0.9099999999999966,
+            "cutoff": "2023-12-01",
+            "error": -0.39068460376925884,
+            "forecast": 0.5193153962307377,
+            "horizon": 12,
+            "status": "ok",
+            "target_date": "2024-12-01"
+          },
+          {
+            "cutoff": "2024-01-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2025-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2025-01-01"
+          },
+          {
+            "cutoff": "2024-02-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2025-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2025-02-01"
+          },
+          {
+            "cutoff": "2024-03-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2025-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2025-03-01"
+          },
+          {
+            "cutoff": "2024-04-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2025-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2025-04-01"
+          },
+          {
+            "cutoff": "2024-05-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2025-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2025-05-01"
+          },
+          {
+            "cutoff": "2024-06-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2025-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2025-06-01"
+          },
+          {
+            "cutoff": "2024-07-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2025-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2025-07-01"
+          },
+          {
+            "cutoff": "2024-08-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2025-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2025-08-01"
+          },
+          {
+            "cutoff": "2024-09-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2025-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2025-09-01"
+          },
+          {
+            "cutoff": "2024-10-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2025-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2025-10-01"
+          },
+          {
+            "actual": 0.15000000000000568,
+            "cutoff": "2024-11-01",
+            "error": 0.6250736071690994,
+            "forecast": 0.7750736071691051,
+            "horizon": 12,
+            "status": "ok",
+            "target_date": "2025-11-01"
+          },
+          {
+            "actual": 0.29000000000000625,
+            "cutoff": "2024-12-01",
+            "error": 0.34268262244847847,
+            "forecast": 0.6326826224484847,
+            "horizon": 12,
+            "status": "ok",
+            "target_date": "2025-12-01"
+          },
+          {
+            "cutoff": "2025-01-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2026-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2026-01-01"
+          },
+          {
+            "cutoff": "2025-02-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2026-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2026-02-01"
+          },
+          {
+            "cutoff": "2025-03-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2026-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2026-03-01"
+          },
+          {
+            "cutoff": "2025-04-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2026-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2026-04-01"
+          },
+          {
+            "cutoff": "2025-05-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2026-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2026-05-01"
+          },
+          {
+            "cutoff": "2025-06-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2026-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2026-06-01"
+          },
+          {
+            "cutoff": "2025-07-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2026-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2026-07-01"
+          },
+          {
+            "cutoff": "2025-08-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2026-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2026-08-01"
+          }
+        ]
+      },
+      "fit": {
+        "coefficients_intercept_then_features": [
+          100.45978410169617,
+          -0.08377733553255798,
+          0.12789404847328462,
+          -0.007382722878558841,
+          -0.2422416397725086,
+          0.22319154611757455,
+          -0.0821311684808117,
+          0.058954737007307946,
+          0.08680855195797198,
+          -0.004629029572881806,
+          0.3283071132398051,
+          0.17579022876547362,
+          0.00603483556954892,
+          0.04955928754835511,
+          0.06956806191990614,
+          -0.011135656243204192,
+          0.04159724738915542
+        ],
+        "converged": true,
+        "features": [
+          "y_lag1",
+          "y_lag2",
+          "y_lag12",
+          "y_ma3",
+          "month_sin",
+          "month_cos",
+          "food_lag1",
+          "nonfood_lag1",
+          "services_lag1",
+          "seasonal_norm",
+          "deviation_lag1",
+          "tariff_rate_lag0",
+          "ruonia_diff_lag1",
+          "spread_lag4",
+          "ki_diff_lag6",
+          "ki_vol"
+        ],
+        "gradient_inf_norm": 0.0,
+        "iterations": 1,
+        "n_train": 104,
+        "objective": 13.582705219231688,
+        "outlier_diagnostics": {
+          "flagged_dates": [],
+          "mode": "none",
+          "n_flagged": 0,
+          "n_used": 104,
+          "rule": "train-only month-median residual; MAD scale 1.4826; winsorize target response",
+          "threshold": 3.5
+        },
+        "scale": null,
+        "scaler_center": [
+          100.5,
+          100.465,
+          100.44999999999999,
+          100.47666666666667,
+          1.2246467991473532e-16,
+          -1.8369701987210297e-16,
+          100.575,
+          100.33,
+          100.44,
+          100.52094444444444,
+          0.002000000000016655,
+          0.0,
+          -0.023562488236401613,
+          0.1743684210526295,
+          0.0,
+          0.4043843925768968
+        ],
+        "scaler_scale": [
+          0.6850000000000023,
+          0.644999999999996,
+          0.6374999999999886,
+          0.46666666666665435,
+          1.366025403784439,
+          1.3660254037844388,
+          1.4849999999999994,
+          0.3674999999999926,
+          0.7999999999999972,
+          0.34827777777776703,
+          0.5638888888888864,
+          1.0,
+          0.4854105991262717,
+          0.2698066770186325,
+          0.0625,
+          0.6191785348824858
+        ],
+        "tariff_diagnostics": {
+          "enabled": true,
+          "excluded_dates": [],
+          "n_excluded_missing": 0,
+          "series_id": "SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA",
+          "training_origin": "2026-08-01",
+          "training_vintage_asof": "2026-08-31"
+        }
+      },
+      "forecast": {
+        "origin": "2026-08-01",
+        "steps": []
+      },
+      "frequency": "raw",
+      "model": "ridge",
+      "ok": true,
+      "schema_version": 1,
+      "warnings": [
+        "experimental tariff calendar regressors; series_id=SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA rate is a monthly percent change",
+        "live forecast unavailable: missing tariff record for forecast month 2027-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)"
+      ]
+    },
+    "lags3": {
+      "backtest": {
+        "metrics": {},
+        "rows": []
+      },
+      "fit": {
+        "coefficients_intercept_then_features": [
+          100.39311419897929,
+          -0.03442222298159927,
+          0.1970980215040879,
+          -0.031629576898492044,
+          -0.2538265093049377,
+          0.18871212845901394,
+          0.009977451618124857,
+          0.08358224620985266,
+          0.05234821907695209,
+          0.007242346310645264,
+          0.28617712184523664,
+          0.06653725794899103,
+          0.01162615056293031,
+          0.0018635492929083629,
+          0.00716247441282238,
+          -0.0018176682001219634,
+          0.12140226124711154,
+          0.0012516593894126924,
+          -0.004423851471586102,
+          -0.026345623012036162
+        ],
+        "converged": true,
+        "features": [
+          "y_lag1",
+          "y_lag2",
+          "y_lag12",
+          "y_ma3",
+          "month_sin",
+          "month_cos",
+          "food_lag1",
+          "nonfood_lag1",
+          "services_lag1",
+          "seasonal_norm",
+          "deviation_lag1",
+          "tariff_rate_lag0",
+          "tariff_rate_lag1",
+          "tariff_rate_lag2",
+          "tariff_rate_lag3",
+          "ruonia_diff_lag1",
+          "spread_lag4",
+          "ki_diff_lag6",
+          "ki_vol"
+        ],
+        "gradient_inf_norm": 0.0,
+        "iterations": 1,
+        "n_train": 80,
+        "objective": 9.01970823188407,
+        "outlier_diagnostics": {
+          "flagged_dates": [],
+          "mode": "none",
+          "n_flagged": 0,
+          "n_used": 80,
+          "rule": "train-only month-median residual; MAD scale 1.4826; winsorize target response",
+          "threshold": 3.5
+        },
+        "scale": null,
+        "scaler_center": [
+          100.46,
+          100.435,
+          100.39500000000001,
+          100.47333333333333,
+          1.2246467991473532e-16,
+          -1.8369701987210297e-16,
+          100.55000000000001,
+          100.32,
+          100.35,
+          100.46517857142857,
+          -0.04124999999999801,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.010765550239235644,
+          0.17594047619047704,
+          0.0,
+          0.3415650255319866
+        ],
+        "scaler_scale": [
+          0.605000000000004,
+          0.5849999999999937,
+          0.5724999999999909,
+          0.4625000000000057,
+          1.366025403784439,
+          1.3660254037844388,
+          1.4424999999999955,
+          0.3225000000000051,
+          0.7049999999999983,
+          0.33749999999997726,
+          0.46334821428571615,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.3597744360902265,
+          0.21914015151515098,
+          0.0625,
+          0.36655806389106405
+        ],
+        "tariff_diagnostics": {
+          "enabled": true,
+          "excluded_dates": [],
+          "n_excluded_missing": 0,
+          "series_id": "SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA",
+          "training_origin": "2024-08-01",
+          "training_vintage_asof": "2024-08-31"
+        }
+      },
+      "forecast": {
+        "origin": "2024-08-01",
+        "steps": [
+          {
+            "all": 0.2997303212616913,
+            "date": "2024-09-01",
+            "ets_level": 100.24571428571429,
+            "ets_weight": 0.9,
+            "model_level": 100.29973032126169
+          },
+          {
+            "all": 0.39336586273424246,
+            "date": "2024-10-01",
+            "ets_level": 100.43285714285716,
+            "ets_weight": 0.9,
+            "model_level": 100.39336586273424
+          },
+          {
+            "all": 0.4100528260611611,
+            "date": "2024-11-01",
+            "ets_level": 100.58714285714287,
+            "ets_weight": 0.0,
+            "model_level": 100.41005282606116
+          },
+          {
+            "all": 0.530116517718696,
+            "date": "2024-12-01",
+            "ets_level": 100.66571428571429,
+            "ets_weight": 0.0,
+            "model_level": 100.5301165177187
+          },
+          {
+            "all": 0.6614934254591844,
+            "date": "2025-01-01",
+            "ets_level": 100.68375,
+            "ets_weight": 0.9,
+            "model_level": 100.66149342545918
+          },
+          {
+            "all": 0.5890722819208492,
+            "date": "2025-02-01",
+            "ets_level": 100.58874999999999,
+            "ets_weight": 0.0,
+            "model_level": 100.58907228192085
+          },
+          {
+            "all": 0.5214657378950847,
+            "date": "2025-03-01",
+            "ets_level": 100.49749999999999,
+            "ets_weight": 0.5,
+            "model_level": 100.52146573789508
+          },
+          {
+            "all": 0.7595157037668514,
+            "date": "2025-04-01",
+            "ets_level": 100.77625,
+            "ets_weight": 0.3,
+            "model_level": 100.75951570376685
+          },
+          {
+            "all": 0.3039648836672768,
+            "date": "2025-05-01",
+            "ets_level": 100.31375,
+            "ets_weight": 0.9,
+            "model_level": 100.30396488366728
+          },
+          {
+            "all": 0.29809278824637886,
+            "date": "2025-06-01",
+            "ets_level": 100.27875,
+            "ets_weight": 0.5,
+            "model_level": 100.29809278824638
+          },
+          {
+            "all": 0.14055884548496067,
+            "date": "2025-07-01",
+            "ets_level": 100.22625,
+            "ets_weight": 0.0,
+            "model_level": 100.14055884548496
+          },
+          {
+            "all": -0.049424918448721655,
+            "date": "2025-08-01",
+            "ets_level": 99.95625,
+            "ets_weight": 0.5,
+            "model_level": 99.95057508155128
+          }
+        ]
+      },
+      "frequency": "raw",
+      "model": "ridge",
+      "ok": true,
+      "schema_version": 1,
+      "warnings": [
+        "experimental tariff calendar regressors; series_id=SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA rate is a monthly percent change"
+      ]
+    },
+    "lags3_backtest": {
+      "backtest": {
+        "metrics": {
+          "1": {
+            "bias": -0.17929002928392515,
+            "hit_within_0_5": 0.6388888888888888,
+            "mae": 0.426369887086771,
+            "n_planned": 36,
+            "n_valid": 36,
+            "rmse": 0.5648032965664528
+          },
+          "12": {
+            "bias": -0.12450994138248224,
+            "hit_within_0_5": 0.6666666666666666,
+            "mae": 0.4424892221514061,
+            "n_planned": 36,
+            "n_valid": 6,
+            "rmse": 0.5402030491021806
+          },
+          "2": {
+            "bias": -0.22080395434135347,
+            "hit_within_0_5": 0.6111111111111112,
+            "mae": 0.4854522479887934,
+            "n_planned": 36,
+            "n_valid": 36,
+            "rmse": 0.6177855899090466
+          }
+        },
+        "rows": [
+          {
+            "actual": 1.75,
+            "cutoff": "2023-08-01",
+            "error": -1.7241042831463034,
+            "forecast": 0.025895716853696626,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2023-09-01"
+          },
+          {
+            "actual": 0.45999999999999375,
+            "cutoff": "2023-09-01",
+            "error": 0.14127607797416886,
+            "forecast": 0.6012760779741626,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2023-10-01"
+          },
+          {
+            "actual": 0.7399999999999949,
+            "cutoff": "2023-10-01",
+            "error": -0.08886678045396934,
+            "forecast": 0.6511332195460255,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2023-11-01"
+          },
+          {
+            "actual": 0.29000000000000625,
+            "cutoff": "2023-11-01",
+            "error": 0.745611615362094,
+            "forecast": 1.0356116153621002,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2023-12-01"
+          },
+          {
+            "actual": 0.8700000000000045,
+            "cutoff": "2023-12-01",
+            "error": -0.26956298702589265,
+            "forecast": 0.6004370129741119,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2024-01-01"
+          },
+          {
+            "actual": 0.5300000000000011,
+            "cutoff": "2024-01-01",
+            "error": -0.5079354925137665,
+            "forecast": 0.022064507486234675,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2024-02-01"
+          },
+          {
+            "actual": 0.5300000000000011,
+            "cutoff": "2024-02-01",
+            "error": 0.007059890737025398,
+            "forecast": 0.5370598907370265,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2024-03-01"
+          },
+          {
+            "actual": 0.37999999999999545,
+            "cutoff": "2024-03-01",
+            "error": 0.19905667406627003,
+            "forecast": 0.5790566740662655,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2024-04-01"
+          },
+          {
+            "actual": 0.9399999999999977,
+            "cutoff": "2024-04-01",
+            "error": -0.7108353218544039,
+            "forecast": 0.22916467814559383,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2024-05-01"
+          },
+          {
+            "actual": 0.18000000000000682,
+            "cutoff": "2024-05-01",
+            "error": 0.17257044328387394,
+            "forecast": 0.35257044328388076,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2024-06-01"
+          },
+          {
+            "actual": 1.0699999999999932,
+            "cutoff": "2024-06-01",
+            "error": -1.1236967138893448,
+            "forecast": -0.0536967138893516,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2024-07-01"
+          },
+          {
+            "actual": 0.09000000000000341,
+            "cutoff": "2024-07-01",
+            "error": -0.16810682573829183,
+            "forecast": -0.07810682573828842,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2024-08-01"
+          },
+          {
+            "actual": 0.6200000000000045,
+            "cutoff": "2024-08-01",
+            "error": -0.32026967873831325,
+            "forecast": 0.2997303212616913,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2024-09-01"
+          },
+          {
+            "actual": 1.019999999999996,
+            "cutoff": "2024-09-01",
+            "error": -0.5975517959284389,
+            "forecast": 0.42244820407155714,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2024-10-01"
+          },
+          {
+            "actual": 1.5,
+            "cutoff": "2024-10-01",
+            "error": -0.8061955958183944,
+            "forecast": 0.6938044041816056,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2024-11-01"
+          },
+          {
+            "actual": 0.9099999999999966,
+            "cutoff": "2024-11-01",
+            "error": 0.16483866691544335,
+            "forecast": 1.07483866691544,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2024-12-01"
+          },
+          {
+            "actual": 0.8400000000000034,
+            "cutoff": "2024-12-01",
+            "error": -0.16448194300144792,
+            "forecast": 0.6755180569985555,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2025-01-01"
+          },
+          {
+            "actual": 1.3400000000000034,
+            "cutoff": "2025-01-01",
+            "error": -0.5657859901691609,
+            "forecast": 0.7742140098308425,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2025-02-01"
+          },
+          {
+            "actual": 0.8100000000000023,
+            "cutoff": "2025-02-01",
+            "error": -0.31455039234094784,
+            "forecast": 0.49544960765905444,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2025-03-01"
+          },
+          {
+            "actual": 0.5300000000000011,
+            "cutoff": "2025-03-01",
+            "error": 0.18401500981008212,
+            "forecast": 0.7140150098100833,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2025-04-01"
+          },
+          {
+            "actual": -0.06999999999999318,
+            "cutoff": "2025-04-01",
+            "error": 0.36114296136079815,
+            "forecast": 0.291142961360805,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2025-05-01"
+          },
+          {
+            "actual": -0.04000000000000625,
+            "cutoff": "2025-05-01",
+            "error": 0.1815397277845392,
+            "forecast": 0.14153972778453294,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2025-06-01"
+          },
+          {
+            "actual": 0.35999999999999943,
+            "cutoff": "2025-06-01",
+            "error": -0.5751506311779195,
+            "forecast": -0.2151506311779201,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2025-07-01"
+          },
+          {
+            "actual": -0.5699999999999932,
+            "cutoff": "2025-07-01",
+            "error": 0.3678746386831193,
+            "forecast": -0.20212536131687386,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2025-08-01"
+          },
+          {
+            "actual": 1.0,
+            "cutoff": "2025-08-01",
+            "error": -0.7359942132305264,
+            "forecast": 0.2640057867694736,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2025-09-01"
+          },
+          {
+            "actual": 0.5300000000000011,
+            "cutoff": "2025-09-01",
+            "error": -0.03338116849852213,
+            "forecast": 0.496618831501479,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2025-10-01"
+          },
+          {
+            "actual": 0.15000000000000568,
+            "cutoff": "2025-10-01",
+            "error": 0.3115987007428771,
+            "forecast": 0.4615987007428828,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2025-11-01"
+          },
+          {
+            "actual": 0.29000000000000625,
+            "cutoff": "2025-11-01",
+            "error": 0.21720152661673353,
+            "forecast": 0.5072015266167398,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2025-12-01"
+          },
+          {
+            "actual": 1.5699999999999932,
+            "cutoff": "2025-12-01",
+            "error": -0.8807284048848345,
+            "forecast": 0.6892715951151587,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2026-01-01"
+          },
+          {
+            "actual": 1.0999999999999943,
+            "cutoff": "2026-01-01",
+            "error": -0.4233112851131722,
+            "forecast": 0.6766887148868221,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2026-02-01"
+          },
+          {
+            "actual": 0.5400000000000063,
+            "cutoff": "2026-02-01",
+            "error": 0.2130187736632223,
+            "forecast": 0.7530187736632286,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2026-03-01"
+          },
+          {
+            "actual": -0.28000000000000114,
+            "cutoff": "2026-03-01",
+            "error": 0.989390884492849,
+            "forecast": 0.7093908844928478,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2026-04-01"
+          },
+          {
+            "actual": 0.09000000000000341,
+            "cutoff": "2026-04-01",
+            "error": 0.1539423065286627,
+            "forecast": 0.2439423065286661,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2026-05-01"
+          },
+          {
+            "actual": 1.0600000000000023,
+            "cutoff": "2026-05-01",
+            "error": -0.8913689911488802,
+            "forecast": 0.16863100885112203,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2026-06-01"
+          },
+          {
+            "actual": 0.8199999999999932,
+            "cutoff": "2026-06-01",
+            "error": 0.015819167166341686,
+            "forecast": 0.8358191671663349,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2026-07-01"
+          },
+          {
+            "actual": 0.12000000000000455,
+            "cutoff": "2026-07-01",
+            "error": 0.021480375263124074,
+            "forecast": 0.14148037526312862,
+            "horizon": 1,
+            "status": "ok",
+            "target_date": "2026-08-01"
+          },
+          {
+            "actual": 1.75,
+            "cutoff": "2023-07-01",
+            "error": -1.7439689295938479,
+            "forecast": 0.006031070406152139,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2023-09-01"
+          },
+          {
+            "actual": 0.45999999999999375,
+            "cutoff": "2023-08-01",
+            "error": -0.01984716295545752,
+            "forecast": 0.4401528370445362,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2023-10-01"
+          },
+          {
+            "actual": 0.7399999999999949,
+            "cutoff": "2023-09-01",
+            "error": 0.375679418819999,
+            "forecast": 1.1156794188199939,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2023-11-01"
+          },
+          {
+            "actual": 0.29000000000000625,
+            "cutoff": "2023-10-01",
+            "error": -0.004451458468750502,
+            "forecast": 0.28554854153125575,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2023-12-01"
+          },
+          {
+            "actual": 0.8700000000000045,
+            "cutoff": "2023-11-01",
+            "error": -0.261737820213753,
+            "forecast": 0.6082621797862515,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2024-01-01"
+          },
+          {
+            "actual": 0.5300000000000011,
+            "cutoff": "2023-12-01",
+            "error": -1.2393643665259333,
+            "forecast": -0.7093643665259322,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2024-02-01"
+          },
+          {
+            "actual": 0.5300000000000011,
+            "cutoff": "2024-01-01",
+            "error": -0.04708110682355482,
+            "forecast": 0.4829188931764463,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2024-03-01"
+          },
+          {
+            "actual": 0.37999999999999545,
+            "cutoff": "2024-02-01",
+            "error": 0.27419632270604666,
+            "forecast": 0.6541963227060421,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2024-04-01"
+          },
+          {
+            "actual": 0.9399999999999977,
+            "cutoff": "2024-03-01",
+            "error": -0.7185415168339659,
+            "forecast": 0.22145848316603178,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2024-05-01"
+          },
+          {
+            "actual": 0.18000000000000682,
+            "cutoff": "2024-04-01",
+            "error": 0.11908786242884162,
+            "forecast": 0.29908786242884844,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2024-06-01"
+          },
+          {
+            "actual": 1.0699999999999932,
+            "cutoff": "2024-05-01",
+            "error": -0.9118152563207644,
+            "forecast": 0.15818474367922875,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2024-07-01"
+          },
+          {
+            "actual": 0.09000000000000341,
+            "cutoff": "2024-06-01",
+            "error": -0.22030256030126338,
+            "forecast": -0.13030256030125997,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2024-08-01"
+          },
+          {
+            "actual": 0.6200000000000045,
+            "cutoff": "2024-07-01",
+            "error": -0.3609543942398261,
+            "forecast": 0.25904560576017843,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2024-09-01"
+          },
+          {
+            "actual": 1.019999999999996,
+            "cutoff": "2024-08-01",
+            "error": -0.6266341372657536,
+            "forecast": 0.39336586273424246,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2024-10-01"
+          },
+          {
+            "actual": 1.5,
+            "cutoff": "2024-09-01",
+            "error": -0.9347651424909031,
+            "forecast": 0.5652348575090969,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2024-11-01"
+          },
+          {
+            "actual": 0.9099999999999966,
+            "cutoff": "2024-10-01",
+            "error": -0.23263983225204754,
+            "forecast": 0.677360167747949,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2024-12-01"
+          },
+          {
+            "actual": 0.8400000000000034,
+            "cutoff": "2024-11-01",
+            "error": -0.16780251491864817,
+            "forecast": 0.6721974850813552,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2025-01-01"
+          },
+          {
+            "actual": 1.3400000000000034,
+            "cutoff": "2024-12-01",
+            "error": -0.42603863354317184,
+            "forecast": 0.9139613664568316,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2025-02-01"
+          },
+          {
+            "actual": 0.8100000000000023,
+            "cutoff": "2025-01-01",
+            "error": -0.3224371137290092,
+            "forecast": 0.4875628862709931,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2025-03-01"
+          },
+          {
+            "actual": 0.5300000000000011,
+            "cutoff": "2025-02-01",
+            "error": 0.21142575516989837,
+            "forecast": 0.7414257551698995,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2025-04-01"
+          },
+          {
+            "actual": -0.06999999999999318,
+            "cutoff": "2025-03-01",
+            "error": 0.37561286437701824,
+            "forecast": 0.30561286437702506,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2025-05-01"
+          },
+          {
+            "actual": -0.04000000000000625,
+            "cutoff": "2025-04-01",
+            "error": 0.28721412221810283,
+            "forecast": 0.24721412221809658,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2025-06-01"
+          },
+          {
+            "actual": 0.35999999999999943,
+            "cutoff": "2025-05-01",
+            "error": -0.5868819966497085,
+            "forecast": -0.2268819966497091,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2025-07-01"
+          },
+          {
+            "actual": -0.5699999999999932,
+            "cutoff": "2025-06-01",
+            "error": 0.45954585375099555,
+            "forecast": -0.11045414624899763,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2025-08-01"
+          },
+          {
+            "actual": 1.0,
+            "cutoff": "2025-07-01",
+            "error": -0.7046781151258728,
+            "forecast": 0.29532188487412725,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2025-09-01"
+          },
+          {
+            "actual": 0.5300000000000011,
+            "cutoff": "2025-08-01",
+            "error": -0.07444188440410926,
+            "forecast": 0.4555581155958919,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2025-10-01"
+          },
+          {
+            "actual": 0.15000000000000568,
+            "cutoff": "2025-09-01",
+            "error": 0.5369217336228331,
+            "forecast": 0.6869217336228388,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2025-11-01"
+          },
+          {
+            "actual": 0.29000000000000625,
+            "cutoff": "2025-10-01",
+            "error": 0.4893851829769318,
+            "forecast": 0.779385182976938,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2025-12-01"
+          },
+          {
+            "actual": 1.5699999999999932,
+            "cutoff": "2025-11-01",
+            "error": -0.8854437952616792,
+            "forecast": 0.684556204738314,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2026-01-01"
+          },
+          {
+            "actual": 1.0999999999999943,
+            "cutoff": "2025-12-01",
+            "error": -0.7288774091755101,
+            "forecast": 0.3711225908244842,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2026-02-01"
+          },
+          {
+            "actual": 0.5400000000000063,
+            "cutoff": "2026-01-01",
+            "error": 0.30055138224989264,
+            "forecast": 0.8405513822498989,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2026-03-01"
+          },
+          {
+            "actual": -0.28000000000000114,
+            "cutoff": "2026-02-01",
+            "error": 1.105031500447808,
+            "forecast": 0.8250315004478068,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2026-04-01"
+          },
+          {
+            "actual": 0.09000000000000341,
+            "cutoff": "2026-03-01",
+            "error": 0.16900947052116067,
+            "forecast": 0.2590094705211641,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2026-05-01"
+          },
+          {
+            "actual": 1.0600000000000023,
+            "cutoff": "2026-04-01",
+            "error": -0.9358545412637511,
+            "forecast": 0.12414545873625116,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2026-06-01"
+          },
+          {
+            "actual": 0.8199999999999932,
+            "cutoff": "2026-05-01",
+            "error": -0.5580519535853625,
+            "forecast": 0.26194804641463065,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2026-07-01"
+          },
+          {
+            "actual": 0.12000000000000455,
+            "cutoff": "2026-06-01",
+            "error": 0.06000781636439001,
+            "forecast": 0.18000781636439456,
+            "horizon": 2,
+            "status": "ok",
+            "target_date": "2026-08-01"
+          },
+          {
+            "cutoff": "2022-09-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2023-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2023-09-01"
+          },
+          {
+            "cutoff": "2022-10-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2023-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2023-10-01"
+          },
+          {
+            "actual": 0.7399999999999949,
+            "cutoff": "2022-11-01",
+            "error": -0.29472418780980547,
+            "forecast": 0.4452758121901894,
+            "horizon": 12,
+            "status": "ok",
+            "target_date": "2023-11-01"
+          },
+          {
+            "actual": 0.29000000000000625,
+            "cutoff": "2022-12-01",
+            "error": -0.007577822992701044,
+            "forecast": 0.2824221770073052,
+            "horizon": 12,
+            "status": "ok",
+            "target_date": "2023-12-01"
+          },
+          {
+            "cutoff": "2023-01-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2024-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2024-01-01"
+          },
+          {
+            "cutoff": "2023-02-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2024-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2024-02-01"
+          },
+          {
+            "cutoff": "2023-03-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2024-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2024-03-01"
+          },
+          {
+            "cutoff": "2023-04-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2024-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2024-04-01"
+          },
+          {
+            "cutoff": "2023-05-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2024-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2024-05-01"
+          },
+          {
+            "cutoff": "2023-06-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2024-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2024-06-01"
+          },
+          {
+            "cutoff": "2023-07-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2024-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2024-07-01"
+          },
+          {
+            "cutoff": "2023-08-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2024-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2024-08-01"
+          },
+          {
+            "cutoff": "2023-09-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2024-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2024-09-01"
+          },
+          {
+            "cutoff": "2023-10-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2024-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2024-10-01"
+          },
+          {
+            "actual": 1.5,
+            "cutoff": "2023-11-01",
+            "error": -1.0036470391728898,
+            "forecast": 0.4963529608271102,
+            "horizon": 12,
+            "status": "ok",
+            "target_date": "2024-11-01"
+          },
+          {
+            "actual": 0.9099999999999966,
+            "cutoff": "2023-12-01",
+            "error": -0.39504844062626887,
+            "forecast": 0.5149515593737277,
+            "horizon": 12,
+            "status": "ok",
+            "target_date": "2024-12-01"
+          },
+          {
+            "cutoff": "2024-01-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2025-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2025-01-01"
+          },
+          {
+            "cutoff": "2024-02-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2025-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2025-02-01"
+          },
+          {
+            "cutoff": "2024-03-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2025-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2025-03-01"
+          },
+          {
+            "cutoff": "2024-04-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2025-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2025-04-01"
+          },
+          {
+            "cutoff": "2024-05-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2025-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2025-05-01"
+          },
+          {
+            "cutoff": "2024-06-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2025-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2025-06-01"
+          },
+          {
+            "cutoff": "2024-07-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2025-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2025-07-01"
+          },
+          {
+            "cutoff": "2024-08-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2025-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2025-08-01"
+          },
+          {
+            "cutoff": "2024-09-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2025-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2025-09-01"
+          },
+          {
+            "cutoff": "2024-10-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2025-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2025-10-01"
+          },
+          {
+            "actual": 0.15000000000000568,
+            "cutoff": "2024-11-01",
+            "error": 0.6280101110654357,
+            "forecast": 0.7780101110654414,
+            "horizon": 12,
+            "status": "ok",
+            "target_date": "2025-11-01"
+          },
+          {
+            "actual": 0.29000000000000625,
+            "cutoff": "2024-12-01",
+            "error": 0.325927731241336,
+            "forecast": 0.6159277312413423,
+            "horizon": 12,
+            "status": "ok",
+            "target_date": "2025-12-01"
+          },
+          {
+            "cutoff": "2025-01-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2026-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2026-01-01"
+          },
+          {
+            "cutoff": "2025-02-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2026-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2026-02-01"
+          },
+          {
+            "cutoff": "2025-03-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2026-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2026-03-01"
+          },
+          {
+            "cutoff": "2025-04-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2026-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2026-04-01"
+          },
+          {
+            "cutoff": "2025-05-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2026-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2026-05-01"
+          },
+          {
+            "cutoff": "2025-06-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2026-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2026-06-01"
+          },
+          {
+            "cutoff": "2025-07-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2026-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2026-07-01"
+          },
+          {
+            "cutoff": "2025-08-01",
+            "horizon": 12,
+            "reason": "missing tariff record for forecast month 2026-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)",
+            "status": "unavailable",
+            "target_date": "2026-08-01"
+          }
+        ]
+      },
+      "fit": {
+        "coefficients_intercept_then_features": [
+          100.43597487799042,
+          -0.020812978805851902,
+          0.1369041119133992,
+          -0.009053426286576306,
+          -0.24912779734233684,
+          0.19481668324426843,
+          -0.1545046510906218,
+          0.1227711499598163,
+          0.09774371346641106,
+          0.011732907020508837,
+          0.37989865811025214,
+          0.07270421407487869,
+          0.010119375415988044,
+          0.013891780959905998,
+          0.020711094648052028,
+          0.009787655255196221,
+          0.04744613622954243,
+          0.07167048138281523,
+          -0.011578378920635549,
+          0.04220099537306503
+        ],
+        "converged": true,
+        "features": [
+          "y_lag1",
+          "y_lag2",
+          "y_lag12",
+          "y_ma3",
+          "month_sin",
+          "month_cos",
+          "food_lag1",
+          "nonfood_lag1",
+          "services_lag1",
+          "seasonal_norm",
+          "deviation_lag1",
+          "tariff_rate_lag0",
+          "tariff_rate_lag1",
+          "tariff_rate_lag2",
+          "tariff_rate_lag3",
+          "ruonia_diff_lag1",
+          "spread_lag4",
+          "ki_diff_lag6",
+          "ki_vol"
+        ],
+        "gradient_inf_norm": 0.0,
+        "iterations": 1,
+        "n_train": 104,
+        "objective": 13.528289088135306,
+        "outlier_diagnostics": {
+          "flagged_dates": [],
+          "mode": "none",
+          "n_flagged": 0,
+          "n_used": 104,
+          "rule": "train-only month-median residual; MAD scale 1.4826; winsorize target response",
+          "threshold": 3.5
+        },
+        "scale": null,
+        "scaler_center": [
+          100.5,
+          100.465,
+          100.44999999999999,
+          100.47666666666667,
+          1.2246467991473532e-16,
+          -1.8369701987210297e-16,
+          100.575,
+          100.33,
+          100.44,
+          100.52094444444444,
+          0.002000000000016655,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.023562488236401613,
+          0.1743684210526295,
+          0.0,
+          0.4043843925768968
+        ],
+        "scaler_scale": [
+          0.6850000000000023,
+          0.644999999999996,
+          0.6374999999999886,
+          0.46666666666665435,
+          1.366025403784439,
+          1.3660254037844388,
+          1.4849999999999994,
+          0.3674999999999926,
+          0.7999999999999972,
+          0.34827777777776703,
+          0.5638888888888864,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.4854105991262717,
+          0.2698066770186325,
+          0.0625,
+          0.6191785348824858
+        ],
+        "tariff_diagnostics": {
+          "enabled": true,
+          "excluded_dates": [],
+          "n_excluded_missing": 0,
+          "series_id": "SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA",
+          "training_origin": "2026-08-01",
+          "training_vintage_asof": "2026-08-31"
+        }
+      },
+      "forecast": {
+        "origin": "2026-08-01",
+        "steps": []
+      },
+      "frequency": "raw",
+      "model": "ridge",
+      "ok": true,
+      "schema_version": 1,
+      "warnings": [
+        "experimental tariff calendar regressors; series_id=SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA rate is a monthly percent change",
+        "live forecast unavailable: missing tariff record for forecast month 2027-01-01 (calendar SYNTHETIC_CONTRACT_TEST_NOT_ECONOMIC_DATA)"
+      ]
+    }
+  }
+}
