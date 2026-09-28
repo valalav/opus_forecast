@@ -23,19 +23,19 @@ const wasmPath = arg('wasm', path.join(root, 'core', 'pkg', 'regional_inflation_
 const outputPath = arg('output', path.join(root, 'regional-inflation.html'));
 const fflatePath = arg('fflate', path.join(root, 'node_modules', 'fflate', 'umd', 'index.js'));
 
-const required = [templatePath, cssPath, appPath, importPath, localSourcesPath, comparisonPath, cbrRatesPath, dataPath, wasmJsPath, wasmPath, fflatePath];
+const required = [templatePath, cssPath, appPath, importPath, localSourcesPath, comparisonPath, cbrRatesPath, path.join(web, 'tariff-scenario.js'), dataPath, wasmJsPath, wasmPath, fflatePath];
 for (const file of required) {
   try { await readFile(file); }
   catch { throw new Error(`Required build input is missing: ${file}`); }
 }
-const [template, css, app, importer, localSources, comparison, cbrRates, data, wasmJs, wasm, fflate] = await Promise.all(required.map(file => readFile(file)));
+const [template, css, app, importer, localSources, comparison, cbrRates, tariffs, data, wasmJs, wasm, fflate] = await Promise.all(required.map(file => readFile(file)));
 const encode = b => b.toString('base64');
 const safeJson = b => JSON.stringify(JSON.parse(b.toString('utf8'))).replaceAll('<', '\\u003c').replaceAll('>', '\\u003e').replaceAll('&', '\\u0026');
 let html = template.toString();
 const replacements = [
   ['/*__INLINE_CSS__*/', css.toString()],
   ['/*__INLINE_WASM_BINDGEN__*/', `window.__WASM_BINDGEN_SOURCE__=${JSON.stringify(wasmJs.toString())};window.__REGIONAL_WASM_BASE64__=${JSON.stringify(encode(wasm))};window.__REGIONAL_DATA__=${safeJson(data)};`],
-  ['/*__INLINE_APP__*/', `${fflate.toString()}\n${importer.toString()}\n${localSources.toString()}\n${comparison.toString()}\n${cbrRates.toString()}\n${app.toString()}`],
+  ['/*__INLINE_APP__*/', `${fflate.toString()}\n${importer.toString()}\n${localSources.toString()}\n${comparison.toString()}\n${cbrRates.toString()}\n${tariffs.toString()}\n${app.toString()}`],
 ];
 for (const [needle, value] of replacements) {
   if (!html.includes(needle)) throw new Error(`Template placeholder not found: ${needle}`);

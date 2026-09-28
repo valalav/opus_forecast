@@ -1,0 +1,79 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "calculation visible",
+      "pass": true
+    },
+    {
+      "name": "invalid scenario blocked",
+      "pass": true
+    },
+    {
+      "name": "blank weight visibly rejected",
+      "pass": true
+    },
+    {
+      "name": "calculation visible",
+      "pass": true
+    },
+    {
+      "name": "model preserved exactly",
+      "pass": true
+    },
+    {
+      "name": "October direct effect only",
+      "pass": true
+    },
+    {
+      "name": "table separates model and scenario",
+      "pass": true
+    },
+    {
+      "name": "annual scenario independently compounded",
+      "pass": true
+    },
+    {
+      "name": "CSV exposes base and contribution",
+      "pass": true
+    },
+    {
+      "name": "annual chart uses scenario",
+      "pass": true
+    },
+    {
+      "name": "settings restore events and enabled",
+      "pass": true
+    },
+    {
+      "name": "calculation visible",
+      "pass": true
+    },
+    {
+      "name": "backtest excludes scenario",
+      "pass": true
+    },
+    {
+      "name": "invalid scenario blocked",
+      "pass": true
+    },
+    {
+      "name": "SA scenario explicitly rejected",
+      "pass": true
+    },
+    {
+      "name": "calculation visible",
+      "pass": true
+    },
+    {
+      "name": "mobile viewport does not overflow",
+      "pass": true
+    },
+    {
+      "name": "no JavaScript errors",
+      "pass": true
+    }
+  ],
+  "html_sha256": "d76ebf7e1da74122547e607c66eb728cc3368992c7785b0e4887302a920ef579",
+  "environment": "Chrome Linux offline; Rust/WASM; Windows not tested"
+}

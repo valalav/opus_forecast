@@ -119,6 +119,28 @@
   }
   // Public bridge kept stable so a future WASM adapter can replace the worker internals.
   window.computeRegional = requestJSON => startCompute(typeof requestJSON==='string'?requestJSON:JSON.stringify(requestJSON));
+  function tariffEvents() {
+    return [...$('tariffRows').children].map(row=>Object.fromEntries([...row.querySelectorAll('input')].map(el=>[el.dataset.field,el.value])));
+  }
+  function addTariff(event={}) {
+    const row=document.createElement('tr');
+    for(const [field,label] of [['date','Месяц'],['rate','Индексация'],['baseline','Учтено в базе'],['weight','Вес в ИПЦ']]) {
+      const td=document.createElement('td'),input=document.createElement('input');input.type=field==='date'?'month':'number';input.step='any';input.dataset.field=field;input.setAttribute('aria-label',label);input.value=event[field]??'';td.append(input);row.append(td);
+    }
+    const td=document.createElement('td'),button=document.createElement('button');button.type='button';button.className='button button-secondary';button.textContent='Удалить';button.addEventListener('click',()=>{row.remove();invalidateResults();});td.append(button);row.append(td);$('tariffRows').append(row);
+  }
+  function scenarioResult(result,request) {
+    if(!$('tariffEnabled').checked)return result;
+    if(request.backtests){result.warnings=[...(result.warnings||[]),'Тарифный сценарий не применяется к бэктестам.'];return result;}
+    if(request.frequency!=='raw')throw new Error('Тарифный сценарий поддерживает только RAW. Выберите RAW или выключите сценарий.');
+    const events=tariffEvents();if(!events.length)throw new Error('Добавьте хотя бы один месяц тарифного сценария.');
+    const numericEvents=events.map((event,i)=>{const converted={date:event.date};for(const field of ['rate','baseline','weight']){if(event[field]===''||!Number.isFinite(Number(event[field])))throw new Error(`Тарифная строка ${i+1}: заполните индексацию, учтённый рост и вес числовыми значениями.`);converted[field]=Number(event[field]);}return converted;});
+    const steps=window.TariffScenario.apply(result.forecast.steps,numericEvents);
+    result.model_forecast=structuredClone(result.forecast);result.forecast={...result.forecast,steps};
+    result.tariff_scenario={events,method:'direct incremental CPI pp = weight_pct * (rate_pct - baseline_pct) / 100; no recursive indirect pass-through'};
+    result.warnings=[...(result.warnings||[]),'Показан экспертный тарифный сценарий. База модели сохранена отдельно. Уже учтённый рост задан пользователем; модель не выделяет его автоматически. Поправка влияет непосредственно на указанные месяцы и на составной годовой темп, без косвенного переноса издержек.'];
+    return result;
+  }
   function getConfig() {
     const cutoff=$('cutoff').value;
     const etsWeights=parseJsonField('etsWeights12',undefined),tariffMonths=parseJsonField('tariffMonths',{});
@@ -182,22 +204,24 @@
   }
   function rowsForTable(result) {
     if(els.operation.value==='backtest')return result.backtest?.rows||[];
-    return (result.forecast?.steps||[]).map(x=>({date:x.date,all:x.all}));
+    return (result.forecast?.steps||[]).map(x=>({...x}));
   }
   function renderTable(result) {
     const back=els.operation.value==='backtest', rows=rowsForTable(result);
     els.tableTitle.textContent=back?'Наблюдения скользящей проверки':'Помесячный прогноз';
     els.tableSubtitle.textContent=back?'Ошибка = прогноз минус факт. Пропуски отмечены отдельно.':'Модельный общий индекс, % к предыдущему месяцу.';
-    const raw=els.representation.value==='raw';
+    const raw=els.representation.value==='raw',scenario=!!result.tariff_scenario;
+    const baseYoY=new Map(scenario?movingYoY(activeRows().filter(r=>r.date<=result.forecast.origin).slice(-11).concat(result.model_forecast.steps.map(r=>({date:r.date,y:100+r.all})))).map(r=>[r.date,r.y]):[]);
     const actualYoY=raw?new Map(movingYoY(activeRows()).map(x=>[x.date,x.y])):new Map();
     const forecastYoY=new Map();
     if(!back&&raw){const origin=result.forecast?.origin, history=activeRows().filter(r=>!origin||r.date<=origin).slice(-11).map(r=>({date:r.date,y:Number(r.y)}));const projected=(result.forecast?.steps||[]).map(r=>({date:r.date,y:100+Number(r.all)}));for(const r of movingYoY(history.concat(projected)))forecastYoY.set(r.date,r.y);}
-    const cols=back?['Отсечение','Горизонт','Целевой месяц','Факт, %','Прогноз, %','Ошибка, п.п.',...(raw?['Факт за 12 мес., % г/г']:[]),'Статус']:['Месяц','Прогноз, % к пред. месяцу',...(raw?['Прогноз за 12 мес., % г/г']:[])];
+    const cols=back?['Отсечение','Горизонт','Целевой месяц','Факт, %','Прогноз, %','Ошибка, п.п.',...(raw?['Факт за 12 мес., % г/г']:[]),'Статус']:['Месяц',...(scenario?['Модель, % м/м','Тарифная поправка, п.п.']:[]),scenario?'Сценарий, % м/м':'Прогноз, % к пред. месяцу',...(raw?[...(scenario?['Модель, % г/г']:[]),scenario?'Сценарий, % г/г':'Прогноз за 12 мес., % г/г']:[])];
     els.tableHead.innerHTML=`<tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr>`; els.tableBody.innerHTML='';
     const shown=back?rows.slice(-100):rows;
-    for(const r of shown){const tr=document.createElement('tr'); const cells=back?[dateLabel(r.cutoff),r.horizon,dateLabel(r.target_date),nfmt(r.actual),nfmt(r.forecast),nfmt(r.error),...(raw?[`${nfmt(actualYoY.get(r.target_date))}%`]:[]),['available','ok',undefined].includes(r.status)?'Валидный':(r.reason||r.status)]:[dateLabel(r.date),`${nfmt(r.all)}%`,...(raw?[`${nfmt(forecastYoY.get(r.date))}%`]:[])]; for(const c of cells){const td=document.createElement('td');td.textContent=String(c??'—');tr.append(td);}els.tableBody.append(tr);}
+    for(const r of shown){const tr=document.createElement('tr'); const cells=back?[dateLabel(r.cutoff),r.horizon,dateLabel(r.target_date),nfmt(r.actual),nfmt(r.forecast),nfmt(r.error),...(raw?[`${nfmt(actualYoY.get(r.target_date))}%`]:[]),['available','ok',undefined].includes(r.status)?'Валидный':(r.reason||r.status)]:[dateLabel(r.date),...(scenario?[`${nfmt(r.model_all)}%`,nfmt(r.tariff_delta,3)]:[]),`${nfmt(r.all)}%`,...(raw?[...(scenario?[`${nfmt(baseYoY.get(r.date))}%`]:[]),`${nfmt(forecastYoY.get(r.date))}%`]:[])]; for(const c of cells){const td=document.createElement('td');td.textContent=String(c??'—');tr.append(td);}els.tableBody.append(tr);}
     if(back&&raw)els.tableSubtitle.textContent='Годовой темп в этой таблице — факт за 12 месяцев. Ошибки модели оценены для месячной инфляции.';
     else if(!back)els.tableSubtitle.textContent=raw?'Прогноз индексов к предыдущему месяцу и составной годовой темп по прогнозному пути.':'SA — месячный темп; годовой официальный темп недоступен.';
+    if(scenario)els.tableSubtitle.textContent='База модели и экспертный сценарий показаны раздельно. Тарифная поправка — в п.п. месячного ИПЦ.';
     els.rowCount.textContent=`${rows.length} строк${back&&rows.length>100?' · показаны последние 100':''}`;
   }
   function movingYoY(rows) {
@@ -237,8 +261,9 @@
     els.chart.dataset.points=JSON.stringify({history:histShown,forecast});
     const points=p=>escapeAttribute(JSON.stringify(p));
     els.chart.innerHTML=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">${grid}<line class="axis" x1="${L}" x2="${W-R}" y1="${H-B}" y2="${H-B}"/><path class="series" data-series="history" data-points="${points(histShown)}" stroke="#1978bd" d="${historyPath}"/>${forecastPath?`<path class="series" data-series="forecast" data-points="${points(forecast)}" stroke="#15917d" stroke-dasharray="6 4" d="${forecastPath}"/>`:''}${labels}</svg>`;
-    els.chartTitle.textContent=back?'Скользящие прогнозы h=1 и факт':'Фактическая история и прогноз';
+    els.chartTitle.textContent=back?'Скользящие прогнозы h=1 и факт':(result.tariff_scenario?'Фактическая история и тарифный сценарий':'Фактическая история и прогноз');
     els.chartSubtitle.textContent=frequency==='sa'?'SA · месячный темп, %':(back?'RAW · месячный темп, % к предыдущему месяцу':'RAW · '+(valueMode==='yoy'?'годовой темп, % г/г':'месячный темп, % к предыдущему месяцу'));
+    if(result.tariff_scenario)els.chartSubtitle.textContent+=' · база модели приведена в таблице';
     els.legend.innerHTML=`<span><i style="background:#1978bd"></i>Факт</span>${forecast.length?'<span><i style="background:#15917d"></i>Прогноз</span>':''}`;
   }
   const escapeAttribute=value=>String(value).replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;').replaceAll('>','&gt;');
@@ -268,26 +293,28 @@
   function csvDownload() {
     if(!activeResult)return; const back=els.operation.value==='backtest'; let rows=rowsForTable(activeResult);
     const raw=els.representation.value==='raw';
-    const columns=back?['cutoff','horizon','target_date','actual','forecast','error',...(raw?['actual_yoy']:[]),'status','reason']:['date','all',...(raw?['yoy']:[])];
+    const columns=back?['cutoff','horizon','target_date','actual','forecast','error',...(raw?['actual_yoy']:[]),'status','reason']:['date',...(activeResult.tariff_scenario?['model_all','tariff_delta']:[]),'all',...(raw?[...(activeResult.tariff_scenario?['model_yoy']:[]),'yoy']:[])];
     if(raw){
       const history=activeRows().filter(r=>back||r.date<=activeResult.forecast.origin);
       const series=back?history:history.slice(-11).concat(activeResult.forecast.steps.map(r=>({date:r.date,y:100+r.all})));
       const annual=new Map(movingYoY(series).map(r=>[r.date,r.y]));
       rows=rows.map(r=>({...r,[back?'actual_yoy':'yoy']:annual.get(back?r.target_date:r.date)}));
     }
+    if(activeResult.tariff_scenario&&!back){const annual=new Map(movingYoY(activeRows().filter(r=>r.date<=activeResult.forecast.origin).slice(-11).concat(activeResult.model_forecast.steps.map(r=>({date:r.date,y:100+r.all})))).map(r=>[r.date,r.y]));rows=rows.map(r=>({...r,model_yoy:annual.get(r.date)}));}
     const escape=x=>`"${String(x??'').replaceAll('"','""')}"`;
     const csv='\ufeff'+[columns.join(';'),...rows.map(r=>columns.map(k=>escape(r[k])).join(';'))].join('\r\n');
     download(csv,`${safeName(selectedRegion()?.code)}_${els.model.value}_${back?'backtest':'forecast'}.csv`,'text/csv;charset=utf-8');
   }
   function download(content,name,type) { const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000); }
   const safeName=x=>String(x||'regional').replace(/[^\p{L}\p{N}_-]+/gu,'_');
-  function settingsSnapshot() { return {schema_version:1,model:els.model.value,frequency:els.representation.value,operation:els.operation.value,backtest_period:els.period.value,backtest_from: $('backtestFrom').value,backtest_to:$('backtestTo').value,source_url:$('sourceUrlInput').value,source_path:els.sourcePath.value,rates:{from:$('cbrFrom').value,to:$('cbrTo').value,ki_method:$('kiMethod').value,ruonia_method:$('ruoniaMethod').value},config:getConfig()}; }
+  function settingsSnapshot() { return {schema_version:1,tariff_scenario:{enabled:$('tariffEnabled').checked,events:tariffEvents()},model:els.model.value,frequency:els.representation.value,operation:els.operation.value,backtest_period:els.period.value,backtest_from: $('backtestFrom').value,backtest_to:$('backtestTo').value,source_url:$('sourceUrlInput').value,source_path:els.sourcePath.value,rates:{from:$('cbrFrom').value,to:$('cbrTo').value,ki_method:$('kiMethod').value,ruonia_method:$('ruoniaMethod').value},config:getConfig()}; }
   function saveSettings() { try{clearError();validateConfigInputs();const snapshot=settingsSnapshot();localStorage.setItem('regional-inflation-settings',JSON.stringify(snapshot));download(JSON.stringify(snapshot,null,2),`${safeName(selectedRegion()?.code)}_settings.json`,'application/json');}catch(e){showError(e.message||String(e));} }
   function applySettings(settings) {
     if(!settings||typeof settings!=='object'||!settings.config||typeof settings.config!=='object')throw new Error('Файл настроек должен содержать объект config.');
     if(settings.model&&!['ridge','huber'].includes(settings.model))throw new Error('В настройках указана неизвестная модель.');
     const map={train_start:'trainStart',cutoff:'cutoff',max_iter:'maxIter',use_macro:'useMacro',min_train:'minTrain',ets_weights12:'etsWeights12',excluded_years:'excludedYears',seasonal_excluded_years:'seasonalExcludedYears',tariff_month_by_year:'tariffMonths',seasonality_mode:'seasonalityMode',outlier_mode:'outlierMode',outlier_threshold:'outlierThreshold'};
     for(const [key,value] of Object.entries(settings.config)) {const el=$(map[key]||key);if(!el)continue;if(el.type==='checkbox')el.checked=!!value;else if(key==='excluded_years'||key==='seasonal_excluded_years')el.value=Array.isArray(value)?value.join(', '):value;else if(key==='cutoff'||key==='train_start')el.value=String(value).slice(0,7);else el.value=Array.isArray(value)||typeof value==='object'?JSON.stringify(value):value;}
+    $('tariffRows').replaceChildren();$('tariffEnabled').checked=!!settings.tariff_scenario?.enabled;for(const event of settings.tariff_scenario?.events||[])addTariff(event);
     if(settings.rates){if(settings.rates.from)$('cbrFrom').value=settings.rates.from;if(settings.rates.to)$('cbrTo').value=settings.rates.to;if(['last','mean'].includes(settings.rates.ki_method))$('kiMethod').value=settings.rates.ki_method;if(['last','mean'].includes(settings.rates.ruonia_method))$('ruoniaMethod').value=settings.rates.ruonia_method;}
     if(settings.model){els.model.value=settings.model;lastModel=settings.model;}
     if(['raw','sa'].includes(settings.frequency))els.representation.value=settings.frequency;
@@ -360,7 +387,7 @@
     try {
       const raw=await window.computeRegional(JSON.stringify(req)); const result=typeof raw==='string'?JSON.parse(raw):raw;
       if(!result?.ok)throw new Error(result?.error?.message||'Rust/WASM вернул ошибку без описания.');
-      render(result);
+      render(scenarioResult(result,req));
       const latest=activeRows().at(-1)?.date; status(`Расчёт завершён. Последнее наблюдение: ${dateLabel(latest)}.`, 'success');
     } catch(e) { if(e.name!=='AbortError'){const message=e.message||String(e);showError(/nonconverged/i.test(message)?`${message}. Выберите Ridge или измените допуск сходимости в параметрах; это меняет критерий принятия оценки. Увеличение числа итераций может не помочь.`:message);} }
     finally {activeRequest=null;setBusy(false);setEngine(wasmReady?'Модуль готов · локальный расчёт':'Модуль недоступен',wasmReady?'ready':'offline');}
@@ -400,6 +427,7 @@
   }
   function resetSettings() {
     for(const [key,value] of Object.entries(DEFAULTS)) { const id={train_start:'trainStart',max_iter:'maxIter',use_macro:'useMacro',min_train:'minTrain',ets_weights12:'etsWeights12',excluded_years:'excludedYears',seasonal_excluded_years:'seasonalExcludedYears',tariff_month_by_year:'tariffMonths',seasonality_mode:'seasonalityMode',outlier_mode:'outlierMode',outlier_threshold:'outlierThreshold'}[key]||key;const el=$(id);if(!el)continue;if(el.type==='checkbox')el.checked=value;else el.value=value; }
+    $('tariffRows').replaceChildren();$('tariffEnabled').checked=false;
     els.model.value='ridge';lastModel='ridge';$('excludedYears').value=DEFAULTS.excluded_years;els.operation.value='forecast';els.period.value='36';$('backtestFrom').value='';$('backtestTo').value='';els.periodField.hidden=true;els.backtestFromField.hidden=true;els.backtestToField.hidden=true;els.representation.value='raw';els.results.hidden=true;activeResult=null;clearError();updateRepresentation();
   }
   els.file.addEventListener('change',e=>{const f=e.target.files?.[0];if(f)readFile(f);e.target.value='';});
@@ -411,6 +439,8 @@
   els.model.addEventListener('change',()=>{const next=els.model.value;for(const [id,key] of [['excludedYears','excluded_years'],['seasonalExcludedYears','seasonal_excluded_years']]){const fallback=DEFAULTS[key],prevDefault=lastModel==='ridge'?fallback:'';if($(id).value.trim()===prevDefault)$(id).value=next==='ridge'?fallback:'';}lastModel=next;});
   const invalidateResults=()=>{if(activeRequest)return;activeResult=null;activeComparison=null;lastRequest=null;els.results.hidden=true;els.comparison.hidden=true;};
   for(const selector of ['#representation','#regionSelect','#modelSelect','#operation','#backtestPeriod','#backtestFrom','#backtestTo','#advancedConfig input','#advancedConfig select'])for(const el of document.querySelectorAll(selector))for(const event of ['input','change'])el.addEventListener(event,invalidateResults);
+  $('addTariff').addEventListener('click',()=>{addTariff();invalidateResults();});
+  $('tariffPanel').addEventListener('input',invalidateResults);$('tariffPanel').addEventListener('change',invalidateResults);
   els.csv.addEventListener('click',csvDownload);els.settings.addEventListener('click',saveSettings);els.package.addEventListener('click',savePackage);$('saveReport').addEventListener('click',saveReport);
   els.valueMode.addEventListener('click',()=>{valueMode=valueMode==='mom'?'yoy':'mom';els.valueMode.textContent=valueMode==='mom'?'Показать г/г':'Показать м/м';if(activeResult)renderChart(activeResult);});
   try {

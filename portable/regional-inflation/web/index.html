@@ -44,6 +44,14 @@
         <div><strong>Параметры модели</strong><p>Начальные значения соответствуют базовой спецификации КБР. Это отправная точка для сравнения, а не универсальные настройки для всех регионов.</p></div>
         <button id="advancedToggle" class="button button-secondary" type="button" aria-expanded="false" aria-controls="advancedConfig">Показать параметры</button>
       </div>
+      <details id="tariffPanel" class="advanced-details">
+        <summary>Сценарий тарифов: месяцы и проценты</summary>
+        <p>Прямой вклад в RAW ИПЦ: вес в общей корзине × (индексация по сценарию − уже учтённая индексация) / 100. Вес задаётся для выбранного региона; автоматической оценки веса нет. «Уже учтено» — ваше предположение о базе модели, а не оценка её коэффициентов.</p>
+        <label class="check-label"><input id="tariffEnabled" type="checkbox"> Применить сценарий к прогнозу RAW</label>
+        <div class="table-scroll"><table><thead><tr><th>Месяц</th><th>Индексация, %</th><th>Уже учтено в базе, %</th><th>Вес в общем ИПЦ, %</th><th></th></tr></thead><tbody id="tariffRows"></tbody></table></div>
+        <button id="addTariff" class="button button-secondary" type="button">Добавить месяц</button>
+        <p>Для переноса укажите две строки: отмену индексации в прежнем месяце и повышение в новом. Все даты должны входить в горизонт прогноза. По умолчанию сценарий выключен, поля пустые. В бэктестах сценарий не применяется; для SA расчёт вклада требует отдельного сезонного преобразования. Косвенный перенос издержек здесь не моделируется.</p>
+      </details>
       <div id="advancedConfig" class="advanced-config" hidden>
         <div class="form-grid compact-grid">
           <label>Горизонт, месяцев<input id="horizon" type="number" min="1" max="24" value="12" required></label>
