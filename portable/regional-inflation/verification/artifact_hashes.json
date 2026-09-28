@@ -1,8 +1,14 @@
 {
-  "regional-inflation.html": "3e25848e114201fd6e8304ae9cb00a2b89cfa8b3c3d345803266c46309aa8c88",
-  "core/src/lib.rs": "29f8c97262ea6c0f6c6cacc0530090e636ac0ff34b9a9318f998f23368331076",
-  "core/pkg/regional_inflation_core_bg.wasm": "fcdeb097cca640256aa6a5eeb2ab80263734e74231cade9601da0fe2c4af30c8",
-  "data/regional_indices.json": "742960d36ec4796ca949606eacf2f958ac2568eefd98718bd55143abdc9be456",
-  "web/app.js": "d493e08c9e7275ba2cc305e10094aadf4498cf9105bd9e832d2d191c08b2bb2f",
+  "regional-inflation.html": "97d17b6787f4711ad3aa1f6e9ba1a72e2c08f090887e4a0fc37d3e1a7458c3bd",
+  "Start.cmd": "751cb280995b2e70685d9a134d03de24207283e00bd10c533cf2c1300e249c2e",
+  "Start.ps1": "f1858c07980edd22a978a3f3588d04c2fa09b936bdb75de1985ac1d9ad74a05d",
+  "macro_rates.json": "66334a4ea18b28698a6e597abd17875e3b984c9a943081aaff18991ec458bac7",
+  "data/regional_indices.json": "cfb6bcc83c5a2f2c99def3883cf6e1e8fde08524b0ab8ef4030d39d0df17c3fd",
+  "core/src/lib.rs": "903df3cd7ec7f6176988f9247eab8ece203220f8f7b47247c4bb40fb34749ca5",
+  "core/pkg/regional_inflation_core_bg.wasm": "f7bb1d39329817119366c2644180d821caabdd835fae52bb16ddc7e4e5ce9181",
+  "web/app.js": "04ece26fa193845c98100c6e272714880f12f4229c55af8612f85a6862780a15",
+  "web/local-sources.js": "a995963c760ad6132757539d2966360f79bb63ecc1a01b0f6e306bc65e848026",
+  "web/cbr-rates.js": "6ef92bea484b3054a5cf6693eb9f2bed8244e88a216ef9717fe4bad0a6644010",
+  "web/comparison.js": "2a95135852116a3588b44dc70fe68f17b5257a8f01967c53a3fafa24d66dd5a8",
   "web/source-import.js": "41e8fb7b8abc7568a2e6c117cafac6596a55d40c5d28ba924b2a8c4f07ef2de8"
 }

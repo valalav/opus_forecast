@@ -1,0 +1,18 @@
+[
+  {
+    "method": "KeyRateXML",
+    "source": "https://www.cbr.ru/DailyInfoWebServ/DailyInfo.asmx",
+    "from": "2016-01-01",
+    "to": "2026-08-31",
+    "bytes": 162145,
+    "sha256": "ace218c8ce9f1a97ab9fe72d0c7a0616bd87aa27ebd35e17abcca4737a6a72d5"
+  },
+  {
+    "method": "RuoniaXML",
+    "source": "https://www.cbr.ru/DailyInfoWebServ/DailyInfo.asmx",
+    "from": "2016-01-01",
+    "to": "2026-08-31",
+    "bytes": 325194,
+    "sha256": "0728a295cc68a09b6cd0ccf8686ee7ca3cba477dad1a6f82e66d1cc37a160fb5"
+  }
+]

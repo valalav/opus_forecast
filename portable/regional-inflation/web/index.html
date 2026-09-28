@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="light">
   <title>Региональная инфляция — локальный расчёт</title>
   <style>/*__INLINE_CSS__*/</style>
-  <style>[hidden]{display:none!important}.form-grid>label{min-width:0}.form-grid select,.form-grid input:not([type=checkbox]){width:100%;max-width:100%;min-width:0}.data-actions,.export-actions{flex-wrap:wrap}</style>
+  <style>[hidden]{display:none!important}.form-grid>label{min-width:0}.form-grid select,.form-grid input:not([type=checkbox]){width:100%;max-width:100%;min-width:0}.data-actions,.export-actions{flex-wrap:wrap}.source-path-grid{grid-template-columns:minmax(260px,2fr) minmax(180px,1fr);margin:0 0 16px}.path-picker{display:flex;flex-direction:column;align-items:flex-start;gap:7px;color:#647585;font-size:12px}.path-picker small{color:#81909a}.metrics-heading{display:flex;align-items:center;gap:14px;margin:20px 0 4px}.metrics-heading h3{margin:0;font-size:16px}.metrics-heading p{margin:0;color:#647585;font-size:11px;flex:1}.metric-grid{margin-top:8px}.metric-card.is-primary{border-color:#b8d8eb;background:#f4faff}.comparison-results{background:white;border:1px solid #dce4e8;border-radius:9px;padding:14px;margin:10px 0;font-size:11px;line-height:1.5}.comparison-results p{margin:0 0 8px}.comparison-results table{white-space:normal}.macro-panel{padding:20px 24px;margin-top:14px}.macro-panel .section-heading{margin-bottom:12px}.macro-panel .section-heading p:not(.eyebrow){font-size:12px;color:#647585;margin:7px 0 0}.macro-controls{margin-bottom:12px}.macro-actions{margin-bottom:12px}.macro-panel .notice{margin:0}@media(max-width:850px){.source-path-grid{grid-template-columns:1fr}.metrics-heading{align-items:flex-start;flex-direction:column}}@media(max-width:560px){.macro-panel{padding:16px 14px}.metrics-heading .button{width:100%}</style>
 </head>
 <body>
   <a class="skip-link" href="#main">К расчётам</a>
@@ -24,9 +24,10 @@
 
     <section class="panel controls-panel" aria-labelledby="setupTitle">
       <div class="section-heading"><div><p class="eyebrow">01 · НАСТРОЙКА</p><h2 id="setupTitle">Данные и модель</h2></div>
-      <div class="data-actions"><button id="loadSource" class="button button-primary" type="button">Загрузить данные</button><label class="button button-secondary" for="fileInput">Импорт XLSX / JSON</label><input id="fileInput" type="file" accept="application/json,.json,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden><button id="savePackage" class="button button-secondary" type="button" disabled>Сохранить JSON</button><button id="resetButton" class="text-button" type="button">Сбросить</button></div>
+      <div class="data-actions"><button id="loadLocalSource" class="button button-primary" type="button">Найти файлы на компьютере</button><button id="loadSource" class="button button-secondary" type="button">Загрузить из Яндекс Диска</button><label class="button button-secondary" for="fileInput">Импорт XLSX / JSON</label><input id="fileInput" type="file" accept="application/json,.json,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden><button id="savePackage" class="button button-secondary" type="button" disabled>Сохранить JSON</button><button id="resetButton" class="text-button" type="button">Сбросить</button></div>
       </div>
       <div id="dataNotice" class="notice notice-info" role="status">RAW и SA загружаются из общего листа региональной базы ИПЦ; доступная история начинается в 2016 году. Нажмите «Загрузить данные» или импортируйте сохранённый XLSX / JSON. Обработка проходит в браузере.</div>
+      <div class="form-grid source-path-grid"><label>Папка или файл с локальными данными<input id="sourcePath" type="text" placeholder="Например, C:\\данные\\региональная_инфляция"><small>Путь применяется только при поиске на компьютере и не меняет ссылку на Яндекс Диск. В браузере путь доступен, только если его разрешает система; иначе выберите папку или импортируйте файл.</small></label><div class="path-picker"><span>Доступ к папке</span><button id="chooseLocalFolder" class="button button-secondary" type="button">Выбрать папку…</button><small>Выбор папки доступен в поддерживаемых браузерах.</small></div></div>
       <div class="form-grid">
         <label>Представление данных
           <select id="representation"><option value="raw">RAW · месячные индексы</option><option value="sa">SA · сезонно скорректированный ряд</option></select>
@@ -61,6 +62,9 @@
             <label>Исключённые годы<input id="excludedYears" type="text" value="2010, 2022" placeholder="2020, 2022"></label>
             <label>Исключённые годы сезонной оценки<input id="seasonalExcludedYears" type="text" value="2010, 2022" placeholder="2020"></label>
             <label>Минимум наблюдений<input id="minTrain" type="number" min="12" value="36" required></label>
+            <label>Сезонность<select id="seasonalityMode"><option value="legacy">Как в базовой модели</option><option value="features_only">Только сезонные признаки</option><option value="off">Отключить сезонность</option></select><small>Управляет сезонной частью модели. Остальные признаки сохраняются.</small></label>
+            <label>Обработка выбросов<select id="outlierMode"><option value="none">Не менять наблюдения</option><option value="mad_winsor">Ограничить крайние значения</option></select><small>Проверка выбросов использует только обучающую часть на каждой дате отсечения.</small></label>
+            <label>Порог ограничения<input id="outlierThreshold" type="number" min="1" step="0.1" value="3.5" required><small>Порог в устойчивых отклонениях от медианы; применяется при ограничении значений.</small></label>
             <label>Ссылка на папку источника<input id="sourceUrlInput" type="url" value="https://disk.yandex.ru/d/i6czrcdNO0I7BQ"></label>
           </div>
         </details>
@@ -71,10 +75,21 @@
       <p id="errorMessage" class="error-message" role="alert" hidden></p>
     </section>
 
+    <section class="panel macro-panel" aria-labelledby="macroTitle">
+      <div class="section-heading"><div><p class="eyebrow">ИСТОЧНИКИ МАКРОДАННЫХ</p><h2 id="macroTitle">Ставки Банка России</h2><p>Месячные значения Ki и RUONIA используются как макропризнаки. Скачанный пакет можно сохранить и применять офлайн.</p></div></div>
+      <div class="form-grid compact-grid macro-controls">
+        <label>С даты<input id="cbrFrom" type="date" value="2016-01-01"></label><label>По дату<input id="cbrTo" type="date"></label>
+        <label>Ki за месяц<select id="kiMethod"><option value="last">Последнее значение</option><option value="mean">Среднее за месяц</option></select></label>
+        <label>RUONIA за месяц<select id="ruoniaMethod"><option value="mean">Среднее за месяц</option><option value="last">Последнее значение</option></select></label>
+      </div>
+      <div class="data-actions macro-actions"><button id="downloadCbr" class="button button-primary" type="button">Скачать ставки</button><label class="button button-secondary" for="rateFiles">Импортировать ставки / официальный файл</label><input id="rateFiles" type="file" accept=".json,.xml,.csv,application/json,text/xml,text/csv" multiple hidden><button id="saveRates" class="button button-secondary" type="button" disabled>Сохранить пакет ставок</button></div>
+      <p id="macroNotice" class="notice notice-info" role="status">Ставки из загруженного регионального файла сохраняются как исходная версия. Загрузка официальных данных меняет макропризнаки и может изменить прогноз.</p>
+    </section>
+
     <section id="results" class="results-section" aria-live="polite" hidden>
       <div class="section-heading results-heading"><div><p class="eyebrow">02 · РЕЗУЛЬТАТ</p><h2 id="resultTitle">Результаты</h2></div><div class="export-actions"><button id="valueMode" class="button button-secondary" type="button">Показать г/г</button><button id="exportCsv" class="button button-secondary" type="button">Скачать CSV</button><button id="saveReport" class="button button-secondary" type="button">Расчёт JSON</button><button id="saveSettings" class="button button-secondary" type="button">Настройки JSON</button></div></div>
       <div id="resultWarnings"></div>
-      <div id="metrics" class="metric-grid"></div>
+      <div class="metrics-heading"><h3>Качество прогноза</h3><p>Основные ошибки в процентных пунктах. Для бэктеста показаны результаты на выбранных целевых месяцах.</p><button id="compareOutliers" class="button button-secondary" type="button" hidden>Сравнить с расчётом без ограничения выбросов</button></div><div id="comparisonResults" class="comparison-results" hidden></div><div id="metrics" class="metric-grid"></div>
       <div class="panel chart-panel"><div class="chart-head"><div><h3 id="chartTitle">Динамика инфляции</h3><p id="chartSubtitle">Фактический ряд и расчёт</p></div><div id="chartLegend" class="legend"></div></div><div id="chart" class="chart" role="img" aria-label="График фактической инфляции и модельного расчёта"></div></div>
       <div class="panel table-panel"><div class="table-head"><div><h3 id="tableTitle">Помесячные значения</h3><p id="tableSubtitle">Единицы измерения и даты указаны в таблице.</p></div><span id="rowCount" class="row-count"></span></div><div class="table-scroll"><table><thead id="tableHead"></thead><tbody id="tableBody"></tbody></table></div></div>
     </section>

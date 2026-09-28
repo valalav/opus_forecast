@@ -1,0 +1,131 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "default root beside HTML",
+      "pass": true
+    },
+    {
+      "name": "missing token rejected",
+      "pass": true
+    },
+    {
+      "name": "foreign origin rejected",
+      "pass": true
+    },
+    {
+      "name": "arbitrary file rejected",
+      "pass": true
+    },
+    {
+      "name": "relative root file resolves",
+      "pass": true
+    },
+    {
+      "name": "root auto-load",
+      "pass": true
+    },
+    {
+      "name": "CBR default complete month",
+      "pass": true
+    },
+    {
+      "name": "calculation visible",
+      "pass": true
+    },
+    {
+      "name": "annual column beside MoM",
+      "pass": true
+    },
+    {
+      "name": "annual included in CSV",
+      "pass": true
+    },
+    {
+      "name": "calculation visible",
+      "pass": true
+    },
+    {
+      "name": "seasonality changes forecasts",
+      "pass": true
+    },
+    {
+      "name": "seasonal features removed",
+      "pass": true
+    },
+    {
+      "name": "calculation visible",
+      "pass": true
+    },
+    {
+      "name": "outliers really processed",
+      "pass": true
+    },
+    {
+      "name": "calculation visible",
+      "pass": true
+    },
+    {
+      "name": "comparison exported",
+      "pass": true
+    },
+    {
+      "name": "same target pairs",
+      "pass": true
+    },
+    {
+      "name": "comparison p or stated reason",
+      "pass": true
+    },
+    {
+      "name": "editable source path used",
+      "pass": true
+    },
+    {
+      "name": "CBR actual network download",
+      "pass": true
+    },
+    {
+      "name": "rate file has128 months",
+      "pass": true
+    },
+    {
+      "name": "official September2023 rate",
+      "pass": true
+    },
+    {
+      "name": "calculation visible",
+      "pass": true
+    },
+    {
+      "name": "offline import success",
+      "pass": true
+    },
+    {
+      "name": "offline forecast equals online",
+      "pass": true
+    },
+    {
+      "name": "macro roundtrip no loss",
+      "pass": true
+    },
+    {
+      "name": "missing early macro history rejected",
+      "pass": true
+    },
+    {
+      "name": "explicit no-macro mode works",
+      "pass": true
+    },
+    {
+      "name": "v2 mobile no overflow",
+      "pass": true
+    },
+    {
+      "name": "no JavaScript errors",
+      "pass": true
+    }
+  ],
+  "platform": "Linux Chrome and actual PowerShell 7 loopback TcpListener; Windows5.1 untested",
+  "html_sha256": "97d17b6787f4711ad3aa1f6e9ba1a72e2c08f090887e4a0fc37d3e1a7458c3bd"
+}

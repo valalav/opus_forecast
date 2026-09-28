@@ -1,0 +1,932 @@
+{
+  "status": "PASS",
+  "source": "Bank of Russia DailyInfo SOAP XML",
+  "monthly_rows": 128,
+  "independent_numeric_checks": 256,
+  "old_macro_source": {
+    "file": "inflation_data.csv",
+    "sha256": "8e6eec3f5cd8248dcbfa99ab728e17e7f287d630e059117408c76032aa171456",
+    "columns": {
+      "ki": "Ki",
+      "ruonia": "Ruonia"
+    }
+  },
+  "new_macro_source": {
+    "publisher": "Банк России",
+    "urls": {
+      "ki": "https://www.cbr.ru/DailyInfoWebServ/DailyInfo.asmx?op=KeyRateXML",
+      "ruonia": "https://www.cbr.ru/DailyInfoWebServ/DailyInfo.asmx?op=RuoniaXML"
+    },
+    "sha256": {
+      "ki": "ace218c8ce9f1a97ab9fe72d0c7a0616bd87aa27ebd35e17abcca4737a6a72d5",
+      "ruonia": "0728a295cc68a09b6cd0ccf8686ee7ca3cba477dad1a6f82e66d1cc37a160fb5"
+    },
+    "downloaded_at": "2026-09-28T15:36:51.142Z",
+    "imported_from": [
+      "KeyRateXML.xml",
+      "RuoniaXML.xml"
+    ],
+    "coverage": {
+      "from": "2016-01-01",
+      "to": "2026-08-31",
+      "first_observation": "2016-01-01",
+      "last_observation": "2026-08-31"
+    },
+    "aggregation": {
+      "ki": "last",
+      "ruonia": "mean"
+    }
+  },
+  "differences": [
+    {
+      "date": "2016-01-01",
+      "old_ki": 10.0,
+      "cbr_ki": 11,
+      "old_ruonia": 11.1,
+      "cbr_ruonia": 11.06133333333333
+    },
+    {
+      "date": "2016-02-01",
+      "old_ki": 10.0,
+      "cbr_ki": 11,
+      "old_ruonia": 10.9,
+      "cbr_ruonia": 10.878000000000002
+    },
+    {
+      "date": "2016-03-01",
+      "old_ki": 10.0,
+      "cbr_ki": 11,
+      "old_ruonia": 10.9,
+      "cbr_ruonia": 10.932857142857141
+    },
+    {
+      "date": "2016-04-01",
+      "old_ki": 10.0,
+      "cbr_ki": 11,
+      "old_ruonia": 10.7,
+      "cbr_ruonia": 10.71238095238095
+    },
+    {
+      "date": "2016-05-01",
+      "old_ki": 10.0,
+      "cbr_ki": 11,
+      "old_ruonia": 11.1,
+      "cbr_ruonia": 11.062105263157894
+    },
+    {
+      "date": "2016-06-01",
+      "old_ki": 10.0,
+      "cbr_ki": 10.5,
+      "old_ruonia": 10.6,
+      "cbr_ruonia": 10.554285714285713
+    },
+    {
+      "date": "2016-07-01",
+      "old_ki": 9.75,
+      "cbr_ki": 10.5,
+      "old_ruonia": 10.3,
+      "cbr_ruonia": 10.275714285714288
+    },
+    {
+      "date": "2016-08-01",
+      "old_ki": 9.75,
+      "cbr_ki": 10.5,
+      "old_ruonia": 10.3,
+      "cbr_ruonia": 10.291304347826085
+    },
+    {
+      "date": "2016-09-01",
+      "old_ki": 9.25,
+      "cbr_ki": 10,
+      "old_ruonia": 10.2,
+      "cbr_ruonia": 10.23909090909091
+    },
+    {
+      "date": "2016-10-01",
+      "old_ki": 9.25,
+      "cbr_ki": 10,
+      "old_ruonia": 10.3,
+      "cbr_ruonia": 10.322380952380952
+    },
+    {
+      "date": "2016-11-01",
+      "old_ki": 9.0,
+      "cbr_ki": 10,
+      "old_ruonia": 10.0,
+      "cbr_ruonia": 9.995238095238095
+    },
+    {
+      "date": "2016-12-01",
+      "old_ki": 9.0,
+      "cbr_ki": 10,
+      "old_ruonia": 10.2,
+      "cbr_ruonia": 10.18047619047619
+    },
+    {
+      "date": "2017-01-01",
+      "old_ki": 9.0,
+      "cbr_ki": 10,
+      "old_ruonia": 10.1,
+      "cbr_ruonia": 10.122941176470588
+    },
+    {
+      "date": "2017-02-01",
+      "old_ki": 9.0,
+      "cbr_ki": 10,
+      "old_ruonia": 10.2,
+      "cbr_ruonia": 10.160555555555556
+    },
+    {
+      "date": "2017-03-01",
+      "old_ki": 8.5,
+      "cbr_ki": 9.75,
+      "old_ruonia": 9.9,
+      "cbr_ruonia": 9.890454545454544
+    },
+    {
+      "date": "2017-04-01",
+      "old_ki": 8.5,
+      "cbr_ki": 9.75,
+      "old_ruonia": 9.5,
+      "cbr_ruonia": 9.549500000000004
+    },
+    {
+      "date": "2017-05-01",
+      "old_ki": 8.25,
+      "cbr_ki": 9.25,
+      "old_ruonia": 9.1,
+      "cbr_ruonia": 9.119
+    },
+    {
+      "date": "2017-06-01",
+      "old_ki": 8.25,
+      "cbr_ki": 9,
+      "old_ruonia": 9.1,
+      "cbr_ruonia": 9.10761904761905
+    },
+    {
+      "date": "2017-07-01",
+      "old_ki": 7.75,
+      "cbr_ki": 9,
+      "old_ruonia": 8.9,
+      "cbr_ruonia": 8.934761904761906
+    },
+    {
+      "date": "2017-08-01",
+      "old_ki": 7.75,
+      "cbr_ki": 9,
+      "old_ruonia": 8.5,
+      "cbr_ruonia": 8.495652173913046
+    },
+    {
+      "date": "2017-09-01",
+      "old_ki": 7.5,
+      "cbr_ki": 8.5,
+      "old_ruonia": 8.3,
+      "cbr_ruonia": 8.335714285714285
+    },
+    {
+      "date": "2017-10-01",
+      "old_ki": 7.25,
+      "cbr_ki": 8.25,
+      "old_ruonia": 8.0,
+      "cbr_ruonia": 8.034545454545455
+    },
+    {
+      "date": "2017-11-01",
+      "old_ki": 7.25,
+      "cbr_ki": 8.25,
+      "old_ruonia": 8.0,
+      "cbr_ruonia": 7.987142857142857
+    },
+    {
+      "date": "2017-12-01",
+      "old_ki": 7.25,
+      "cbr_ki": 7.75,
+      "old_ruonia": 7.8,
+      "cbr_ruonia": 7.782500000000001
+    },
+    {
+      "date": "2018-01-01",
+      "old_ki": 7.25,
+      "cbr_ki": 7.75,
+      "old_ruonia": 7.1,
+      "cbr_ruonia": 7.079411764705883
+    },
+    {
+      "date": "2018-02-01",
+      "old_ki": 7.25,
+      "cbr_ki": 7.5,
+      "old_ruonia": 7.2,
+      "cbr_ruonia": 7.162105263157895
+    },
+    {
+      "date": "2018-03-01",
+      "old_ki": 7.25,
+      "cbr_ki": 7.25,
+      "old_ruonia": 7.2,
+      "cbr_ruonia": 7.155000000000001
+    },
+    {
+      "date": "2018-04-01",
+      "old_ki": 7.5,
+      "cbr_ki": 7.25,
+      "old_ruonia": 7.2,
+      "cbr_ruonia": 7.007142857142857
+    },
+    {
+      "date": "2018-05-01",
+      "old_ki": 7.5,
+      "cbr_ki": 7.25,
+      "old_ruonia": 7.2,
+      "cbr_ruonia": 6.949
+    },
+    {
+      "date": "2018-06-01",
+      "old_ki": 7.5,
+      "cbr_ki": 7.25,
+      "old_ruonia": 7.2,
+      "cbr_ruonia": 6.9975
+    },
+    {
+      "date": "2018-07-01",
+      "old_ki": 7.75,
+      "cbr_ki": 7.25,
+      "old_ruonia": 7.2,
+      "cbr_ruonia": 7.08318181818182
+    },
+    {
+      "date": "2018-08-01",
+      "old_ki": 7.75,
+      "cbr_ki": 7.25,
+      "old_ruonia": 7.2,
+      "cbr_ruonia": 7.034347826086955
+    },
+    {
+      "date": "2018-09-01",
+      "old_ki": 7.75,
+      "cbr_ki": 7.5,
+      "old_ruonia": 7.2,
+      "cbr_ruonia": 7.1275
+    },
+    {
+      "date": "2018-10-01",
+      "old_ki": 7.75,
+      "cbr_ki": 7.5,
+      "old_ruonia": 7.2,
+      "cbr_ruonia": 7.26086956521739
+    },
+    {
+      "date": "2018-11-01",
+      "old_ki": 7.75,
+      "cbr_ki": 7.5,
+      "old_ruonia": 7.2,
+      "cbr_ruonia": 7.23904761904762
+    },
+    {
+      "date": "2018-12-01",
+      "old_ki": 7.75,
+      "cbr_ki": 7.75,
+      "old_ruonia": 7.2,
+      "cbr_ruonia": 7.477500000000001
+    },
+    {
+      "date": "2019-01-01",
+      "old_ki": 7.5,
+      "cbr_ki": 7.75,
+      "old_ruonia": 7.2,
+      "cbr_ruonia": 7.61529411764706
+    },
+    {
+      "date": "2019-02-01",
+      "old_ki": 7.25,
+      "cbr_ki": 7.75,
+      "old_ruonia": 7.5,
+      "cbr_ruonia": 7.519500000000001
+    },
+    {
+      "date": "2019-03-01",
+      "old_ki": 7.25,
+      "cbr_ki": 7.75,
+      "old_ruonia": 7.6,
+      "cbr_ruonia": 7.590999999999999
+    },
+    {
+      "date": "2019-04-01",
+      "old_ki": 7.0,
+      "cbr_ki": 7.75,
+      "old_ruonia": 7.7,
+      "cbr_ruonia": 7.673636363636366
+    },
+    {
+      "date": "2019-05-01",
+      "old_ki": 6.5,
+      "cbr_ki": 7.75,
+      "old_ruonia": 7.6,
+      "cbr_ruonia": 7.6483333333333325
+    },
+    {
+      "date": "2019-06-01",
+      "old_ki": 6.5,
+      "cbr_ki": 7.5,
+      "old_ruonia": 7.5,
+      "cbr_ruonia": 7.525789473684211
+    },
+    {
+      "date": "2019-07-01",
+      "old_ki": 6.25,
+      "cbr_ki": 7.25,
+      "old_ruonia": 7.2,
+      "cbr_ruonia": 7.240869565217394
+    },
+    {
+      "date": "2019-08-01",
+      "old_ki": 6.25,
+      "cbr_ki": 7.25,
+      "old_ruonia": 7.1,
+      "cbr_ruonia": 7.084090909090909
+    },
+    {
+      "date": "2019-09-01",
+      "old_ki": 6.0,
+      "cbr_ki": 7,
+      "old_ruonia": 6.8,
+      "cbr_ruonia": 6.827619047619046
+    },
+    {
+      "date": "2019-10-01",
+      "old_ki": 6.0,
+      "cbr_ki": 6.5,
+      "old_ruonia": 6.8,
+      "cbr_ruonia": 6.767391304347825
+    },
+    {
+      "date": "2019-11-01",
+      "old_ki": 5.5,
+      "cbr_ki": 6.5,
+      "old_ruonia": 6.4,
+      "cbr_ruonia": 6.446499999999999
+    },
+    {
+      "date": "2019-12-01",
+      "old_ki": 5.5,
+      "cbr_ki": 6.25,
+      "old_ruonia": 6.2,
+      "cbr_ruonia": 6.1571428571428575
+    },
+    {
+      "date": "2020-01-01",
+      "old_ki": 4.5,
+      "cbr_ki": 6.25,
+      "old_ruonia": 6.0,
+      "cbr_ruonia": 6.038823529411765
+    },
+    {
+      "date": "2020-02-01",
+      "old_ki": 4.25,
+      "cbr_ki": 6,
+      "old_ruonia": 5.9,
+      "cbr_ruonia": 5.923684210526316
+    },
+    {
+      "date": "2020-03-01",
+      "old_ki": 4.25,
+      "cbr_ki": 6,
+      "old_ruonia": 5.8,
+      "cbr_ruonia": 5.753684210526315
+    },
+    {
+      "date": "2020-04-01",
+      "old_ki": 4.25,
+      "cbr_ki": 5.5,
+      "old_ruonia": 5.9,
+      "cbr_ruonia": 5.917894736842105
+    },
+    {
+      "date": "2020-05-01",
+      "old_ki": 4.25,
+      "cbr_ki": 5.5,
+      "old_ruonia": 5.4,
+      "cbr_ruonia": 5.378823529411763
+    },
+    {
+      "date": "2020-06-01",
+      "old_ki": 4.25,
+      "cbr_ki": 4.5,
+      "old_ruonia": 4.9,
+      "cbr_ruonia": 4.9245
+    },
+    {
+      "date": "2020-07-01",
+      "old_ki": 4.25,
+      "cbr_ki": 4.25,
+      "old_ruonia": 4.2,
+      "cbr_ruonia": 4.175909090909091
+    },
+    {
+      "date": "2020-08-01",
+      "old_ki": 4.25,
+      "cbr_ki": 4.25,
+      "old_ruonia": 4.1,
+      "cbr_ruonia": 4.112380952380952
+    },
+    {
+      "date": "2020-09-01",
+      "old_ki": 4.25,
+      "cbr_ki": 4.25,
+      "old_ruonia": 4.2,
+      "cbr_ruonia": 4.166363636363636
+    },
+    {
+      "date": "2020-10-01",
+      "old_ki": 4.5,
+      "cbr_ki": 4.25,
+      "old_ruonia": 4.2,
+      "cbr_ruonia": 4.195000000000001
+    },
+    {
+      "date": "2020-11-01",
+      "old_ki": 5.0,
+      "cbr_ki": 4.25,
+      "old_ruonia": 4.1,
+      "cbr_ruonia": 4.0705
+    },
+    {
+      "date": "2020-12-01",
+      "old_ki": 5.0,
+      "cbr_ki": 4.25,
+      "old_ruonia": 4.1,
+      "cbr_ruonia": 4.129545454545454
+    },
+    {
+      "date": "2021-01-01",
+      "old_ki": 5.5,
+      "cbr_ki": 4.25,
+      "old_ruonia": 4.3,
+      "cbr_ruonia": 4.284666666666667
+    },
+    {
+      "date": "2021-02-01",
+      "old_ki": 6.5,
+      "cbr_ki": 4.25,
+      "old_ruonia": 4.0,
+      "cbr_ruonia": 3.999473684210525
+    },
+    {
+      "date": "2021-03-01",
+      "old_ki": 6.5,
+      "cbr_ki": 4.5,
+      "old_ruonia": 4.2,
+      "cbr_ruonia": 4.200000000000001
+    },
+    {
+      "date": "2021-04-01",
+      "old_ki": 6.75,
+      "cbr_ki": 5,
+      "old_ruonia": 4.5,
+      "cbr_ruonia": 4.479090909090909
+    },
+    {
+      "date": "2021-05-01",
+      "old_ki": 7.5,
+      "cbr_ki": 5,
+      "old_ruonia": 4.8,
+      "cbr_ruonia": 4.757368421052632
+    },
+    {
+      "date": "2021-06-01",
+      "old_ki": 7.5,
+      "cbr_ki": 5.5,
+      "old_ruonia": 5.1,
+      "cbr_ruonia": 5.092857142857143
+    },
+    {
+      "date": "2021-07-01",
+      "old_ki": 8.5,
+      "cbr_ki": 6.5,
+      "old_ruonia": 5.8,
+      "cbr_ruonia": 5.765909090909091
+    },
+    {
+      "date": "2021-08-01",
+      "old_ki": 8.5,
+      "cbr_ki": 6.5,
+      "old_ruonia": 6.3,
+      "cbr_ruonia": 6.306818181818182
+    },
+    {
+      "date": "2021-09-01",
+      "old_ki": 8.5,
+      "cbr_ki": 6.75,
+      "old_ruonia": 6.6,
+      "cbr_ruonia": 6.556363636363638
+    },
+    {
+      "date": "2021-10-01",
+      "old_ki": 20.0,
+      "cbr_ki": 7.5,
+      "old_ruonia": 6.8,
+      "cbr_ruonia": 6.808571428571428
+    },
+    {
+      "date": "2021-11-01",
+      "old_ki": 20.0,
+      "cbr_ki": 7.5,
+      "old_ruonia": 7.3,
+      "cbr_ruonia": 7.307500000000002
+    },
+    {
+      "date": "2021-12-01",
+      "old_ki": 17.0,
+      "cbr_ki": 8.5,
+      "old_ruonia": 7.6,
+      "cbr_ruonia": 7.577619047619048
+    },
+    {
+      "date": "2022-01-01",
+      "old_ki": 14.0,
+      "cbr_ki": 8.5,
+      "old_ruonia": 8.3,
+      "cbr_ruonia": 8.262500000000001
+    },
+    {
+      "date": "2022-02-01",
+      "old_ki": 11.0,
+      "cbr_ki": 20,
+      "old_ruonia": 9.5,
+      "cbr_ruonia": 9.514736842105263
+    },
+    {
+      "date": "2022-03-01",
+      "old_ki": 9.5,
+      "cbr_ki": 20,
+      "old_ruonia": 20.0,
+      "cbr_ruonia": 20.03272727272727
+    },
+    {
+      "date": "2022-04-01",
+      "old_ki": 8.0,
+      "cbr_ki": 17,
+      "old_ruonia": 17.1,
+      "cbr_ruonia": 17.12666666666667
+    },
+    {
+      "date": "2022-05-01",
+      "old_ki": 8.0,
+      "cbr_ki": 11,
+      "old_ruonia": 13.3,
+      "cbr_ruonia": 13.297777777777778
+    },
+    {
+      "date": "2022-06-01",
+      "old_ki": 8.0,
+      "cbr_ki": 9.5,
+      "old_ruonia": 9.6,
+      "cbr_ruonia": 9.632857142857143
+    },
+    {
+      "date": "2022-07-01",
+      "old_ki": 7.5,
+      "cbr_ki": 8,
+      "old_ruonia": 8.9,
+      "cbr_ruonia": 8.903809523809523
+    },
+    {
+      "date": "2022-08-01",
+      "old_ki": 7.5,
+      "cbr_ki": 8,
+      "old_ruonia": 7.9,
+      "cbr_ruonia": 7.94695652173913
+    },
+    {
+      "date": "2022-09-01",
+      "old_ki": 7.5,
+      "cbr_ki": 7.5,
+      "old_ruonia": 7.7,
+      "cbr_ruonia": 7.691363636363636
+    },
+    {
+      "date": "2022-10-01",
+      "old_ki": 7.5,
+      "cbr_ki": 7.5,
+      "old_ruonia": 7.7,
+      "cbr_ruonia": 7.717142857142856
+    },
+    {
+      "date": "2022-11-01",
+      "old_ki": 7.5,
+      "cbr_ki": 7.5,
+      "old_ruonia": 7.3,
+      "cbr_ruonia": 7.333333333333333
+    },
+    {
+      "date": "2022-12-01",
+      "old_ki": 7.5,
+      "cbr_ki": 7.5,
+      "old_ruonia": 7.3,
+      "cbr_ruonia": 7.319047619047619
+    },
+    {
+      "date": "2023-02-01",
+      "old_ki": 7.5,
+      "cbr_ki": 7.5,
+      "old_ruonia": 7.1,
+      "cbr_ruonia": 7.134999999999999
+    },
+    {
+      "date": "2023-03-01",
+      "old_ki": 7.5,
+      "cbr_ki": 7.5,
+      "old_ruonia": 7.3,
+      "cbr_ruonia": 7.339090909090911
+    },
+    {
+      "date": "2023-04-01",
+      "old_ki": 7.5,
+      "cbr_ki": 7.5,
+      "old_ruonia": 7.1,
+      "cbr_ruonia": 7.149499999999999
+    },
+    {
+      "date": "2023-05-01",
+      "old_ki": 8.5,
+      "cbr_ki": 7.5,
+      "old_ruonia": 7.2,
+      "cbr_ruonia": 7.211500000000001
+    },
+    {
+      "date": "2023-06-01",
+      "old_ki": 12.0,
+      "cbr_ki": 7.5,
+      "old_ruonia": 7.3,
+      "cbr_ruonia": 7.292857142857142
+    },
+    {
+      "date": "2023-07-01",
+      "old_ki": 13.0,
+      "cbr_ki": 8.5,
+      "old_ruonia": 7.8,
+      "cbr_ruonia": 7.830476190476189
+    },
+    {
+      "date": "2023-08-01",
+      "old_ki": 15.0,
+      "cbr_ki": 12,
+      "old_ruonia": 10.3,
+      "cbr_ruonia": 10.339565217391302
+    },
+    {
+      "date": "2023-09-01",
+      "old_ki": 15.0,
+      "cbr_ki": 13,
+      "old_ruonia": 12.2,
+      "cbr_ruonia": 12.228571428571426
+    },
+    {
+      "date": "2023-10-01",
+      "old_ki": 16.0,
+      "cbr_ki": 15,
+      "old_ruonia": 13.0,
+      "cbr_ruonia": 13.032727272727273
+    },
+    {
+      "date": "2023-11-01",
+      "old_ki": 16.0,
+      "cbr_ki": 15,
+      "old_ruonia": 14.8,
+      "cbr_ruonia": 14.797619047619047
+    },
+    {
+      "date": "2023-12-01",
+      "old_ki": 16.0,
+      "cbr_ki": 16,
+      "old_ruonia": 15.1,
+      "cbr_ruonia": 15.132499999999999
+    },
+    {
+      "date": "2024-01-01",
+      "old_ki": 16.0,
+      "cbr_ki": 16,
+      "old_ruonia": 15.7,
+      "cbr_ruonia": 15.694705882352942
+    },
+    {
+      "date": "2024-02-01",
+      "old_ki": 16.0,
+      "cbr_ki": 16,
+      "old_ruonia": 15.8,
+      "cbr_ruonia": 15.8285
+    },
+    {
+      "date": "2024-03-01",
+      "old_ki": 16.0,
+      "cbr_ki": 16,
+      "old_ruonia": 15.6,
+      "cbr_ruonia": 15.594
+    },
+    {
+      "date": "2024-04-01",
+      "old_ki": 16.0,
+      "cbr_ki": 16,
+      "old_ruonia": 15.7,
+      "cbr_ruonia": 15.701428571428572
+    },
+    {
+      "date": "2024-05-01",
+      "old_ki": 18.0,
+      "cbr_ki": 16,
+      "old_ruonia": 15.9,
+      "cbr_ruonia": 15.9475
+    },
+    {
+      "date": "2024-06-01",
+      "old_ki": 18.0,
+      "cbr_ki": 16,
+      "old_ruonia": 15.7,
+      "cbr_ruonia": 15.651052631578947
+    },
+    {
+      "date": "2024-07-01",
+      "old_ki": 19.0,
+      "cbr_ki": 18,
+      "old_ruonia": 16.1,
+      "cbr_ruonia": 16.113478260869567
+    },
+    {
+      "date": "2024-08-01",
+      "old_ki": 19.0,
+      "cbr_ki": 18,
+      "old_ruonia": 17.7,
+      "cbr_ruonia": 17.74318181818182
+    },
+    {
+      "date": "2024-09-01",
+      "old_ki": 21.0,
+      "cbr_ki": 19,
+      "old_ruonia": 18.4,
+      "cbr_ruonia": 18.390476190476193
+    },
+    {
+      "date": "2024-10-01",
+      "old_ki": 21.0,
+      "cbr_ki": 21,
+      "old_ruonia": 18.9,
+      "cbr_ruonia": 18.90217391304348
+    },
+    {
+      "date": "2024-11-01",
+      "old_ki": 21.0,
+      "cbr_ki": 21,
+      "old_ruonia": 20.7,
+      "cbr_ruonia": 20.62571428571428
+    },
+    {
+      "date": "2024-12-01",
+      "old_ki": 21.0,
+      "cbr_ki": 21,
+      "old_ruonia": 21.09,
+      "cbr_ruonia": 21.126000000000005
+    },
+    {
+      "date": "2025-01-01",
+      "old_ki": 21.0,
+      "cbr_ki": 21,
+      "old_ruonia": 20.82,
+      "cbr_ruonia": 20.815882352941177
+    },
+    {
+      "date": "2025-02-01",
+      "old_ki": 21.0,
+      "cbr_ki": 21,
+      "old_ruonia": 20.83,
+      "cbr_ruonia": 20.826
+    },
+    {
+      "date": "2025-03-01",
+      "old_ki": 21.0,
+      "cbr_ki": 21,
+      "old_ruonia": 21.36,
+      "cbr_ruonia": 21.369523809523816
+    },
+    {
+      "date": "2025-04-01",
+      "old_ki": 21.0,
+      "cbr_ki": 21,
+      "old_ruonia": 21.11,
+      "cbr_ruonia": 21.106363636363632
+    },
+    {
+      "date": "2025-05-01",
+      "old_ki": 21.0,
+      "cbr_ki": 21,
+      "old_ruonia": 21.0,
+      "cbr_ruonia": 20.797222222222217
+    },
+    {
+      "date": "2025-06-01",
+      "old_ki": 20.0,
+      "cbr_ki": 20,
+      "old_ruonia": 20.08,
+      "cbr_ruonia": 20.082105263157896
+    },
+    {
+      "date": "2025-07-01",
+      "old_ki": 18.0,
+      "cbr_ki": 18,
+      "old_ruonia": 19.28,
+      "cbr_ruonia": 19.283913043478268
+    },
+    {
+      "date": "2025-08-01",
+      "old_ki": 18.0,
+      "cbr_ki": 18,
+      "old_ruonia": 17.73,
+      "cbr_ruonia": 17.73333333333333
+    },
+    {
+      "date": "2025-09-01",
+      "old_ki": 17.0,
+      "cbr_ki": 17,
+      "old_ruonia": 17.2,
+      "cbr_ruonia": 17.198636363636364
+    },
+    {
+      "date": "2025-10-01",
+      "old_ki": 16.5,
+      "cbr_ki": 16.5,
+      "old_ruonia": 16.49,
+      "cbr_ruonia": 16.49478260869565
+    },
+    {
+      "date": "2025-11-01",
+      "old_ki": 16.5,
+      "cbr_ki": 16.5,
+      "old_ruonia": 16.25,
+      "cbr_ruonia": 16.323684210526313
+    },
+    {
+      "date": "2025-12-01",
+      "old_ki": 16.0,
+      "cbr_ki": 16,
+      "old_ruonia": 15.85,
+      "cbr_ruonia": 16.040000000000003
+    },
+    {
+      "date": "2026-01-01",
+      "old_ki": 16.0,
+      "cbr_ki": 16,
+      "old_ruonia": 15.9,
+      "cbr_ruonia": 15.692666666666668
+    },
+    {
+      "date": "2026-02-01",
+      "old_ki": 15.5,
+      "cbr_ki": 15.5,
+      "old_ruonia": 15.33,
+      "cbr_ruonia": 15.32526315789474
+    },
+    {
+      "date": "2026-03-01",
+      "old_ki": 15.0,
+      "cbr_ki": 15,
+      "old_ruonia": 14.87,
+      "cbr_ruonia": 14.974761904761904
+    },
+    {
+      "date": "2026-04-01",
+      "old_ki": 14.5,
+      "cbr_ki": 14.5,
+      "old_ruonia": 14.49,
+      "cbr_ruonia": 14.638636363636364
+    },
+    {
+      "date": "2026-05-01",
+      "old_ki": 14.5,
+      "cbr_ki": 14.5,
+      "old_ruonia": 14.25,
+      "cbr_ruonia": 14.170526315789473
+    },
+    {
+      "date": "2026-06-01",
+      "old_ki": 14.25,
+      "cbr_ki": 14.25,
+      "old_ruonia": 14.25,
+      "cbr_ruonia": 14.031428571428572
+    },
+    {
+      "date": "2026-07-01",
+      "old_ki": 14.0,
+      "cbr_ki": 14,
+      "old_ruonia": 13.95,
+      "cbr_ruonia": 14.282608695652172
+    },
+    {
+      "date": "2026-08-01",
+      "old_ki": 14.0,
+      "cbr_ki": 14,
+      "old_ruonia": 13.68,
+      "cbr_ruonia": 13.78714285714286
+    }
+  ],
+  "note": "Ki last published observation per month; RUONIA arithmetic mean of published daily observations. No production data modified."
+}

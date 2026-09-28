@@ -49,6 +49,12 @@ struct Config {
     future_rates: Option<String>,
     #[serde(default)]
     allow_nonconverged: Option<bool>,
+    #[serde(default)]
+    seasonality_mode: Option<String>,
+    #[serde(default)]
+    outlier_mode: Option<String>,
+    #[serde(default)]
+    outlier_threshold: Option<f64>,
 }
 
 #[derive(Clone, Debug, Deserialize)]
@@ -121,6 +127,7 @@ struct Prepared {
     names: Vec<String>,
     seasonal: [f64; 12],
     macro_medians: [f64; 4],
+    outlier_diagnostics: Value,
 }
 #[derive(Clone)]
 struct Fit {
@@ -134,6 +141,7 @@ struct Fit {
     gradient_inf_norm: f64,
     features: Vec<String>,
     n: usize,
+    outlier_diagnostics: Value,
 }
 
 fn err(code: &str, msg: impl Into<String>) -> Value {
@@ -149,6 +157,18 @@ fn finite(v: f64, name: &str) -> Result<(), String> {
 fn validate(req: &Request) -> Result<Vec<Month>, String> {
     if req.schema_version != 1 {
         return Err("schema_version must be 1".into());
+    }
+    let seasonality_mode = req.config.seasonality_mode.as_deref().unwrap_or("legacy");
+    if !["legacy", "off", "features_only"].contains(&seasonality_mode) {
+        return Err("seasonality_mode must be legacy, off, or features_only".into());
+    }
+    let outlier_mode = req.config.outlier_mode.as_deref().unwrap_or("none");
+    if !["none", "mad_winsor"].contains(&outlier_mode) {
+        return Err("outlier_mode must be none or mad_winsor".into());
+    }
+    let outlier_threshold = req.config.outlier_threshold.unwrap_or(3.5);
+    if !outlier_threshold.is_finite() || outlier_threshold < 1.0 {
+        return Err("outlier_threshold must be finite and at least 1".into());
     }
     if req.model != "ridge" && req.model != "huber" {
         return Err("model must be ridge or huber".into());
@@ -281,6 +301,22 @@ fn features_for(model: &str) -> Vec<String> {
     v.extend(["ruonia_diff_lag1", "spread_lag4", "ki_diff_lag6", "ki_vol"]);
     v.into_iter().map(str::to_owned).collect()
 }
+fn is_seasonal_feature(name: &str) -> bool {
+    matches!(
+        name,
+        "month_sin"
+            | "month_cos"
+            | "quarter_sin"
+            | "quarter_cos"
+            | "is_jan"
+            | "is_dec"
+            | "is_tariff_month"
+            | "is_q1"
+            | "is_summer"
+            | "seasonal_norm"
+            | "deviation_lag1"
+    )
+}
 fn mean(v: &[f64]) -> f64 {
     v.iter().sum::<f64>() / v.len() as f64
 }
@@ -334,6 +370,7 @@ fn feature_row(
     seasonal: &[f64; 12],
     model: &str,
     tariff: u32,
+    seasonality_mode: &str,
 ) -> Option<Vec<f64>> {
     if i < 12 {
         return None;
@@ -347,19 +384,17 @@ fn feature_row(
     let vol = |n: usize| sd(&ys[i - n..i]);
     let s = |m: u32| seasonal[(m - 1) as usize];
     if model == "ridge" {
-        f.extend([
-            ylag(1),
-            ylag(2),
-            ylag(12),
-            avg(3),
-            (2.0 * std::f64::consts::PI * month as f64 / 12.0).sin(),
-            (2.0 * std::f64::consts::PI * month as f64 / 12.0).cos(),
-            rows[i - 1].food,
-            rows[i - 1].nonfood,
-            rows[i - 1].services,
-            s(month),
-            ylag(1) - s(dates[i - 1].m),
-        ]);
+        f.extend([ylag(1), ylag(2), ylag(12), avg(3)]);
+        if seasonality_mode != "off" {
+            f.extend([
+                (2.0 * std::f64::consts::PI * month as f64 / 12.0).sin(),
+                (2.0 * std::f64::consts::PI * month as f64 / 12.0).cos(),
+            ]);
+        }
+        f.extend([rows[i - 1].food, rows[i - 1].nonfood, rows[i - 1].services]);
+        if seasonality_mode != "off" {
+            f.extend([s(month), ylag(1) - s(dates[i - 1].m)]);
+        }
     } else {
         f.extend([
             ylag(1),
@@ -373,21 +408,26 @@ fn feature_row(
             ylag(1) - ylag(4),
             vol(3),
             vol(6),
-            (2.0 * std::f64::consts::PI * month as f64 / 12.0).sin(),
-            (2.0 * std::f64::consts::PI * month as f64 / 12.0).cos(),
-            (2.0 * std::f64::consts::PI * quarter / 4.0).sin(),
-            (2.0 * std::f64::consts::PI * quarter / 4.0).cos(),
-            (month == 1) as u8 as f64,
-            (month == 12) as u8 as f64,
-            (month == tariff) as u8 as f64,
-            (quarter == 1.0) as u8 as f64,
-            (month >= 6 && month <= 8) as u8 as f64,
-            rows[i - 1].food,
-            rows[i - 1].nonfood,
-            rows[i - 1].services,
-            s(month),
-            ylag(1) - s(dates[i - 1].m),
         ]);
+        if seasonality_mode != "off" {
+            f.extend([
+                (2.0 * std::f64::consts::PI * month as f64 / 12.0).sin(),
+                (2.0 * std::f64::consts::PI * month as f64 / 12.0).cos(),
+                (2.0 * std::f64::consts::PI * quarter / 4.0).sin(),
+                (2.0 * std::f64::consts::PI * quarter / 4.0).cos(),
+            ]);
+            f.extend([
+                (month == 1) as u8 as f64,
+                (month == 12) as u8 as f64,
+                (month == tariff) as u8 as f64,
+                (quarter == 1.0) as u8 as f64,
+                (month >= 6 && month <= 8) as u8 as f64,
+            ]);
+        }
+        f.extend([rows[i - 1].food, rows[i - 1].nonfood, rows[i - 1].services]);
+        if seasonality_mode != "off" {
+            f.extend([s(month), ylag(1) - s(dates[i - 1].m)]);
+        }
     }
     if rows.iter().any(|r| r.ki.is_some() && r.ruonia.is_some()) {
         let ki: Vec<_> = rows.iter().map(|r| r.ki.unwrap_or(f64::NAN)).collect();
@@ -406,6 +446,10 @@ fn prepare(req: &Request, rows: &[Row], dates: &[Month], model: &str) -> Result<
     let config = &req.config;
     let use_macro = config.use_macro.unwrap_or(true);
     let mut names = features_for(model);
+    let seasonality_mode = config.seasonality_mode.as_deref().unwrap_or("legacy");
+    if seasonality_mode == "off" {
+        names.retain(|name| !is_seasonal_feature(name));
+    }
     if !use_macro {
         names.truncate(names.len() - 4)
     }
@@ -434,6 +478,7 @@ fn prepare(req: &Request, rows: &[Row], dates: &[Month], model: &str) -> Result<
     let cutoff = config.cutoff.as_deref().map(Month::parse).transpose()?;
     let mut x = Vec::new();
     let mut y = Vec::new();
+    let mut train_dates = Vec::new();
     let mut macro_columns: [Vec<f64>; 4] = Default::default();
     for i in 12..rows.len() {
         if excluded.contains(&dates[i].y)
@@ -449,13 +494,11 @@ fn prepare(req: &Request, rows: &[Row], dates: &[Month], model: &str) -> Result<
             &seasonal,
             model,
             tariff_month(req, dates[i].y),
+            seasonality_mode,
         ) else {
             continue;
         };
-        if f[..if use_macro { f.len() - 4 } else { f.len() }]
-            .iter()
-            .any(|v| !v.is_finite())
-        {
+        if f[..f.len() - 4].iter().any(|v| !v.is_finite()) {
             continue;
         }
         if !use_macro {
@@ -470,6 +513,7 @@ fn prepare(req: &Request, rows: &[Row], dates: &[Month], model: &str) -> Result<
         }
         x.push(f);
         y.push(rows[i].y);
+        train_dates.push(dates[i]);
     }
     if x.len() < config.min_train.unwrap_or(36) {
         return Err(format!(
@@ -495,12 +539,66 @@ fn prepare(req: &Request, rows: &[Row], dates: &[Month], model: &str) -> Result<
             }
         }
     }
+    let outlier_mode = config.outlier_mode.as_deref().unwrap_or("none");
+    let threshold = config.outlier_threshold.unwrap_or(3.5);
+    let overall_center = median(y.clone());
+    let center: Vec<f64> = (0..12)
+        .map(|m| {
+            if req.frequency == "raw" {
+                let vals: Vec<_> = y
+                    .iter()
+                    .zip(&train_dates)
+                    .filter(|(_, d)| d.m == m as u32 + 1)
+                    .map(|(v, _)| *v)
+                    .collect();
+                if vals.is_empty() {
+                    overall_center
+                } else {
+                    median(vals)
+                }
+            } else {
+                overall_center
+            }
+        })
+        .collect();
+    let residuals: Vec<f64> = y
+        .iter()
+        .zip(&train_dates)
+        .map(|(v, d)| v - center[(d.m - 1) as usize])
+        .collect();
+    let residual_median = median(residuals.clone());
+    let mad = median(
+        residuals
+            .iter()
+            .map(|v| (v - residual_median).abs())
+            .collect(),
+    );
+    let robust_scale = mad * 1.4826;
+    let mut flagged_dates = Vec::new();
+    if outlier_mode == "mad_winsor" && robust_scale > 1e-12 {
+        for i in 0..y.len() {
+            let base = center[(train_dates[i].m - 1) as usize];
+            let residual = y[i] - base;
+            if (residual - residual_median).abs() > threshold * robust_scale {
+                flagged_dates.push(train_dates[i].text());
+                y[i] = base
+                    + residual_median
+                    + (residual - residual_median).signum() * threshold * robust_scale;
+            }
+        }
+    }
+    let outlier_diagnostics = json!({
+        "mode": outlier_mode, "threshold": threshold,
+        "n_flagged": flagged_dates.len(), "n_used": y.len(), "flagged_dates": flagged_dates,
+        "rule": if robust_scale <= 1e-12 { "MAD zero; no winsorization" } else if req.frequency == "raw" { "train-only month-median residual; MAD scale 1.4826; winsorize target response" } else { "train-only overall-median residual; MAD scale 1.4826; winsorize target response" }
+    });
     Ok(Prepared {
         x,
         y,
         names,
         seasonal,
         macro_medians,
+        outlier_diagnostics,
     })
 }
 
@@ -569,6 +667,7 @@ fn ridge_fit(p: &Prepared, alpha: f64) -> Fit {
         gradient_inf_norm: 0.,
         features: p.names.clone(),
         n,
+        outlier_diagnostics: p.outlier_diagnostics.clone(),
     }
 }
 
@@ -611,10 +710,14 @@ fn dot(a: &[f64], b: &[f64]) -> f64 {
 fn huber_fit(p: &Prepared, alpha: f64, eps: f64, max_iter: usize, tol: f64) -> Fit {
     let (xs, center, scale) = robust_scale(p);
     let d = xs[0].len();
-    let mut t = vec![mean(&p.y)];
+    // Center the response to avoid cancellation around the CPI index level 100.
+    // The unpenalized intercept is restored below; the objective is unchanged.
+    let y_center = mean(&p.y);
+    let centered_y: Vec<f64> = p.y.iter().map(|v| v - y_center).collect();
+    let mut t = vec![0.0];
     t.resize(d + 1, 0.);
     t.push(sd(&p.y).max(1e-4).ln());
-    let (mut f, mut g) = huber_obj(&t, &xs, &p.y, eps, alpha);
+    let (mut f, mut g) = huber_obj(&t, &xs, &centered_y, eps, alpha);
     let mut h = DMatrix::<f64>::identity(d + 2, d + 2);
     let mut converged = false;
     let mut it = 0;
@@ -638,7 +741,7 @@ fn huber_fit(p: &Prepared, alpha: f64, eps: f64, max_iter: usize, tol: f64) -> F
         let mut found = false;
         for _ in 0..40 {
             candidate = t.iter().zip(&dir).map(|(a, b)| a + step * b).collect();
-            let pair = huber_obj(&candidate, &xs, &p.y, eps, alpha);
+            let pair = huber_obj(&candidate, &xs, &centered_y, eps, alpha);
             nf = pair.0;
             ng = pair.1;
             if nf <= f + 1e-4 * step * dot(&g, &dir) {
@@ -669,6 +772,7 @@ fn huber_fit(p: &Prepared, alpha: f64, eps: f64, max_iter: usize, tol: f64) -> F
     }
     let gradient_inf_norm = g.iter().map(|v| v.abs()).fold(0.0, f64::max);
     let sigma = t[d + 1].exp().clamp(1e-8, 1e8);
+    t[0] += y_center;
     Fit {
         coef: t[..d + 1].to_vec(),
         center,
@@ -680,6 +784,7 @@ fn huber_fit(p: &Prepared, alpha: f64, eps: f64, max_iter: usize, tol: f64) -> F
         gradient_inf_norm,
         features: p.names.clone(),
         n: xs.len(),
+        outlier_diagnostics: p.outlier_diagnostics.clone(),
     }
 }
 fn pred(fit: &Fit, raw: &[f64]) -> f64 {
@@ -696,11 +801,11 @@ fn fit_model(req: &Request, history: &[Row], dates: &[Month]) -> Result<(Fit, Pr
     let use_macro = req.config.use_macro.unwrap_or(true);
     if use_macro {
         if history.len() < 12
-            || history[history.len() - 12..].iter().any(|r| {
+            || history.iter().any(|r| {
                 r.ki.is_none_or(|v| !v.is_finite()) || r.ruonia.is_none_or(|v| !v.is_finite())
             })
         {
-            return Err("macro freshness requirement failed: latest 12 training months must have finite ki and ruonia; set use_macro=false to run without macro features".into());
+            return Err("macro freshness requirement failed: all training months must have finite ki and ruonia; set use_macro=false to run without macro features".into());
         }
     }
     let p = prepare(req, history, dates, model)?;
@@ -760,6 +865,7 @@ fn forecast(
             &p.seasonal,
             &req.model,
             tariff_month(req, d.y),
+            req.config.seasonality_mode.as_deref().unwrap_or("legacy"),
         )
         .ok_or_else(|| "unable to build forecast features".to_string())?;
         if req.config.use_macro.unwrap_or(true) {
@@ -781,6 +887,8 @@ fn forecast(
         let w = weights.map(|v| v[(d.m - 1) as usize]).unwrap_or(
             [0.9, 0.0, 0.5, 0.3, 0.9, 0.5, 0.0, 0.5, 0.9, 0.9, 0.0, 0.0][(d.m - 1) as usize],
         );
+        let seasonality_mode = req.config.seasonality_mode.as_deref().unwrap_or("legacy");
+        let w = if seasonality_mode == "legacy" { w } else { 0.0 };
         let level = (1. - w) * raw + w * seasonal;
         let all = level - 100.0;
         finite(all, "forecast")?;
@@ -792,7 +900,7 @@ fn forecast(
 }
 
 fn fit_json(f: &Fit) -> Value {
-    json!({"converged":f.fit_converged,"iterations":f.iterations,"objective":f.objective,"scale":if f.huber_scale>0.0 {Value::from(f.huber_scale)} else {Value::Null},"gradient_inf_norm":f.gradient_inf_norm,"features":f.features,"n_train":f.n,"coefficients_intercept_then_features":f.coef,"scaler_center":f.center,"scaler_scale":f.scale})
+    json!({"converged":f.fit_converged,"iterations":f.iterations,"objective":f.objective,"scale":if f.huber_scale>0.0 {Value::from(f.huber_scale)} else {Value::Null},"gradient_inf_norm":f.gradient_inf_norm,"features":f.features,"n_train":f.n,"coefficients_intercept_then_features":f.coef,"scaler_center":f.center,"scaler_scale":f.scale,"outlier_diagnostics":f.outlier_diagnostics})
 }
 fn run(req: Request) -> Result<Value, String> {
     let dates = validate(&req)?;
@@ -944,6 +1052,23 @@ mod tests {
         json!({"schema_version":1,"model":"ridge","frequency":"raw","rows":rows,"config":{"horizon":2,"use_macro":false},"backtests":{"cutoffs":["2022-12-01","2023-12-01"],"horizons":[1,2,12]}}).to_string()
     }
     #[test]
+    fn no_macro_mode_is_invariant_to_missing_macro_values() {
+        let mut request: Value = serde_json::from_str(&fixture()).unwrap();
+        request["backtests"] = Value::Null;
+        let baseline: Value = serde_json::from_str(&process(&request.to_string())).unwrap();
+        for row in request["rows"].as_array_mut().unwrap() {
+            row["ki"] = Value::Null;
+            row["ruonia"] = Value::Null;
+        }
+        let without: Value = serde_json::from_str(&process(&request.to_string())).unwrap();
+        assert_eq!(without["ok"], true);
+        assert_eq!(baseline["forecast"], without["forecast"]);
+        assert_eq!(baseline["fit"]["n_train"], without["fit"]["n_train"]);
+        request["config"]["use_macro"] = json!(true);
+        let required: Value = serde_json::from_str(&process(&request.to_string())).unwrap();
+        assert_eq!(required["ok"], false);
+    }
+    #[test]
     fn ridge_fixture_returns_finite_forecast() {
         let v: Value = serde_json::from_str(&process(&fixture())).unwrap();
         assert_eq!(v["ok"], true);
@@ -986,6 +1111,7 @@ mod tests {
             names: vec!["x".into()],
             seasonal: [100.0; 12],
             macro_medians: [0.0; 4],
+            outlier_diagnostics: Value::Null,
         };
         let f = ridge_fit(&p, 0.0);
         assert!((pred(&f, &[1.0]) - 5.0).abs() < 1e-10);
@@ -1056,5 +1182,75 @@ mod tests {
             .as_str()
             .unwrap()
             .contains("not both"));
+    }
+    #[test]
+    fn seasonality_off_removes_seasonal_features_and_changes_fit() {
+        let mut v: Value = serde_json::from_str(&fixture()).unwrap();
+        v["backtests"] = Value::Null;
+        let legacy: Value = serde_json::from_str(&process(&v.to_string())).unwrap();
+        v["config"]["seasonality_mode"] = json!("off");
+        let off: Value = serde_json::from_str(&process(&v.to_string())).unwrap();
+        assert_eq!(off["ok"], true);
+        assert!(!off["fit"]["features"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|x| is_seasonal_feature(x.as_str().unwrap())));
+        assert_ne!(
+            legacy["forecast"]["steps"][0]["all"],
+            off["forecast"]["steps"][0]["all"]
+        );
+    }
+    #[test]
+    fn mad_winsor_flags_train_shock_without_changing_row_count() {
+        let mut v: Value = serde_json::from_str(&fixture()).unwrap();
+        v["backtests"] = Value::Null;
+        v["rows"][35]["y"] = json!(180.0);
+        v["config"]["cutoff"] = json!("2022-12-01");
+        v["config"]["outlier_mode"] = json!("mad_winsor");
+        let response: Value = serde_json::from_str(&process(&v.to_string())).unwrap();
+        assert_eq!(response["ok"], true, "{}", response);
+        let diag = &response["fit"]["outlier_diagnostics"];
+        assert!(diag["n_flagged"].as_u64().unwrap() >= 1);
+        assert_eq!(diag["n_used"], response["fit"]["n_train"]);
+    }
+    #[test]
+    fn outlier_diagnostics_are_cutoff_invariant_to_future_actuals() {
+        let mut v: Value = serde_json::from_str(&fixture()).unwrap();
+        v["backtests"] = Value::Null;
+        v["config"]["cutoff"] = json!("2022-12-01");
+        v["config"]["outlier_mode"] = json!("mad_winsor");
+        for i in 0..12 {
+            let d = Month { y: 2023, m: i + 1 };
+            v["rows"].as_array_mut().unwrap().push(json!({
+                "date": d.text(), "y": 100.1 + i as f64, "food": 100.0,
+                "nonfood": 100.0, "services": 100.0, "ki": 10.0, "ruonia": 8.0
+            }));
+        }
+        let a: Value = serde_json::from_str(&process(&v.to_string())).unwrap();
+        for r in v["rows"].as_array_mut().unwrap().iter_mut().skip(60) {
+            r["y"] = json!(9000.0);
+        }
+        let b: Value = serde_json::from_str(&process(&v.to_string())).unwrap();
+        assert_eq!(
+            a["fit"]["outlier_diagnostics"],
+            b["fit"]["outlier_diagnostics"]
+        );
+        assert_eq!(a["forecast"]["steps"], b["forecast"]["steps"]);
+    }
+    #[test]
+    fn invalid_control_values_are_rejected() {
+        let mut v: Value = serde_json::from_str(&fixture()).unwrap();
+        v["config"]["seasonality_mode"] = json!("maybe");
+        assert_eq!(
+            serde_json::from_str::<Value>(&process(&v.to_string())).unwrap()["ok"],
+            false
+        );
+        v["config"]["seasonality_mode"] = json!("legacy");
+        v["config"]["outlier_threshold"] = json!(0.5);
+        assert_eq!(
+            serde_json::from_str::<Value>(&process(&v.to_string())).unwrap()["ok"],
+            false
+        );
     }
 }

@@ -3,7 +3,7 @@
   "file_protocol": true,
   "actual_update_button": true,
   "regions": 101,
-  "seconds": 4.973863152001286,
+  "seconds": 5.348691194987623,
   "source": {
     "public_url": "https://disk.yandex.ru/d/i6czrcdNO0I7BQ",
     "name": "2026-08 ИПЦ с исключением сезонности (регионы).xlsx",
@@ -13,9 +13,9 @@
     "raw_field": "mom",
     "sa_field": "mom_sa",
     "sha256": "1a3648b2de7f3b777e20e5912da576acbcc0e9a5d827a89eefe290c01bbea84f",
-    "imported_at": "2026-09-28T14:30:48.932Z",
+    "imported_at": "2026-09-28T15:51:59.639Z",
     "evidence_level": "C",
     "note": "RAW и SA из одного выпуска; импорт заменяет историю целиком, без склейки vintages"
   },
-  "html_sha256": "3e25848e114201fd6e8304ae9cb00a2b89cfa8b3c3d345803266c46309aa8c88"
+  "html_sha256": "393599340f05390656e00507a998b361f6f2fb4031e622d510584fc70a404695"
 }

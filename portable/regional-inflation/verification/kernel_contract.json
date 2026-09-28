@@ -3,7 +3,7 @@
   "contract": "native CLI behavioral checks; no model superiority claim",
   "dataset": {
     "file": "regional_indices.json",
-    "sha256": "742960d36ec4796ca949606eacf2f958ac2568eefd98718bd55143abdc9be456",
+    "sha256": "cfb6bcc83c5a2f2c99def3883cf6e1e8fde08524b0ab8ef4030d39d0df17c3fd",
     "region_code": 7,
     "region": "Кабардино-Балкарская Республика",
     "raw_rows": 128,
@@ -12,8 +12,8 @@
   },
   "fixtures": {
     "region_code": 7,
-    "raw_rows_sha256": "b597887f6081b76bccf843af4244195efc3f0bf9c96c9eda7dae2c6117f6abdc",
-    "sa_rows_sha256": "ac3ca3ca0fe8da7112d19f6bb0123523ecf20bc9c8db3143d3b1db8114f2c03d",
+    "raw_rows_sha256": "ae252ccfe2a44cc31c8d781d2689235aabb109feeee7acfa97c7deddee46b54c",
+    "sa_rows_sha256": "ff997e2785c913fa74d888d97431192a176fd92dac71fd840b37547dfeb8a3aa",
     "future_mutation": "for dates after 2025-06-01, add 17 to y, subtract 21 from food, add 13 to nonfood, subtract 9 from services, set Ki=1000 and Ruonia=-500",
     "backtest_cutoffs": [
       "2024-12-01",
@@ -28,12 +28,12 @@
   },
   "binary": {
     "path": "regional-inflation-core",
-    "sha256": "a1cf267ff8b16bfc6624ab88c069e7485e5ee6342d88f39db6ef9665c088bb1e"
+    "sha256": "51163da2df902356167edacb904134fe58c64dbbe6d1f0f1613f38462cc93bb8"
   },
   "working_tree_source_hashes": {
-    "portable/regional-inflation/core/src/lib.rs": "29f8c97262ea6c0f6c6cacc0530090e636ac0ff34b9a9318f998f23368331076",
+    "portable/regional-inflation/core/src/lib.rs": "903df3cd7ec7f6176988f9247eab8ece203220f8f7b47247c4bb40fb34749ca5",
     "portable/regional-inflation/core/src/main.rs": "7c0ec9da458f9a39d8bc7e22045826e0a1493f1b51ed327d488f04eede25cdeb",
-    "portable/regional-inflation/core/Cargo.toml": "a1c949a374705e9326149609c78705603b23ecca0523d4c8d91f36e343e0df7e",
+    "portable/regional-inflation/core/Cargo.toml": "319ec18de37bc8d8ad49305e0512d42ca7e9d5caa8a8736c1dead81aaa7a8139",
     "portable/regional-inflation/core/Cargo.lock": "e436667ba455a74019141d390975b1cfde52d4b0f08d2a2f0ff63c0fc7a0e115",
     "sirena/models/ridge.py": "b174bda6ab1df5647fc83e93ac6c9c6d0d87739e62b1447240438da54f4a9973",
     "portable/regional-inflation/tools/verify_kernel_contract.py": "0d28a5fc18358e90d0e86b047fc4988fc57c2aab7af5ba8904140f17c4a2fce3"
@@ -42,59 +42,59 @@
   "native_cli_log": [
     {
       "label": "raw_cutoff_forecast",
-      "request_sha256": "bb05430e9752854d17b3a555ce3f4ee04de31c919e1ba92f0731bccee20a70af",
+      "request_sha256": "beba5a1f6a9ead284a42ca7e78e3d5cc087f07c68801f5699a3bb35a98db7bd2",
       "request_rows": 128,
       "frequency": "raw",
       "cutoff": "2025-06-01",
       "horizon": 3,
       "return_code": 0,
-      "response_sha256": "58851e3c1e3a91343b26d5265bd7d42400a446d14cf66dd8ce60933b75ff201f",
+      "response_sha256": "bf3c3450f94d220a28eda58592fbd231c10d53789896c7dd952be5c429473d8a",
       "ok": true,
       "error_code": null,
       "stderr": null
     },
     {
       "label": "future_mutation_forecast",
-      "request_sha256": "253a761e88f2b9f08e98fcb2a790ee180405942654ad33985ca423b2ba80f88c",
+      "request_sha256": "4be2a6bc30eb1452c31b27ae7ae4fc540db104c7e50533c6cf299c94ef2e022a",
       "request_rows": 128,
       "frequency": "raw",
       "cutoff": "2025-06-01",
       "horizon": 3,
       "return_code": 0,
-      "response_sha256": "58851e3c1e3a91343b26d5265bd7d42400a446d14cf66dd8ce60933b75ff201f",
+      "response_sha256": "bf3c3450f94d220a28eda58592fbd231c10d53789896c7dd952be5c429473d8a",
       "ok": true,
       "error_code": null,
       "stderr": null
     },
     {
       "label": "sa_cutoff_forecast",
-      "request_sha256": "2a0f7a479fb706b69e04ebee079dc73f8b05c95e60ad4b42ab5592c6dff9c5c5",
+      "request_sha256": "83953e9889ed22d84cd454ba3d8503b9626bc456068490ceafb98a05b8a074d1",
       "request_rows": 128,
       "frequency": "sa",
       "cutoff": "2025-06-01",
       "horizon": 3,
       "return_code": 0,
-      "response_sha256": "1bac806eed8cbcef768811ead15d5f8b4035ff5d7af698209d5a175716e875ca",
+      "response_sha256": "22682540a8f706d4106be617f4ee49862398a1c34e7378add7a219b1767e3fab",
       "ok": true,
       "error_code": null,
       "stderr": null
     },
     {
       "label": "all_macro_values_none",
-      "request_sha256": "035e30f50084de0a2027ad65a576b992c672cbe7b070679dd4cdeb43fc400ec3",
+      "request_sha256": "907539347992f6e24353dd910ee17a28bc6613fb383c54abd73667ca42e16898",
       "request_rows": 128,
       "frequency": "raw",
       "cutoff": "2025-06-01",
       "horizon": 3,
       "return_code": 0,
-      "response_sha256": "12e7f2b4e8e5d855ae56e301a9cac203830b13123c648fab48885b8168405f84",
+      "response_sha256": "d41ab3d4c7996674b490ab9c47943b385c2b7801cff63eedfe4b9cfd2dac2518",
       "ok": false,
       "error_code": "invalid_or_fit_error",
       "stderr": null
     },
     {
       "label": "missing_month_gap",
-      "request_sha256": "caaeb9e77b52a562103b33bb1fce4cb7767f952d272100e598a2dab4dcc16030",
+      "request_sha256": "e77d1da67b411ff490857be84c511f2d3c29065d86687a933d326cccf7bb02cf",
       "request_rows": 127,
       "frequency": "raw",
       "cutoff": "2025-06-01",
@@ -107,7 +107,7 @@
     },
     {
       "label": "invalid_horizon_25",
-      "request_sha256": "747ca4ebe480bb98a6c37c4eb4a2b94792390e6abc44efc4052e3b50e04a3b83",
+      "request_sha256": "ff8e7004fb40a5cd879abfdc2774f965d80280e3c2fca733146c23cfc69e4e5e",
       "request_rows": 128,
       "frequency": "raw",
       "cutoff": "2025-06-01",
@@ -120,13 +120,13 @@
     },
     {
       "label": "backtest_horizons_1_2_12",
-      "request_sha256": "e2f1628ceed5d8f01426bf0c3032df9b3df8f41c3c1d362b0b2a20339a910b77",
+      "request_sha256": "60a43a20c33c864d570cc78895c3c5d9e9c50bab09490019c70167bf680b7983",
       "request_rows": 128,
       "frequency": "raw",
       "cutoff": "2026-08-01",
       "horizon": 1,
       "return_code": 0,
-      "response_sha256": "87f900fdf89936740377dd0e02e639ba6cb423ad9a027a1bd56f4d9734cb952f",
+      "response_sha256": "c9ab7959d5dd3ff89349990d94a2fb13d4ec6b6151d93f6cdc9203dc3156ac67",
       "ok": true,
       "error_code": null,
       "stderr": null
@@ -145,7 +145,7 @@
     "all_macro_none_returns_explicit_error": {
       "pass": true,
       "error_code": "invalid_or_fit_error",
-      "message": "macro freshness requirement failed: latest 12 training months must have finite ki and ruonia; set use_macro=false to run without macro features"
+      "message": "macro freshness requirement failed: all training months must have finite ki and ruonia; set use_macro=false to run without macro features"
     },
     "monthly_gap_rejected": {
       "pass": true,
@@ -169,25 +169,25 @@
         "1": {
           "n_planned": 3,
           "n_valid": 3,
-          "mae": 0.19634774313519662,
-          "rmse": 0.24418441243167036,
-          "bias": -0.19634774313519662,
-          "hit_within_0_5": 1.0
+          "mae": 0.2534295510267839,
+          "rmse": 0.3556839446595066,
+          "bias": -0.2534295510267839,
+          "hit_within_0_5": 0.6666666666666666
         },
         "2": {
           "n_planned": 3,
           "n_valid": 2,
-          "mae": 0.5723274499627351,
-          "rmse": 0.574589762958965,
-          "bias": -0.050938057642518686,
-          "hit_within_0_5": 0.0
+          "mae": 0.4567349304777224,
+          "rmse": 0.45676961865287813,
+          "bias": 0.0056291922871594124,
+          "hit_within_0_5": 1.0
         },
         "12": {
           "n_planned": 3,
           "n_valid": 2,
-          "mae": 0.5925162247494598,
-          "rmse": 0.6307306597868145,
-          "bias": -0.2162075128291292,
+          "mae": 0.5847699248956459,
+          "rmse": 0.6308212901456154,
+          "bias": -0.23660015857669947,
           "hit_within_0_5": 0.5
         }
       },
@@ -259,7 +259,7 @@
       "pass": true,
       "cutoff": "2025-06-01",
       "horizon": 3,
-      "max_abs_difference_vs_python": 4.263256414560601e-14,
+      "max_abs_difference_vs_python": 1.1368683772161603e-13,
       "tolerance": 1e-07
     }
   }

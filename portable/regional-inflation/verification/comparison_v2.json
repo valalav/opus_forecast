@@ -1,0 +1,531 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "HAC independent h1",
+      "pass": true
+    },
+    {
+      "name": "normal p independent h1",
+      "pass": true
+    },
+    {
+      "name": "HAC independent h2",
+      "pass": true
+    },
+    {
+      "name": "normal p independent h2",
+      "pass": true
+    },
+    {
+      "name": "HAC independent h12",
+      "pass": true
+    },
+    {
+      "name": "normal p independent h12",
+      "pass": true
+    },
+    {
+      "name": "identical forecasts do not invent significance",
+      "pass": true
+    },
+    {
+      "name": "missing pairs suppress p",
+      "pass": true
+    },
+    {
+      "name": "region 7 raw none",
+      "pass": true
+    },
+    {
+      "name": "region 7 raw mad_winsor",
+      "pass": true
+    },
+    {
+      "name": "region 7 raw matched pairs",
+      "pass": true
+    },
+    {
+      "name": "region 7 sa none",
+      "pass": true
+    },
+    {
+      "name": "region 7 sa mad_winsor",
+      "pass": true
+    },
+    {
+      "name": "region 7 sa matched pairs",
+      "pass": true
+    },
+    {
+      "name": "region 16 raw none",
+      "pass": true
+    },
+    {
+      "name": "region 16 raw mad_winsor",
+      "pass": true
+    },
+    {
+      "name": "region 16 raw matched pairs",
+      "pass": true
+    },
+    {
+      "name": "region 16 sa none",
+      "pass": true
+    },
+    {
+      "name": "region 16 sa mad_winsor",
+      "pass": true
+    },
+    {
+      "name": "region 16 sa matched pairs",
+      "pass": true
+    },
+    {
+      "name": "region 77 raw none",
+      "pass": true
+    },
+    {
+      "name": "region 77 raw mad_winsor",
+      "pass": true
+    },
+    {
+      "name": "region 77 raw matched pairs",
+      "pass": true
+    },
+    {
+      "name": "region 77 sa none",
+      "pass": true
+    },
+    {
+      "name": "region 77 sa mad_winsor",
+      "pass": true
+    },
+    {
+      "name": "region 77 sa matched pairs",
+      "pass": true
+    }
+  ],
+  "experiments": [
+    {
+      "region": 7,
+      "frequency": "raw",
+      "paired": {
+        "1": {
+          "horizon": 1,
+          "n_planned": 36,
+          "n_pairs": 36,
+          "baseline_mae": 0.4298706566992105,
+          "treatment_mae": 0.4195511605384168,
+          "improvement_mae": 0.010319496160793702,
+          "mean_loss_difference": 0.010319496160793702,
+          "ci95": [
+            -0.002043849044253721,
+            0.022682841365841123
+          ],
+          "statistic": 1.6359521212347667,
+          "p_value": 0.10184958577417946,
+          "p_value_holm": 0.20369917154835893,
+          "bandwidth": 3,
+          "status": "approximate",
+          "method": "Paired absolute-error difference; Bartlett Newey-West HAC; asymptotic normal approximation",
+          "standard_error": 0.006307945096220091
+        },
+        "2": {
+          "horizon": 2,
+          "n_planned": 36,
+          "n_pairs": 36,
+          "baseline_mae": 0.4836125375302416,
+          "treatment_mae": 0.4711010645075283,
+          "improvement_mae": 0.012511473022713283,
+          "mean_loss_difference": 0.012511473022713283,
+          "ci95": [
+            0.0006321714725913904,
+            0.024390774572835176
+          ],
+          "statistic": 2.0642658505298153,
+          "p_value": 0.03899238530174354,
+          "p_value_holm": 0.11697715590523061,
+          "bandwidth": 3,
+          "status": "approximate",
+          "method": "Paired absolute-error difference; Bartlett Newey-West HAC; asymptotic normal approximation",
+          "standard_error": 0.006060979509738091
+        },
+        "12": {
+          "horizon": 12,
+          "n_planned": 36,
+          "n_pairs": 36,
+          "baseline_mae": 0.44790575791605114,
+          "treatment_mae": 0.4411729933788702,
+          "improvement_mae": 0.006732764537180931,
+          "mean_loss_difference": 0.006732764537180931,
+          "ci95": [
+            -0.001501226417901313,
+            0.014966755492263176
+          ],
+          "statistic": 1.6026221162069887,
+          "p_value": 0.1090181055480488,
+          "p_value_holm": 0.20369917154835893,
+          "bandwidth": 11,
+          "status": "approximate",
+          "method": "Paired absolute-error difference; Bartlett Newey-West HAC; asymptotic normal approximation",
+          "standard_error": 0.004201092989478845
+        }
+      },
+      "outliers": {
+        "flagged_dates": [],
+        "mode": "mad_winsor",
+        "n_flagged": 0,
+        "n_used": 104,
+        "rule": "train-only month-median residual; MAD scale 1.4826; winsorize target response",
+        "threshold": 3.5
+      }
+    },
+    {
+      "region": 7,
+      "frequency": "sa",
+      "paired": {
+        "1": {
+          "horizon": 1,
+          "n_planned": 36,
+          "n_pairs": 36,
+          "baseline_mae": 0.3597675203345574,
+          "treatment_mae": 0.3597675203345574,
+          "improvement_mae": 0,
+          "mean_loss_difference": 0,
+          "ci95": null,
+          "statistic": null,
+          "p_value": null,
+          "p_value_holm": null,
+          "bandwidth": 3,
+          "status": "degenerate_variance",
+          "method": "Paired absolute-error difference; Bartlett Newey-West HAC; asymptotic normal approximation"
+        },
+        "2": {
+          "horizon": 2,
+          "n_planned": 36,
+          "n_pairs": 36,
+          "baseline_mae": 0.4258648967546925,
+          "treatment_mae": 0.4258648967546925,
+          "improvement_mae": 0,
+          "mean_loss_difference": 0,
+          "ci95": null,
+          "statistic": null,
+          "p_value": null,
+          "p_value_holm": null,
+          "bandwidth": 3,
+          "status": "degenerate_variance",
+          "method": "Paired absolute-error difference; Bartlett Newey-West HAC; asymptotic normal approximation"
+        },
+        "12": {
+          "horizon": 12,
+          "n_planned": 36,
+          "n_pairs": 36,
+          "baseline_mae": 0.39401791502330613,
+          "treatment_mae": 0.39401791502330613,
+          "improvement_mae": 0,
+          "mean_loss_difference": 0,
+          "ci95": null,
+          "statistic": null,
+          "p_value": null,
+          "p_value_holm": null,
+          "bandwidth": 11,
+          "status": "degenerate_variance",
+          "method": "Paired absolute-error difference; Bartlett Newey-West HAC; asymptotic normal approximation"
+        }
+      },
+      "outliers": {
+        "flagged_dates": [],
+        "mode": "mad_winsor",
+        "n_flagged": 0,
+        "n_used": 104,
+        "rule": "train-only overall-median residual; MAD scale 1.4826; winsorize target response",
+        "threshold": 3.5
+      }
+    },
+    {
+      "region": 16,
+      "frequency": "raw",
+      "paired": {
+        "1": {
+          "horizon": 1,
+          "n_planned": 36,
+          "n_pairs": 36,
+          "baseline_mae": 0.39247799049326404,
+          "treatment_mae": 0.39247799049326404,
+          "improvement_mae": 0,
+          "mean_loss_difference": 0,
+          "ci95": null,
+          "statistic": null,
+          "p_value": null,
+          "p_value_holm": null,
+          "bandwidth": 3,
+          "status": "degenerate_variance",
+          "method": "Paired absolute-error difference; Bartlett Newey-West HAC; asymptotic normal approximation"
+        },
+        "2": {
+          "horizon": 2,
+          "n_planned": 36,
+          "n_pairs": 36,
+          "baseline_mae": 0.45666530173614184,
+          "treatment_mae": 0.45666530173614184,
+          "improvement_mae": 0,
+          "mean_loss_difference": 0,
+          "ci95": null,
+          "statistic": null,
+          "p_value": null,
+          "p_value_holm": null,
+          "bandwidth": 3,
+          "status": "degenerate_variance",
+          "method": "Paired absolute-error difference; Bartlett Newey-West HAC; asymptotic normal approximation"
+        },
+        "12": {
+          "horizon": 12,
+          "n_planned": 36,
+          "n_pairs": 36,
+          "baseline_mae": 0.47354214595826566,
+          "treatment_mae": 0.47354214595826566,
+          "improvement_mae": 0,
+          "mean_loss_difference": 0,
+          "ci95": null,
+          "statistic": null,
+          "p_value": null,
+          "p_value_holm": null,
+          "bandwidth": 11,
+          "status": "degenerate_variance",
+          "method": "Paired absolute-error difference; Bartlett Newey-West HAC; asymptotic normal approximation"
+        }
+      },
+      "outliers": {
+        "flagged_dates": [],
+        "mode": "mad_winsor",
+        "n_flagged": 0,
+        "n_used": 104,
+        "rule": "train-only month-median residual; MAD scale 1.4826; winsorize target response",
+        "threshold": 3.5
+      }
+    },
+    {
+      "region": 16,
+      "frequency": "sa",
+      "paired": {
+        "1": {
+          "horizon": 1,
+          "n_planned": 36,
+          "n_pairs": 36,
+          "baseline_mae": 0.367266375323515,
+          "treatment_mae": 0.367266375323515,
+          "improvement_mae": 0,
+          "mean_loss_difference": 0,
+          "ci95": null,
+          "statistic": null,
+          "p_value": null,
+          "p_value_holm": null,
+          "bandwidth": 3,
+          "status": "degenerate_variance",
+          "method": "Paired absolute-error difference; Bartlett Newey-West HAC; asymptotic normal approximation"
+        },
+        "2": {
+          "horizon": 2,
+          "n_planned": 36,
+          "n_pairs": 36,
+          "baseline_mae": 0.39316391918031596,
+          "treatment_mae": 0.39316391918031596,
+          "improvement_mae": 0,
+          "mean_loss_difference": 0,
+          "ci95": null,
+          "statistic": null,
+          "p_value": null,
+          "p_value_holm": null,
+          "bandwidth": 3,
+          "status": "degenerate_variance",
+          "method": "Paired absolute-error difference; Bartlett Newey-West HAC; asymptotic normal approximation"
+        },
+        "12": {
+          "horizon": 12,
+          "n_planned": 36,
+          "n_pairs": 36,
+          "baseline_mae": 0.38497496407421194,
+          "treatment_mae": 0.38497496407421194,
+          "improvement_mae": 0,
+          "mean_loss_difference": 0,
+          "ci95": null,
+          "statistic": null,
+          "p_value": null,
+          "p_value_holm": null,
+          "bandwidth": 11,
+          "status": "degenerate_variance",
+          "method": "Paired absolute-error difference; Bartlett Newey-West HAC; asymptotic normal approximation"
+        }
+      },
+      "outliers": {
+        "flagged_dates": [],
+        "mode": "mad_winsor",
+        "n_flagged": 0,
+        "n_used": 104,
+        "rule": "train-only overall-median residual; MAD scale 1.4826; winsorize target response",
+        "threshold": 3.5
+      }
+    },
+    {
+      "region": 77,
+      "frequency": "raw",
+      "paired": {
+        "1": {
+          "horizon": 1,
+          "n_planned": 36,
+          "n_pairs": 36,
+          "baseline_mae": 0.3301271113695713,
+          "treatment_mae": 0.3194734682246675,
+          "improvement_mae": 0.010653643144903826,
+          "mean_loss_difference": 0.010653643144903826,
+          "ci95": [
+            -0.006859244042685415,
+            0.028166530332493066
+          ],
+          "statistic": 1.1923080783019595,
+          "p_value": 0.2331405958129673,
+          "p_value_holm": 0.4662811916259346,
+          "bandwidth": 3,
+          "status": "approximate",
+          "method": "Paired absolute-error difference; Bartlett Newey-West HAC; asymptotic normal approximation",
+          "standard_error": 0.008935310712711387
+        },
+        "2": {
+          "horizon": 2,
+          "n_planned": 36,
+          "n_pairs": 36,
+          "baseline_mae": 0.3422237783791265,
+          "treatment_mae": 0.33907863626190404,
+          "improvement_mae": 0.0031451421172224376,
+          "mean_loss_difference": 0.0031451421172224376,
+          "ci95": [
+            -0.0044342796325258045,
+            0.010724563866970679
+          ],
+          "statistic": 0.813302845460577,
+          "p_value": 0.41604433225528537,
+          "p_value_holm": 0.4662811916259346,
+          "bandwidth": 3,
+          "status": "approximate",
+          "method": "Paired absolute-error difference; Bartlett Newey-West HAC; asymptotic normal approximation",
+          "standard_error": 0.00386712297242896
+        },
+        "12": {
+          "horizon": 12,
+          "n_planned": 36,
+          "n_pairs": 36,
+          "baseline_mae": 0.3396345462976728,
+          "treatment_mae": 0.3209406044353563,
+          "improvement_mae": 0.01869394186231648,
+          "mean_loss_difference": 0.01869394186231648,
+          "ci95": [
+            0.006252441273116329,
+            0.031135442451516632
+          ],
+          "statistic": 2.9449383952150288,
+          "p_value": 0.003230326614209522,
+          "p_value_holm": 0.009690979842628566,
+          "bandwidth": 11,
+          "status": "approximate",
+          "method": "Paired absolute-error difference; Bartlett Newey-West HAC; asymptotic normal approximation",
+          "standard_error": 0.006347821024945928
+        }
+      },
+      "outliers": {
+        "flagged_dates": [
+          "2023-11-01",
+          "2024-05-01",
+          "2024-07-01",
+          "2024-11-01",
+          "2026-01-01"
+        ],
+        "mode": "mad_winsor",
+        "n_flagged": 5,
+        "n_used": 104,
+        "rule": "train-only month-median residual; MAD scale 1.4826; winsorize target response",
+        "threshold": 3.5
+      }
+    },
+    {
+      "region": 77,
+      "frequency": "sa",
+      "paired": {
+        "1": {
+          "horizon": 1,
+          "n_planned": 36,
+          "n_pairs": 36,
+          "baseline_mae": 0.31260559270971516,
+          "treatment_mae": 0.3106919142930001,
+          "improvement_mae": 0.0019136784167150564,
+          "mean_loss_difference": 0.0019136784167150564,
+          "ci95": [
+            -0.0018987835482634275,
+            0.005726140381693541
+          ],
+          "statistic": 0.9838106738395518,
+          "p_value": 0.325208617352049,
+          "p_value_holm": 0.650417234704098,
+          "bandwidth": 3,
+          "status": "approximate",
+          "method": "Paired absolute-error difference; Bartlett Newey-West HAC; asymptotic normal approximation",
+          "standard_error": 0.0019451693985454313
+        },
+        "2": {
+          "horizon": 2,
+          "n_planned": 36,
+          "n_pairs": 36,
+          "baseline_mae": 0.3656338104335247,
+          "treatment_mae": 0.36664662884139315,
+          "improvement_mae": -0.001012818407868426,
+          "mean_loss_difference": -0.001012818407868426,
+          "ci95": [
+            -0.0034690885592861586,
+            0.0014434517435493064
+          ],
+          "statistic": -0.8081715283457493,
+          "p_value": 0.41899172925980954,
+          "p_value_holm": 0.650417234704098,
+          "bandwidth": 3,
+          "status": "approximate",
+          "method": "Paired absolute-error difference; Bartlett Newey-West HAC; asymptotic normal approximation",
+          "standard_error": 0.0012532220850956844
+        },
+        "12": {
+          "horizon": 12,
+          "n_planned": 36,
+          "n_pairs": 36,
+          "baseline_mae": 0.45563894749449374,
+          "treatment_mae": 0.45375719626780747,
+          "improvement_mae": 0.001881751226686311,
+          "mean_loss_difference": 0.001881751226686311,
+          "ci95": [
+            -0.00028607780909095594,
+            0.004049580262463578
+          ],
+          "statistic": 1.7013171109440643,
+          "p_value": 0.08888339705360049,
+          "p_value_holm": 0.26665019116080146,
+          "bandwidth": 11,
+          "status": "approximate",
+          "method": "Paired absolute-error difference; Bartlett Newey-West HAC; asymptotic normal approximation",
+          "standard_error": 0.0011060555463655588
+        }
+      },
+      "outliers": {
+        "flagged_dates": [
+          "2024-12-01",
+          "2026-01-01"
+        ],
+        "mode": "mad_winsor",
+        "n_flagged": 2,
+        "n_used": 104,
+        "rule": "train-only overall-median residual; MAD scale 1.4826; winsorize target response",
+        "threshold": 3.5
+      }
+    }
+  ],
+  "comparison_sha256": "2a95135852116a3588b44dc70fe68f17b5257a8f01967c53a3fafa24d66dd5a8",
+  "binary_sha256": "51163da2df902356167edacb904134fe58c64dbbe6d1f0f1613f38462cc93bb8",
+  "note": "Exploratory same-window comparison, not model promotion. No automatic hyperparameter selection."
+}

@@ -2,7 +2,7 @@
   "status": "PASS",
   "regions": 101,
   "numeric_values_compared": 155040,
-  "seconds": 5.333167944016168,
+  "seconds": 6.08195862499997,
   "file_protocol": true,
   "sha256": "1a3648b2de7f3b777e20e5912da576acbcc0e9a5d827a89eefe290c01bbea84f"
 }
