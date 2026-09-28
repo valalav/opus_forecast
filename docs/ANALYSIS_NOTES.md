@@ -40,6 +40,7 @@ Check `analysis_index.csv` before continuing discussions about:
 
 | Date | Topic | Note |
 |---|---|---|
+| 2026-09-28 | Плодоовощи: трёхмесячные окна, аналоги и осень 2026 | [Исследование](../archive/results/produce_patterns_20260928/REPORT.md) |
 | 2026-09-08 | Model apparatus review and prioritized improvements with Claude | [2026-09-08_model_apparatus_review.md](../archive/results/analysis_notes/2026-09-08_model_apparatus_review.md) |
 | 2026-09-08 | August nowcast refresh with operational calendar | [2026-09-08_august_nowcast_refresh.md](../archive/results/analysis_notes/2026-09-08_august_nowcast_refresh.md) |
 | 2026-09-01 | September live-nowcast after fixing August at 100.0 | [2026-09-01_september_live_nowcast_protocol.md](../archive/results/analysis_notes/2026-09-01_september_live_nowcast_protocol.md) |

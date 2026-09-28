@@ -1,0 +1,28 @@
+{
+  "cutoff": "2026-08",
+  "weight_2026": 0.05546,
+  "complete_years": 16,
+  "source_hashes": {
+    "data/kbr_indices.csv": "84e18c5ad606084ab72d43143f6c3311eda1f68f5b50a7acc075d7ed25c0d9a0",
+    "data/access_weights.csv": "fe1a4f4221c7b57ca551bcd9ade1b076f53ea1208b5db5a8272e8512b54f6e4d",
+    "data/items_structure.csv": "c8f5426f9664c4ac7c11a897eef6fda513f964c99f024e39d51d81d56e07091c",
+    "data/mom_sa_kbr.csv": "c4928f6819e05a91a039c43ec7b16fbef5b242fa5767063dec1c29e74b6e7ad7",
+    "data/micro_forecast_components.csv": "079df7f03d68eab5d267da79b594de19f94f10b38905cc86827c0ebfb61acebf",
+    "data/inflation_data.csv": "8e6eec3f5cd8248dcbfa99ab728e17e7f287d630e059117408c76032aa171456"
+  },
+  "source_manifest": "data/access_source_manifest.json",
+  "joint_positive_sep_oct": 4,
+  "rolling_pooled_rho": -0.07745936085796395,
+  "rolling_month_demeaned_rho": -0.0328312302260198,
+  "rolling_inference": "No iid p-value: overlapping monthly windows; descriptive seasonal confounding check.",
+  "august_produce_headline_contribution_approx_pp": -0.41650471092000024,
+  "mean_sep_without_2010": -1.1113326666666665,
+  "no_new_forecast_model": true,
+  "production_forecast_changed": false,
+  "analogy_features": [
+    "apr_jun",
+    "jun_aug"
+  ],
+  "analogy_count": 5,
+  "analogy_scale": "historical IQR; no future data"
+}
