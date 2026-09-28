@@ -121,6 +121,20 @@ def generate_nowcast_html(data, output_path, policy=None):
     policy = policy or {}
     policy_values = dict(zip(policy.get("forecast_dates", []), policy.get("mom_pp", [])))
     sections = []
+    weighted = data.get("diagnostics", {}).get("weighted_micro_nowcast")
+    if weighted and weighted.get("month") in {d[:7] for d in data["forecast_dates"]}:
+        sections.append(f"""<section id="weighted-nowcast">
+        <h2>Взвешенная экспертная оценка · {escape(weighted['month'])}</h2>
+        <p class="value">{weighted['central_mom']:+.2f}% м/м · индекс {100 + weighted['central_mom']:.2f}</p>
+        <p>Сценарный диапазон {weighted['scenario_low']:.2f}–{weighted['scenario_high']:.2f}%;
+        это не статистический доверительный интервал.</p>
+        <p>Данные по {escape(weighted['last_week'])}; наблюдаемые позиции покрывают
+        {weighted['covered_weight']:.3%} корзины. Остальное — прогноз Micro.
+        Расчёт с весами и модельным продолжением последней недели:
+        {weighted['weighted_micro_mom']:+.4f}%.</p>
+        <p>Экспериментальная диагностика без отдельного ретроспективного бэктеста.
+        Ниже показан штатный технический nowcast с другой схемой агрегирования.</p>
+        </section>""")
     for date, value in zip(data["forecast_dates"], data["forecasts"].get("Nowcast") or []):
         if value is None:
             continue

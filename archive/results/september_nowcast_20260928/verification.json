@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "checks": {
+    "input_hashes": true,
+    "no_double_weights": true,
+    "full_basket": true,
+    "weighted_arithmetic": true,
+    "fuel_persistence_scenario": true,
+    "unchanged_monthly_forecasts": true,
+    "policy_preserved": true,
+    "cache_diagnostic": true,
+    "operational_calendar": true,
+    "html_both_methods": true,
+    "workbook_readable": true
+  },
+  "tests": "17 weekly bridge / canonical refresh tests passed",
+  "limitations": [
+    "Hybrid has no independent historical forecast accuracy backtest",
+    "Four of five operational weeks; 64.735% basket remains modelled",
+    "Separate canonical weekly store was not refreshed and is not an input to this nowcast"
+  ]
+}

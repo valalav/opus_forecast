@@ -1,0 +1,30 @@
+{
+  "month": "2026-09",
+  "last_week": "2026-09-21",
+  "weeks_observed": 4,
+  "weeks_expected": 5,
+  "central_mom": 0.5,
+  "scenario_low": 0.25,
+  "scenario_high": 0.75,
+  "scenario_interval_is_statistical": false,
+  "weighted_micro_mom": 0.5106951667862407,
+  "flat_remaining_week_mom": 0.5162218783054542,
+  "fuel_no_decline_tail_mom": 0.533968515096742,
+  "covered_weight": 0.3526499999999998,
+  "matched_weekly_positions": 107,
+  "matched_monthly_positions": 110,
+  "observed_contribution_pp": 0.2822542295622081,
+  "unobserved_model_contribution_pp": 0.23396764874324605,
+  "standard_bridge_nowcast": 0.3560694595129342,
+  "ensemble_mom": 0.5216573882254045,
+  "prior_micro_mom": 0.19856223497102682,
+  "status": "experimental_diagnostic_not_backtested",
+  "report": "archive/results/september_nowcast_20260928/REPORT.md",
+  "source_hashes": {
+    "data/Сравнение еженедельных цен_01.csv": "eee0ce322066f59774c9c78b806b85da4c2e0b0f0c9088929eccdf396252b259",
+    "data/micro_sprav.csv": "2f7ec58b6d6a684e559eaa5adf750e5356e9b6d4f697243259225234acaf61fc",
+    "data/micro_forecast_components.csv": "079df7f03d68eab5d267da79b594de19f94f10b38905cc86827c0ebfb61acebf",
+    "data/weekly_accounting_month_overrides.csv": "0e9a46b6f68db8c4de9b9b80ba74dffaaeb237a9c084b9f71b3d4841e2e84b73",
+    "data/inflation_data.csv": "8e6eec3f5cd8248dcbfa99ab728e17e7f287d630e059117408c76032aa171456"
+  }
+}
