@@ -9,7 +9,9 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 from scripts.backtest_framework import BacktestRunner
-from sirena.experiment_models import m1_adapters, M1_PARAMETERS
+from sirena.experiment_models import (
+    M1_PARAMETERS, P3_PARAMETERS, m1_adapters, p3_adapters,
+)
 
 
 def main():
@@ -22,10 +24,14 @@ def main():
         raise ValueError('run_id must be one directory name')
     output = ROOT/'archive/results/model_development'/run_id
     runner = BacktestRunner(1, test_months=len(protocol['targets']), output_dir=str(output))
-    adapters = m1_adapters()
-    expected = {name: M1_PARAMETERS[name] for name in protocol['models']}
+    adapters = {**m1_adapters(), **p3_adapters()}
+    unknown = set(protocol['models']) - set(adapters)
+    if unknown:
+        raise ValueError(f'No registered development adapters for: {sorted(unknown)}')
+    parameter_catalog = {**M1_PARAMETERS, **P3_PARAMETERS}
+    expected = {name: parameter_catalog[name] for name in protocol['models']}
     if protocol['parameters'] != expected or protocol['seed'] != 42:
-        raise ValueError('M1 adapter parameters/seed differ from locked protocol')
+        raise ValueError('Adapter parameters/seed differ from locked protocol')
     selected = {name: adapters[name] for name in protocol['models']}
     runner.run_registered_experiment(protocol, selected)
 

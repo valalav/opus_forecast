@@ -1,0 +1,7 @@
+{
+  "command": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python3 -m pytest tests/test_pooled_components.py tests/test_p3_experiment_adapters.py tests/test_registered_evaluation.py tests/test_weekly_news_bridge.py -q",
+  "passed": 23,
+  "failed": 0,
+  "elapsed_seconds": 6.4,
+  "run_date": "2026-09-28"
+}

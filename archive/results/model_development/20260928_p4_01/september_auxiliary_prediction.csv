@@ -1,0 +1,2 @@
+model,target_month,stage,training_cutoff,observation_cutoff,prediction,base_ridge,status,evidence_level
+WeeklyNewsBridge,2026-09,4,2026-08-01,2026-09-21,0.4568101153159574,0.49907539019727665,auxiliary_prediction,C

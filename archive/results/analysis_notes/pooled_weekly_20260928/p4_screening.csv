@@ -1,0 +1,9 @@
+stage,baseline,N_pair,N_planned,mae_gain_pp,guards_pass,complete_pair,screening_pass
+1,Ridge,16,16,-0.044336862698253876,False,True,False
+1,CalendarStageCorrection,16,16,0.008946693275766027,True,True,False
+2,Ridge,16,16,-0.038720434072744,False,True,False
+2,CalendarStageCorrection,16,16,0.0145631219012759,False,True,False
+3,Ridge,16,16,-0.023221172299813797,False,True,False
+3,CalendarStageCorrection,16,16,0.03460873939866238,True,True,True
+4,Ridge,15,16,0.000836045057083401,False,False,False
+4,CalendarStageCorrection,15,16,0.05778357692200342,True,False,False

@@ -1,0 +1,9 @@
+candidate,baseline,mae_gain_pp,guards_pass,screening_pass
+P3PartialPooling,P3IndependentRidge,-0.011405852965349406,False,False
+P3PoolingLagTrend,P3PartialPooling,-0.0036968825463286614,False,False
+P3IndependentRidge,Ridge,-0.017903819697357826,False,False
+P3IndependentRidge,Huber,-0.021656775262509698,False,False
+P3PartialPooling,Ridge,-0.02930967266270723,False,False
+P3PartialPooling,Huber,-0.0330626282278591,False,False
+P3PoolingLagTrend,Ridge,-0.03300655520903589,False,False
+P3PoolingLagTrend,Huber,-0.036759510774187765,False,False

@@ -34,6 +34,10 @@
 
 ## Experimental Models (v5.x)
 
+### P3/P4: проверка общих параметров и недельных сигналов (28.09.2026)
+
+`P3IndependentRidge`, `P3PartialPooling`, `P3PoolingLagTrend` используют одинаковые 45 групп и фиксированную агрегацию. Они доступны только через экспериментальные адаптеры; в `ModelRegistry` не включены, поскольку его default ensemble перебирает все зарегистрированные модели. `WeeklyNewsBridge` — отдельная поправка к месячному Ridge по стадиям недельного наблюдения, с календарным контролем. [План и команды](POOLED_COMPONENT_EXPERIMENT.md), [результаты и ограничения](../archive/results/analysis_notes/pooled_weekly_20260928/REPORT.md). Статус: экспериментальные, без production promotion.
+
 ### Subcomponent Models (Bottom-up)
 
 | Модель | Файл | Описание | MAE h=1 |

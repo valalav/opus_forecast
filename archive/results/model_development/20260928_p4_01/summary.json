@@ -1,0 +1,12 @@
+{
+  "run_id": "weekly_news_20260928T131530Z",
+  "output_dir": "/home/valalav/_projects/sirena-kbr/archive/results/model_development/20260928_p4_01",
+  "status": "INCOMPLETE",
+  "planned_targets": 16,
+  "planned_target_stage_rows": 64,
+  "planned_model_rows": 192,
+  "available_model_rows": 191,
+  "failure_count": 1,
+  "invalid_reasons": [],
+  "interpretation": "revised-vintage retrospective; no real weekly release vintages; diagnostic only"
+}

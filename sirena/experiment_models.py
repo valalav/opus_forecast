@@ -101,3 +101,78 @@ M1_PARAMETERS = {
     'GroupsFixed': {'group_predictor': 'existing Micro parent Ridge', 'aggregation': 'fixed', 'cross_year_policy': 'freeze'},
     'GroupsDated': {'group_predictor': 'existing Micro parent Ridge', 'aggregation': 'dated', 'cross_year_policy': 'freeze'},
 }
+
+
+P3_MODEL_VARIANTS = {
+    'P3IndependentRidge': 'independent_ridge',
+    'P3PartialPooling': 'partial_pooling',
+    'P3PoolingLagTrend': 'partial_pooling_trend',
+}
+
+
+def p3_adapters():
+    """Build experimental P3 adapters using one common fixed-basket contract.
+
+    Group models expose their 45 parent paths; this adapter applies the same
+    fixed aggregation used by GroupsFixed so all ablations share basket,
+    weights, and cutoff semantics. The pooled model stays outside production.
+    """
+    from sirena.models.pooled_components import PooledComponentsForecaster
+    from sirena.data.aggregation import aggregate_group_forecasts
+
+    def make_adapter(variant):
+        def calculate(train, horizon, context):
+            cache_key = f'p3:{variant}'
+            if cache_key not in context['cache']:
+                model = PooledComponentsForecaster(variant=variant).fit(
+                    train, target_col='Все товары и услуги')
+                context['cache'][cache_key] = model
+            model = context['cache'][cache_key]
+            groups = model.forecast_groups(horizon)
+            basket = model.basket
+            if len(basket['groups']) != 45 or set(groups.columns) != set(basket['groups'].index):
+                raise ValueError('P3 requires the complete common 45-group basket')
+            result = aggregate_group_forecasts(
+                basket, groups, origin=context['cutoff'], method='fixed',
+                cross_year_policy='freeze')
+            records = [
+                {'target_month': str(date.date()), 'group': int(code),
+                 'prediction': float(groups.at[date, code]),
+                 'weight': float(result.weights.at[date, code]),
+                 'contribution': float(result.contributions.at[date, code])}
+                for date in groups.index for code in groups.columns
+            ]
+            return {
+                'units': 'mom_percent', 'path': result.total.to_numpy(),
+                'coverage': {
+                    'weight_vintage': str(basket['weight_vintage'].date()),
+                    'observed_weight': 1., 'forecast_weight': 1.,
+                    'aggregation': 'fixed', 'cross_year_policy': 'freeze',
+                    'group_family': str(model.group_family),
+                    'price_reference_period': str(result.price_reference_period.date()),
+                    'price_reference_evidence': result.price_reference_evidence,
+                },
+                'contributions': records,
+            }
+        return calculate
+
+    return {name: make_adapter(variant) for name, variant in P3_MODEL_VARIANTS.items()}
+
+
+# This manifest is compared literally with the protocol before any evaluation.
+# Constructor and aggregation values are frozen here so protocol edits cannot
+# silently change the experiment implementation.
+from sirena.models.pooled_components import P3_PARAMETERS as _P3_CORE_PARAMETERS
+
+P3_PARAMETERS = {
+    name: {
+        'variant': variant,
+        **_P3_CORE_PARAMETERS,
+        'lags': list(_P3_CORE_PARAMETERS['lags']),
+        'feature_ids': list(_P3_CORE_PARAMETERS['feature_ids']),
+        'basket_groups': 45,
+        'target_col': 'Все товары и услуги',
+        'output_units': 'mom_percent',
+    }
+    for name, variant in P3_MODEL_VARIANTS.items()
+}

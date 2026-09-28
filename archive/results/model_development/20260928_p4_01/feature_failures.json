@@ -1,0 +1,170 @@
+[
+  {
+    "target_month": "2023-05",
+    "stage": 1,
+    "status": "unavailable",
+    "reason": "insufficient same-stage history; counts=[0]"
+  },
+  {
+    "target_month": "2023-05",
+    "stage": 2,
+    "status": "unavailable",
+    "reason": "insufficient same-stage history; counts=[0]"
+  },
+  {
+    "target_month": "2023-05",
+    "stage": 3,
+    "status": "unavailable",
+    "reason": "insufficient same-stage history; counts=[0]"
+  },
+  {
+    "target_month": "2023-05",
+    "stage": 4,
+    "status": "unavailable",
+    "reason": "insufficient same-stage history; counts=[0]"
+  },
+  {
+    "target_month": "2023-06",
+    "stage": 1,
+    "status": "unavailable",
+    "reason": "insufficient same-stage history; counts=[1]"
+  },
+  {
+    "target_month": "2023-06",
+    "stage": 2,
+    "status": "unavailable",
+    "reason": "insufficient same-stage history; counts=[1]"
+  },
+  {
+    "target_month": "2023-06",
+    "stage": 3,
+    "status": "unavailable",
+    "reason": "insufficient same-stage history; counts=[1]"
+  },
+  {
+    "target_month": "2023-06",
+    "stage": 4,
+    "status": "unavailable",
+    "reason": "2023-06 stage 4 has only 3 observed weekly dates"
+  },
+  {
+    "target_month": "2023-07",
+    "stage": 1,
+    "status": "unavailable",
+    "reason": "insufficient same-stage history; counts=[2]"
+  },
+  {
+    "target_month": "2023-07",
+    "stage": 2,
+    "status": "unavailable",
+    "reason": "insufficient same-stage history; counts=[2]"
+  },
+  {
+    "target_month": "2023-07",
+    "stage": 3,
+    "status": "unavailable",
+    "reason": "insufficient same-stage history; counts=[2]"
+  },
+  {
+    "target_month": "2023-07",
+    "stage": 4,
+    "status": "unavailable",
+    "reason": "insufficient same-stage history; counts=[1]"
+  },
+  {
+    "target_month": "2023-08",
+    "stage": 1,
+    "status": "unavailable",
+    "reason": "insufficient same-stage history; counts=[3]"
+  },
+  {
+    "target_month": "2023-08",
+    "stage": 2,
+    "status": "unavailable",
+    "reason": "insufficient same-stage history; counts=[3]"
+  },
+  {
+    "target_month": "2023-08",
+    "stage": 3,
+    "status": "unavailable",
+    "reason": "insufficient same-stage history; counts=[3]"
+  },
+  {
+    "target_month": "2023-08",
+    "stage": 4,
+    "status": "unavailable",
+    "reason": "insufficient same-stage history; counts=[2]"
+  },
+  {
+    "target_month": "2023-09",
+    "stage": 1,
+    "status": "unavailable",
+    "reason": "insufficient same-stage history; counts=[4]"
+  },
+  {
+    "target_month": "2023-09",
+    "stage": 2,
+    "status": "unavailable",
+    "reason": "insufficient same-stage history; counts=[4]"
+  },
+  {
+    "target_month": "2023-09",
+    "stage": 3,
+    "status": "unavailable",
+    "reason": "insufficient same-stage history; counts=[4]"
+  },
+  {
+    "target_month": "2023-09",
+    "stage": 4,
+    "status": "unavailable",
+    "reason": "insufficient same-stage history; counts=[3]"
+  },
+  {
+    "target_month": "2023-10",
+    "stage": 1,
+    "status": "unavailable",
+    "reason": "insufficient same-stage history; counts=[5]"
+  },
+  {
+    "target_month": "2023-10",
+    "stage": 2,
+    "status": "unavailable",
+    "reason": "insufficient same-stage history; counts=[5]"
+  },
+  {
+    "target_month": "2023-10",
+    "stage": 3,
+    "status": "unavailable",
+    "reason": "insufficient same-stage history; counts=[5]"
+  },
+  {
+    "target_month": "2023-10",
+    "stage": 4,
+    "status": "unavailable",
+    "reason": "insufficient same-stage history; counts=[4]"
+  },
+  {
+    "target_month": "2023-11",
+    "stage": 4,
+    "status": "unavailable",
+    "reason": "insufficient same-stage history; counts=[5]"
+  },
+  {
+    "target_month": "2025-01",
+    "stage": 3,
+    "status": "unavailable",
+    "reason": "2025-01 stage 3 has only 2 observed weekly dates"
+  },
+  {
+    "target_month": "2025-01",
+    "stage": 4,
+    "status": "unavailable",
+    "reason": "2025-01 stage 4 has only 2 observed weekly dates"
+  },
+  {
+    "target_month": "2026-01",
+    "stage": 4,
+    "status": "unavailable",
+    "reason": "2026-01 stage 4 has only 3 observed weekly dates"
+  }
+]

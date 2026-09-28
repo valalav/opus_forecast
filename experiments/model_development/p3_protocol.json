@@ -1,0 +1,211 @@
+{
+  "run_id": "20260928_p3_01",
+  "phase": "P1/P2",
+  "registered_at": "2026-09-09T06:47:27.196891+00:00",
+  "targets": [
+    "2024-01-01",
+    "2024-02-01",
+    "2024-03-01",
+    "2024-04-01",
+    "2024-05-01",
+    "2024-06-01",
+    "2024-07-01",
+    "2024-08-01",
+    "2024-09-01",
+    "2024-10-01",
+    "2024-11-01",
+    "2024-12-01",
+    "2025-01-01",
+    "2025-02-01",
+    "2025-03-01",
+    "2025-04-01",
+    "2025-05-01",
+    "2025-06-01",
+    "2025-07-01",
+    "2025-08-01",
+    "2025-09-01",
+    "2025-10-01",
+    "2025-11-01",
+    "2025-12-01",
+    "2026-01-01",
+    "2026-02-01",
+    "2026-03-01",
+    "2026-04-01",
+    "2026-05-01",
+    "2026-06-01",
+    "2026-07-01",
+    "2026-08-01"
+  ],
+  "horizons": [
+    1,
+    2,
+    12
+  ],
+  "models": [
+    "Ridge",
+    "Huber",
+    "SeasonalNaive",
+    "GroupsFixed",
+    "P3IndependentRidge",
+    "P3PartialPooling",
+    "P3PoolingLagTrend"
+  ],
+  "parameters": {
+    "Ridge": {
+      "implementation": "RidgeForecaster defaults at code hash"
+    },
+    "Huber": {
+      "implementation": "HuberForecaster defaults at code hash"
+    },
+    "SeasonalNaive": {
+      "lag_months": 12
+    },
+    "GroupsFixed": {
+      "group_predictor": "existing Micro parent Ridge",
+      "aggregation": "fixed",
+      "cross_year_policy": "freeze"
+    },
+    "P3IndependentRidge": {
+      "variant": "independent_ridge",
+      "train_start": "2016-01-01",
+      "lags": [
+        1,
+        2,
+        3,
+        6,
+        12
+      ],
+      "feature_ids": [
+        "lag1",
+        "lag2",
+        "lag3",
+        "lag6",
+        "lag12",
+        "month_sin",
+        "month_cos",
+        "lagged_common_trend"
+      ],
+      "group_family_source": "items_structure.Item_type=3.Component (2/3/4)",
+      "seasonality": "target-month sin/cos",
+      "ridge_alpha": 25.0,
+      "pooling_penalty": 100.0,
+      "trend_penalty": 25.0,
+      "trend": "cutoff-vintage weighted 45-group mean at forecast origin (lag 1 to target)",
+      "aggregation": "fixed",
+      "cross_year_policy": "freeze",
+      "minimum_panel_rows": 24,
+      "basket_groups": 45,
+      "target_col": "Все товары и услуги",
+      "output_units": "mom_percent"
+    },
+    "P3PartialPooling": {
+      "variant": "partial_pooling",
+      "train_start": "2016-01-01",
+      "lags": [
+        1,
+        2,
+        3,
+        6,
+        12
+      ],
+      "feature_ids": [
+        "lag1",
+        "lag2",
+        "lag3",
+        "lag6",
+        "lag12",
+        "month_sin",
+        "month_cos",
+        "lagged_common_trend"
+      ],
+      "group_family_source": "items_structure.Item_type=3.Component (2/3/4)",
+      "seasonality": "target-month sin/cos",
+      "ridge_alpha": 25.0,
+      "pooling_penalty": 100.0,
+      "trend_penalty": 25.0,
+      "trend": "cutoff-vintage weighted 45-group mean at forecast origin (lag 1 to target)",
+      "aggregation": "fixed",
+      "cross_year_policy": "freeze",
+      "minimum_panel_rows": 24,
+      "basket_groups": 45,
+      "target_col": "Все товары и услуги",
+      "output_units": "mom_percent"
+    },
+    "P3PoolingLagTrend": {
+      "variant": "partial_pooling_trend",
+      "train_start": "2016-01-01",
+      "lags": [
+        1,
+        2,
+        3,
+        6,
+        12
+      ],
+      "feature_ids": [
+        "lag1",
+        "lag2",
+        "lag3",
+        "lag6",
+        "lag12",
+        "month_sin",
+        "month_cos",
+        "lagged_common_trend"
+      ],
+      "group_family_source": "items_structure.Item_type=3.Component (2/3/4)",
+      "seasonality": "target-month sin/cos",
+      "ridge_alpha": 25.0,
+      "pooling_penalty": 100.0,
+      "trend_penalty": 25.0,
+      "trend": "cutoff-vintage weighted 45-group mean at forecast origin (lag 1 to target)",
+      "aggregation": "fixed",
+      "cross_year_policy": "freeze",
+      "minimum_panel_rows": 24,
+      "basket_groups": 45,
+      "target_col": "Все товары и услуги",
+      "output_units": "mom_percent"
+    }
+  },
+  "seed": 42,
+  "evidence_level": "C",
+  "fact_policy": "current_revised_raw",
+  "budget_seconds": 3600,
+  "search": {
+    "registered_specifications": 7,
+    "parameter_search": "none; three fixed P3 ablations and four existing controls",
+    "selection_data": "previously inspected historical targets; diagnostic only"
+  },
+  "admission": {
+    "mode": "diagnostic_only",
+    "primary_metric": "MAE_h1",
+    "min_mae_gain_pp": 0.025,
+    "threshold_basis": "Engineering screening threshold = 5% of user operational +/-0.5pp tolerance, fixed before new run; not institutional/statistical guarantee.",
+    "max_rmse_increase_pp": 0.0,
+    "max_abs_bias_increase_pp": 0.0,
+    "min_hit_rate_change": 0.0,
+    "require_complete_pair": true,
+    "replacement_requires_prospective": true
+  },
+  "comparisons": {
+    "pooling": [
+      "P3PartialPooling",
+      "P3IndependentRidge"
+    ],
+    "trend": [
+      "P3PoolingLagTrend",
+      "P3PartialPooling"
+    ],
+    "monthly_baselines": [
+      "Ridge",
+      "Huber"
+    ]
+  },
+  "excluded_controls": {
+    "Ensemble": "Current precompute ensemble lacks a verified origin-aware identical full-member adapter; old backtest ensemble has different composition/weights. Not ranked as same live model."
+  },
+  "limits": [
+    "Historical publication vintages unknown; evidence C.",
+    "Basket cutoff preflight fixes targets Jan2024-Aug2026 before errors; earlier cutoffs overlap leaf weights.",
+    "No hyperparameter selection; min screening gain 0.025pp is engineering rule.",
+    "Pooled trend uses one global lagged coefficient. No tariffs or weekly data injected into P3."
+  ]
+}

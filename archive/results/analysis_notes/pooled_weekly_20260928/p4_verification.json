@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "experimental_execution": "INCOMPLETE",
+  "rows": 192,
+  "unavailable": 1,
+  "unique_planned_slots": true,
+  "independent_metrics": true,
+  "code_sources_unchanged": true,
+  "production_promotion": false
+}
