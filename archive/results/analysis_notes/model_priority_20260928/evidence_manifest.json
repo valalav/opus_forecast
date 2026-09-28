@@ -1,0 +1,13 @@
+{
+  "date": "2026-09-28",
+  "status": "research_recommendation_no_new_model_or_backtest",
+  "sources": {
+    "archive/results/model_development/20260909_m1_02/adjudication.json": "77be6255308b1d27d6fcd4475c2763a5431befbcc1303e490d277f953d5bcea2",
+    "archive/results/micro_policy_20260909/common_metrics.csv": "a2084154e7b4d0c5fc5952ab012147b16eaf03fc00a2de73ca5fd1afd5e46a26",
+    "archive/results/forecast_update_20260928/august_model_comparison.csv": "fd0dc568c1702c70fecd756c30338b3d93e1ac2bc844919493e88003c6e6301d",
+    "docs/VAR_MODEL_RESEARCH.md": "c92daaca1913d0503d16da5a8b81c7095d24159b709f8027925ee6c232d39894",
+    "docs/FACTOR_MODEL_RESEARCH.md": "d312b3c01d29d6e454c0f6574b8332b6a0329615e2d0b704a83492b413e86383",
+    "docs/CPI_MODEL_DEVELOPMENT_PLAN.md": "17e974f081453543b47fbf253cbe8d5b3579f519b3348fef59bc70cba81d9e16",
+    "archive/results/september_nowcast_20260928/summary.json": "c66f6b99125d04a687161792f7ed1c847c68451caf17617347244b9d2338a191"
+  }
+}
