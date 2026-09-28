@@ -1,0 +1,115 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "101 regions offline",
+      "pass": true
+    },
+    {
+      "name": "calculation visible",
+      "pass": true
+    },
+    {
+      "name": "12 forecast table rows",
+      "pass": true
+    },
+    {
+      "name": "forecast cells populated",
+      "pass": true
+    },
+    {
+      "name": "WASM equals native",
+      "pass": true
+    },
+    {
+      "name": "CSV dates and values",
+      "pass": true
+    },
+    {
+      "name": "forecast YoY compounds monthly indices",
+      "pass": true
+    },
+    {
+      "name": "parameter edit clears result",
+      "pass": true
+    },
+    {
+      "name": "Huber exclusion defaults",
+      "pass": true
+    },
+    {
+      "name": "calculation visible",
+      "pass": true
+    },
+    {
+      "name": "Huber converges",
+      "pass": true
+    },
+    {
+      "name": "calculation visible",
+      "pass": true
+    },
+    {
+      "name": "SA request",
+      "pass": true
+    },
+    {
+      "name": "SA annual toggle hidden",
+      "pass": true
+    },
+    {
+      "name": "calculation visible",
+      "pass": true
+    },
+    {
+      "name": "selected region exported",
+      "pass": true
+    },
+    {
+      "name": "backtest 108 slots",
+      "pass": true
+    },
+    {
+      "name": "three horizons complete",
+      "pass": true
+    },
+    {
+      "name": "backtest cells populated",
+      "pass": true
+    },
+    {
+      "name": "backtest dates overlay",
+      "pass": true
+    },
+    {
+      "name": "backtest annual toggle hidden",
+      "pass": true
+    },
+    {
+      "name": "mobile no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "settings roundtrip",
+      "pass": true
+    },
+    {
+      "name": "calculation visible",
+      "pass": true
+    },
+    {
+      "name": "chart respects cutoff",
+      "pass": true
+    },
+    {
+      "name": "bad JSON visible error",
+      "pass": true
+    },
+    {
+      "name": "no JS errors",
+      "pass": true
+    }
+  ],
+  "platform": "Linux Chrome file:// offline",
+  "html_sha256": "3e25848e114201fd6e8304ae9cb00a2b89cfa8b3c3d345803266c46309aa8c88"
+}

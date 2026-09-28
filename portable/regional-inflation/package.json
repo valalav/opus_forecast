@@ -1,0 +1,12 @@
+{
+  "name": "regional-inflation-offline-ui",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build:html": "node tools/build_html.mjs"
+  },
+  "devDependencies": {
+    "fflate": "0.8.2"
+  }
+}

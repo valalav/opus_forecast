@@ -1,0 +1,41 @@
+{
+  "checked_at": "2026-09-28",
+  "public_folder": "https://disk.yandex.ru/d/i6czrcdNO0I7BQ",
+  "listing_api": "https://cloud-api.yandex.net/v1/disk/public/resources",
+  "api_origin_null": {
+    "status": 200,
+    "access_control_allow_origin": "null"
+  },
+  "binary_download_origin_null": {
+    "status": 206,
+    "access_control_allow_origin": "*",
+    "range_requests": true
+  },
+  "selected_source": {
+    "file": "2026-08 ИПЦ с исключением сезонности (регионы).xlsx",
+    "modified": "2026-09-15T09:58:45+00:00",
+    "size_bytes": 29626236,
+    "etag": "1e85996e5e6c78421d6944f1eefab391",
+    "sha256": "1a3648b2de7f3b777e20e5912da576acbcc0e9a5d827a89eefe290c01bbea84f",
+    "sheet_contract": {
+      "db": [
+        "Day",
+        "item",
+        "region",
+        "mom",
+        "mom_sa"
+      ],
+      "region_lookup": "momsa_regions columns B=code, C=name"
+    },
+    "coverage": "item codes 1-4 across 101 region entities; 100 entities have 128 observations (2016-01 through 2026-08), and code 93 Южный федеральный округ has 120 (2016-09 through 2026-08); both mom and mom_sa are present for all exported rows"
+  },
+  "other_latest_candidate": {
+    "file": "2026-08 Статистика ИПЦ полный.xlsx",
+    "modified": "2026-09-14T13:39:56+00:00",
+    "size_bytes": 105794814,
+    "etag": "0a241b5b3e4d0f57eb8b57d954d23758",
+    "inspection": "One visible pivot sheet filtered to Россия; pivot cache uses an external Access connection, saveData=0, recordCount=0 and has no pivotCacheRecords XML. Regional data may exist inside embedded Excel Data Model binary, which this importer does not decode.",
+    "sha256": "bf16ec66a1f7d6848a3cf535ca19f08ccba50cdd583e95153540d8c7e9e11a29"
+  },
+  "browser_update": "Yandex public listing and binary download support cross-origin requests; XLSX parsing remains a separate browser implementation. No direct browser ACCDB import is supported or claimed."
+}

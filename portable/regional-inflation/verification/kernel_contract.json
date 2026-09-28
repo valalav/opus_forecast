@@ -1,0 +1,266 @@
+{
+  "status": "PASS",
+  "contract": "native CLI behavioral checks; no model superiority claim",
+  "dataset": {
+    "file": "regional_indices.json",
+    "sha256": "742960d36ec4796ca949606eacf2f958ac2568eefd98718bd55143abdc9be456",
+    "region_code": 7,
+    "region": "Кабардино-Балкарская Республика",
+    "raw_rows": 128,
+    "sa_rows": 128,
+    "source_latest": "2026-08-01"
+  },
+  "fixtures": {
+    "region_code": 7,
+    "raw_rows_sha256": "b597887f6081b76bccf843af4244195efc3f0bf9c96c9eda7dae2c6117f6abdc",
+    "sa_rows_sha256": "ac3ca3ca0fe8da7112d19f6bb0123523ecf20bc9c8db3143d3b1db8114f2c03d",
+    "future_mutation": "for dates after 2025-06-01, add 17 to y, subtract 21 from food, add 13 to nonfood, subtract 9 from services, set Ki=1000 and Ruonia=-500",
+    "backtest_cutoffs": [
+      "2024-12-01",
+      "2025-06-01",
+      "2026-07-01"
+    ],
+    "backtest_horizons": [
+      1,
+      2,
+      12
+    ]
+  },
+  "binary": {
+    "path": "regional-inflation-core",
+    "sha256": "a1cf267ff8b16bfc6624ab88c069e7485e5ee6342d88f39db6ef9665c088bb1e"
+  },
+  "working_tree_source_hashes": {
+    "portable/regional-inflation/core/src/lib.rs": "29f8c97262ea6c0f6c6cacc0530090e636ac0ff34b9a9318f998f23368331076",
+    "portable/regional-inflation/core/src/main.rs": "7c0ec9da458f9a39d8bc7e22045826e0a1493f1b51ed327d488f04eede25cdeb",
+    "portable/regional-inflation/core/Cargo.toml": "a1c949a374705e9326149609c78705603b23ecca0523d4c8d91f36e343e0df7e",
+    "portable/regional-inflation/core/Cargo.lock": "e436667ba455a74019141d390975b1cfde52d4b0f08d2a2f0ff63c0fc7a0e115",
+    "sirena/models/ridge.py": "b174bda6ab1df5647fc83e93ac6c9c6d0d87739e62b1447240438da54f4a9973",
+    "portable/regional-inflation/tools/verify_kernel_contract.py": "0d28a5fc18358e90d0e86b047fc4988fc57c2aab7af5ba8904140f17c4a2fce3"
+  },
+  "provenance_note": "The tested executable SHA-256 identifies the exact native binary. Working-tree source hashes identify current source files; they do not prove that this binary was built from those exact hashes.",
+  "native_cli_log": [
+    {
+      "label": "raw_cutoff_forecast",
+      "request_sha256": "bb05430e9752854d17b3a555ce3f4ee04de31c919e1ba92f0731bccee20a70af",
+      "request_rows": 128,
+      "frequency": "raw",
+      "cutoff": "2025-06-01",
+      "horizon": 3,
+      "return_code": 0,
+      "response_sha256": "58851e3c1e3a91343b26d5265bd7d42400a446d14cf66dd8ce60933b75ff201f",
+      "ok": true,
+      "error_code": null,
+      "stderr": null
+    },
+    {
+      "label": "future_mutation_forecast",
+      "request_sha256": "253a761e88f2b9f08e98fcb2a790ee180405942654ad33985ca423b2ba80f88c",
+      "request_rows": 128,
+      "frequency": "raw",
+      "cutoff": "2025-06-01",
+      "horizon": 3,
+      "return_code": 0,
+      "response_sha256": "58851e3c1e3a91343b26d5265bd7d42400a446d14cf66dd8ce60933b75ff201f",
+      "ok": true,
+      "error_code": null,
+      "stderr": null
+    },
+    {
+      "label": "sa_cutoff_forecast",
+      "request_sha256": "2a0f7a479fb706b69e04ebee079dc73f8b05c95e60ad4b42ab5592c6dff9c5c5",
+      "request_rows": 128,
+      "frequency": "sa",
+      "cutoff": "2025-06-01",
+      "horizon": 3,
+      "return_code": 0,
+      "response_sha256": "1bac806eed8cbcef768811ead15d5f8b4035ff5d7af698209d5a175716e875ca",
+      "ok": true,
+      "error_code": null,
+      "stderr": null
+    },
+    {
+      "label": "all_macro_values_none",
+      "request_sha256": "035e30f50084de0a2027ad65a576b992c672cbe7b070679dd4cdeb43fc400ec3",
+      "request_rows": 128,
+      "frequency": "raw",
+      "cutoff": "2025-06-01",
+      "horizon": 3,
+      "return_code": 0,
+      "response_sha256": "12e7f2b4e8e5d855ae56e301a9cac203830b13123c648fab48885b8168405f84",
+      "ok": false,
+      "error_code": "invalid_or_fit_error",
+      "stderr": null
+    },
+    {
+      "label": "missing_month_gap",
+      "request_sha256": "caaeb9e77b52a562103b33bb1fce4cb7767f952d272100e598a2dab4dcc16030",
+      "request_rows": 127,
+      "frequency": "raw",
+      "cutoff": "2025-06-01",
+      "horizon": 3,
+      "return_code": 0,
+      "response_sha256": "6632997b733d61e2abc682b48a3e73634ecc4aed55387b79b0b76cd58332fc5f",
+      "ok": false,
+      "error_code": "invalid_or_fit_error",
+      "stderr": null
+    },
+    {
+      "label": "invalid_horizon_25",
+      "request_sha256": "747ca4ebe480bb98a6c37c4eb4a2b94792390e6abc44efc4052e3b50e04a3b83",
+      "request_rows": 128,
+      "frequency": "raw",
+      "cutoff": "2025-06-01",
+      "horizon": 25,
+      "return_code": 0,
+      "response_sha256": "9b4e32400ec120529a8e483879811b175fd8d2ddba1a5840752296796add58ae",
+      "ok": false,
+      "error_code": "invalid_or_fit_error",
+      "stderr": null
+    },
+    {
+      "label": "backtest_horizons_1_2_12",
+      "request_sha256": "e2f1628ceed5d8f01426bf0c3032df9b3df8f41c3c1d362b0b2a20339a910b77",
+      "request_rows": 128,
+      "frequency": "raw",
+      "cutoff": "2026-08-01",
+      "horizon": 1,
+      "return_code": 0,
+      "response_sha256": "87f900fdf89936740377dd0e02e639ba6cb423ad9a027a1bd56f4d9734cb952f",
+      "ok": true,
+      "error_code": null,
+      "stderr": null
+    }
+  ],
+  "checks": {
+    "future_cpi_and_macro_mutation_is_cutoff_safe": {
+      "pass": true,
+      "cutoff": "2025-06-01"
+    },
+    "raw_and_sa_histories_are_separate": {
+      "pass": true,
+      "raw_latest_y": 100.12,
+      "sa_latest_y": 100.8
+    },
+    "all_macro_none_returns_explicit_error": {
+      "pass": true,
+      "error_code": "invalid_or_fit_error",
+      "message": "macro freshness requirement failed: latest 12 training months must have finite ki and ruonia; set use_macro=false to run without macro features"
+    },
+    "monthly_gap_rejected": {
+      "pass": true,
+      "error_code": "invalid_or_fit_error",
+      "message": "monthly gap or unordered rows at 2021-02-01"
+    },
+    "invalid_horizon_rejected": {
+      "pass": true,
+      "error_code": "invalid_or_fit_error",
+      "message": "horizon must be between 1 and 24"
+    },
+    "backtest_pairs_and_metrics_recomputed": {
+      "pass": true,
+      "planned_slots": 9,
+      "valid_slots": 7,
+      "unavailable_targets": [
+        "2026-09-01",
+        "2027-07-01"
+      ],
+      "metrics": {
+        "1": {
+          "n_planned": 3,
+          "n_valid": 3,
+          "mae": 0.19634774313519662,
+          "rmse": 0.24418441243167036,
+          "bias": -0.19634774313519662,
+          "hit_within_0_5": 1.0
+        },
+        "2": {
+          "n_planned": 3,
+          "n_valid": 2,
+          "mae": 0.5723274499627351,
+          "rmse": 0.574589762958965,
+          "bias": -0.050938057642518686,
+          "hit_within_0_5": 0.0
+        },
+        "12": {
+          "n_planned": 3,
+          "n_valid": 2,
+          "mae": 0.5925162247494598,
+          "rmse": 0.6307306597868145,
+          "bias": -0.2162075128291292,
+          "hit_within_0_5": 0.5
+        }
+      },
+      "pairs": [
+        {
+          "horizon": 1,
+          "cutoff": "2024-12-01",
+          "target_date": "2025-01-01",
+          "status": "ok",
+          "actual": 0.8400000000000034
+        },
+        {
+          "horizon": 1,
+          "cutoff": "2025-06-01",
+          "target_date": "2025-07-01",
+          "status": "ok",
+          "actual": 0.35999999999999943
+        },
+        {
+          "horizon": 1,
+          "cutoff": "2026-07-01",
+          "target_date": "2026-08-01",
+          "status": "ok",
+          "actual": 0.12000000000000455
+        },
+        {
+          "horizon": 2,
+          "cutoff": "2024-12-01",
+          "target_date": "2025-02-01",
+          "status": "ok",
+          "actual": 1.3400000000000034
+        },
+        {
+          "horizon": 2,
+          "cutoff": "2025-06-01",
+          "target_date": "2025-08-01",
+          "status": "ok",
+          "actual": -0.5699999999999932
+        },
+        {
+          "horizon": 2,
+          "cutoff": "2026-07-01",
+          "target_date": "2026-09-01",
+          "status": "unavailable"
+        },
+        {
+          "horizon": 12,
+          "cutoff": "2024-12-01",
+          "target_date": "2025-12-01",
+          "status": "ok",
+          "actual": 0.29000000000000625
+        },
+        {
+          "horizon": 12,
+          "cutoff": "2025-06-01",
+          "target_date": "2026-06-01",
+          "status": "ok",
+          "actual": 1.0600000000000023
+        },
+        {
+          "horizon": 12,
+          "cutoff": "2026-07-01",
+          "target_date": "2027-07-01",
+          "status": "unavailable"
+        }
+      ]
+    },
+    "historical_ridge_regression": {
+      "pass": true,
+      "cutoff": "2025-06-01",
+      "horizon": 3,
+      "max_abs_difference_vs_python": 4.263256414560601e-14,
+      "tolerance": 1e-07
+    }
+  }
+}

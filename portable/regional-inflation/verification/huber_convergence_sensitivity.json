@@ -1,0 +1,3820 @@
+{
+  "status": "COMPLETE",
+  "purpose": "Huber convergence sensitivity only; does not change defaults or promote nonconverged forecasts",
+  "method": {
+    "known_cases": 27,
+    "frequency_and_rows": "each case uses the same RAW or SA history from regional_indices.json, macro enabled, horizon 12, and default model exclusions",
+    "allow_nonconverged": "true only to expose fit objective, gradient norm and scale; any nonconverged forecast path is diagnostic only",
+    "baseline_default": {
+      "max_iter": 500,
+      "tol": 1e-05
+    },
+    "requested_sensitivities": [
+      {
+        "max_iter": 2000,
+        "tol": 1e-05
+      },
+      {
+        "max_iter": 10000,
+        "tol": 1e-05
+      },
+      {
+        "max_iter": 500,
+        "tol": 0.0001,
+        "run_when": "only cases still nonconverged at max_iter=10000,tol=1e-5"
+      },
+      {
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "run_when": "only cases still nonconverged at max_iter=10000,tol=1e-5"
+      }
+    ]
+  },
+  "source": {
+    "dataset": {
+      "file": "regional_indices.json",
+      "sha256": "742960d36ec4796ca949606eacf2f958ac2568eefd98718bd55143abdc9be456",
+      "regional_source": {
+        "public_folder": "https://disk.yandex.ru/d/i6czrcdNO0I7BQ",
+        "file": "2026-08 ИПЦ с исключением сезонности (регионы).xlsx",
+        "sheet": "db",
+        "modified": "2026-09-15T09:58:45+00:00",
+        "etag": "1e85996e5e6c78421d6944f1eefab391",
+        "sha256": "1a3648b2de7f3b777e20e5912da576acbcc0e9a5d827a89eefe290c01bbea84f",
+        "release_period": "2026-08",
+        "raw_column": "mom",
+        "sa_column": "mom_sa",
+        "raw_and_sa_same_release": true,
+        "unit": "monthly index level (100 means no change)"
+      },
+      "latest": "2026-08-01"
+    },
+    "baseline_report": {
+      "file": "all_regions.json",
+      "sha256": "f4720902f4e4c20140ce83f21ace8ddbd556f071965ec4a1bbdd485578673d5e"
+    },
+    "binary": {
+      "file": "regional-inflation-core",
+      "sha256": "a1cf267ff8b16bfc6624ab88c069e7485e5ee6342d88f39db6ef9665c088bb1e"
+    },
+    "working_tree_hashes": {
+      "portable/regional-inflation/core/src/lib.rs": "29f8c97262ea6c0f6c6cacc0530090e636ac0ff34b9a9318f998f23368331076",
+      "portable/regional-inflation/core/src/main.rs": "7c0ec9da458f9a39d8bc7e22045826e0a1493f1b51ed327d488f04eede25cdeb",
+      "portable/regional-inflation/core/Cargo.toml": "a1c949a374705e9326149609c78705603b23ecca0523d4c8d91f36e343e0df7e",
+      "portable/regional-inflation/core/Cargo.lock": "e436667ba455a74019141d390975b1cfde52d4b0f08d2a2f0ff63c0fc7a0e115"
+    },
+    "provenance_note": "Binary hash identifies the exact tested executable. Source hashes identify current files and do not prove the binary was built from those exact hashes."
+  },
+  "elapsed_seconds": 30.836,
+  "summaries": {
+    "baseline_500_tol_1e-5": {
+      "runs": 27,
+      "converged": 0,
+      "not_converged_or_error": 27,
+      "iterations": {
+        "min": 500,
+        "max": 500
+      },
+      "max_gradient_inf_norm": 0.0001303487232114666,
+      "max_objective": 107.62996889433646
+    },
+    "max_iter_2000_tol_1e-5": {
+      "runs": 27,
+      "converged": 0,
+      "not_converged_or_error": 27,
+      "iterations": {
+        "min": 2000,
+        "max": 2000
+      },
+      "max_gradient_inf_norm": 0.0001303487232114666,
+      "max_objective": 107.62996889433646
+    },
+    "max_iter_10000_tol_1e-5": {
+      "runs": 27,
+      "converged": 0,
+      "not_converged_or_error": 27,
+      "iterations": {
+        "min": 10000,
+        "max": 10000
+      },
+      "max_gradient_inf_norm": 0.0001303487232114666,
+      "max_objective": 107.62996889433646
+    },
+    "max_iter_500_tol_1e-4": {
+      "runs": 27,
+      "converged": 26,
+      "not_converged_or_error": 1,
+      "iterations": {
+        "min": 46,
+        "max": 500
+      },
+      "max_gradient_inf_norm": 0.0001303487232114666,
+      "max_objective": 107.62996889433673
+    },
+    "max_iter_2000_tol_1e-4": {
+      "runs": 27,
+      "converged": 26,
+      "not_converged_or_error": 1,
+      "iterations": {
+        "min": 46,
+        "max": 2000
+      },
+      "max_gradient_inf_norm": 0.0001303487232114666,
+      "max_objective": 107.62996889433673
+    }
+  },
+  "iteration_sensitivity": {
+    "cases_with_identical_objective_and_gradient_at_500_2000_10000": 27,
+    "cases": [
+      {
+        "region_code": 2,
+        "frequency": "sa",
+        "objectives_500_2000_10000": [
+          71.27372096073213,
+          71.27372096073213,
+          71.27372096073213
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          4.467313929457702e-05,
+          4.467313929457702e-05,
+          4.467313929457702e-05
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      },
+      {
+        "region_code": 4,
+        "frequency": "raw",
+        "objectives_500_2000_10000": [
+          80.31241261026085,
+          80.31241261026085,
+          80.31241261026085
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          3.390669792488498e-05,
+          3.390669792488498e-05,
+          3.390669792488498e-05
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      },
+      {
+        "region_code": 10,
+        "frequency": "raw",
+        "objectives_500_2000_10000": [
+          82.15224381343855,
+          82.15224381343855,
+          82.15224381343855
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          3.55859509518228e-05,
+          3.55859509518228e-05,
+          3.55859509518228e-05
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      },
+      {
+        "region_code": 11,
+        "frequency": "raw",
+        "objectives_500_2000_10000": [
+          88.31648389512105,
+          88.31648389512105,
+          88.31648389512105
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          5.842935019458647e-05,
+          5.842935019458647e-05,
+          5.842935019458647e-05
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      },
+      {
+        "region_code": 13,
+        "frequency": "raw",
+        "objectives_500_2000_10000": [
+          66.161305279065,
+          66.161305279065,
+          66.161305279065
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          1.2764369415437654e-05,
+          1.2764369415437654e-05,
+          1.2764369415437654e-05
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      },
+      {
+        "region_code": 14,
+        "frequency": "raw",
+        "objectives_500_2000_10000": [
+          68.0798184075009,
+          68.0798184075009,
+          68.0798184075009
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          1.0005764542273427e-05,
+          1.0005764542273427e-05,
+          1.0005764542273427e-05
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      },
+      {
+        "region_code": 15,
+        "frequency": "raw",
+        "objectives_500_2000_10000": [
+          96.90030975352974,
+          96.90030975352974,
+          96.90030975352974
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          3.471567652133271e-05,
+          3.471567652133271e-05,
+          3.471567652133271e-05
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      },
+      {
+        "region_code": 17,
+        "frequency": "sa",
+        "objectives_500_2000_10000": [
+          91.0318204467179,
+          91.0318204467179,
+          91.0318204467179
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          3.160101241344009e-05,
+          3.160101241344009e-05,
+          3.160101241344009e-05
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      },
+      {
+        "region_code": 19,
+        "frequency": "raw",
+        "objectives_500_2000_10000": [
+          80.6230142315884,
+          80.6230142315884,
+          80.6230142315884
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          4.9528342679536295e-05,
+          4.9528342679536295e-05,
+          4.9528342679536295e-05
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      },
+      {
+        "region_code": 23,
+        "frequency": "sa",
+        "objectives_500_2000_10000": [
+          79.90417179001676,
+          79.90417179001676,
+          79.90417179001676
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          1.4369852931116547e-05,
+          1.4369852931116547e-05,
+          1.4369852931116547e-05
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      },
+      {
+        "region_code": 30,
+        "frequency": "sa",
+        "objectives_500_2000_10000": [
+          78.0003343644123,
+          78.0003343644123,
+          78.0003343644123
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          1.074828490631001e-05,
+          1.074828490631001e-05,
+          1.074828490631001e-05
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      },
+      {
+        "region_code": 33,
+        "frequency": "sa",
+        "objectives_500_2000_10000": [
+          78.69153191367971,
+          78.69153191367971,
+          78.69153191367971
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          1.3388346223607971e-05,
+          1.3388346223607971e-05,
+          1.3388346223607971e-05
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      },
+      {
+        "region_code": 54,
+        "frequency": "raw",
+        "objectives_500_2000_10000": [
+          84.2271992947752,
+          84.2271992947752,
+          84.2271992947752
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          2.2460760920998708e-05,
+          2.2460760920998708e-05,
+          2.2460760920998708e-05
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      },
+      {
+        "region_code": 55,
+        "frequency": "raw",
+        "objectives_500_2000_10000": [
+          88.92684973207406,
+          88.92684973207406,
+          88.92684973207406
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          1.7290312969205773e-05,
+          1.7290312969205773e-05,
+          1.7290312969205773e-05
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      },
+      {
+        "region_code": 56,
+        "frequency": "sa",
+        "objectives_500_2000_10000": [
+          84.16497448140538,
+          84.16497448140538,
+          84.16497448140538
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          2.8267373294746465e-05,
+          2.8267373294746465e-05,
+          2.8267373294746465e-05
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      },
+      {
+        "region_code": 57,
+        "frequency": "sa",
+        "objectives_500_2000_10000": [
+          78.07844789656473,
+          78.07844789656473,
+          78.07844789656473
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          1.088040502211264e-05,
+          1.088040502211264e-05,
+          1.088040502211264e-05
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      },
+      {
+        "region_code": 64,
+        "frequency": "sa",
+        "objectives_500_2000_10000": [
+          66.12319322841513,
+          66.12319322841513,
+          66.12319322841513
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          1.1165225393610072e-05,
+          1.1165225393610072e-05,
+          1.1165225393610072e-05
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      },
+      {
+        "region_code": 66,
+        "frequency": "raw",
+        "objectives_500_2000_10000": [
+          68.02707757162294,
+          68.02707757162294,
+          68.02707757162294
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          0.0001303487232114666,
+          0.0001303487232114666,
+          0.0001303487232114666
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      },
+      {
+        "region_code": 66,
+        "frequency": "sa",
+        "objectives_500_2000_10000": [
+          64.6944727760755,
+          64.6944727760755,
+          64.6944727760755
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          6.01421651535922e-05,
+          6.01421651535922e-05,
+          6.01421651535922e-05
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      },
+      {
+        "region_code": 72,
+        "frequency": "sa",
+        "objectives_500_2000_10000": [
+          70.79665181749897,
+          70.79665181749897,
+          70.79665181749897
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          1.1112371770241516e-05,
+          1.1112371770241516e-05,
+          1.1112371770241516e-05
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      },
+      {
+        "region_code": 74,
+        "frequency": "raw",
+        "objectives_500_2000_10000": [
+          65.33722975965975,
+          65.33722975965975,
+          65.33722975965975
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          1.0650354574684353e-05,
+          1.0650354574684353e-05,
+          1.0650354574684353e-05
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      },
+      {
+        "region_code": 83,
+        "frequency": "sa",
+        "objectives_500_2000_10000": [
+          107.62996889433646,
+          107.62996889433646,
+          107.62996889433646
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          1.0090868941144224e-05,
+          1.0090868941144224e-05,
+          1.0090868941144224e-05
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      },
+      {
+        "region_code": 84,
+        "frequency": "sa",
+        "objectives_500_2000_10000": [
+          78.0145459091683,
+          78.0145459091683,
+          78.0145459091683
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          7.432447748262133e-05,
+          7.432447748262133e-05,
+          7.432447748262133e-05
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      },
+      {
+        "region_code": 90,
+        "frequency": "raw",
+        "objectives_500_2000_10000": [
+          54.28413554231881,
+          54.28413554231881,
+          54.28413554231881
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          4.9111702764090964e-05,
+          4.9111702764090964e-05,
+          4.9111702764090964e-05
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      },
+      {
+        "region_code": 95,
+        "frequency": "raw",
+        "objectives_500_2000_10000": [
+          84.34094320470525,
+          84.34094320470525,
+          84.34094320470525
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          5.0037421602882985e-05,
+          5.0037421602882985e-05,
+          5.0037421602882985e-05
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      },
+      {
+        "region_code": 100,
+        "frequency": "raw",
+        "objectives_500_2000_10000": [
+          65.34251834393886,
+          65.34251834393886,
+          65.34251834393886
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          2.8803774031228857e-05,
+          2.8803774031228857e-05,
+          2.8803774031228857e-05
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      },
+      {
+        "region_code": 100,
+        "frequency": "sa",
+        "objectives_500_2000_10000": [
+          62.51335806825884,
+          62.51335806825884,
+          62.51335806825884
+        ],
+        "gradient_inf_norms_500_2000_10000": [
+          1.861857009061163e-05,
+          1.861857009061163e-05,
+          1.861857009061163e-05
+        ],
+        "objective_max_abs_delta": 0.0,
+        "gradient_max_abs_delta": 0.0,
+        "fit_metrics_unchanged_with_more_iterations": true
+      }
+    ],
+    "interpretation": "For cases with identical fit metrics as the iteration cap rises, raising max_iter alone did not move the optimizer to a different fit. A relaxed tolerance may accept a fit sooner, but only the converged flag indicates whether it met that configured threshold."
+  },
+  "remaining_at_10000_tol_1e-5": [
+    {
+      "region_code": 2,
+      "frequency": "sa"
+    },
+    {
+      "region_code": 4,
+      "frequency": "raw"
+    },
+    {
+      "region_code": 10,
+      "frequency": "raw"
+    },
+    {
+      "region_code": 11,
+      "frequency": "raw"
+    },
+    {
+      "region_code": 13,
+      "frequency": "raw"
+    },
+    {
+      "region_code": 14,
+      "frequency": "raw"
+    },
+    {
+      "region_code": 15,
+      "frequency": "raw"
+    },
+    {
+      "region_code": 17,
+      "frequency": "sa"
+    },
+    {
+      "region_code": 19,
+      "frequency": "raw"
+    },
+    {
+      "region_code": 23,
+      "frequency": "sa"
+    },
+    {
+      "region_code": 30,
+      "frequency": "sa"
+    },
+    {
+      "region_code": 33,
+      "frequency": "sa"
+    },
+    {
+      "region_code": 54,
+      "frequency": "raw"
+    },
+    {
+      "region_code": 55,
+      "frequency": "raw"
+    },
+    {
+      "region_code": 56,
+      "frequency": "sa"
+    },
+    {
+      "region_code": 57,
+      "frequency": "sa"
+    },
+    {
+      "region_code": 64,
+      "frequency": "sa"
+    },
+    {
+      "region_code": 66,
+      "frequency": "raw"
+    },
+    {
+      "region_code": 66,
+      "frequency": "sa"
+    },
+    {
+      "region_code": 72,
+      "frequency": "sa"
+    },
+    {
+      "region_code": 74,
+      "frequency": "raw"
+    },
+    {
+      "region_code": 83,
+      "frequency": "sa"
+    },
+    {
+      "region_code": 84,
+      "frequency": "sa"
+    },
+    {
+      "region_code": 90,
+      "frequency": "raw"
+    },
+    {
+      "region_code": 95,
+      "frequency": "raw"
+    },
+    {
+      "region_code": 100,
+      "frequency": "raw"
+    },
+    {
+      "region_code": 100,
+      "frequency": "sa"
+    }
+  ],
+  "baseline_failure_messages": [
+    {
+      "region_code": 2,
+      "frequency": "sa",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=71.273720960732; scale=0.132511777462; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    },
+    {
+      "region_code": 4,
+      "frequency": "raw",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=80.312412610261; scale=0.144328927125; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    },
+    {
+      "region_code": 10,
+      "frequency": "raw",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=82.152243813439; scale=0.165285281543; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    },
+    {
+      "region_code": 11,
+      "frequency": "raw",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=88.316483895121; scale=0.187994984686; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    },
+    {
+      "region_code": 13,
+      "frequency": "raw",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=66.161305279065; scale=0.123171286634; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    },
+    {
+      "region_code": 14,
+      "frequency": "raw",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=68.079818407501; scale=0.157729627314; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    },
+    {
+      "region_code": 15,
+      "frequency": "raw",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=96.900309753530; scale=0.201710624259; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    },
+    {
+      "region_code": 17,
+      "frequency": "sa",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=91.031820446718; scale=0.167040798723; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    },
+    {
+      "region_code": 19,
+      "frequency": "raw",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=80.623014231588; scale=0.139287005205; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    },
+    {
+      "region_code": 23,
+      "frequency": "sa",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=79.904171790017; scale=0.187433907832; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    },
+    {
+      "region_code": 30,
+      "frequency": "sa",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=78.000334364412; scale=0.177082725064; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    },
+    {
+      "region_code": 33,
+      "frequency": "sa",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=78.691531913680; scale=0.175038147410; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    },
+    {
+      "region_code": 54,
+      "frequency": "raw",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=84.227199294775; scale=0.186219904841; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    },
+    {
+      "region_code": 55,
+      "frequency": "raw",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=88.926849732074; scale=0.176168401962; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    },
+    {
+      "region_code": 56,
+      "frequency": "sa",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=84.164974481405; scale=0.157410804960; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    },
+    {
+      "region_code": 57,
+      "frequency": "sa",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=78.078447896565; scale=0.168091152133; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    },
+    {
+      "region_code": 64,
+      "frequency": "sa",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=66.123193228415; scale=0.142803272028; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    },
+    {
+      "region_code": 66,
+      "frequency": "raw",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=68.027077571623; scale=0.139996851554; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    },
+    {
+      "region_code": 66,
+      "frequency": "sa",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=64.694472776076; scale=0.122376940914; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    },
+    {
+      "region_code": 72,
+      "frequency": "sa",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=70.796651817499; scale=0.153875406334; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    },
+    {
+      "region_code": 74,
+      "frequency": "raw",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=65.337229759660; scale=0.136939809602; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    },
+    {
+      "region_code": 83,
+      "frequency": "sa",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=107.629968894336; scale=0.231161779606; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    },
+    {
+      "region_code": 84,
+      "frequency": "sa",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=78.014545909168; scale=0.134864237331; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    },
+    {
+      "region_code": 90,
+      "frequency": "raw",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=54.284135542319; scale=0.096479281526; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    },
+    {
+      "region_code": 95,
+      "frequency": "raw",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=84.340943204705; scale=0.144000822012; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    },
+    {
+      "region_code": 100,
+      "frequency": "raw",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=65.342518343939; scale=0.117725601653; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    },
+    {
+      "region_code": 100,
+      "frequency": "sa",
+      "message": "Huber optimizer status=nonconverged after 500 iterations; objective=62.513358068259; scale=0.101171512275; set allow_nonconverged=true only to inspect this fit without treating it as a valid forecast"
+    }
+  ],
+  "runs": {
+    "baseline_500_tol_1e-5": [
+      {
+        "region_code": 2,
+        "region": "Республика Башкортостан",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 71.27372096073213,
+        "gradient_inf_norm": 4.467313929457702e-05,
+        "scale": 0.13251177746207715,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.49907002020746916,
+          0.33592425478077814
+        ]
+      },
+      {
+        "region_code": 4,
+        "region": "Республика Алтай",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 80.31241261026085,
+        "gradient_inf_norm": 3.390669792488498e-05,
+        "scale": 0.14432892712459106,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.049878440029942794,
+          0.2916274836204025
+        ]
+      },
+      {
+        "region_code": 10,
+        "region": "Республика Карелия",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 82.15224381343855,
+        "gradient_inf_norm": 3.55859509518228e-05,
+        "scale": 0.16528528154344743,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.1675463692141932,
+          -0.012350956938533386
+        ]
+      },
+      {
+        "region_code": 11,
+        "region": "Республика Коми",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 88.31648389512105,
+        "gradient_inf_norm": 5.842935019458647e-05,
+        "scale": 0.1879949846859162,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.1391832853220336,
+          -0.477679169297204
+        ]
+      },
+      {
+        "region_code": 13,
+        "region": "Республика Мордовия",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 66.161305279065,
+        "gradient_inf_norm": 1.2764369415437654e-05,
+        "scale": 0.12317128663398415,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.18524961738279444,
+          -0.07998014130549791
+        ]
+      },
+      {
+        "region_code": 14,
+        "region": "Республика Саха (Якутия)",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 68.0798184075009,
+        "gradient_inf_norm": 1.0005764542273427e-05,
+        "scale": 0.15772962731361695,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.16606072214142387,
+          0.1973449646646941
+        ]
+      },
+      {
+        "region_code": 15,
+        "region": "Республика Северная Осетия-Алания",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 96.90030975352974,
+        "gradient_inf_norm": 3.471567652133271e-05,
+        "scale": 0.20171062425938444,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.47227796789633203,
+          0.13224968781000257
+        ]
+      },
+      {
+        "region_code": 17,
+        "region": "Республика Тыва",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 91.0318204467179,
+        "gradient_inf_norm": 3.160101241344009e-05,
+        "scale": 0.16704079872275893,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4532676209868214,
+          1.1967536072601064
+        ]
+      },
+      {
+        "region_code": 19,
+        "region": "Республика Хакасия",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 80.6230142315884,
+        "gradient_inf_norm": 4.9528342679536295e-05,
+        "scale": 0.13928700520536738,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.39254748139453,
+          0.1387934761768861
+        ]
+      },
+      {
+        "region_code": 23,
+        "region": "Краснодарский край",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 79.90417179001676,
+        "gradient_inf_norm": 1.4369852931116547e-05,
+        "scale": 0.1874339078316429,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4608989025750816,
+          0.6902079487791468
+        ]
+      },
+      {
+        "region_code": 30,
+        "region": "Астраханская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 78.0003343644123,
+        "gradient_inf_norm": 1.074828490631001e-05,
+        "scale": 0.17708272506395387,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.40079292216749707,
+          -1.0406921304832366
+        ]
+      },
+      {
+        "region_code": 33,
+        "region": "Владимирская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 78.69153191367971,
+        "gradient_inf_norm": 1.3388346223607971e-05,
+        "scale": 0.17503814740964743,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4045432421876285,
+          0.4024066575368863
+        ]
+      },
+      {
+        "region_code": 54,
+        "region": "Новосибирская область",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 84.2271992947752,
+        "gradient_inf_norm": 2.2460760920998708e-05,
+        "scale": 0.18621990484062992,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.016429267711728812,
+          0.15818913367102994
+        ]
+      },
+      {
+        "region_code": 55,
+        "region": "Омская область",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 88.92684973207406,
+        "gradient_inf_norm": 1.7290312969205773e-05,
+        "scale": 0.17616840196158004,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          -0.0023377182929351648,
+          0.03223513318154403
+        ]
+      },
+      {
+        "region_code": 56,
+        "region": "Оренбургская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 84.16497448140538,
+        "gradient_inf_norm": 2.8267373294746465e-05,
+        "scale": 0.1574108049598625,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4251051588316841,
+          0.39096851783014586
+        ]
+      },
+      {
+        "region_code": 57,
+        "region": "Орловская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 78.07844789656473,
+        "gradient_inf_norm": 1.088040502211264e-05,
+        "scale": 0.1680911521325296,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.6664171032670794,
+          0.4443892958367712
+        ]
+      },
+      {
+        "region_code": 64,
+        "region": "Саратовская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 66.12319322841513,
+        "gradient_inf_norm": 1.1165225393610072e-05,
+        "scale": 0.1428032720277999,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.46872336664301884,
+          0.5259998282194829
+        ]
+      },
+      {
+        "region_code": 66,
+        "region": "Свердловская область",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 68.02707757162294,
+        "gradient_inf_norm": 0.0001303487232114666,
+        "scale": 0.13999685155402514,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.30351662460532225,
+          -0.022580579980072457
+        ]
+      },
+      {
+        "region_code": 66,
+        "region": "Свердловская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 64.6944727760755,
+        "gradient_inf_norm": 6.01421651535922e-05,
+        "scale": 0.12237694091372918,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.5291699244430959,
+          0.35033367448427555
+        ]
+      },
+      {
+        "region_code": 72,
+        "region": "Тюменская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 70.79665181749897,
+        "gradient_inf_norm": 1.1112371770241516e-05,
+        "scale": 0.1538754063335971,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.367385897294497,
+          0.439749096595591
+        ]
+      },
+      {
+        "region_code": 74,
+        "region": "Челябинская область",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 65.33722975965975,
+        "gradient_inf_norm": 1.0650354574684353e-05,
+        "scale": 0.1369398096018715,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.11018692989978263,
+          0.2401875150483903
+        ]
+      },
+      {
+        "region_code": 83,
+        "region": "Ненецкий автономный округ",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 107.62996889433646,
+        "gradient_inf_norm": 1.0090868941144224e-05,
+        "scale": 0.23116177960624484,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.22212998003398354,
+          0.025229996785981257
+        ]
+      },
+      {
+        "region_code": 84,
+        "region": "Архангельская область (кроме Ненецкого автономного округа)",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 78.0145459091683,
+        "gradient_inf_norm": 7.432447748262133e-05,
+        "scale": 0.13486423733070957,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.5753664354871262,
+          0.4669742829760253
+        ]
+      },
+      {
+        "region_code": 90,
+        "region": "Дальневосточный федеральный округ",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 54.28413554231881,
+        "gradient_inf_norm": 4.9111702764090964e-05,
+        "scale": 0.09647928152620411,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4391115993450114,
+          0.06633514328368051
+        ]
+      },
+      {
+        "region_code": 95,
+        "region": "Северо-Кавказский федеральный округ",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 84.34094320470525,
+        "gradient_inf_norm": 5.0037421602882985e-05,
+        "scale": 0.1440008220123169,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.41907371719176467,
+          0.10726044124680811
+        ]
+      },
+      {
+        "region_code": 100,
+        "region": "Волго-Вятское ГУ",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 65.34251834393886,
+        "gradient_inf_norm": 2.8803774031228857e-05,
+        "scale": 0.1177256016530443,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.2648390047768743,
+          -0.19200070142244385
+        ]
+      },
+      {
+        "region_code": 100,
+        "region": "Волго-Вятское ГУ",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 62.51335806825884,
+        "gradient_inf_norm": 1.861857009061163e-05,
+        "scale": 0.10117151227481458,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4576813696671138,
+          0.394820724354787
+        ]
+      }
+    ],
+    "max_iter_2000_tol_1e-5": [
+      {
+        "region_code": 2,
+        "region": "Республика Башкортостан",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 71.27372096073213,
+        "gradient_inf_norm": 4.467313929457702e-05,
+        "scale": 0.13251177746207715,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.49907002020746916,
+          0.33592425478077814
+        ]
+      },
+      {
+        "region_code": 4,
+        "region": "Республика Алтай",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 80.31241261026085,
+        "gradient_inf_norm": 3.390669792488498e-05,
+        "scale": 0.14432892712459106,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.049878440029942794,
+          0.2916274836204025
+        ]
+      },
+      {
+        "region_code": 10,
+        "region": "Республика Карелия",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 82.15224381343855,
+        "gradient_inf_norm": 3.55859509518228e-05,
+        "scale": 0.16528528154344743,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.1675463692141932,
+          -0.012350956938533386
+        ]
+      },
+      {
+        "region_code": 11,
+        "region": "Республика Коми",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 88.31648389512105,
+        "gradient_inf_norm": 5.842935019458647e-05,
+        "scale": 0.1879949846859162,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.1391832853220336,
+          -0.477679169297204
+        ]
+      },
+      {
+        "region_code": 13,
+        "region": "Республика Мордовия",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 66.161305279065,
+        "gradient_inf_norm": 1.2764369415437654e-05,
+        "scale": 0.12317128663398415,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.18524961738279444,
+          -0.07998014130549791
+        ]
+      },
+      {
+        "region_code": 14,
+        "region": "Республика Саха (Якутия)",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 68.0798184075009,
+        "gradient_inf_norm": 1.0005764542273427e-05,
+        "scale": 0.15772962731361695,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.16606072214142387,
+          0.1973449646646941
+        ]
+      },
+      {
+        "region_code": 15,
+        "region": "Республика Северная Осетия-Алания",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 96.90030975352974,
+        "gradient_inf_norm": 3.471567652133271e-05,
+        "scale": 0.20171062425938444,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.47227796789633203,
+          0.13224968781000257
+        ]
+      },
+      {
+        "region_code": 17,
+        "region": "Республика Тыва",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 91.0318204467179,
+        "gradient_inf_norm": 3.160101241344009e-05,
+        "scale": 0.16704079872275893,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4532676209868214,
+          1.1967536072601064
+        ]
+      },
+      {
+        "region_code": 19,
+        "region": "Республика Хакасия",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 80.6230142315884,
+        "gradient_inf_norm": 4.9528342679536295e-05,
+        "scale": 0.13928700520536738,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.39254748139453,
+          0.1387934761768861
+        ]
+      },
+      {
+        "region_code": 23,
+        "region": "Краснодарский край",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 79.90417179001676,
+        "gradient_inf_norm": 1.4369852931116547e-05,
+        "scale": 0.1874339078316429,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4608989025750816,
+          0.6902079487791468
+        ]
+      },
+      {
+        "region_code": 30,
+        "region": "Астраханская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 78.0003343644123,
+        "gradient_inf_norm": 1.074828490631001e-05,
+        "scale": 0.17708272506395387,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.40079292216749707,
+          -1.0406921304832366
+        ]
+      },
+      {
+        "region_code": 33,
+        "region": "Владимирская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 78.69153191367971,
+        "gradient_inf_norm": 1.3388346223607971e-05,
+        "scale": 0.17503814740964743,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4045432421876285,
+          0.4024066575368863
+        ]
+      },
+      {
+        "region_code": 54,
+        "region": "Новосибирская область",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 84.2271992947752,
+        "gradient_inf_norm": 2.2460760920998708e-05,
+        "scale": 0.18621990484062992,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.016429267711728812,
+          0.15818913367102994
+        ]
+      },
+      {
+        "region_code": 55,
+        "region": "Омская область",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 88.92684973207406,
+        "gradient_inf_norm": 1.7290312969205773e-05,
+        "scale": 0.17616840196158004,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          -0.0023377182929351648,
+          0.03223513318154403
+        ]
+      },
+      {
+        "region_code": 56,
+        "region": "Оренбургская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 84.16497448140538,
+        "gradient_inf_norm": 2.8267373294746465e-05,
+        "scale": 0.1574108049598625,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4251051588316841,
+          0.39096851783014586
+        ]
+      },
+      {
+        "region_code": 57,
+        "region": "Орловская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 78.07844789656473,
+        "gradient_inf_norm": 1.088040502211264e-05,
+        "scale": 0.1680911521325296,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.6664171032670794,
+          0.4443892958367712
+        ]
+      },
+      {
+        "region_code": 64,
+        "region": "Саратовская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 66.12319322841513,
+        "gradient_inf_norm": 1.1165225393610072e-05,
+        "scale": 0.1428032720277999,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.46872336664301884,
+          0.5259998282194829
+        ]
+      },
+      {
+        "region_code": 66,
+        "region": "Свердловская область",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 68.02707757162294,
+        "gradient_inf_norm": 0.0001303487232114666,
+        "scale": 0.13999685155402514,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.30351662460532225,
+          -0.022580579980072457
+        ]
+      },
+      {
+        "region_code": 66,
+        "region": "Свердловская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 64.6944727760755,
+        "gradient_inf_norm": 6.01421651535922e-05,
+        "scale": 0.12237694091372918,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.5291699244430959,
+          0.35033367448427555
+        ]
+      },
+      {
+        "region_code": 72,
+        "region": "Тюменская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 70.79665181749897,
+        "gradient_inf_norm": 1.1112371770241516e-05,
+        "scale": 0.1538754063335971,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.367385897294497,
+          0.439749096595591
+        ]
+      },
+      {
+        "region_code": 74,
+        "region": "Челябинская область",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 65.33722975965975,
+        "gradient_inf_norm": 1.0650354574684353e-05,
+        "scale": 0.1369398096018715,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.11018692989978263,
+          0.2401875150483903
+        ]
+      },
+      {
+        "region_code": 83,
+        "region": "Ненецкий автономный округ",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 107.62996889433646,
+        "gradient_inf_norm": 1.0090868941144224e-05,
+        "scale": 0.23116177960624484,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.22212998003398354,
+          0.025229996785981257
+        ]
+      },
+      {
+        "region_code": 84,
+        "region": "Архангельская область (кроме Ненецкого автономного округа)",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 78.0145459091683,
+        "gradient_inf_norm": 7.432447748262133e-05,
+        "scale": 0.13486423733070957,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.5753664354871262,
+          0.4669742829760253
+        ]
+      },
+      {
+        "region_code": 90,
+        "region": "Дальневосточный федеральный округ",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 54.28413554231881,
+        "gradient_inf_norm": 4.9111702764090964e-05,
+        "scale": 0.09647928152620411,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4391115993450114,
+          0.06633514328368051
+        ]
+      },
+      {
+        "region_code": 95,
+        "region": "Северо-Кавказский федеральный округ",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 84.34094320470525,
+        "gradient_inf_norm": 5.0037421602882985e-05,
+        "scale": 0.1440008220123169,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.41907371719176467,
+          0.10726044124680811
+        ]
+      },
+      {
+        "region_code": 100,
+        "region": "Волго-Вятское ГУ",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 65.34251834393886,
+        "gradient_inf_norm": 2.8803774031228857e-05,
+        "scale": 0.1177256016530443,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.2648390047768743,
+          -0.19200070142244385
+        ]
+      },
+      {
+        "region_code": 100,
+        "region": "Волго-Вятское ГУ",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 62.51335806825884,
+        "gradient_inf_norm": 1.861857009061163e-05,
+        "scale": 0.10117151227481458,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4576813696671138,
+          0.394820724354787
+        ]
+      }
+    ],
+    "max_iter_10000_tol_1e-5": [
+      {
+        "region_code": 2,
+        "region": "Республика Башкортостан",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 71.27372096073213,
+        "gradient_inf_norm": 4.467313929457702e-05,
+        "scale": 0.13251177746207715,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.49907002020746916,
+          0.33592425478077814
+        ]
+      },
+      {
+        "region_code": 4,
+        "region": "Республика Алтай",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 80.31241261026085,
+        "gradient_inf_norm": 3.390669792488498e-05,
+        "scale": 0.14432892712459106,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.049878440029942794,
+          0.2916274836204025
+        ]
+      },
+      {
+        "region_code": 10,
+        "region": "Республика Карелия",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 82.15224381343855,
+        "gradient_inf_norm": 3.55859509518228e-05,
+        "scale": 0.16528528154344743,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.1675463692141932,
+          -0.012350956938533386
+        ]
+      },
+      {
+        "region_code": 11,
+        "region": "Республика Коми",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 88.31648389512105,
+        "gradient_inf_norm": 5.842935019458647e-05,
+        "scale": 0.1879949846859162,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.1391832853220336,
+          -0.477679169297204
+        ]
+      },
+      {
+        "region_code": 13,
+        "region": "Республика Мордовия",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 66.161305279065,
+        "gradient_inf_norm": 1.2764369415437654e-05,
+        "scale": 0.12317128663398415,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.18524961738279444,
+          -0.07998014130549791
+        ]
+      },
+      {
+        "region_code": 14,
+        "region": "Республика Саха (Якутия)",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 68.0798184075009,
+        "gradient_inf_norm": 1.0005764542273427e-05,
+        "scale": 0.15772962731361695,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.16606072214142387,
+          0.1973449646646941
+        ]
+      },
+      {
+        "region_code": 15,
+        "region": "Республика Северная Осетия-Алания",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 96.90030975352974,
+        "gradient_inf_norm": 3.471567652133271e-05,
+        "scale": 0.20171062425938444,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.47227796789633203,
+          0.13224968781000257
+        ]
+      },
+      {
+        "region_code": 17,
+        "region": "Республика Тыва",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 91.0318204467179,
+        "gradient_inf_norm": 3.160101241344009e-05,
+        "scale": 0.16704079872275893,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4532676209868214,
+          1.1967536072601064
+        ]
+      },
+      {
+        "region_code": 19,
+        "region": "Республика Хакасия",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 80.6230142315884,
+        "gradient_inf_norm": 4.9528342679536295e-05,
+        "scale": 0.13928700520536738,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.39254748139453,
+          0.1387934761768861
+        ]
+      },
+      {
+        "region_code": 23,
+        "region": "Краснодарский край",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 79.90417179001676,
+        "gradient_inf_norm": 1.4369852931116547e-05,
+        "scale": 0.1874339078316429,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4608989025750816,
+          0.6902079487791468
+        ]
+      },
+      {
+        "region_code": 30,
+        "region": "Астраханская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 78.0003343644123,
+        "gradient_inf_norm": 1.074828490631001e-05,
+        "scale": 0.17708272506395387,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.40079292216749707,
+          -1.0406921304832366
+        ]
+      },
+      {
+        "region_code": 33,
+        "region": "Владимирская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 78.69153191367971,
+        "gradient_inf_norm": 1.3388346223607971e-05,
+        "scale": 0.17503814740964743,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4045432421876285,
+          0.4024066575368863
+        ]
+      },
+      {
+        "region_code": 54,
+        "region": "Новосибирская область",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 84.2271992947752,
+        "gradient_inf_norm": 2.2460760920998708e-05,
+        "scale": 0.18621990484062992,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.016429267711728812,
+          0.15818913367102994
+        ]
+      },
+      {
+        "region_code": 55,
+        "region": "Омская область",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 88.92684973207406,
+        "gradient_inf_norm": 1.7290312969205773e-05,
+        "scale": 0.17616840196158004,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          -0.0023377182929351648,
+          0.03223513318154403
+        ]
+      },
+      {
+        "region_code": 56,
+        "region": "Оренбургская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 84.16497448140538,
+        "gradient_inf_norm": 2.8267373294746465e-05,
+        "scale": 0.1574108049598625,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4251051588316841,
+          0.39096851783014586
+        ]
+      },
+      {
+        "region_code": 57,
+        "region": "Орловская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 78.07844789656473,
+        "gradient_inf_norm": 1.088040502211264e-05,
+        "scale": 0.1680911521325296,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.6664171032670794,
+          0.4443892958367712
+        ]
+      },
+      {
+        "region_code": 64,
+        "region": "Саратовская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 66.12319322841513,
+        "gradient_inf_norm": 1.1165225393610072e-05,
+        "scale": 0.1428032720277999,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.46872336664301884,
+          0.5259998282194829
+        ]
+      },
+      {
+        "region_code": 66,
+        "region": "Свердловская область",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 68.02707757162294,
+        "gradient_inf_norm": 0.0001303487232114666,
+        "scale": 0.13999685155402514,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.30351662460532225,
+          -0.022580579980072457
+        ]
+      },
+      {
+        "region_code": 66,
+        "region": "Свердловская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 64.6944727760755,
+        "gradient_inf_norm": 6.01421651535922e-05,
+        "scale": 0.12237694091372918,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.5291699244430959,
+          0.35033367448427555
+        ]
+      },
+      {
+        "region_code": 72,
+        "region": "Тюменская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 70.79665181749897,
+        "gradient_inf_norm": 1.1112371770241516e-05,
+        "scale": 0.1538754063335971,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.367385897294497,
+          0.439749096595591
+        ]
+      },
+      {
+        "region_code": 74,
+        "region": "Челябинская область",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 65.33722975965975,
+        "gradient_inf_norm": 1.0650354574684353e-05,
+        "scale": 0.1369398096018715,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.11018692989978263,
+          0.2401875150483903
+        ]
+      },
+      {
+        "region_code": 83,
+        "region": "Ненецкий автономный округ",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 107.62996889433646,
+        "gradient_inf_norm": 1.0090868941144224e-05,
+        "scale": 0.23116177960624484,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.22212998003398354,
+          0.025229996785981257
+        ]
+      },
+      {
+        "region_code": 84,
+        "region": "Архангельская область (кроме Ненецкого автономного округа)",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 78.0145459091683,
+        "gradient_inf_norm": 7.432447748262133e-05,
+        "scale": 0.13486423733070957,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.5753664354871262,
+          0.4669742829760253
+        ]
+      },
+      {
+        "region_code": 90,
+        "region": "Дальневосточный федеральный округ",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 54.28413554231881,
+        "gradient_inf_norm": 4.9111702764090964e-05,
+        "scale": 0.09647928152620411,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4391115993450114,
+          0.06633514328368051
+        ]
+      },
+      {
+        "region_code": 95,
+        "region": "Северо-Кавказский федеральный округ",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 84.34094320470525,
+        "gradient_inf_norm": 5.0037421602882985e-05,
+        "scale": 0.1440008220123169,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.41907371719176467,
+          0.10726044124680811
+        ]
+      },
+      {
+        "region_code": 100,
+        "region": "Волго-Вятское ГУ",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 65.34251834393886,
+        "gradient_inf_norm": 2.8803774031228857e-05,
+        "scale": 0.1177256016530443,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.2648390047768743,
+          -0.19200070142244385
+        ]
+      },
+      {
+        "region_code": 100,
+        "region": "Волго-Вятское ГУ",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 10000,
+        "tol": 1e-05,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 10000,
+        "objective": 62.51335806825884,
+        "gradient_inf_norm": 1.861857009061163e-05,
+        "scale": 0.10117151227481458,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4576813696671138,
+          0.394820724354787
+        ]
+      }
+    ],
+    "max_iter_500_tol_1e-4": [
+      {
+        "region_code": 2,
+        "region": "Республика Башкортостан",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 49,
+        "objective": 71.27372096073698,
+        "gradient_inf_norm": 7.367659051325803e-05,
+        "scale": 0.1325117818864616,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4990700092565703,
+          0.33592426117184004
+        ]
+      },
+      {
+        "region_code": 4,
+        "region": "Республика Алтай",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 53,
+        "objective": 80.31241261026096,
+        "gradient_inf_norm": 3.4934335357681865e-05,
+        "scale": 0.14432892708546033,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.0498784400223542,
+          0.2916274835924071
+        ]
+      },
+      {
+        "region_code": 10,
+        "region": "Республика Карелия",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 51,
+        "objective": 82.15224381343889,
+        "gradient_inf_norm": 7.856779224301325e-05,
+        "scale": 0.16528528060148476,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.1675463679196838,
+          -0.012350943646254109
+        ]
+      },
+      {
+        "region_code": 11,
+        "region": "Республика Коми",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 49,
+        "objective": 88.31648389512117,
+        "gradient_inf_norm": 7.989549994635164e-05,
+        "scale": 0.18799498461110442,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.13918328510294486,
+          -0.4776791609781412
+        ]
+      },
+      {
+        "region_code": 13,
+        "region": "Республика Мордовия",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 52,
+        "objective": 66.16130527906682,
+        "gradient_inf_norm": 3.9441761183894863e-05,
+        "scale": 0.12317129973369866,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.18524961253648087,
+          -0.07997999554626745
+        ]
+      },
+      {
+        "region_code": 14,
+        "region": "Республика Саха (Якутия)",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 48,
+        "objective": 68.07981840750115,
+        "gradient_inf_norm": 4.386147687926697e-05,
+        "scale": 0.15772962938961105,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.1660607239984131,
+          0.1973449846066444
+        ]
+      },
+      {
+        "region_code": 15,
+        "region": "Республика Северная Осетия-Алания",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 46,
+        "objective": 96.90030975353034,
+        "gradient_inf_norm": 7.840745441064579e-05,
+        "scale": 0.2017106316008505,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.47227797872672284,
+          0.13224970530154678
+        ]
+      },
+      {
+        "region_code": 17,
+        "region": "Республика Тыва",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 53,
+        "objective": 91.03182044671807,
+        "gradient_inf_norm": 3.214172510577259e-05,
+        "scale": 0.16704079872826008,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4532676209701947,
+          1.1967536077408454
+        ]
+      },
+      {
+        "region_code": 19,
+        "region": "Республика Хакасия",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 56,
+        "objective": 80.62301423158885,
+        "gradient_inf_norm": 6.455988709020517e-05,
+        "scale": 0.13928700175636832,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.392547477441056,
+          0.13879352294665637
+        ]
+      },
+      {
+        "region_code": 23,
+        "region": "Краснодарский край",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 53,
+        "objective": 79.90417179001693,
+        "gradient_inf_norm": 1.4456660162837521e-05,
+        "scale": 0.18743390782756053,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4608989025770569,
+          0.6902079490980668
+        ]
+      },
+      {
+        "region_code": 30,
+        "region": "Астраханская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 51,
+        "objective": 78.00033436441267,
+        "gradient_inf_norm": 1.7536024770125908e-05,
+        "scale": 0.1770827242716264,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4007929222722879,
+          -1.0406921317108129
+        ]
+      },
+      {
+        "region_code": 33,
+        "region": "Владимирская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 51,
+        "objective": 78.69153191368011,
+        "gradient_inf_norm": 1.0307967291069055e-05,
+        "scale": 0.17503815402570247,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4045432391732646,
+          0.40240666067084874
+        ]
+      },
+      {
+        "region_code": 54,
+        "region": "Новосибирская область",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 53,
+        "objective": 84.22719929477579,
+        "gradient_inf_norm": 2.080884994219755e-05,
+        "scale": 0.18621989721022658,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.01642927071856093,
+          0.15818921953410836
+        ]
+      },
+      {
+        "region_code": 55,
+        "region": "Омская область",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 50,
+        "objective": 88.92684973207449,
+        "gradient_inf_norm": 4.921577170139985e-05,
+        "scale": 0.17616840108552986,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          -0.0023377176414953738,
+          0.03223510153088682
+        ]
+      },
+      {
+        "region_code": 56,
+        "region": "Оренбургская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 52,
+        "objective": 84.16497448140609,
+        "gradient_inf_norm": 2.5974807065920827e-05,
+        "scale": 0.15741079991613174,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.42510515919533987,
+          0.39096854441029905
+        ]
+      },
+      {
+        "region_code": 57,
+        "region": "Орловская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 54,
+        "objective": 78.07844789656738,
+        "gradient_inf_norm": 5.4144227050116015e-05,
+        "scale": 0.16809116526193082,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.666417089885428,
+          0.4443892673930634
+        ]
+      },
+      {
+        "region_code": 64,
+        "region": "Саратовская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 52,
+        "objective": 66.1231932284152,
+        "gradient_inf_norm": 1.3715686542751116e-05,
+        "scale": 0.1428032739394316,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.46872336737314413,
+          0.5259998266135
+        ]
+      },
+      {
+        "region_code": 66,
+        "region": "Свердловская область",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 500,
+        "objective": 68.02707757162294,
+        "gradient_inf_norm": 0.0001303487232114666,
+        "scale": 0.13999685155402514,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.30351662460532225,
+          -0.022580579980072457
+        ]
+      },
+      {
+        "region_code": 66,
+        "region": "Свердловская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 48,
+        "objective": 64.69447277607627,
+        "gradient_inf_norm": 2.4686403705258785e-05,
+        "scale": 0.12237693539191427,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.5291699204330058,
+          0.3503336690890251
+        ]
+      },
+      {
+        "region_code": 72,
+        "region": "Тюменская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 51,
+        "objective": 70.7966518174994,
+        "gradient_inf_norm": 1.0950892493782026e-05,
+        "scale": 0.15387541230850668,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.3673858969381172,
+          0.4397490950480005
+        ]
+      },
+      {
+        "region_code": 74,
+        "region": "Челябинская область",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 53,
+        "objective": 65.33722975965999,
+        "gradient_inf_norm": 3.091235315518231e-05,
+        "scale": 0.13693981018316084,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.11018693001742008,
+          0.240187502282609
+        ]
+      },
+      {
+        "region_code": 83,
+        "region": "Ненецкий автономный округ",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 48,
+        "objective": 107.62996889433673,
+        "gradient_inf_norm": 3.563669650157291e-05,
+        "scale": 0.23116178170468932,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.22212997901610265,
+          0.025230000740037895
+        ]
+      },
+      {
+        "region_code": 84,
+        "region": "Архангельская область (кроме Ненецкого автономного округа)",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 56,
+        "objective": 78.01454590916838,
+        "gradient_inf_norm": 7.432447748262458e-05,
+        "scale": 0.13486423733070957,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.5753664354871262,
+          0.4669742829760253
+        ]
+      },
+      {
+        "region_code": 90,
+        "region": "Дальневосточный федеральный округ",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 55,
+        "objective": 54.28413554231904,
+        "gradient_inf_norm": 7.508595906966257e-05,
+        "scale": 0.0964792790808877,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4391115978900615,
+          0.06633511698585437
+        ]
+      },
+      {
+        "region_code": 95,
+        "region": "Северо-Кавказский федеральный округ",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 50,
+        "objective": 84.3409432047053,
+        "gradient_inf_norm": 5.0037420764495466e-05,
+        "scale": 0.14400082201231706,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.41907371719176467,
+          0.10726044124680811
+        ]
+      },
+      {
+        "region_code": 100,
+        "region": "Волго-Вятское ГУ",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 52,
+        "objective": 65.34251834393937,
+        "gradient_inf_norm": 3.785997129121879e-05,
+        "scale": 0.11772560543786809,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.2648390046968814,
+          -0.1920007131625141
+        ]
+      },
+      {
+        "region_code": 100,
+        "region": "Волго-Вятское ГУ",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 500,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 52,
+        "objective": 62.51335806825887,
+        "gradient_inf_norm": 1.8618575921808267e-05,
+        "scale": 0.10117151227481466,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4576813696671138,
+          0.394820724354787
+        ]
+      }
+    ],
+    "max_iter_2000_tol_1e-4": [
+      {
+        "region_code": 2,
+        "region": "Республика Башкортостан",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 49,
+        "objective": 71.27372096073698,
+        "gradient_inf_norm": 7.367659051325803e-05,
+        "scale": 0.1325117818864616,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4990700092565703,
+          0.33592426117184004
+        ]
+      },
+      {
+        "region_code": 4,
+        "region": "Республика Алтай",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 53,
+        "objective": 80.31241261026096,
+        "gradient_inf_norm": 3.4934335357681865e-05,
+        "scale": 0.14432892708546033,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.0498784400223542,
+          0.2916274835924071
+        ]
+      },
+      {
+        "region_code": 10,
+        "region": "Республика Карелия",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 51,
+        "objective": 82.15224381343889,
+        "gradient_inf_norm": 7.856779224301325e-05,
+        "scale": 0.16528528060148476,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.1675463679196838,
+          -0.012350943646254109
+        ]
+      },
+      {
+        "region_code": 11,
+        "region": "Республика Коми",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 49,
+        "objective": 88.31648389512117,
+        "gradient_inf_norm": 7.989549994635164e-05,
+        "scale": 0.18799498461110442,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.13918328510294486,
+          -0.4776791609781412
+        ]
+      },
+      {
+        "region_code": 13,
+        "region": "Республика Мордовия",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 52,
+        "objective": 66.16130527906682,
+        "gradient_inf_norm": 3.9441761183894863e-05,
+        "scale": 0.12317129973369866,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.18524961253648087,
+          -0.07997999554626745
+        ]
+      },
+      {
+        "region_code": 14,
+        "region": "Республика Саха (Якутия)",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 48,
+        "objective": 68.07981840750115,
+        "gradient_inf_norm": 4.386147687926697e-05,
+        "scale": 0.15772962938961105,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.1660607239984131,
+          0.1973449846066444
+        ]
+      },
+      {
+        "region_code": 15,
+        "region": "Республика Северная Осетия-Алания",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 46,
+        "objective": 96.90030975353034,
+        "gradient_inf_norm": 7.840745441064579e-05,
+        "scale": 0.2017106316008505,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.47227797872672284,
+          0.13224970530154678
+        ]
+      },
+      {
+        "region_code": 17,
+        "region": "Республика Тыва",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 53,
+        "objective": 91.03182044671807,
+        "gradient_inf_norm": 3.214172510577259e-05,
+        "scale": 0.16704079872826008,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4532676209701947,
+          1.1967536077408454
+        ]
+      },
+      {
+        "region_code": 19,
+        "region": "Республика Хакасия",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 56,
+        "objective": 80.62301423158885,
+        "gradient_inf_norm": 6.455988709020517e-05,
+        "scale": 0.13928700175636832,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.392547477441056,
+          0.13879352294665637
+        ]
+      },
+      {
+        "region_code": 23,
+        "region": "Краснодарский край",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 53,
+        "objective": 79.90417179001693,
+        "gradient_inf_norm": 1.4456660162837521e-05,
+        "scale": 0.18743390782756053,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4608989025770569,
+          0.6902079490980668
+        ]
+      },
+      {
+        "region_code": 30,
+        "region": "Астраханская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 51,
+        "objective": 78.00033436441267,
+        "gradient_inf_norm": 1.7536024770125908e-05,
+        "scale": 0.1770827242716264,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4007929222722879,
+          -1.0406921317108129
+        ]
+      },
+      {
+        "region_code": 33,
+        "region": "Владимирская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 51,
+        "objective": 78.69153191368011,
+        "gradient_inf_norm": 1.0307967291069055e-05,
+        "scale": 0.17503815402570247,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4045432391732646,
+          0.40240666067084874
+        ]
+      },
+      {
+        "region_code": 54,
+        "region": "Новосибирская область",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 53,
+        "objective": 84.22719929477579,
+        "gradient_inf_norm": 2.080884994219755e-05,
+        "scale": 0.18621989721022658,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.01642927071856093,
+          0.15818921953410836
+        ]
+      },
+      {
+        "region_code": 55,
+        "region": "Омская область",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 50,
+        "objective": 88.92684973207449,
+        "gradient_inf_norm": 4.921577170139985e-05,
+        "scale": 0.17616840108552986,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          -0.0023377176414953738,
+          0.03223510153088682
+        ]
+      },
+      {
+        "region_code": 56,
+        "region": "Оренбургская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 52,
+        "objective": 84.16497448140609,
+        "gradient_inf_norm": 2.5974807065920827e-05,
+        "scale": 0.15741079991613174,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.42510515919533987,
+          0.39096854441029905
+        ]
+      },
+      {
+        "region_code": 57,
+        "region": "Орловская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 54,
+        "objective": 78.07844789656738,
+        "gradient_inf_norm": 5.4144227050116015e-05,
+        "scale": 0.16809116526193082,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.666417089885428,
+          0.4443892673930634
+        ]
+      },
+      {
+        "region_code": 64,
+        "region": "Саратовская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 52,
+        "objective": 66.1231932284152,
+        "gradient_inf_norm": 1.3715686542751116e-05,
+        "scale": 0.1428032739394316,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.46872336737314413,
+          0.5259998266135
+        ]
+      },
+      {
+        "region_code": 66,
+        "region": "Свердловская область",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "nonconverged_diagnostic_only",
+        "converged": false,
+        "iterations": 2000,
+        "objective": 68.02707757162294,
+        "gradient_inf_norm": 0.0001303487232114666,
+        "scale": 0.13999685155402514,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.30351662460532225,
+          -0.022580579980072457
+        ]
+      },
+      {
+        "region_code": 66,
+        "region": "Свердловская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 48,
+        "objective": 64.69447277607627,
+        "gradient_inf_norm": 2.4686403705258785e-05,
+        "scale": 0.12237693539191427,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.5291699204330058,
+          0.3503336690890251
+        ]
+      },
+      {
+        "region_code": 72,
+        "region": "Тюменская область",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 51,
+        "objective": 70.7966518174994,
+        "gradient_inf_norm": 1.0950892493782026e-05,
+        "scale": 0.15387541230850668,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.3673858969381172,
+          0.4397490950480005
+        ]
+      },
+      {
+        "region_code": 74,
+        "region": "Челябинская область",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 53,
+        "objective": 65.33722975965999,
+        "gradient_inf_norm": 3.091235315518231e-05,
+        "scale": 0.13693981018316084,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.11018693001742008,
+          0.240187502282609
+        ]
+      },
+      {
+        "region_code": 83,
+        "region": "Ненецкий автономный округ",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 48,
+        "objective": 107.62996889433673,
+        "gradient_inf_norm": 3.563669650157291e-05,
+        "scale": 0.23116178170468932,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.22212997901610265,
+          0.025230000740037895
+        ]
+      },
+      {
+        "region_code": 84,
+        "region": "Архангельская область (кроме Ненецкого автономного округа)",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 56,
+        "objective": 78.01454590916838,
+        "gradient_inf_norm": 7.432447748262458e-05,
+        "scale": 0.13486423733070957,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.5753664354871262,
+          0.4669742829760253
+        ]
+      },
+      {
+        "region_code": 90,
+        "region": "Дальневосточный федеральный округ",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 55,
+        "objective": 54.28413554231904,
+        "gradient_inf_norm": 7.508595906966257e-05,
+        "scale": 0.0964792790808877,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4391115978900615,
+          0.06633511698585437
+        ]
+      },
+      {
+        "region_code": 95,
+        "region": "Северо-Кавказский федеральный округ",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 50,
+        "objective": 84.3409432047053,
+        "gradient_inf_norm": 5.0037420764495466e-05,
+        "scale": 0.14400082201231706,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.41907371719176467,
+          0.10726044124680811
+        ]
+      },
+      {
+        "region_code": 100,
+        "region": "Волго-Вятское ГУ",
+        "frequency": "raw",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 52,
+        "objective": 65.34251834393937,
+        "gradient_inf_norm": 3.785997129121879e-05,
+        "scale": 0.11772560543786809,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.2648390046968814,
+          -0.1920007131625141
+        ]
+      },
+      {
+        "region_code": 100,
+        "region": "Волго-Вятское ГУ",
+        "frequency": "sa",
+        "rows": 128,
+        "origin": "2026-08-01",
+        "max_iter": 2000,
+        "tol": 0.0001,
+        "status": "converged",
+        "converged": true,
+        "iterations": 52,
+        "objective": 62.51335806825887,
+        "gradient_inf_norm": 1.8618575921808267e-05,
+        "scale": 0.10117151227481466,
+        "n_train": 116,
+        "forecast_steps": 12,
+        "forecast_finite": true,
+        "forecast_first_last_diagnostic_only": [
+          0.4576813696671138,
+          0.394820724354787
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,4 @@
+core/target/
+node_modules/
+verification/screenshots/
+*.tmp

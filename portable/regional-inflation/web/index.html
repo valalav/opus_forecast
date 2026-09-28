@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Региональная инфляция — локальный расчёт</title>
+  <style>/*__INLINE_CSS__*/</style>
+  <style>[hidden]{display:none!important}.form-grid>label{min-width:0}.form-grid select,.form-grid input:not([type=checkbox]){width:100%;max-width:100%;min-width:0}.data-actions,.export-actions{flex-wrap:wrap}</style>
+</head>
+<body>
+  <a class="skip-link" href="#main">К расчётам</a>
+  <header class="topbar">
+    <div class="brand-mark" aria-hidden="true">И</div>
+    <div><p class="eyebrow">СИРЕНА · РЕГИОНАЛЬНЫЕ ДАННЫЕ</p><h1>Инфляция по регионам</h1></div>
+    <span class="local-badge"><i></i> Расчёт на этом устройстве</span>
+  </header>
+  <main id="main">
+    <section class="intro">
+      <div><p class="eyebrow">ЛОКАЛЬНЫЙ ПРОГНОЗНЫЙ РАБОЧИЙ СТОЛ</p><h2>Сравнивайте модельные прогнозы и историю</h2>
+      <p class="lede">Выберите регион и спецификацию, настройте параметры и рассчитайте прогноз или скользящую проверку. Исходные данные и результаты остаются в браузере.</p></div>
+      <a id="sourceLink" class="source-link" href="https://disk.yandex.ru/d/i6czrcdNO0I7BQ" target="_blank" rel="noopener">Открыть папку источника <span aria-hidden="true">↗</span></a>
+    </section>
+
+    <section class="panel controls-panel" aria-labelledby="setupTitle">
+      <div class="section-heading"><div><p class="eyebrow">01 · НАСТРОЙКА</p><h2 id="setupTitle">Данные и модель</h2></div>
+      <div class="data-actions"><button id="loadSource" class="button button-primary" type="button">Загрузить данные</button><label class="button button-secondary" for="fileInput">Импорт XLSX / JSON</label><input id="fileInput" type="file" accept="application/json,.json,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden><button id="savePackage" class="button button-secondary" type="button" disabled>Сохранить JSON</button><button id="resetButton" class="text-button" type="button">Сбросить</button></div>
+      </div>
+      <div id="dataNotice" class="notice notice-info" role="status">RAW и SA загружаются из общего листа региональной базы ИПЦ; доступная история начинается в 2016 году. Нажмите «Загрузить данные» или импортируйте сохранённый XLSX / JSON. Обработка проходит в браузере.</div>
+      <div class="form-grid">
+        <label>Представление данных
+          <select id="representation"><option value="raw">RAW · месячные индексы</option><option value="sa">SA · сезонно скорректированный ряд</option></select>
+          <small id="representationHint">RAW используется по умолчанию; годовой темп рассчитывается только для RAW.</small>
+        </label>
+        <label>Регион<select id="regionSelect" disabled><option value="">Сначала импортируйте данные</option></select></label>
+        <label>Модель<select id="modelSelect"><option value="ridge">Ridge</option><option value="huber">Huber</option></select></label>
+        <label>Режим расчёта<select id="operation"><option value="forecast">Прогноз вперёд</option><option value="backtest">Скользящая проверка</option></select></label>
+        <label id="periodField" hidden>Целевых месяцев<select id="backtestPeriod"><option value="36">Последние 36</option><option value="60">Последние 60</option><option value="all">Все доступные</option></select><small>На каждом месяце оцениваются h=1, 2 и 12.</small></label>
+        <label id="backtestFromField" hidden>Первый целевой месяц<input id="backtestFrom" type="month"></label>
+        <label id="backtestToField" hidden>Последний целевой месяц<input id="backtestTo" type="month"></label>
+      </div>
+      <div class="config-row">
+        <div><strong>Параметры модели</strong><p>Начальные значения соответствуют базовой спецификации КБР. Это отправная точка для сравнения, а не универсальные настройки для всех регионов.</p></div>
+        <button id="advancedToggle" class="button button-secondary" type="button" aria-expanded="false" aria-controls="advancedConfig">Показать параметры</button>
+      </div>
+      <div id="advancedConfig" class="advanced-config" hidden>
+        <div class="form-grid compact-grid">
+          <label>Горизонт, месяцев<input id="horizon" type="number" min="1" max="24" value="12" required></label>
+          <label>Начало обучения<input id="trainStart" type="month" value="2016-01"></label>
+          <label>Дата отсечения<input id="cutoff" type="month"></label>
+          <label>Сила Ridge (α)<input id="alpha" type="number" min="0" step="any" value="0.3" required></label>
+          <label>Порог Huber (ε)<input id="epsilon" type="number" min="0.1" step="any" value="1.35" required></label>
+          <label>Макс. итераций<input id="maxIter" type="number" min="10" step="10" value="500" required></label>
+          <label>Допуск сходимости<input id="tol" type="number" min="0.0000001" step="any" value="0.00001" required></label>
+          <label class="check-label"><input id="useMacro" type="checkbox" checked> Использовать макропризнаки</label>
+        </div>
+        <details class="advanced-details"><summary>Дополнительные параметры и исключения</summary>
+          <div class="form-grid compact-grid detail-grid">
+            <label>Тарифный месяц по годам, JSON · только прогноз<input id="tariffMonths" type="text" placeholder='{"2026":10}'></label>
+            <label>Сезонные веса по месяцам<input id="etsWeights12" type="text" value="[0.9,0,0.5,0.3,0.9,0.5,0,0.5,0.9,0.9,0,0]" placeholder="JSON-массив из 12 чисел"></label>
+            <label>Исключённые годы<input id="excludedYears" type="text" value="2010, 2022" placeholder="2020, 2022"></label>
+            <label>Исключённые годы сезонной оценки<input id="seasonalExcludedYears" type="text" value="2010, 2022" placeholder="2020"></label>
+            <label>Минимум наблюдений<input id="minTrain" type="number" min="12" value="36" required></label>
+            <label>Ссылка на папку источника<input id="sourceUrlInput" type="url" value="https://disk.yandex.ru/d/i6czrcdNO0I7BQ"></label>
+          </div>
+        </details>
+      </div>
+      <div class="run-row"><span id="engineState" class="engine-state"><i></i> Проверка вычислительного модуля…</span>
+        <div><button id="cancelButton" class="button button-secondary" type="button" hidden>Остановить</button><button id="runButton" class="button button-primary" type="button" disabled>Рассчитать</button></div>
+      </div>
+      <p id="errorMessage" class="error-message" role="alert" hidden></p>
+    </section>
+
+    <section id="results" class="results-section" aria-live="polite" hidden>
+      <div class="section-heading results-heading"><div><p class="eyebrow">02 · РЕЗУЛЬТАТ</p><h2 id="resultTitle">Результаты</h2></div><div class="export-actions"><button id="valueMode" class="button button-secondary" type="button">Показать г/г</button><button id="exportCsv" class="button button-secondary" type="button">Скачать CSV</button><button id="saveReport" class="button button-secondary" type="button">Расчёт JSON</button><button id="saveSettings" class="button button-secondary" type="button">Настройки JSON</button></div></div>
+      <div id="resultWarnings"></div>
+      <div id="metrics" class="metric-grid"></div>
+      <div class="panel chart-panel"><div class="chart-head"><div><h3 id="chartTitle">Динамика инфляции</h3><p id="chartSubtitle">Фактический ряд и расчёт</p></div><div id="chartLegend" class="legend"></div></div><div id="chart" class="chart" role="img" aria-label="График фактической инфляции и модельного расчёта"></div></div>
+      <div class="panel table-panel"><div class="table-head"><div><h3 id="tableTitle">Помесячные значения</h3><p id="tableSubtitle">Единицы измерения и даты указаны в таблице.</p></div><span id="rowCount" class="row-count"></span></div><div class="table-scroll"><table><thead id="tableHead"></thead><tbody id="tableBody"></tbody></table></div></div>
+    </section>
+    <footer><span>Все вычисления выполняются локально в браузере.</span><span id="packageMeta">Пакет данных не загружен</span></footer>
+  </main>
+  <script>/*__INLINE_WASM_BINDGEN__*/</script>
+  <script>/*__INLINE_APP__*/</script>
+</body>
+</html>

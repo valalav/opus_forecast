@@ -1,0 +1,8 @@
+{
+  "regional-inflation.html": "3e25848e114201fd6e8304ae9cb00a2b89cfa8b3c3d345803266c46309aa8c88",
+  "core/src/lib.rs": "29f8c97262ea6c0f6c6cacc0530090e636ac0ff34b9a9318f998f23368331076",
+  "core/pkg/regional_inflation_core_bg.wasm": "fcdeb097cca640256aa6a5eeb2ab80263734e74231cade9601da0fe2c4af30c8",
+  "data/regional_indices.json": "742960d36ec4796ca949606eacf2f958ac2568eefd98718bd55143abdc9be456",
+  "web/app.js": "d493e08c9e7275ba2cc305e10094aadf4498cf9105bd9e832d2d191c08b2bb2f",
+  "web/source-import.js": "41e8fb7b8abc7568a2e6c117cafac6596a55d40c5d28ba924b2a8c4f07ef2de8"
+}
